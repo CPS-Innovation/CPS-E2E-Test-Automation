@@ -3,7 +3,8 @@ package com.cps.fct.e2e.utils.services.ddei.payloadBuilder;
 import com.cps.fct.e2e.model.PreChargeDecision;
 import com.cps.fct.e2e.utils.common.DateTimeUtils;
 import com.cps.fct.e2e.utils.common.JsonUtils;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import io.cucumber.messages.ndjson.internal.com.fasterxml.jackson.core.JsonProcessingException;
+//import com.fasterxml.jackson.core.JsonProcessingException;
 
 
 public class PreChargeCaseBuilder {

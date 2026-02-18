@@ -1,0 +1,333 @@
+<PreChargeDecisionRequest xmlns:ds="http://schemas.cjse.gov.uk/datastandards/2006-10"
+                          xmlns:tt="http://schemas.cps.gov.uk/TWIFTypes/2009-08"
+                          xmlns="http://schemas.cjse.gov.uk/TWIFBusinessMessages/CM01PreChargeRequest/2009-08"
+>
+    <tt:ItemId>PCD001222D</tt:ItemId>
+    <tt:PTIURN>
+        <tt:Force>45</tt:Force>
+        <tt:Unit>AT</tt:Unit>
+        <tt:Number>00123</tt:Number>
+        <tt:Year>25</tt:Year>
+    </tt:PTIURN>
+    <CPSUnit>
+        <tt:TopLevel>A</tt:TopLevel>
+        <tt:SecondLevel>16</tt:SecondLevel>
+        <tt:ThirdLevel>AD</tt:ThirdLevel>
+        <tt:BottomLevel>00</tt:BottomLevel>
+    </CPSUnit>
+    <OperationName>OperationName00122</OperationName>
+    <CaseClassification>
+        <tt:ClassificationType>CaseMonitoring</tt:ClassificationType>
+        <tt:ClassificationCode>ChildAbuse</tt:ClassificationCode>
+        <tt:ClassificationValue>
+            <tt:ClassificationValueFlag>true</tt:ClassificationValueFlag>
+        </tt:ClassificationValue>
+    </CaseClassification>
+    <CaseClassification>
+        <tt:ClassificationType>CaseMonitoring</tt:ClassificationType>
+        <tt:ClassificationCode>AssetRecovery</tt:ClassificationCode>
+        <tt:ClassificationValue>
+            <tt:ClassificationValueFlag>true</tt:ClassificationValueFlag>
+        </tt:ClassificationValue>
+    </CaseClassification>
+    <CaseClassification>
+        <tt:ClassificationType>CaseMonitoring</tt:ClassificationType>
+        <tt:ClassificationCode>CrimeAgainstAnOlderPerson</tt:ClassificationCode>
+        <tt:ClassificationValue>
+            <tt:ClassificationValueFlag>true</tt:ClassificationValueFlag>
+        </tt:ClassificationValue>
+    </CaseClassification>
+    <CaseClassification>
+        <tt:ClassificationType>CaseMonitoring</tt:ClassificationType>
+        <tt:ClassificationCode>DrugInterventionProgramme</tt:ClassificationCode>
+        <tt:ClassificationValue>
+            <tt:ClassificationValueFlag>true</tt:ClassificationValueFlag>
+        </tt:ClassificationValue>
+    </CaseClassification>
+    <CaseClassification>
+        <tt:ClassificationType>CaseMonitoring</tt:ClassificationType>
+        <tt:ClassificationCode>DisabilityHateCrime</tt:ClassificationCode>
+        <tt:ClassificationValue>
+            <tt:ClassificationValueFlag>true</tt:ClassificationValueFlag>
+        </tt:ClassificationValue>
+    </CaseClassification>
+    <CaseClassification>
+        <tt:ClassificationType>CaseMonitoring</tt:ClassificationType>
+        <tt:ClassificationCode>DomesticViolence</tt:ClassificationCode>
+        <tt:ClassificationValue>
+            <tt:ClassificationValueFlag>true</tt:ClassificationValueFlag>
+        </tt:ClassificationValue>
+    </CaseClassification>
+    <CaseClassification>
+        <tt:ClassificationType>CaseMonitoring</tt:ClassificationType>
+        <tt:ClassificationCode>Fatality</tt:ClassificationCode>
+        <tt:ClassificationValue>
+            <tt:ClassificationValueFlag>true</tt:ClassificationValueFlag>
+        </tt:ClassificationValue>
+    </CaseClassification>
+    <CaseClassification>
+        <tt:ClassificationType>CaseMonitoring</tt:ClassificationType>
+        <tt:ClassificationCode>ForcedMarriage</tt:ClassificationCode>
+        <tt:ClassificationValue>
+            <tt:ClassificationValueFlag>true</tt:ClassificationValueFlag>
+        </tt:ClassificationValue>
+    </CaseClassification>
+    <CaseClassification>
+        <tt:ClassificationType>CaseMonitoring</tt:ClassificationType>
+        <tt:ClassificationCode>Homophobic</tt:ClassificationCode>
+        <tt:ClassificationValue>
+            <tt:ClassificationValueFlag>true</tt:ClassificationValueFlag>
+        </tt:ClassificationValue>
+    </CaseClassification>
+    <CaseClassification>
+        <tt:ClassificationType>CaseMonitoring</tt:ClassificationType>
+        <tt:ClassificationCode>HonourCrime</tt:ClassificationCode>
+        <tt:ClassificationValue>
+            <tt:ClassificationValueFlag>true</tt:ClassificationValueFlag>
+        </tt:ClassificationValue>
+    </CaseClassification>
+    <CaseClassification>
+        <tt:ClassificationType>CaseMonitoring</tt:ClassificationType>
+        <tt:ClassificationCode>IdentifiedVictim</tt:ClassificationCode>
+        <tt:ClassificationValue>
+            <tt:ClassificationValueFlag>true</tt:ClassificationValueFlag>
+        </tt:ClassificationValue>
+    </CaseClassification>
+    <CaseClassification>
+        <tt:ClassificationType>CaseMonitoring</tt:ClassificationType>
+        <tt:ClassificationCode>MediaInterest</tt:ClassificationCode>
+        <tt:ClassificationValue>
+            <tt:ClassificationValueFlag>true</tt:ClassificationValueFlag>
+        </tt:ClassificationValue>
+    </CaseClassification>
+    <CaseClassification>
+        <tt:ClassificationType>CaseMonitoring</tt:ClassificationType>
+        <tt:ClassificationCode>PoliceComplaints</tt:ClassificationCode>
+        <tt:ClassificationValue>
+            <tt:ClassificationValueFlag>true</tt:ClassificationValueFlag>
+        </tt:ClassificationValue>
+    </CaseClassification>
+    <CaseClassification>
+        <tt:ClassificationType>CaseMonitoring</tt:ClassificationType>
+        <tt:ClassificationCode>Rape</tt:ClassificationCode>
+        <tt:ClassificationValue>
+            <tt:ClassificationValueFlag>true</tt:ClassificationValueFlag>
+        </tt:ClassificationValue>
+    </CaseClassification>
+    <CaseClassification>
+        <tt:ClassificationType>CaseMonitoring</tt:ClassificationType>
+        <tt:ClassificationCode>RacistCrime</tt:ClassificationCode>
+        <tt:ClassificationValue>
+            <tt:ClassificationValueFlag>true</tt:ClassificationValueFlag>
+        </tt:ClassificationValue>
+    </CaseClassification>
+    <CaseClassification>
+        <tt:ClassificationType>CaseMonitoring</tt:ClassificationType>
+        <tt:ClassificationCode>ReligiousCrime</tt:ClassificationCode>
+        <tt:ClassificationValue>
+            <tt:ClassificationValueFlag>true</tt:ClassificationValueFlag>
+        </tt:ClassificationValue>
+    </CaseClassification>
+    <CaseClassification>
+        <tt:ClassificationType>CaseMonitoring</tt:ClassificationType>
+        <tt:ClassificationCode>VulnerableIntimidatedVictim</tt:ClassificationCode>
+        <tt:ClassificationValue>
+            <tt:ClassificationValueFlag>true</tt:ClassificationValueFlag>
+        </tt:ClassificationValue>
+    </CaseClassification>
+    <!-- <CaseClassification> -->
+    <!-- <tt:ClassificationType>CaseMonitoring</tt:ClassificationType> -->
+    <!-- <tt:ClassificationCode>MCA</tt:ClassificationCode> -->
+    <!-- <tt:ClassificationValue> -->
+    <!-- <tt:ClassificationValueFlag>true</tt:ClassificationValueFlag> -->
+    <!-- </tt:ClassificationValue> -->
+    <!-- </CaseClassification> -->
+    <!-- <CaseClassification> -->
+    <!-- <tt:ClassificationType>CaseMonitoring</tt:ClassificationType> -->
+    <!-- <tt:ClassificationCode>MCANotGuiltyPlea</tt:ClassificationCode> -->
+    <!-- <tt:ClassificationValue> -->
+    <!-- <tt:ClassificationValueFlag>true</tt:ClassificationValueFlag> -->
+    <!-- </tt:ClassificationValue> -->
+    <!-- </CaseClassification> -->
+    <Suspect>
+        <tt:AccusedPerson>
+            <tt:UniqueId>DEF0100122</tt:UniqueId>
+            <tt:Name>
+                <ds:GivenName>Tony</ds:GivenName>
+                <ds:FamilyName>Lewis</ds:FamilyName>
+            </tt:Name>
+        </tt:AccusedPerson>
+        <tt:ASN>
+            <tt:Year>25</tt:Year>
+            <tt:Force>45</tt:Force>
+            <tt:Unit>54</tt:Unit>
+            <tt:System>00</tt:System>
+            <tt:Number>29483000122</tt:Number>
+            <tt:CheckCharacter>B</tt:CheckCharacter>
+        </tt:ASN>
+        <tt:ProposedCharge>
+            <tt:UniqueID>PCD1600122DEF01OFC1</tt:UniqueID>
+            <tt:CJSCode LiteralValue="PL96002">
+                <tt:Code>
+                    <tt:Alternative>
+                        <tt:ActOrSource>PL</tt:ActOrSource>
+                        <tt:Year>96</tt:Year>
+                    </tt:Alternative>
+                    <tt:Reason>002</tt:Reason>
+                </tt:Code>
+            </tt:CJSCode>
+            <tt:Description>Assault</tt:Description>
+            <tt:Category>Summary Only</tt:Category>
+            <tt:FromDate>2024-11-25</tt:FromDate>
+            <tt:ToDate>2024-11-25</tt:ToDate>
+            <tt:Particulars>
+                <tt:Address>
+                    <tt:AddressLine>20 Newtons Road</tt:AddressLine>
+                    <tt:AddressLine>Newton</tt:AddressLine>
+                    <tt:AddressLine>Surrey</tt:AddressLine>
+                    <tt:Postcode>SM4 4DN</tt:Postcode>
+                    <tt:Country>UK</tt:Country>
+                </tt:Address>
+            </tt:Particulars>
+        </tt:ProposedCharge>
+    </Suspect>
+    <CaseOutlineItem>
+        <CaseOutlineHeading>
+            <tt:ClassificationType>CaseOutline</tt:ClassificationType>
+            <tt:ClassificationCode>Heading</tt:ClassificationCode>
+            <tt:ClassificationValue>
+                <tt:ClassificationValueText>KEVD</tt:ClassificationValueText>
+            </tt:ClassificationValue>
+        </CaseOutlineHeading>
+        <CaseOutlineText>KEVD - This is a test</CaseOutlineText>
+    </CaseOutlineItem>
+    <CaseOutlineItem>
+        <CaseOutlineHeading>
+            <tt:ClassificationType>CaseOutline</tt:ClassificationType>
+            <tt:ClassificationCode>Heading</tt:ClassificationCode>
+            <tt:ClassificationValue>
+                <tt:ClassificationValueText>DINT</tt:ClassificationValueText>
+            </tt:ClassificationValue>
+        </CaseOutlineHeading>
+        <CaseOutlineText>DINT - This is a test</CaseOutlineText>
+    </CaseOutlineItem>
+    <CaseOutlineItem>
+        <CaseOutlineHeading>
+            <tt:ClassificationType>CaseOutline</tt:ClassificationType>
+            <tt:ClassificationCode>Heading</tt:ClassificationCode>
+            <tt:ClassificationValue>
+                <tt:ClassificationValueText>NEVD</tt:ClassificationValueText>
+            </tt:ClassificationValue>
+        </CaseOutlineHeading>
+        <CaseOutlineText>NEVD - This is a test</CaseOutlineText>
+    </CaseOutlineItem>
+    <CaseOutlineItem>
+        <CaseOutlineHeading>
+            <tt:ClassificationType>CaseOutline</tt:ClassificationType>
+            <tt:ClassificationCode>Heading</tt:ClassificationCode>
+            <tt:ClassificationValue>
+                <tt:ClassificationValueText>VEVD</tt:ClassificationValueText>
+            </tt:ClassificationValue>
+        </CaseOutlineHeading>
+        <CaseOutlineText>VEVD - This is a test</CaseOutlineText>
+    </CaseOutlineItem>
+    <CaseOutlineItem>
+        <CaseOutlineHeading>
+            <tt:ClassificationType>CaseOutline</tt:ClassificationType>
+            <tt:ClassificationCode>Heading</tt:ClassificationCode>
+            <tt:ClassificationValue>
+                <tt:ClassificationValueText>INJS</tt:ClassificationValueText>
+            </tt:ClassificationValue>
+        </CaseOutlineHeading>
+        <CaseOutlineText>INJS - This is a test</CaseOutlineText>
+    </CaseOutlineItem>
+    <CaseOutlineItem>
+        <CaseOutlineHeading>
+            <tt:ClassificationType>CaseOutline</tt:ClassificationType>
+            <tt:ClassificationCode>Heading</tt:ClassificationCode>
+            <tt:ClassificationValue>
+                <tt:ClassificationValueText>FFDE</tt:ClassificationValueText>
+            </tt:ClassificationValue>
+        </CaseOutlineHeading>
+        <CaseOutlineText>FFDE - This is a test</CaseOutlineText>
+    </CaseOutlineItem>
+    <CaseOutlineItem>
+        <CaseOutlineHeading>
+            <tt:ClassificationType>CaseOutline</tt:ClassificationType>
+            <tt:ClassificationCode>Heading</tt:ClassificationCode>
+            <tt:ClassificationValue>
+                <tt:ClassificationValueText>ISS</tt:ClassificationValueText>
+            </tt:ClassificationValue>
+        </CaseOutlineHeading>
+        <CaseOutlineText>ISS - This is a test</CaseOutlineText>
+    </CaseOutlineItem>
+    <CaseOutlineItem>
+        <CaseOutlineHeading>
+            <tt:ClassificationType>CaseOutline</tt:ClassificationType>
+            <tt:ClassificationCode>Heading</tt:ClassificationCode>
+            <tt:ClassificationValue>
+                <tt:ClassificationValueText>OUTW</tt:ClassificationValueText>
+            </tt:ClassificationValue>
+        </CaseOutlineHeading>
+        <CaseOutlineText>OUTW - This is a test</CaseOutlineText>
+    </CaseOutlineItem>
+    <CaseOutlineItem>
+        <CaseOutlineHeading>
+            <tt:ClassificationType>CaseOutline</tt:ClassificationType>
+            <tt:ClassificationCode>Heading</tt:ClassificationCode>
+            <tt:ClassificationValue>
+                <tt:ClassificationValueText>SIAV</tt:ClassificationValueText>
+            </tt:ClassificationValue>
+        </CaseOutlineHeading>
+        <CaseOutlineText>SIAV - This is a test</CaseOutlineText>
+    </CaseOutlineItem>
+    <CaseOutlineItem>
+        <CaseOutlineHeading>
+            <tt:ClassificationType>CaseOutline</tt:ClassificationType>
+            <tt:ClassificationCode>Heading</tt:ClassificationCode>
+            <tt:ClassificationValue>
+                <tt:ClassificationValueText>AREC</tt:ClassificationValueText>
+            </tt:ClassificationValue>
+        </CaseOutlineHeading>
+        <CaseOutlineText>AREC - This is a test</CaseOutlineText>
+    </CaseOutlineItem>
+    <CaseOutlineItem>
+        <CaseOutlineHeading>
+            <tt:ClassificationType>CaseOutline</tt:ClassificationType>
+            <tt:ClassificationCode>Heading</tt:ClassificationCode>
+            <tt:ClassificationValue>
+                <tt:ClassificationValueText>DIP</tt:ClassificationValueText>
+            </tt:ClassificationValue>
+        </CaseOutlineHeading>
+        <CaseOutlineText>DIP - This is a test</CaseOutlineText>
+    </CaseOutlineItem>
+    <CaseOutlineItem>
+        <CaseOutlineHeading>
+            <tt:ClassificationType>CaseOutline</tt:ClassificationType>
+            <tt:ClassificationCode>Heading</tt:ClassificationCode>
+            <tt:ClassificationValue>
+                <tt:ClassificationValueText>ACOC</tt:ClassificationValueText>
+            </tt:ClassificationValue>
+        </CaseOutlineHeading>
+        <CaseOutlineText>ACOC - This is a test</CaseOutlineText>
+    </CaseOutlineItem>
+    <PCDPoliceContactDetails>
+        <OfficerCompleting>
+            <tt:UniqueId>PCD100122DOC</tt:UniqueId>
+            <tt:Name>
+                <ds:GivenName>Test Completing</ds:GivenName>
+                <ds:FamilyName>Officer</ds:FamilyName>
+            </tt:Name>
+        </OfficerCompleting>
+        <OfficerSupervising>
+            <tt:UniqueId>PCD100122DOS</tt:UniqueId>
+            <tt:Name>
+                <ds:GivenName>Test Supervising</ds:GivenName>
+                <ds:FamilyName>Officer</ds:FamilyName>
+            </tt:Name>
+        </OfficerSupervising>
+    </PCDPoliceContactDetails>
+    <PCDRequestDate>2025-01-16</PCDRequestDate>
+    <PCDDecisionRequiredByDate>2025-01-26</PCDDecisionRequiredByDate>
+    <Contact>Telephone</Contact>
+</PreChargeDecisionRequest>

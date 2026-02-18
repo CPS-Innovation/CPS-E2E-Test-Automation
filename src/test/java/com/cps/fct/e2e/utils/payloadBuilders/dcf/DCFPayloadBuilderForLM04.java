@@ -1,0 +1,47 @@
+package com.cps.fct.e2e.utils.payloadBuilders.dcf;
+
+import com.cps.fct.e2e.model.CaseResponse;
+import com.cps.fct.e2e.utils.common.JsonReplacer;
+import com.cps.fct.e2e.utils.common.ScenarioContext;
+
+import java.io.IOException;
+import java.util.Map;
+
+import static com.cps.fct.e2e.utils.common.FakerUtils.*;
+
+public class DCFPayloadBuilderForLM04 extends JsonReplacer {
+
+    public String generatePayloadWithValues(
+            String type, String payloadFileName, ScenarioContext context) throws IOException {
+
+        Map<String, String> cm01Map = context.getAsMap("CM01ModifiedValues");
+        CaseResponse caseData = context.getCastClazz("caseDetails", CaseResponse.class);
+        Map<String, String> initialLM04Map = new java.util.HashMap<>(Map.of(
+                "{{LM04_CaseId}}", caseData.getCaseId(),
+                "{{LM04_PTIURN_Number}}", cm01Map.get("CM01_PTIURN_Number"),
+                "{{LM04_itemId}}",generateUppercaseAlphaNumeric(12),
+                "{{FirstName}}",firstName(),
+                "{{MiddleName}}",middleName(),
+                "{{Surname}}",lastName(),
+                "{{LM04_CaseOffenceId}}", cm01Map.get("CM01_CaseOffenceId")));
+
+        switch (type.toLowerCase()) {
+            case "witness":
+                initialLM04Map.put("{{LM04_WitnessRef_1}}", cm01Map.get("CM01_WitnessRef_1"));
+                break;
+            case "victim":
+                initialLM04Map.put("{{LM04_VictimRef_1}}", cm01Map.get("CM01_VictimRef_1"));
+                break;
+            case "victim witness":
+                initialLM04Map.put("{{LM04_VictimWitnessRef_1}}", cm01Map.get("CM01_VictimWitnessRef_1"));
+                break;
+            default:
+                break;
+        }
+        return applyReplacements(payloadFileName, initialLM04Map);
+    }
+
+}
+
+
+

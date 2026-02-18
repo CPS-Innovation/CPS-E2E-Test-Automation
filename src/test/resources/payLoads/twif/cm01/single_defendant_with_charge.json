@@ -1,0 +1,90 @@
+{
+  "PreChargeDecisionRequest": {
+    "ItemId": "{{CM01_itemId}}",
+    "PTIURN": {
+      "Force": "16",
+      "Unit": "GD",
+      "Number": "{{CM01_PTIURN_Number}}",
+      "Year": "25"
+    },
+    "CPSUnit": {
+      "TopLevel": "A",
+      "SecondLevel": "16",
+      "ThirdLevel": "AD",
+      "BottomLevel": "00"
+    },
+    "Suspect": {
+      "AccusedPerson": {
+        "UniqueId": "{{CM01_Suspect_UniqueId}}",
+        "Name": {
+          "GivenName":"{{DEF_FirstName}}",
+          "FamilyName": "{{DEF_Surname}}"
+        }
+      },
+      "ASN": {
+        "Year": "25",
+        "Force": "16",
+        "Unit": "GD",
+        "System": "00",
+        "Number": "55150090052",
+        "CheckCharacter": "B"
+      },
+      "ProposedCharge": {
+        "UniqueID": "{{CM01_CaseOffenceId}}",
+        "CJSCode": {
+          "Code": {
+            "Alternative": {
+              "ActOrSource": "FA",
+              "Year": "90"
+            },
+            "Reason": "731"
+          }
+        },
+        "Description": "Theft",
+        "Category": "Summary Only",
+        "FromDate": "2025-09-03",
+        "ToDate": "2025-09-10",
+        "Particulars": {
+          "Address": {
+            "AddressLine": [
+              "2 Newton Road",
+              "Newton",
+              "Surrey"
+            ],
+            "Postcode": "SM4 4DN",
+            "Country": "UK"
+          }
+        }
+      }
+    },
+    "CaseOutlineItem": {
+      "CaseOutlineHeading": {
+        "ClassificationType": "CaseOutline",
+        "ClassificationCode": "Heading",
+        "ClassificationValue": {
+          "ClassificationValueText": "KEVD"
+        }
+      },
+      "CaseOutlineText": "This is a test message generated for the CJS Simulator system"
+    },
+    "PCDPoliceContactDetails": {
+      "OfficerCompleting": {
+        "UniqueId": "{{CM01_Officer_UniqueId}}",
+        "Name": {
+          "GivenName": "{{CM01_Officer1_FirstName}}",
+          "FamilyName": "{{CM01_Officer1_SurName}}"
+        }
+      },
+      "OfficerSupervising": {
+        "UniqueId":"{{CM01_Supervising_UniqueId}}",
+        "Name": {
+          "GivenName":  "{{CM01_Officer2_FirstName}}",
+          "FamilyName": "{{CM01_Officer2_SurName}}"
+        }
+      }
+    },
+    "PCDRequestDate": "{{CM01_PCD_Request_Date}}",
+    "PCDDecisionRequiredByDate": "{{CM01_PCD_Decision_By_Date}}",
+    "Contact": "Telephone"
+  }
+}

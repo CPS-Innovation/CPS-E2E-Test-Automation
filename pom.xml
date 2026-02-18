@@ -16,11 +16,12 @@
         <maven.compiler.target>25</maven.compiler.target>
         <playwright.version>1.58.0</playwright.version>
         <assertj.version>3.27.7</assertj.version>
+        <lombook.version>1.18.42</lombook.version>
+        <jackson.core.version>3.0.4</jackson.core.version>
     </properties>
 
     <dependencies>
         <!-- Playwright -->
-
         <dependency>
             <groupId>com.microsoft.playwright</groupId>
             <artifactId>playwright</artifactId>
@@ -31,6 +32,19 @@
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
             <version>${assertj.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombook.version}</version>
+        </dependency>
+
+        <!-- Source: https://mvnrepository.com/artifact/tools.jackson.core/jackson-core -->
+        <dependency>
+            <groupId>tools.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson.core.version}</version>
         </dependency>
 
 <!--        <dependency>-->

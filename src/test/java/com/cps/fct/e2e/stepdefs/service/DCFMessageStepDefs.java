@@ -28,6 +28,11 @@ public class DCFMessageStepDefs {
     @Given("create case {word} for type {string}")
     public void createCaseUsing(String messageType, String caseDataType) throws IOException {
         File caseDataFile = FileUtils.getValidatedFile(context.get("caseType"), messageType, caseDataType);
+//        File caseDataFile = FileUtils.getValidatedFile(
+//                context.get("caseType"),   // <-- currently null
+//                messageType,
+//                caseDataType
+//        );
         HttpResponseWrapper responseWrapper = messageService.cm01WithADefendantCharge(caseDataFile, messageType, context);
         messageService.persistCaseDetails(responseWrapper, context);
     }

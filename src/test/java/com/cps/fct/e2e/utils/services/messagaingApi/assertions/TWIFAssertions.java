@@ -3,8 +3,11 @@ package com.cps.fct.e2e.utils.services.messagaingApi.assertions;
 import com.cps.fct.e2e.model.TWIFMessageResponse;
 import com.cps.fct.e2e.utils.httpClient.HttpResponseWrapper;
 import com.cps.fct.e2e.utils.httpClient.ResourceResponseStore;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+//import io.cucumber.messages.ndjson.internal.com.fasterxml.jackson.core.JsonProcessingException;
+import io.cucumber.core.internal.com.fasterxml.jackson.core.JsonProcessingException;
+import tools.jackson.databind.ObjectMapper;
+//import com.fasterxml.jackson.core.JsonProcessingException;
+//import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

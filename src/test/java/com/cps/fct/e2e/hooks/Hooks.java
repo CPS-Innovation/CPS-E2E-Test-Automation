@@ -36,17 +36,14 @@ public class Hooks {
     @Getter
     @Inject
     private PlaywrightManager playwrightManager;
-
     @Inject
     private PlaywrightContext playwrightContext;
-
 
     @Inject
     private ScenarioContext context;
 
     @Inject
     private CommonService service;
-
 
     @Before(order = 0)
     public void loadEnvironmentConfig() {
@@ -87,7 +84,6 @@ public class Hooks {
         }
     }
 
-
     public void setSuffixBasedOnTag(Scenario scenario) {
         String suffix = "";
         String caseType = "";
@@ -106,8 +102,6 @@ public class Hooks {
         context.set("caseType", caseType.replace("@", ""));
         context.set("envSuffix", suffix);
     }
-
-
 }
 
 

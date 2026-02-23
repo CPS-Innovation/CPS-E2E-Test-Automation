@@ -110,3 +110,7 @@ target/
 
 # Mac
 .DS_Store
+
+# creds
+.env.qa
+.env.dev

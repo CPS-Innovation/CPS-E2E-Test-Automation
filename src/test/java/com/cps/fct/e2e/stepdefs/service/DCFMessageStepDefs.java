@@ -7,6 +7,7 @@ import com.cps.fct.e2e.utils.services.ddei.CaseService;
 import com.cps.fct.e2e.utils.services.messagaingApi.DCFMessageService;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
 import org.picocontainer.annotations.Inject;
 
 import java.io.File;
@@ -28,11 +29,6 @@ public class DCFMessageStepDefs {
     @Given("create case {word} for type {string}")
     public void createCaseUsing(String messageType, String caseDataType) throws IOException {
         File caseDataFile = FileUtils.getValidatedFile(context.get("caseType"), messageType, caseDataType);
-//        File caseDataFile = FileUtils.getValidatedFile(
-//                context.get("caseType"),   // <-- currently null
-//                messageType,
-//                caseDataType
-//        );
         HttpResponseWrapper responseWrapper = messageService.cm01WithADefendantCharge(caseDataFile, messageType, context);
         messageService.persistCaseDetails(responseWrapper, context);
     }
@@ -43,4 +39,22 @@ public class DCFMessageStepDefs {
         messageService.lmO4AddVictimWitness(caseDataFile, caseDataType, context);
     }
 
+//    @Given("I print a message {string}")
+//    public void iPrintAMessage(String message) {
+//        // Console output
+//        System.out.println("REPORT TEST PRINT: " + message);
+//
+//    }
+//
+//    @Then("the test should pass")
+//    public void theTestShouldPass() {
+//        // Console output
+//        System.out.println("REPORT TEST PRINT: " );
+//    }
+//
+//    @Then("the test should fail")
+//    public void theTestShouldFail() {
+//        // Console output
+//        System.out.println("REPORT TEST PRINT: " );
+//    }
 }

@@ -25,7 +25,6 @@ public class DCFMessageStepDefs {
     @Inject
     private DCFMessageService messageService;
 
-
     @Given("create case {word} for type {string}")
     public void createCaseUsing(String messageType, String caseDataType) throws IOException {
         File caseDataFile = FileUtils.getValidatedFile(context.get("caseType"), messageType, caseDataType);
@@ -39,22 +38,4 @@ public class DCFMessageStepDefs {
         messageService.lmO4AddVictimWitness(caseDataFile, caseDataType, context);
     }
 
-//    @Given("I print a message {string}")
-//    public void iPrintAMessage(String message) {
-//        // Console output
-//        System.out.println("REPORT TEST PRINT: " + message);
-//
-//    }
-//
-//    @Then("the test should pass")
-//    public void theTestShouldPass() {
-//        // Console output
-//        System.out.println("REPORT TEST PRINT: " );
-//    }
-//
-//    @Then("the test should fail")
-//    public void theTestShouldFail() {
-//        // Console output
-//        System.out.println("REPORT TEST PRINT: " );
-//    }
 }

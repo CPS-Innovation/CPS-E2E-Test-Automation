@@ -5,7 +5,7 @@ Feature: Add witness personal details and verify wm01u
   I want to update personal details of witness
   Updated information is reflected in CMS and wm01u message is sent to police system
 
-  @DCF
+  @DCF1
   Scenario: Add witness title, date of birth, address, contact and email details.
     Given create case CM01 for type "single defendant with charge"
     And a "witness" is added using LM04

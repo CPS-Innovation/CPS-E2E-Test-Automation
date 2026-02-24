@@ -1,14 +1,13 @@
-Feature: Create a TWIF case
+@TWIF @vca @regression
 
-  @atwip
-  Scenario Outline: Create a TWIF case - One defendant with a proposed charge
+Feature: Add witness personal details and verify wm01u
+  As a Victim Liaison Officer
+  I want to update personal details of witness
+  Updated information is reflected in CMS and wm01u message is sent to police system
 
-    Given the "TWIF" "CM01" API is available
-    When I send a "POST" request with payload "<payload>"
-    Then the response status should be <statusCode>
-#    And the response should contain "username" in identifier "TBC"
+  @TwifAddWitness
+  Scenario: Demo test for 28 days PCD review of test type full code
+    Given create TWIF case "CM01" for type "single defendant with charge"
+    And precharge the triage case for 28 days PCD review
 
-    Examples:
-      | payload       | statusCode |
-      | twif_cm01.xml | 200        |
 

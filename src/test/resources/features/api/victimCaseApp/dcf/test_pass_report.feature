@@ -1,4 +1,4 @@
-@TWIF
+@DCF
 Feature: Report validation feature
 
   @Test1

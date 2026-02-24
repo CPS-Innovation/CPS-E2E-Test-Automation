@@ -1,9 +1,16 @@
 package com.cps.fct.e2e.runners;
 
-import org.junit.platform.suite.api.ConfigurationParameter;
-import org.junit.platform.suite.api.IncludeEngines;
-import org.junit.platform.suite.api.SelectClasspathResource;
-import org.junit.platform.suite.api.Suite;
+import net.masterthought.cucumber.Configuration;
+import net.masterthought.cucumber.ReportBuilder;
+import org.junit.jupiter.api.Test;
+import org.junit.platform.suite.api.*;
+import org.w3c.dom.*;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.File;
+import java.nio.file.*;
+import java.util.Collections;
+import java.util.List;
 
 import static io.cucumber.junit.platform.engine.Constants.GLUE_PROPERTY_NAME;
 import static io.cucumber.junit.platform.engine.Constants.FILTER_TAGS_PROPERTY_NAME;
@@ -14,7 +21,7 @@ import static io.cucumber.junit.platform.engine.Constants.OBJECT_FACTORY_PROPERT
 @IncludeEngines("cucumber")
 @SelectClasspathResource("features")
 @ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "com.cps.fct.e2e")
-@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@Test1")
+@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@DCF or @TWIF")
 @ConfigurationParameter(
         key = PLUGIN_PROPERTY_NAME,
         value = "pretty, json:target/cucumber-report/cucumber.json"
@@ -24,4 +31,15 @@ import static io.cucumber.junit.platform.engine.Constants.OBJECT_FACTORY_PROPERT
         value = "com.cps.fct.e2e.support.CucumberObjectFactory"
 )
 public class TestRunnerApi {
+
+    @Test
+    void generateCucumberReport() {
+        String jsonPath = "target/cucumber-report/cucumber.json";
+        File reportOutputDir = new File("target/cucumber-report");
+        List<String> jsonFiles = Collections.singletonList(jsonPath);
+        Configuration config = new Configuration(reportOutputDir,"CPS E2E Test Automation");
+        ReportBuilder reportBuilder = new ReportBuilder(jsonFiles, config);
+        reportBuilder.generateReports();
+    }
+
 }

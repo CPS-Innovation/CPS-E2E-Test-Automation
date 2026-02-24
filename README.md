@@ -26,6 +26,39 @@ It allows writing readable and maintainable test scenarios for REST APIs.
 - .env.*: Environment-specific variables for API base URLs, tokens, etc.
 - pom.xml: Maven dependencies and build configuration.
 
+## 🔐 Environment Configuration
+
+The repository contains template files:
+
+- `.env.dev.sample`
+- `.env.qa.sample`
+
+These files contain placeholder values and serve as templates only.
+
+---
+
+1. In the project root directory, locate the sample file:
+    - `.env.dev.sample` (for Development)
+    - `.env.qa.sample` (for QA)
+
+2. Right-click the file → **Copy**
+
+3. Right-click in the same folder → **Paste**
+
+4. Rename the copied file:
+    - From `.env.devSample` → `.env.dev`
+    - From `.env.qaSample` → `.env.qa`
+
+5. Open the new file and update the value of the CPS_USER= and PASSWORD= credentials.
+
+---
+
+### ⚠️ Important
+
+- Do **NOT** commit `.env.dev` or `.env.qa` to Git.
+- Only the `Sample` files should exist in the repository.
+- Each developer/QA must maintain their own local `.env` file.
+
 ---
 
 ## How to Run Tests

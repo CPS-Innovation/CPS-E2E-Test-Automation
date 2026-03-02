@@ -30,7 +30,7 @@ public class DCFMessageStepDefs {
     @Given("create case {word} for type {string}")
     public void createCaseUsing(String messageType, String caseDataType) throws IOException {
         File caseDataFile = FileUtils.getValidatedFile(context.get("caseType"), messageType, caseDataType);
-        File overridesFile = FileUtils.getValidatedFile(context.get("caseType"), messageType, "cm01 update meta data");
+        File overridesFile = FileUtils.getValidatedFile(context.get("caseType"), messageType, "dcf meta data");
 
         File mergedFile = JsonMergeUtil.mergeToTempFile(caseDataFile, overridesFile);
 //        String mergedContent = Files.readString(mergedFile.toPath());

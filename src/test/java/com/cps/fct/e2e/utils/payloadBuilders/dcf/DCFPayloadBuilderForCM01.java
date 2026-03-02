@@ -15,8 +15,13 @@ public class DCFPayloadBuilderForCM01 extends JsonReplacer {
             Map.entry("{{CM01_itemId}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_PTIURN_Number}}", fiveDigitNumber()),
             Map.entry("{{CM01_Def_PersonId}}", generateUppercaseAlphaNumeric(12)),
+            Map.entry("{{CM01_Def_PersonId_2}}", generateUppercaseAlphaNumeric(12)),
+            Map.entry("{{CM01_Def_PersonId_3}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_CaseOffenceId}}", generateUppercaseAlphaNumeric(12)),
+            Map.entry("{{CM01_CaseOffenceId_2}}", generateUppercaseAlphaNumeric(12)),
+            Map.entry("{{CM01_CaseOffenceId_3}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_SolicitorId}}", generateUppercaseAlphaNumeric(12)),
+            Map.entry("{{CM01_SolicitorId_2}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_Ser_ShoulderNo}}", generateUppercaseAlphaNumeric(6)),
             Map.entry("{{CM01_Ser_PersonId}}", generateUppercaseAlphaNumeric(10)),
             Map.entry("{{CM01_Con_ShoulderNo}}", generateUppercaseAlphaNumeric(6)),
@@ -37,11 +42,22 @@ public class DCFPayloadBuilderForCM01 extends JsonReplacer {
             Map.entry("{{Solicitor_FirstName}}", firstName()),
             Map.entry("{{Solicitor_lastName}}", lastName()),
             Map.entry("{{Solicitor_email}}", email()),
+            Map.entry("{{Solicitor_2_FirstName}}", firstName()),
+            Map.entry("{{Solicitor_2_lastName}}", lastName()),
+            Map.entry("{{Solicitor_2_email}}", email()),
             Map.entry("{{Defender_Solicitor_Company}}", companyName()),
             Map.entry("{{DEF_FirstName}}", firstName()),
             Map.entry("{{DEF_Surname}}", lastName()),
+            Map.entry("{{DEF_2_FirstName}}", firstName()),
+            Map.entry("{{DEF_2_Surname}}", lastName()),
+            Map.entry("{{DEF_3_FirstName}}", firstName()),
+            Map.entry("{{DEF_3_Surname}}", lastName()),
             Map.entry("{{DEF_Building_number}}", buildingNumber()),
-            Map.entry("{{DEF_Street_Address}}", streetAddress())
+            Map.entry("{{DEF_Street_Address}}", streetAddress()),
+            Map.entry("{{DEF_City}}", cityName()),
+            Map.entry("{{DEF_Mobile}}", mobilePhone()),
+            Map.entry("{{DEF_HomePhone}}", homePhone()),
+            Map.entry("{{DEF_Email}}", email())
 
     );
 

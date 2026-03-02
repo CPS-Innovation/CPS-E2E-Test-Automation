@@ -283,12 +283,12 @@
               },
               {
                 "Number": {
-                  "TelNationalNumber": "{{DEF_HomeNumber}}"
+                  "TelNationalNumber": "{{DEF_HomePhone}}"
                 },
                 "TypeOfNumber": "home"
               }
             ],
-            "Email": "{{DEF_email}}",
+            "Email": "{{DEF_Email}}",
             "DXAddress": null,
             "SocialMedia": null,
             "ContactPreferences": null

@@ -1,10 +1,10 @@
 {
   "PreChargeDecisionRequest": {
-    "ItemId": "{{DCFCM01itemId}}",
+    "ItemId": "{{CM01_itemId}}",
     "PTIURN": {
       "Force": "45",
       "Unit": "AA",
-      "Number": "{{DCFPtiUrnNumber}}",
+      "Number": "{{CM01_PTIURN_Number}}",
       "Year": "26",
       "Split": null
     },
@@ -54,7 +54,7 @@
             }
           },
           "ItemText": "Arrest Details",
-          "PersonUniqueId": "{{DefPersonId01}}"
+          "PersonUniqueId": "{{CM01_Def_PersonId}}"
         },
         {
           "ItemHeading": {
@@ -65,7 +65,7 @@
             }
           },
           "ItemText": "Interview Summary",
-          "PersonUniqueId": "{{DefPersonId01}}"
+          "PersonUniqueId": "{{CM01_Def_PersonId}}"
         },
         {
           "ItemHeading": {
@@ -76,7 +76,7 @@
             }
           },
           "ItemText": "Witness Involvement",
-          "PersonUniqueId": "{{VictimWitnessRef_1}}"
+          "PersonUniqueId": "{{CM01_VictimRef_1}}"
         },
         {
           "ItemHeading": {
@@ -87,7 +87,7 @@
             }
           },
           "ItemText": "Witness Involvement",
-          "PersonUniqueId": "{{Victim_Child}}"
+          "PersonUniqueId": "{{CM01_VictimRef_Child}}"
         },
         {
           "ItemHeading": {
@@ -98,7 +98,7 @@
             }
           },
           "ItemText": "Witness Involvement",
-          "PersonUniqueId": "{{Victim_Vulnerable}}"
+          "PersonUniqueId": "{{CM01_VictimRef_Vulnerable}}"
         },
         {
           "ItemHeading": {
@@ -109,7 +109,7 @@
             }
           },
           "ItemText": "Witness Involvement",
-          "PersonUniqueId": "{{Victim_Intimidated}}"
+          "PersonUniqueId": "{{CM01_VictimRef_Intimidated}}"
         },
         {
           "ItemHeading": {
@@ -120,7 +120,7 @@
             }
           },
           "ItemText": "Witness Involvement",
-          "PersonUniqueId": "{{WitnessRef_1}}"
+          "PersonUniqueId": "{{CM01_WitnessRef_1}}"
         },
         {
           "ItemHeading": {
@@ -131,7 +131,7 @@
             }
           },
           "ItemText": "Witness Involvement",
-          "PersonUniqueId": "{{Witness_Child}}"
+          "PersonUniqueId": "{{CM01_WitnessRef_Child}}"
         },
         {
           "ItemHeading": {
@@ -142,7 +142,7 @@
             }
           },
           "ItemText": "Witness Involvement",
-          "PersonUniqueId": "{{Witness_Police}}"
+          "PersonUniqueId": "{{CM01_WitnessRef_Police}}"
         },
         {
           "ItemHeading": {
@@ -153,7 +153,7 @@
             }
           },
           "ItemText": "Witness Involvement",
-          "PersonUniqueId": "{{Witness_Vulnerable}}"
+          "PersonUniqueId": "{{CM01_WitnessRef_Vulnerable}}"
         },
         {
           "ItemHeading": {
@@ -164,7 +164,7 @@
             }
           },
           "ItemText": "Witness Involvement",
-          "PersonUniqueId": "{{Witness_Intimidated}}"
+          "PersonUniqueId": "{{CM01_WitnessRef_Intimidated}}"
         }
       ]
     },
@@ -202,17 +202,13 @@
           {
             "Particulars": {
               "Address": {
-                "AddressLine": [
-                  "{{$randomStreetName}}",
-                  "{{$randomStreetName}}",
-                  "{{$randomCity}}"
-                ],
+                "AddressLine": ["{{DEF_Building_number}}","{{DEF_Street_Address}}","{{DEF_City}}" ],
                 "Postcode": "NE1 1AA",
                 "Country": "UK"
               }
             },
             "AnticipatedPlea": "Not Guilty",
-            "UniqueID": "{{CaseOffenceId}}",
+            "UniqueID": "{{CM01_CaseOffenceId}}",
             "CJSCode": {
               "Code": {
                 "Alternative": {
@@ -237,7 +233,7 @@
           "Alias": null,
           "PNCId": {
             "Year": "26",
-            "SerialNumber": "{{DCFPtiUrnNumber}}",
+            "SerialNumber": "{{CM01_PTIURN_Number}}",
             "CheckCharacter": "X"
           },
           "ParentGuardian": null,
@@ -250,19 +246,19 @@
           "PolicePostChargeRemand": null,
           "AppropriateAdultPresentId": null,
           "RemandApplicationIssues": null,
-          "UniqueId": "{{DefPersonId01}}",
+          "UniqueId": "{{CM01_Def_PersonId}}",
           "Name": {
-            "Title": "{{$randomNamePrefix}}",
+            "Title": null,
             "GivenName": [
               {
                 "NameSequenceSpecified": false,
-                "Value": "{{$randomFirstName}}"
+                "Value": "{{DEF_FirstName}}"
               }
             ],
             "RequestedName": null,
             "FamilyName": {
               "NameSequenceSpecified": false,
-              "Value": "{{$randomLastName}}"
+              "Value": "{{DEF_Surname}}"
             },
             "Suffix": null,
             "TypeSpecified": false
@@ -270,9 +266,7 @@
           "ContactDetails": {
             "Address": {
               "AddressLine": [
-                "{{$randomStreetName}}",
-                "{{$randomStreetName}}",
-                "{{$randomCity}}"
+                "{{DEF_Building_number}}","{{DEF_Street_Address}}","{{DEF_City}}"
               ],
               "Postcode": "NE1 1AB",
               "Country": "UK"
@@ -280,12 +274,18 @@
             "ContactNumber": [
               {
                 "Number": {
-                  "TelNationalNumber": "07111111111"
+                  "TelNationalNumber": "{{DEF_Mobile}}"
                 },
                 "TypeOfNumber": "mobile"
+              },
+              {
+                "Number": {
+                  "TelNationalNumber": "{{DEF_HomePhone}}"
+                },
+                "TypeOfNumber": "home"
               }
             ],
-            "Email": "{{$randomEmail}}",
+            "Email": "{{DEF_Email}}",
             "DXAddress": null,
             "SocialMedia": null,
             "ContactPreferences": null
@@ -364,20 +364,20 @@
           ]
         },
         "DefenceSolicitor": {
-          "Firm": "DEFENDER SOLICITOR COMPANY",
-          "UniqueId": "{{Solicitor}}",
+          "Firm": "{{Defender_Solicitor_Company}}",
+          "UniqueId": "{{CM01_SolicitorId}}",
           "Name": {
             "Title": null,
             "GivenName": [
               {
                 "NameSequenceSpecified": false,
-                "Value": "{{$randomFirstName}}"
+                "Value": "{{Solicitor_FirstName}}"
               }
             ],
             "RequestedName": null,
             "FamilyName": {
               "NameSequenceSpecified": false,
-              "Value": "{{$randomLastName}}"
+              "Value": "{{Solicitor_lastName}}"
             },
             "TypeSpecified": false
           },
@@ -385,16 +385,12 @@
             "SocialMedia": null,
             "ContactPreferences": null,
             "Address": {
-              "AddressLine": [
-                "{{$randomStreetName}}",
-                "{{$randomStreetName}}",
-                "{{$randomCity}}"
-              ],
+              "AddressLine": ["{{DEF_Building_number}}","{{DEF_Street_Address}}","{{DEF_City}}" ],
               "Postcode": "NE1 1AB",
               "Country": "UK"
             },
             "ContactNumber": null,
-            "Email": "{{$randomEmail}}"
+            "Email": "{{Solicitor_email}}"
           },
           "PersonClassification": null
         },
@@ -408,17 +404,13 @@
           {
             "Particulars": {
               "Address": {
-                "AddressLine": [
-                  "{{$randomStreetName}}",
-                  "{{$randomStreetName}}",
-                  "{{$randomCity}}"
-                ],
+                "AddressLine": ["{{DEF_Building_number}}","{{DEF_Street_Address}}","{{DEF_City}}" ],
                 "Postcode": "NE1 1AA",
                 "Country": "UK"
               }
             },
             "AnticipatedPlea": "Not Guilty",
-            "UniqueID": "{{CaseOffenceId}}",
+            "UniqueID": "{{CM01_CaseOffenceId}}",
             "CJSCode": {
               "Code": {
                 "Alternative": {
@@ -443,7 +435,7 @@
           "Alias": null,
           "PNCId": {
             "Year": "26",
-            "SerialNumber": "{{DCFPtiUrnNumber}}",
+            "SerialNumber": "{{CM01_PTIURN_Number}}",
             "CheckCharacter": "X"
           },
           "ParentGuardian": null,
@@ -456,30 +448,26 @@
           "PolicePostChargeRemand": null,
           "AppropriateAdultPresentId": null,
           "RemandApplicationIssues": null,
-          "UniqueId": "{{DefPersonId02}}",
+          "UniqueId": "{{CM01_Def_PersonId_2}}",
           "Name": {
-            "Title": "{{$randomNamePrefix}}",
+            "Title": null,
             "GivenName": [
               {
                 "NameSequenceSpecified": false,
-                "Value": "{{$randomFirstName}}"
+                "Value": "{{DEF_2_FirstName}}"
               }
             ],
             "RequestedName": null,
             "FamilyName": {
               "NameSequenceSpecified": false,
-              "Value": "{{$randomLastName}}"
+              "Value": "{{DEF_2_Surname}}"
             },
             "Suffix": null,
             "TypeSpecified": false
           },
           "ContactDetails": {
             "Address": {
-              "AddressLine": [
-                "{{$randomStreetName}}",
-                "{{$randomStreetName}}",
-                "{{$randomCity}}"
-              ],
+              "AddressLine": [  "{{DEF_Building_number}}","{{DEF_Street_Address}}","{{DEF_City}}"  ],
               "Postcode": "NE1 1AB",
               "Country": "UK"
             },
@@ -489,9 +477,15 @@
                   "TelNationalNumber": "07111111111"
                 },
                 "TypeOfNumber": "mobile"
+              },
+              {
+                "Number": {
+                  "TelNationalNumber": "01912525874"
+                },
+                "TypeOfNumber": "home"
               }
             ],
-            "Email": "{{$randomEmail}}",
+            "Email": "{{DEF_Email}}",
             "DXAddress": null,
             "SocialMedia": null,
             "ContactPreferences": null
@@ -570,20 +564,20 @@
           ]
         },
         "DefenceSolicitor": {
-          "Firm": "DEFENDER SOLICITOR COMPANY",
-          "UniqueId": "{{Solicitor02}}",
+          "Firm": "{{Defender_Solicitor_Company}}",
+          "UniqueId": "{{CM01_SolicitorId_2}}",
           "Name": {
             "Title": null,
             "GivenName": [
               {
                 "NameSequenceSpecified": false,
-                "Value": "{{$randomFirstName}}"
+                "Value": "{{Solicitor_2_FirstName}}"
               }
             ],
             "RequestedName": null,
             "FamilyName": {
               "NameSequenceSpecified": false,
-              "Value": "{{$randomLastName}}"
+              "Value": "{{Solicitor_2_lastName}}"
             },
             "TypeSpecified": false
           },
@@ -591,16 +585,12 @@
             "SocialMedia": null,
             "ContactPreferences": null,
             "Address": {
-              "AddressLine": [
-                "{{$randomStreetName}}",
-                "{{$randomStreetName}}",
-                "{{$randomCity}}"
-              ],
+              "AddressLine": [ "{{DEF_Building_number}}","{{DEF_Street_Address}}","{{DEF_City}}" ],
               "Postcode": "NE1 1AB",
               "Country": "UK"
             },
             "ContactNumber": null,
-            "Email": "{{$randomEmail}}"
+            "Email": "{{Solicitor_2_email}}"
           },
           "PersonClassification": null
         },
@@ -612,32 +602,28 @@
       {
         "Officer": {
           "PoliceOfficerRank": "Sergeant",
-          "ShoulderNumber": "{{SergeantShoulderNo}}"
+          "ShoulderNumber": "{{CM01_Ser_ShoulderNo}}"
         },
-        "UniqueId": "{{SergeantPersonId}}",
+        "UniqueId": "{{CM01_Ser_PersonId}}",
         "Name": {
           "Title": "DS",
           "GivenName": [
             {
               "NameSequenceSpecified": false,
-              "Value": "{{$randomFirstName}}"
+              "Value": "{{PoliceOfficer_GivenName}}"
             }
           ],
           "RequestedName": null,
           "FamilyName": {
             "NameSequenceSpecified": false,
-            "Value": "{{$randomLastName}}"
+            "Value": "{{PoliceOfficer_SurName}}"
           },
           "Suffix": null,
           "TypeSpecified": false
         },
         "ContactDetails": {
           "Address": {
-            "AddressLine": [
-              "{{$randomStreetName}}",
-              "{{$randomStreetName}}",
-              "{{$randomCity}}"
-            ],
+            "AddressLine": [ "{{DEF_Building_number}}","{{DEF_Street_Address}}","{{DEF_City}}" ],
             "Postcode": "NE1 1AB",
             "Country": "UK"
           },
@@ -670,32 +656,28 @@
       {
         "Officer": {
           "PoliceOfficerRank": "PoliceUnit",
-          "ShoulderNumber": "{{ConstableShoulderNo}}"
+          "ShoulderNumber": "{{CM01_Con_ShoulderNo}}"
         },
-        "UniqueId": "{{ConstablePersonId}}",
+        "UniqueId": "{{CM01_Con_PersonId}}",
         "Name": {
           "Title": "PC",
           "GivenName": [
             {
               "NameSequenceSpecified": false,
-              "Value": "{{$randomFirstName}}"
+              "Value": "{{PoliceOfficer2_GivenName}}"
             }
           ],
           "RequestedName": null,
           "FamilyName": {
             "NameSequenceSpecified": false,
-            "Value": "{{$randomLastName}}"
+            "Value": "{{PoliceOfficer2_Surname}}"
           },
           "Suffix": null,
           "TypeSpecified": false
         },
         "ContactDetails": {
           "Address": {
-            "AddressLine": [
-              "{{$randomStreetName}}",
-              "{{$randomStreetName}}",
-              "{{$randomCity}}"
-            ],
+            "AddressLine": ["{{DEF_Building_number}}","{{DEF_Street_Address}}","{{DEF_City}}" ],
             "Postcode": "NE1 1AB",
             "Country": "UK"
           },

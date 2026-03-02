@@ -8,11 +8,17 @@ Feature: Add witness personal details and verify wm01u
   @AddWitness @JSONMERGE
   Scenario: Add witness title, date of birth, address, contact and email details.
     Given create case CM01 for type "single defendant with charge"
-    And a "witness" is added using LM04
-    And a "witness child" is added using LM04
+#    And a "witness" is added using LM04
+#    And a "witness child" is added using LM04
+#    And a "witness police" is added using LM04
+#    And a "witness intimidated" is added using LM04
+#    And a "witness vulnerable" is added using LM04
 
-    And a "victim" is added using LM04
-    And a "victim child" is added using LM04
+#    And a "victim" is added using LM04
+#    And a "victim child" is added using LM04
+#    And a "victim police" is added using LM04
+#    And a "victim intimidated" is added using LM04
+
 #    And witness details are available
 #    And witness and victim are added to VCA
 #    When the witness's personal details are entered

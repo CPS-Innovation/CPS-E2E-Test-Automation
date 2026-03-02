@@ -1,12 +1,12 @@
 {
   "WitnessOrVictim": {
-    "CaseId": "{{DCFCaseID}}",
-    "ItemId": "{{WitnessChildLM04ItemId}}",
+    "CaseId": "{{LM04_CaseId}}",
+    "ItemId": "{{LM04_itemId}}",
     "PTIURN": {
-      "Force": "{{DCFforceNo}}",
-      "Unit": "{{DCFunit}}",
-      "Number": "{{DCFptnNo}}",
-      "Year": "{{DCFyear}}",
+      "Force": "25",
+      "Unit": "GD",
+      "Number": "{{LM04_PTIURN_Number}}",
+      "Year": "25",
       "Split": null
     },
     "UpdateStatus": {
@@ -16,18 +16,22 @@
     },
     "VictimWitness": {
       "Person": {
-        "UniqueId": "{{Witness_Child}}",
+        "UniqueId": "{{LM04_WitnessRef_1}}",
         "Name": {
-          "Title":"{{$randomNamePrefix}}",
+          "Title": null,
           "GivenName": [
             {
               "NameSequenceSpecified": false,
-              "Value": "{{$randomFirstName}}"
+              "Value": "{{FirstName}}"
+            },
+            {
+              "NameSequenceSpecified": false,
+              "Value": "{{MiddleName}}"
             }
           ],
           "RequestedName": null,
           "FamilyName": {
-            "Value": "{{$randomLastName}}"
+            "Value": "{{SurName}}"
           }
         },
         "ContactDetails": {
@@ -39,8 +43,8 @@
           "ContactPreferences": null
         },
         "PNCId": null,
-        "DateOfBirth": null,
-        "Nationality": null,
+        "DateOfBirth":  "2016-08-03",
+        "Nationality": "England",
         "AlternativeContact": null,
         "Occupation": null,
         "PersonClassification": [
@@ -61,7 +65,6 @@
         ]
       },
       "TypeOfPerson": "Witness",
-      "DateOfBirth": "2012-08-03",
       "Witness": {
         "Occupation": "Student",
         "Officer": null,

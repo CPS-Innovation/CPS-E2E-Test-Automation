@@ -2,15 +2,15 @@
   "PreChargeDecisionRequest": {
     "ItemId": "{{CM01_itemId}}",
     "PTIURN": {
-      "Force": "25",
-      "Unit": "GD",
+      "Force": "45",
+      "Unit": "AA",
       "Number": "{{CM01_PTIURN_Number}}",
-      "Year": "25",
+      "Year": "26",
       "Split": null
     },
     "CPSUnit": {
       "TopLevel": "A",
-      "SecondLevel": "21",
+      "SecondLevel": "45",
       "ThirdLevel": "AA",
       "BottomLevel": "00",
       "LiteralValue": null
@@ -24,7 +24,7 @@
         }
       },
       {
-        "ClassificationType": "CaseMonitoring",
+        "ClassificationType": "Case Monitoring",
         "ClassificationCode": "CSEA",
         "ClassificationValue": {
           "ClassificationValueFlag": true
@@ -43,7 +43,7 @@
               "ClassificationValueText": "SCO"
             }
           },
-          "ItemText": "Summary of Circumstances of Offence(s).",
+          "ItemText": "Summary of Circumstances of Offence(s)",
           "PersonUniqueId": null
         },
         {
@@ -54,7 +54,7 @@
               "ClassificationValueText": "AD"
             }
           },
-          "ItemText": "Defendant Arrest Details",
+          "ItemText": "Arrest Details",
           "PersonUniqueId": "{{CM01_Def_PersonId}}"
         },
         {
@@ -77,6 +77,50 @@
             }
           },
           "ItemText": "Witness Involvement",
+          "PersonUniqueId": "{{CM01_VictimRef_1}}"
+        },
+        {
+          "ItemHeading": {
+            "ClassificationType": "PoliceNarrative",
+            "ClassificationCode": "Factual Summary",
+            "ClassificationValue": {
+              "ClassificationValueText": "WITI"
+            }
+          },
+          "ItemText": "Witness Involvement",
+          "PersonUniqueId": "{{CM01_VictimRef_Child}}"
+        },
+        {
+          "ItemHeading": {
+            "ClassificationType": "PoliceNarrative",
+            "ClassificationCode": "Factual Summary",
+            "ClassificationValue": {
+              "ClassificationValueText": "WITI"
+            }
+          },
+          "ItemText": "Witness Involvement",
+          "PersonUniqueId": "{{CM01_VictimRef_Vulnerable}}"
+        },
+        {
+          "ItemHeading": {
+            "ClassificationType": "PoliceNarrative",
+            "ClassificationCode": "Factual Summary",
+            "ClassificationValue": {
+              "ClassificationValueText": "WITI"
+            }
+          },
+          "ItemText": "Witness Involvement",
+          "PersonUniqueId": "{{CM01_VictimRef_Intimidated}}"
+        },
+        {
+          "ItemHeading": {
+            "ClassificationType": "PoliceNarrative",
+            "ClassificationCode": "Factual Summary",
+            "ClassificationValue": {
+              "ClassificationValueText": "WITI"
+            }
+          },
+          "ItemText": "Witness Involvement",
           "PersonUniqueId": "{{CM01_WitnessRef_1}}"
         },
         {
@@ -88,7 +132,40 @@
             }
           },
           "ItemText": "Witness Involvement",
-          "PersonUniqueId": "{{CM01_VictimRef_1}}"
+          "PersonUniqueId": "{{CM01_WitnessRef_Child}}"
+        },
+        {
+          "ItemHeading": {
+            "ClassificationType": "PoliceNarrative",
+            "ClassificationCode": "Factual Summary",
+            "ClassificationValue": {
+              "ClassificationValueText": "WITI"
+            }
+          },
+          "ItemText": "Witness Involvement",
+          "PersonUniqueId": "{{CM01_WitnessRef_Police}}"
+        },
+        {
+          "ItemHeading": {
+            "ClassificationType": "PoliceNarrative",
+            "ClassificationCode": "Factual Summary",
+            "ClassificationValue": {
+              "ClassificationValueText": "WITI"
+            }
+          },
+          "ItemText": "Witness Involvement",
+          "PersonUniqueId": "{{CM01_WitnessRef_Vulnerable}}"
+        },
+        {
+          "ItemHeading": {
+            "ClassificationType": "PoliceNarrative",
+            "ClassificationCode": "Factual Summary",
+            "ClassificationValue": {
+              "ClassificationValueText": "WITI"
+            }
+          },
+          "ItemText": "Witness Involvement",
+          "PersonUniqueId": "{{CM01_WitnessRef_Intimidated}}"
         }
       ]
     },
@@ -102,7 +179,7 @@
               "ClassificationValueText": "EI"
             }
           },
-          "ItemText": "Evidential Summary.",
+          "ItemText": "Evidential",
           "PersonUniqueId": null
         },
         {
@@ -113,7 +190,7 @@
               "ClassificationValueText": "RLE"
             }
           },
-          "ItemText": "Reasonable Lines of Enquiry.",
+          "ItemText": "Reasonable Lines of Enquiry",
           "PersonUniqueId": null
         }
       ]
@@ -126,8 +203,10 @@
           {
             "Particulars": {
               "Address": {
-                "AddressLine": [ "Suspect AddressLine 1","Suspect AddressLine 2","Suspect AddressLine 3","Suspect AddressLine 4","Suspect AddressLine 5"],
-                "Postcode": "DF1 1OF",
+                "AddressLine": [
+                  "{{DEF_Building_number}}","{{DEF_Street_Address}}","{{DEF_City}}"
+                ],
+                "Postcode": "NE1 1AA",
                 "Country": "UK"
               }
             },
@@ -146,17 +225,17 @@
             },
             "Description": "OF 61 102 - Assault a person thereby occasioning them actual bodily harm",
             "Category": "Either Way",
-            "FromDate": "2025-01-01T00:00:00",
+            "FromDate": "2025-12-15T00:00:00",
             "ToDate": null
           }
         ],
         "Person": {
           "DateOfBirth": "2004-03-20",
-          "Nationality": "Wales",
+          "Nationality": "England",
           "Occupation": "Defender Occupation",
           "Alias": null,
           "PNCId": {
-            "Year": "25",
+            "Year": "26",
             "SerialNumber": "{{CM01_PTIURN_Number}}",
             "CheckCharacter": "X"
           },
@@ -172,15 +251,11 @@
           "RemandApplicationIssues": null,
           "UniqueId": "{{CM01_Def_PersonId}}",
           "Name": {
-            "Title": "Mr",
+            "Title": null,
             "GivenName": [
               {
                 "NameSequenceSpecified": false,
                 "Value": "{{DEF_FirstName}}"
-              },
-              {
-                "NameSequenceSpecified": false,
-                "Value": "{{DEF_MiddleName}}"
               }
             ],
             "RequestedName": null,
@@ -193,19 +268,27 @@
           },
           "ContactDetails": {
             "Address": {
-              "AddressLine": [ "DF AddressLine1", "DF AddressLine2", "DF AddressLine3" ],
-              "Postcode": "DF1 1PC",
+              "AddressLine": [
+                "{{DEF_Building_number}}","{{DEF_Street_Address}}","{{DEF_City}}"
+              ],
+              "Postcode": "NE1 1AB",
               "Country": "UK"
             },
             "ContactNumber": [
               {
                 "Number": {
-                  "TelNationalNumber": "07111111111"
+                  "TelNationalNumber": "{{DEF_Mobile}}"
                 },
                 "TypeOfNumber": "mobile"
+              },
+              {
+                "Number": {
+                  "TelNationalNumber": "{{DEF_HomeNumber}}"
+                },
+                "TypeOfNumber": "home"
               }
             ],
-            "Email": "DEFENDER_01@EMAIL.COM",
+            "Email": "{{DEF_email}}",
             "DXAddress": null,
             "SocialMedia": null,
             "ContactPreferences": null
@@ -287,7 +370,7 @@
           "Firm": "{{Defender_Solicitor_Company}}",
           "UniqueId": "{{CM01_SolicitorId}}",
           "Name": {
-            "Title": "FEMALE",
+            "Title": null,
             "GivenName": [
               {
                 "NameSequenceSpecified": false,
@@ -305,12 +388,14 @@
             "SocialMedia": null,
             "ContactPreferences": null,
             "Address": {
-              "AddressLine": ["Solicitor AddressLine 1","Solicitor AddressLine 2","Solicitor AddressLine 3"],
-              "Postcode": "SO1 1PC",
+              "AddressLine": [
+                "{{DEF_Building_number}}","{{DEF_Street_Address}}","{{DEF_City}}"
+              ],
+              "Postcode": "NE1 1AB",
               "Country": "UK"
             },
             "ContactNumber": null,
-            "Email": null
+            "Email": "{{Solicitor_email}}"
           },
           "PersonClassification": null
         },
@@ -326,7 +411,7 @@
         },
         "UniqueId": "{{CM01_Ser_PersonId}}",
         "Name": {
-          "Title": null,
+          "Title": "DS",
           "GivenName": [
             {
               "NameSequenceSpecified": false,
@@ -343,20 +428,22 @@
         },
         "ContactDetails": {
           "Address": {
-            "AddressLine": ["Police Station AddressLine1","Police Station AddressLine2","Police Station AddressLine3"],
-            "Postcode": "PS1 1PS",
+            "AddressLine": [
+              "{{DEF_Building_number}}","{{DEF_Street_Address}}","{{DEF_City}}"
+            ],
+            "Postcode": "NE1 1AB",
             "Country": "UK"
           },
           "ContactNumber": [
             {
               "Number": {
                 "TelCountryCode": "44",
-                "TelNationalNumber": "07777777777"
+                "TelNationalNumber": "07777777778"
               },
               "TypeOfNumber": "mobile"
             }
           ],
-          "Email": "police.sergeant@police-station.co.uk",
+          "Email": "police.sergeant@police-station.uk",
           "DXAddress": null,
           "SocialMedia": null,
           "ContactPreferences": {
@@ -375,12 +462,12 @@
       },
       {
         "Officer": {
-          "PoliceOfficerRank": "Constable",
+          "PoliceOfficerRank": "PoliceUnit",
           "ShoulderNumber": "{{CM01_Con_ShoulderNo}}"
         },
         "UniqueId": "{{CM01_Con_PersonId}}",
         "Name": {
-          "Title": null,
+          "Title": "PC",
           "GivenName": [
             {
               "NameSequenceSpecified": false,
@@ -397,9 +484,10 @@
         },
         "ContactDetails": {
           "Address": {
-            "AddressLine": [ "Policeconstable AddressLine1","Policeconstable AddressLine2","Policeconstable AddressLine3",
-              "Policeconstable AddressLine4","Policeconstable AddressLine5","Policeconstable AddressLine6" ],
-            "Postcode": "PC1 1PC",
+            "AddressLine": [
+              "{{DEF_Building_number}}","{{DEF_Street_Address}}","{{DEF_City}}"
+            ],
+            "Postcode": "NE1 1AB",
             "Country": "UK"
           },
           "ContactNumber": [
@@ -411,7 +499,7 @@
               "TypeOfNumber": "mobile"
             }
           ],
-          "Email": "police.constable@police-station.co.uk",
+          "Email": "police.constable@police-station.uk",
           "DXAddress": null,
           "SocialMedia": null,
           "ContactPreferences": {

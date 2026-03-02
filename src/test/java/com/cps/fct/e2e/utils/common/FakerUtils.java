@@ -139,7 +139,7 @@ public class FakerUtils {
 
     public static void main(String[] args) {
         Faker faker1 = new Faker();
-        System.out.println("01" + faker1.numerify("########")); // work phone
+        System.out.println("01" + faker1.numerify("#########")); // work phone
         System.out.println("07" + faker1.numerify("#########"));
 
     }

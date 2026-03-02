@@ -24,12 +24,11 @@ public class DCFMapper implements FileMapper {
         String lowerSubtype  = subtype.toLowerCase(Locale.ROOT).trim();
         String lowerFileType = fileType.toLowerCase(Locale.ROOT).trim();
 
-        String dir = BASE_DIR + "/" + lowerSubtype; // e.g. .../payloads/DCF/lm04
+        String dir = BASE_DIR + "/" + lowerSubtype;
 
         if ("lm04".equals(lowerSubtype)) {
-            String normalized = lowerFileType.replace(' ', '_'); // "witness_child", "victim_police", etc.
+            String normalized = lowerFileType.replace(' ', '_');
 
-            // 1️⃣ Override metadata payloads first
             if ("dcf_witness_meta_data".equals(normalized)) {
                 return Paths.get(dir, "dcf_witness_meta_data.json").toFile();
             }
@@ -37,22 +36,18 @@ public class DCFMapper implements FileMapper {
                 return Paths.get(dir, "dcf_victim_meta_data.json").toFile();
             }
 
-            // 2️⃣ All witness* variants → witness.json, witness_child.json, witness_police.json, etc.
             Path path = Paths.get(dir, normalized + ".json");
             if (normalized.startsWith("witness")) {
                 return path.toFile();
             }
 
-            // 3️⃣ All victim* variants → victim.json, victim_child.json, victim_police.json, etc.
             if (normalized.startsWith("victim")) {
                 return path.toFile();
             }
 
-            // 4️⃣ Anything else → old fuzzy logic
             return FileUtils.findMatchingFile(dir, fileType);
         }
 
-        // Other DCF message types unchanged
         return FileUtils.findMatchingFile(dir, fileType);
     }
 }

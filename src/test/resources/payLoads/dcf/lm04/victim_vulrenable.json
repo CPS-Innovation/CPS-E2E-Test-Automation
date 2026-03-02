@@ -1,7 +1,7 @@
 {
   "WitnessOrVictim": {
     "CaseId": "{{DCFCaseID}}",
-    "ItemId": "{{VicWitLM04ItemId}}",
+    "ItemId": "{{VictimVulnerableLM04ItemId}}",
     "PTIURN": {
       "Force": "{{DCFforceNo}}",
       "Unit": "{{DCFunit}}",
@@ -16,7 +16,7 @@
     },
     "VictimWitness": {
       "Person": {
-        "UniqueId": "{{VictimWitnessRef_1}}",
+        "UniqueId": "{{Victim_Vulnerable}}",
         "Name": {
           "Title": "{{$randomNamePrefix}}",
           "GivenName": [
@@ -45,19 +45,19 @@
         "Occupation": null,
         "PersonClassification": [
           {
-            "ClassificationType": "StatusInformation",
-            "ClassificationCode": "KeyWitness",
+            "ClassificationType": "TypeOfWitness",
+            "ClassificationCode": "L",
             "ClassificationValue": {
-              "ClassificationValueText": "Y"
+              "ClassificationValueFlag": true
             }
           }
         ]
       },
       "TypeOfPerson": "VictimWitness",
-      "DateOfBirth": "1970-08-03",
+      "DateOfBirth": "2012-09-03",
       "WitnessAndVictim": {
         "Witness": {
-          "Occupation": "Civilian"
+          "Occupation": "Student"
         },
         "Victim": {
           "XOffenceId": [

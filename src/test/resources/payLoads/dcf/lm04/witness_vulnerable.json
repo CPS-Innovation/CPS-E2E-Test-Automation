@@ -1,7 +1,7 @@
 {
   "WitnessOrVictim": {
     "CaseId": "{{DCFCaseID}}",
-    "ItemId": "{{VicWitLM04ItemId}}",
+    "ItemId": "{{WitnessVulnerableLM04ItemId}}",
     "PTIURN": {
       "Force": "{{DCFforceNo}}",
       "Unit": "{{DCFunit}}",
@@ -16,7 +16,7 @@
     },
     "VictimWitness": {
       "Person": {
-        "UniqueId": "{{VictimWitnessRef_1}}",
+        "UniqueId": "{{Witness_Vulnerable}}",
         "Name": {
           "Title": "{{$randomNamePrefix}}",
           "GivenName": [
@@ -50,24 +50,24 @@
             "ClassificationValue": {
               "ClassificationValueText": "Y"
             }
+          },
+          {
+            "ClassificationType": "TypeOfWitness",
+            "ClassificationCode": "L",
+            "ClassificationValue": {
+              "ClassificationValueFlag": true
+            }
           }
         ]
       },
-      "TypeOfPerson": "VictimWitness",
-      "DateOfBirth": "1970-08-03",
-      "WitnessAndVictim": {
-        "Witness": {
-          "Occupation": "Civilian"
-        },
-        "Victim": {
-          "XOffenceId": [
-            "{{CaseOffenceId}}"
-          ],
-          "VPSStatus": {
-            "ResponseToVPSOffer": "Accepted",
-            "SchemeExplained": false
-          }
-        }
+      "TypeOfPerson": "Witness",
+      "DateOfBirth": "1988-08-03",
+      "Witness": {
+        "Occupation": "Worker",
+        "Officer": null,
+        "WitnessNeeds": null,
+        "WarnedByPolice": false,
+        "AvailabilityToAttendCourt": null
       },
       "LinkedSuspects": null
     }

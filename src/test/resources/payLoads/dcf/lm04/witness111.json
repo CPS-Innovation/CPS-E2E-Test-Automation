@@ -1,12 +1,12 @@
 {
   "WitnessOrVictim": {
-    "CaseId": "{{DCFCaseID}}",
-    "ItemId": "{{VicWitLM04ItemId}}",
+    "CaseId": "{{LM04_CaseId}}",
+    "ItemId": "{{LM04_itemId}}",
     "PTIURN": {
-      "Force": "{{DCFforceNo}}",
-      "Unit": "{{DCFunit}}",
-      "Number": "{{DCFptnNo}}",
-      "Year": "{{DCFyear}}",
+      "Force": "25",
+      "Unit": "GD",
+      "Number": "{{LM04_PTIURN_Number}}",
+      "Year": "25",
       "Split": null
     },
     "UpdateStatus": {
@@ -16,18 +16,22 @@
     },
     "VictimWitness": {
       "Person": {
-        "UniqueId": "{{VictimWitnessRef_1}}",
+        "UniqueId": "{{LM04_WitnessRef_1}}",
         "Name": {
-          "Title": "{{$randomNamePrefix}}",
+          "Title": null,
           "GivenName": [
             {
               "NameSequenceSpecified": false,
-              "Value": "{{$randomFirstName}}"
+              "Value": "{{FirstName}}"
+            },
+            {
+              "NameSequenceSpecified": false,
+              "Value": "{{MiddleName}}"
             }
           ],
           "RequestedName": null,
           "FamilyName": {
-            "Value": "{{$randomLastName}}"
+            "Value": "{{Surname}}"
           }
         },
         "ContactDetails": {
@@ -53,21 +57,12 @@
           }
         ]
       },
-      "TypeOfPerson": "VictimWitness",
-      "DateOfBirth": "1970-08-03",
-      "WitnessAndVictim": {
-        "Witness": {
-          "Occupation": "Civilian"
-        },
-        "Victim": {
-          "XOffenceId": [
-            "{{CaseOffenceId}}"
-          ],
-          "VPSStatus": {
-            "ResponseToVPSOffer": "Accepted",
-            "SchemeExplained": false
-          }
-        }
+      "TypeOfPerson": "Witness",
+      "Witness": {
+        "Officer": null,
+        "WitnessNeeds": null,
+        "WarnedByPolice": false,
+        "AvailabilityToAttendCourt": null
       },
       "LinkedSuspects": null
     }

@@ -203,17 +203,13 @@
           {
             "Particulars": {
               "Address": {
-                "AddressLine": [
-                  "{{$randomStreetName}}",
-                  "{{$randomStreetName}}",
-                  "{{$randomCity}}"
-                ],
+                "AddressLine": [ "{{$randomStreetName}}","{{$randomStreetName}}","{{$randomCity}}"],
                 "Postcode": "NE1 1AA",
                 "Country": "UK"
               }
             },
             "AnticipatedPlea": "Not Guilty",
-            "UniqueID": "{{CaseOffenceId}}",
+            "UniqueID": "{{CaseOffenceId01}}",
             "CJSCode": {
               "Code": {
                 "Alternative": {
@@ -226,6 +222,58 @@
               "LiteralValue": null
             },
             "Description": "OF 61 102 - Assault a person thereby occasioning them actual bodily harm",
+            "Category": "Either Way",
+            "FromDate": "2025-12-15T00:00:00",
+            "ToDate": null
+          },
+          {
+            "Particulars": {
+              "Address": {
+                "AddressLine": ["{{$randomStreetName}}","{{$randomStreetName}}", "{{$randomCity}}"],
+                "Postcode": "NE1 1AA",
+                "Country": "UK"
+              }
+            },
+            "AnticipatedPlea": "Not Guilty",
+            "UniqueID": "{{CaseOffenceId02}}",
+            "CJSCode": {
+              "Code": {
+                "Alternative": {
+                  "ActOrSource": "OF",
+                  "Year": "61"
+                },
+                "Reason": "017"
+              },
+              "Qualifier": null,
+              "LiteralValue": null
+            },
+            "Description": "OF 61 017 - Section 18 - grievous bodily harm with intent",
+            "Category": "Either Way",
+            "FromDate": "2025-12-15T00:00:00",
+            "ToDate": null
+          },
+          {
+            "Particulars": {
+              "Address": {
+                "AddressLine": ["{{$randomStreetName}}","{{$randomStreetName}}","{{$randomCity}}"],
+                "Postcode": "NE1 1AA",
+                "Country": "UK"
+              }
+            },
+            "AnticipatedPlea": "Not Guilty",
+            "UniqueID": "{{CaseOffenceId03}}",
+            "CJSCode": {
+              "Code": {
+                "Alternative": {
+                  "ActOrSource": "OF",
+                  "Year": "61"
+                },
+                "Reason": "016"
+              },
+              "Qualifier": null,
+              "LiteralValue": null
+            },
+            "Description": "OF 61 016 - Section 18 - wounding with intent",
             "Category": "Either Way",
             "FromDate": "2025-12-15T00:00:00",
             "ToDate": null
@@ -440,7 +488,7 @@
             {
               "Number": {
                 "TelCountryCode": "44",
-                "TelNationalNumber": "07777777778"
+                "TelNationalNumber": "07777777777"
               },
               "TypeOfNumber": "mobile"
             }

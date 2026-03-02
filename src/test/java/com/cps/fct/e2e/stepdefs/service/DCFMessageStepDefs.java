@@ -38,15 +38,34 @@ public class DCFMessageStepDefs {
 
         HttpResponseWrapper responseWrapper = messageService.cm01WithADefendantCharge(mergedFile, messageType, context);
         messageService.persistCaseDetails(responseWrapper, context);
-
-//        HttpResponseWrapper responseWrapper = messageService.cm01WithADefendantCharge(caseDataFile, messageType, context);
-//        messageService.persistCaseDetails(responseWrapper, context);
     }
 
     @And("a {string} is added using {word}")
     public void addNewVictimOrWitness(String caseDataType, String messageType) throws IOException {
-        File caseDataFile = FileUtils.getValidatedFile(context.get("caseType"), messageType, caseDataType);
-        messageService.lmO4AddVictimWitness(caseDataFile, caseDataType, context);
+//        File caseDataFile = FileUtils.getValidatedFile(context.get("caseType"), messageType, caseDataType);
+//        String metaDataType = JsonMergeUtil.resolveDcfMetaDataType(caseDataType);
+//        File overridesFile = FileUtils.getValidatedFile(context.get("caseType"), messageType, metaDataType);
+//        File mergedFile = JsonMergeUtil.mergeToTempFile(caseDataFile, overridesFile);
+//        messageService.lmO4AddVictimWitness(mergedFile, caseDataType, context);
+
+        String caseType = (String) context.get("caseType");
+
+        System.out.println("caseType     = " + caseType);
+        System.out.println("messageType  = " + messageType);
+        System.out.println("caseDataType = " + caseDataType);
+
+        File caseDataFile = FileUtils.getValidatedFile(caseType, messageType, caseDataType);
+        System.out.println("base file path     = " + caseDataFile.getAbsolutePath());
+
+        String metaDataType = JsonMergeUtil.resolveDcfMetaDataType(caseDataType);
+        System.out.println("metaDataType       = " + metaDataType);
+
+        File overridesFile = FileUtils.getValidatedFile(caseType, messageType, metaDataType);
+        System.out.println("override file path = " + overridesFile.getAbsolutePath());
+
+        File mergedFile = JsonMergeUtil.mergeToTempFile(caseDataFile, overridesFile);
+
+        messageService.lmO4AddVictimWitness(mergedFile, caseDataType, context);
     }
 
 }

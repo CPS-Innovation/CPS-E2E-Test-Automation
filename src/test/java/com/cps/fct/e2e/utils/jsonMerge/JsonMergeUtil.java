@@ -34,17 +34,17 @@ public class JsonMergeUtil {
         System.out.println(">> mergeToTempFile baseFile      = " + baseFile.getAbsolutePath());
         System.out.println(">> mergeToTempFile overridesFile = " + overridesFile.getAbsolutePath());
 
-        // 1️⃣ Read base JSON (LM04 witness/victim template)
+        // Read base JSON (LM04 witness/victim template)
         ObjectNode baseJson = (ObjectNode) MAPPER.readTree(baseFile);
         System.out.println(">> baseJson root field names:");
         baseJson.fieldNames().forEachRemaining(System.out::println);
 
-        // 2️⃣ Read overrides JSON (flat map of paths → values)
+        // Read overrides JSON (flat map of paths → values)
         ObjectNode overridesRoot = (ObjectNode) MAPPER.readTree(overridesFile);
         System.out.println(">> overrides root field names:");
         overridesRoot.fieldNames().forEachRemaining(System.out::println);
 
-        // 3️⃣ Apply each override path strictly onto baseJson
+        // Apply each override path strictly onto baseJson
         Iterator<Map.Entry<String, JsonNode>> fields = overridesRoot.fields();
         while (fields.hasNext()) {
             Map.Entry<String, JsonNode> entry = fields.next();
@@ -54,7 +54,7 @@ public class JsonMergeUtil {
             setDeepStrict(baseJson, path, value);
         }
 
-        // 4️⃣ Write merged JSON to temp file
+        // Write merged JSON to temp file
         String mergedJsonString = MAPPER.writeValueAsString(baseJson);
 
         Path tempFilePath = Files.createTempFile("merged-", ".json");

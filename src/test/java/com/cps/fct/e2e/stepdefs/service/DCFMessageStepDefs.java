@@ -3,6 +3,7 @@ package com.cps.fct.e2e.stepdefs.service;
 import com.cps.fct.e2e.utils.FileMapping.FileUtils;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
 import com.cps.fct.e2e.utils.httpClient.HttpResponseWrapper;
+import com.cps.fct.e2e.utils.jsonMerge.JsonMergeUtil;
 import com.cps.fct.e2e.utils.services.ddei.CaseService;
 import com.cps.fct.e2e.utils.services.messagaingApi.DCFMessageService;
 import io.cucumber.java.en.And;
@@ -12,6 +13,7 @@ import org.picocontainer.annotations.Inject;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 
 
 public class DCFMessageStepDefs {
@@ -28,8 +30,17 @@ public class DCFMessageStepDefs {
     @Given("create case {word} for type {string}")
     public void createCaseUsing(String messageType, String caseDataType) throws IOException {
         File caseDataFile = FileUtils.getValidatedFile(context.get("caseType"), messageType, caseDataType);
-        HttpResponseWrapper responseWrapper = messageService.cm01WithADefendantCharge(caseDataFile, messageType, context);
+        File overridesFile = FileUtils.getValidatedFile(context.get("caseType"), messageType, "cm01 update meta data");
+
+        File mergedFile = JsonMergeUtil.mergeToTempFile(caseDataFile, overridesFile);
+//        String mergedContent = Files.readString(mergedFile.toPath());
+//        System.out.println("Merged JSON:\n" + mergedContent);
+
+        HttpResponseWrapper responseWrapper = messageService.cm01WithADefendantCharge(mergedFile, messageType, context);
         messageService.persistCaseDetails(responseWrapper, context);
+
+//        HttpResponseWrapper responseWrapper = messageService.cm01WithADefendantCharge(caseDataFile, messageType, context);
+//        messageService.persistCaseDetails(responseWrapper, context);
     }
 
     @And("a {string} is added using {word}")

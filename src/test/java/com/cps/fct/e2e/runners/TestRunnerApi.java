@@ -21,7 +21,7 @@ import static io.cucumber.junit.platform.engine.Constants.OBJECT_FACTORY_PROPERT
 @IncludeEngines("cucumber")
 @SelectClasspathResource("features")
 @ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "com.cps.fct.e2e")
-@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@DCF or @TWIF")
+@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@JSONMERGE")
 @ConfigurationParameter(
         key = PLUGIN_PROPERTY_NAME,
         value = "pretty, json:target/cucumber-report/cucumber.json"

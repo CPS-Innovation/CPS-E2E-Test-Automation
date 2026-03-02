@@ -32,20 +32,16 @@ public class DCFPayloadBuilderForCM01 extends JsonReplacer {
             Map.entry("{{CM01_VictimRef_Intimidated}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{PoliceOfficer_GivenName}}", firstName()),
             Map.entry("{{PoliceOfficer_SurName}}", lastName()),
-            Map.entry("{{PoliceOfficer2_GivenName}}",firstName()),
+            Map.entry("{{PoliceOfficer2_GivenName}}", firstName()),
             Map.entry("{{PoliceOfficer2_Surname}}", lastName()),
             Map.entry("{{Solicitor_FirstName}}", firstName()),
             Map.entry("{{Solicitor_lastName}}", lastName()),
+            Map.entry("{{Solicitor_email}}", email()),
             Map.entry("{{Defender_Solicitor_Company}}", companyName()),
-            Map.entry("{{DEF_MiddleName}}", middleName()),
+            Map.entry("{{DEF_FirstName}}", firstName()),
             Map.entry("{{DEF_Surname}}",lastName()),
             Map.entry("{{DEF_Building_number}}",buildingNumber()),
-            Map.entry("{{DEF_Street_Address}}",streetAddress()),
-            Map.entry("{{DEF_City}}",cityName()),
-            Map.entry("{{DEF_email}}",email()),
-            Map.entry("{{DEF_Mobile}}",mobilePhone())
-
-
+            Map.entry("{{DEF_Street_Address}}",streetAddress())
     );
 
     public String generatePayloadWithValues(String payloadFileName, ScenarioContext context) throws IOException {

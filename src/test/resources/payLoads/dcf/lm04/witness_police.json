@@ -1,12 +1,12 @@
 {
   "WitnessOrVictim": {
-    "CaseId": "{{DCFCaseID}}",
-    "ItemId": "{{WitnessPoliceLM04ItemId}}",
+    "CaseId": "{{LM04_CaseId}}",
+    "ItemId": "{{LM04_itemId}}",
     "PTIURN": {
-      "Force": "{{DCFforceNo}}",
-      "Unit": "{{DCFunit}}",
-      "Number": "{{DCFptnNo}}",
-      "Year": "{{DCFyear}}",
+      "Force": "25",
+      "Unit": "GD",
+      "Number": "{{LM04_PTIURN_Number}}",
+      "Year": "25",
       "Split": null
     },
     "UpdateStatus": {
@@ -16,18 +16,22 @@
     },
     "VictimWitness": {
       "Person": {
-        "UniqueId": "{{Witness_Police}}",
+        "UniqueId": "{{LM04_WitnessRef_1}}",
         "Name": {
           "Title": null,
           "GivenName": [
             {
               "NameSequenceSpecified": false,
-              "Value": "{{$randomFirstName}}"
+              "Value": "{{FirstName}}"
+            },
+            {
+              "NameSequenceSpecified": false,
+              "Value": "{{MiddleName}}"
             }
           ],
           "RequestedName": null,
           "FamilyName": {
-            "Value": "{{$randomLastName}}"
+            "Value": "{{Surname}}"
           }
         },
         "ContactDetails": {

@@ -68,7 +68,7 @@
       "Witness": {
         "Officer": {
           "PoliceOfficerRank": "Constable",
-          "ShoulderNumber": "{{ConstableShoulderNo}}"
+          "ShoulderNumber": "{{CM01_Con_ShoulderNo}}"
         },
         "WitnessNeeds": null,
         "WarnedByPolice": false,

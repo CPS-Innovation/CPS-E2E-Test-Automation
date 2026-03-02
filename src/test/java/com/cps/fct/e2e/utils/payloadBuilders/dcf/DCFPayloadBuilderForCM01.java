@@ -22,8 +22,14 @@ public class DCFPayloadBuilderForCM01 extends JsonReplacer {
             Map.entry("{{CM01_Con_ShoulderNo}}", generateUppercaseAlphaNumeric(6)),
             Map.entry("{{CM01_Con_PersonId}}", generateUppercaseAlphaNumeric(10)),
             Map.entry("{{CM01_WitnessRef_1}}", generateUppercaseAlphaNumeric(12)),
+            Map.entry("{{CM01_WitnessRef_Child}}", generateUppercaseAlphaNumeric(12)),
+            Map.entry("{{CM01_WitnessRef_Police}}", generateUppercaseAlphaNumeric(12)),
+            Map.entry("{{CM01_WitnessRef_Vulnerable}}", generateUppercaseAlphaNumeric(12)),
+            Map.entry("{{CM01_WitnessRef_Intimidated}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_VictimRef_1}}", generateUppercaseAlphaNumeric(12)),
-            Map.entry("{{CM01_VictimWitnessRef_1}}", generateUppercaseAlphaNumeric(12)),
+            Map.entry("{{CM01_VictimRef_Child}}", generateUppercaseAlphaNumeric(12)),
+            Map.entry("{{CM01_VictimRef_Vulnerable}}", generateUppercaseAlphaNumeric(12)),
+            Map.entry("{{CM01_VictimRef_Intimidated}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{PoliceOfficer_GivenName}}", firstName()),
             Map.entry("{{PoliceOfficer_SurName}}", lastName()),
             Map.entry("{{PoliceOfficer2_GivenName}}",firstName()),
@@ -33,7 +39,13 @@ public class DCFPayloadBuilderForCM01 extends JsonReplacer {
             Map.entry("{{Defender_Solicitor_Company}}", companyName()),
             Map.entry("{{DEF_MiddleName}}", middleName()),
             Map.entry("{{DEF_Surname}}",lastName()),
-            Map.entry("{{DEF_FirstName}}", firstName())
+            Map.entry("{{DEF_Building_number}}",buildingNumber()),
+            Map.entry("{{DEF_Street_Address}}",streetAddress()),
+            Map.entry("{{DEF_City}}",cityName()),
+            Map.entry("{{DEF_email}}",email()),
+            Map.entry("{{DEF_Mobile}}",mobilePhone())
+
+
     );
 
     public String generatePayloadWithValues(String payloadFileName, ScenarioContext context) throws IOException {

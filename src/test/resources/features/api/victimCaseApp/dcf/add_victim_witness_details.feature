@@ -10,7 +10,7 @@ Feature: Add witness personal details and verify wm01u
     Given create case CM01 for type "single defendant with charge"
 #    And a "witness" is added using LM04
 #    And a "witness child" is added using LM04
-#    And a "witness police" is added using LM04
+    And a "witness police" is added using LM04
 #    And a "witness intimidated" is added using LM04
 #    And a "witness vulnerable" is added using LM04
 

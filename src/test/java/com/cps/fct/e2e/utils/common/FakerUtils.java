@@ -23,29 +23,6 @@ public class FakerUtils {
         return faker.name().fullName();
     }
 
-    public static String buildingNumber() {
-        return faker.address().buildingNumber();
-
-    }
-
-    public static String populateSentences() {
-        return faker.yoda().quote();
-
-    }
-
-    public static String gender() {
-        return faker.demographic().sex();
-    }
-
-    public static String streetName() {
-        return faker.address().streetName();
-    }
-
-    public static String cityName() {
-        return faker.address().cityName();
-    }
-
-
     public static String firstName() {
         return faker.name().firstName();
     }
@@ -56,6 +33,32 @@ public class FakerUtils {
 
     public static String lastName() {
         return faker.name().lastName();
+    }
+
+    public static String buildingNumber() {
+        return faker.address().buildingNumber();
+    }
+
+    public static String streetName() {
+        return faker.address().streetName();
+    }
+
+    public static String streetAddress() {
+        return faker.address().streetAddress();
+    }
+
+    public static String cityName() {
+        return faker.address().cityName();
+    }
+
+
+    public static String populateSentences() {
+        return faker.yoda().quote();
+
+    }
+
+    public static String gender() {
+        return faker.demographic().sex();
     }
 
     public static String address() {
@@ -72,15 +75,15 @@ public class FakerUtils {
     }
 
     public static String homePhone() {
-        return "01" + faker.numerify("#########"); // work phone
+        return "01" + faker.numerify("#########");
     }
 
     public static String mobilePhone() {
-        return "07" + faker.numerify("#########"); // work phone
+        return "07" + faker.numerify("#########");
     }
 
     public static String ukPostCode() {
-        return faker.bothify("??## #??"); // work phone
+        return faker.bothify("??## #??");
     }
 
     public static String companyName() {

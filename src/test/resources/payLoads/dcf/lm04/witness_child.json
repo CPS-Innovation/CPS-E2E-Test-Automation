@@ -16,7 +16,7 @@
     },
     "VictimWitness": {
       "Person": {
-        "UniqueId": "{{LM04_WitnessRef_1}}",
+        "UniqueId": "{{LM04_WitnessRef_child}}",
         "Name": {
           "Title": null,
           "GivenName": [
@@ -31,7 +31,7 @@
           ],
           "RequestedName": null,
           "FamilyName": {
-            "Value": "{{SurName}}"
+            "Value": "{{Surname}}"
           }
         },
         "ContactDetails": {

@@ -31,7 +31,7 @@
           ],
           "RequestedName": null,
           "FamilyName": {
-            "Value": "{{SurName}}"
+            "Value": "{{Surname}}"
           }
         },
         "ContactDetails": {

@@ -16,7 +16,7 @@
     },
     "VictimWitness": {
       "Person": {
-        "UniqueId": "{{LM04_WitnessRef_1}}",
+        "UniqueId": "{{LM04_WitnessRef_police}}",
         "Name": {
           "Title": null,
           "GivenName": [
@@ -68,7 +68,7 @@
       "Witness": {
         "Officer": {
           "PoliceOfficerRank": "Constable",
-          "ShoulderNumber": "{{CM01_Con_ShoulderNo}}"
+          "ShoulderNumber": "{{LM04_Con_ShoulderNo}}"
         },
         "WitnessNeeds": null,
         "WarnedByPolice": false,

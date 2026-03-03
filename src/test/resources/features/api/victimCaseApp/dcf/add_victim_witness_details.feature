@@ -7,8 +7,8 @@ Feature: Add witness personal details and verify wm01u
 
   @AddWitness @JSONMerge
   Scenario: Add witness title, date of birth, address, contact and email details.
-    Given create case CM01 for type "single defendant with charge"
-#    Given create case CM01 for type "single defendant with multi charge"
+#    Given create case CM01 for type "single defendant with charge"
+    Given create case CM01 for type "single defendant with multi charge"
 #    Given create case CM01 for type "multi defendant with charge"
 #    Given create case CM01 for type "multi defendant with multi charge"
 

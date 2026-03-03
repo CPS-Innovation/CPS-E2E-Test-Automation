@@ -1,30 +1,21 @@
 package com.cps.fct.e2e.utils.common;
 
-//import com.fasterxml.jackson.core.JsonProcessingException;
-//import com.fasterxml.jackson.databind.JsonNode;
-//import com.fasterxml.jackson.databind.ObjectMapper;
-//import com.fasterxml.jackson.databind.SerializationFeature;
-//import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.gson.Gson;
 import com.jayway.jsonpath.JsonPath;
-//import io.cucumber.messages.ndjson.internal.com.fasterxml.jackson.core.JsonProcessingException;
-//import io.cucumber.messages.ndjson.internal.com.fasterxml.jackson.databind.SerializationFeature;
 import io.cucumber.core.internal.com.fasterxml.jackson.core.JsonProcessingException;
 import net.minidev.json.JSONArray;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.node.ObjectNode;
-
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-
 public class JsonUtils {
     private static final ObjectMapper mapper = new ObjectMapper();
     private static final Gson gson = new Gson();
-
-
     public static JsonNode parse(String json) {
         try {
             return mapper.readTree(json);
@@ -51,7 +42,6 @@ public class JsonUtils {
         }
     }
 
-
     public static String getValue(JsonNode node, String path) {
         String[] keys = path.split("\\.");
         for (String key : keys) {
@@ -60,7 +50,6 @@ public class JsonUtils {
         }
         return node!=null ? node.asText():null;
     }
-
 
     public static <T> T fromJson(String json, Class<T> clazz) {
         try {
@@ -78,7 +67,6 @@ public class JsonUtils {
         }
     }
 
-
     public static List<String> extractFromJsonToList(String jsonBody, String jsonPathExpression) {
         JSONArray rawArray = JsonPath.read(jsonBody, jsonPathExpression);
         return rawArray.stream()
@@ -91,9 +79,8 @@ public class JsonUtils {
         return gson.toJson(payload);
     }
 
-
-        @SuppressWarnings("unchecked")
-        public static <T> T readJsonPath(String jsonBody, String jsonPathExpression, Class<T> type) {
+    @SuppressWarnings("unchecked")
+    public static <T> T readJsonPath(String jsonBody, String jsonPathExpression, Class<T> type) {
             Object result = JsonPath.read(jsonBody, jsonPathExpression);
 
             if (result instanceof JSONArray array) {
@@ -122,13 +109,28 @@ public class JsonUtils {
             return null;
         }
 
-
-
     public static <T> String toJson(T object) throws JsonProcessingException {
 //        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);  // TODO:
         return mapper.writeValueAsString(object);
     }
 
+    public String getMetaDataKeyValue(String caseType, String key) throws IOException {
+        InputStream inputStream;
+        if(caseType.equalsIgnoreCase("DCF"))
+        {
+            inputStream = getClass().getClassLoader().getResourceAsStream("payloads/dcf/dcf_metadata.json");
+        } else {
+            inputStream = getClass().getClassLoader().getResourceAsStream("payloads/twif/twif_metadata.json");
+        }
+
+        if (inputStream == null) {
+            throw new IOException(caseType +" metadata file not found in classpath");
+        }
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode root = objectMapper.readTree(inputStream);
+        return root.get(key).asString();
+    }
 }
 
 

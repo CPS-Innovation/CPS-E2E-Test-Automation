@@ -1,6 +1,7 @@
 package com.cps.fct.e2e.utils.payloadBuilders.twif;
 
 import com.cps.fct.e2e.utils.common.JsonReplacer;
+import com.cps.fct.e2e.utils.common.JsonUtils;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
 
 import java.io.IOException;
@@ -11,8 +12,17 @@ import static com.cps.fct.e2e.utils.common.DateTimeUtils.pcdRequestDate;
 import static com.cps.fct.e2e.utils.common.FakerUtils.*;
 
 public class TWIFPayloadBuilderForCM01 extends JsonReplacer {
+    JsonUtils jsonUtils = new JsonUtils();
+    private final Map<String, String> caseWithChargeMap = Map.ofEntries(
+            Map.entry("{{TWIF_Force}}", jsonUtils.getMetaDataKeyValue("twif", "Force")),
+            Map.entry("{{TWIF_Unit}}", jsonUtils.getMetaDataKeyValue("twif", "Unit")),
+            Map.entry("{{TWIF_Year}}", jsonUtils.getMetaDataKeyValue("twif", "Year")),
 
-    private static final Map<String, String> caseWithChargeMap = Map.ofEntries(
+            Map.entry("{{TWIF_TopLevel}}", jsonUtils.getMetaDataKeyValue("twif", "TopLevel")),
+            Map.entry("{{TWIF_SecondLevel}}", jsonUtils.getMetaDataKeyValue("twif", "SecondLevel")),
+            Map.entry("{{TWIF_ThirdLevel}}", jsonUtils.getMetaDataKeyValue("twif", "ThirdLevel")),
+            Map.entry("{{TWIF_BottomLevel}}", jsonUtils.getMetaDataKeyValue("twif", "BottomLevel")),
+
             Map.entry("{{CM01_itemId}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_PTIURN_Number}}", fiveDigitNumber()),
             Map.entry("{{CM01_Suspect_UniqueId}}", generateUppercaseAlphaNumeric(12)),
@@ -28,6 +38,9 @@ public class TWIFPayloadBuilderForCM01 extends JsonReplacer {
             Map.entry("{{CM01_PCD_Request_Date}}", pcdRequestDate()),
             Map.entry("{{CM01_PCD_Decision_By_Date}}", pcdDecisionByDate())
     );
+
+    public TWIFPayloadBuilderForCM01() throws IOException {
+    }
 
     public String generatePayloadWithValues(String payloadFileName, ScenarioContext context) throws IOException {
         String modifiedJson = applyReplacements(payloadFileName, caseWithChargeMap);

@@ -29,13 +29,6 @@ public class DCFMapper implements FileMapper {
         if ("lm04".equals(lowerSubtype)) {
             String normalized = lowerFileType.replace(' ', '_');
 
-            if ("dcf_witness_meta_data".equals(normalized)) {
-                return Paths.get(dir, "dcf_witness_meta_data.json").toFile();
-            }
-            if ("dcf_victim_meta_data".equals(normalized)) {
-                return Paths.get(dir, "dcf_victim_meta_data.json").toFile();
-            }
-
             Path path = Paths.get(dir, normalized + ".json");
             if (normalized.startsWith("witness")) {
                 return path.toFile();

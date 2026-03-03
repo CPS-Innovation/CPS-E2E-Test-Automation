@@ -39,9 +39,7 @@ public class DCFMessageStepDefs {
         String caseType = (String) context.get("caseType");
 
         File caseDataFile = FileUtils.getValidatedFile(caseType, messageType, caseDataType);
-        String metaDataType = JsonMergeUtil.resolveDcfMetaDataType(caseDataType);
-        File overridesFile = FileUtils.getValidatedFile(caseType, messageType, metaDataType);
-        File mergedFile = JsonMergeUtil.mergeToTempFile(caseDataFile, overridesFile);
+        File mergedFile = JsonMergeUtil.mergeToTempFile(caseDataFile, caseDataFile);
 
         messageService.lmO4AddVictimWitness(mergedFile, caseDataType, context);
     }

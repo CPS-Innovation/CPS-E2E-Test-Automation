@@ -1,9 +1,0 @@
-{
-    "WitnessOrVictim.PTIURN.Force": "35",
-    "WitnessOrVictim.PTIURN.Year": "26",
-
-    "WitnessOrVictim.VictimWitness.Person.DateOfBirth": "1970-08-03",
-
-    "WitnessOrVictim.VictimWitness.WitnessAndVictim.Witness.Occupation": "Civilian",
-    "WitnessOrVictim.VictimWitness.WitnessAndVictim.Victim.VPSStatus.ResponseToVPSOffer": "Accepted"
-}

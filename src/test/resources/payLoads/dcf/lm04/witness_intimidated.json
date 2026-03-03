@@ -3,10 +3,10 @@
     "CaseId": "{{LM04_CaseId}}",
     "ItemId": "{{LM04_itemId}}",
     "PTIURN": {
-      "Force": "25",
-      "Unit": "GD",
+      "Force": "45",
+      "Unit": "AA",
       "Number": "{{LM04_PTIURN_Number}}",
-      "Year": "25",
+      "Year": "26",
       "Split": null
     },
     "UpdateStatus": {

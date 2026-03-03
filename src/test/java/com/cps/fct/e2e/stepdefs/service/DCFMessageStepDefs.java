@@ -27,21 +27,13 @@ public class DCFMessageStepDefs {
     @Given("create case {word} for type {string}")
     public void createCaseUsing(String messageType, String caseDataType) throws IOException {
         File caseDataFile = FileUtils.getValidatedFile(context.get("caseType"), messageType, caseDataType);
-        File overridesFile = FileUtils.getValidatedFile(context.get("caseType"), messageType, "dcf meta data");
-        File mergedFile = JsonMergeUtil.mergeToTempFile(caseDataFile, overridesFile);
-
-        HttpResponseWrapper responseWrapper = messageService.cm01WithADefendantCharge(mergedFile, messageType, context);
+        HttpResponseWrapper responseWrapper = messageService.cm01WithADefendantCharge(caseDataFile, messageType, context);
         messageService.persistCaseDetails(responseWrapper, context);
     }
 
     @And("a {string} is added using {word}")
     public void addNewVictimOrWitness(String caseDataType, String messageType) throws IOException {
-        String caseType = (String) context.get("caseType");
-
-        File caseDataFile = FileUtils.getValidatedFile(caseType, messageType, caseDataType);
-        File mergedFile = JsonMergeUtil.mergeToTempFile(caseDataFile, caseDataFile);
-
-        messageService.lmO4AddVictimWitness(mergedFile, caseDataType, context);
+        File caseDataFile = FileUtils.getValidatedFile(context.get("caseType"), messageType, caseDataType);
+        messageService.lmO4AddVictimWitness(caseDataFile, caseDataType, context);
     }
-
 }

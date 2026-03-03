@@ -1,17 +1,30 @@
 package com.cps.fct.e2e.utils.payloadBuilders.dcf;
 
 import com.cps.fct.e2e.utils.common.JsonReplacer;
+import com.cps.fct.e2e.utils.common.JsonUtils;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 
 import static com.cps.fct.e2e.utils.common.FakerUtils.*;
 
 public class DCFPayloadBuilderForCM01 extends JsonReplacer {
 
+    JsonUtils jsonUtils = new JsonUtils();
+    private final Map<String, String> caseWithChargeMap = Map.ofEntries(
+            Map.entry("{{DCF_Force}}", jsonUtils.getMetaDataKeyValue("dcf", "Force")),
+            Map.entry("{{DCF_Unit}}", jsonUtils.getMetaDataKeyValue("dcf", "Unit")),
+            Map.entry("{{DCF_Year}}", jsonUtils.getMetaDataKeyValue("dcf", "Year")),
 
-    private static final Map<String, String> caseWithChargeMap = Map.ofEntries(
+            Map.entry("{{DCF_TopLevel}}", jsonUtils.getMetaDataKeyValue("dcf", "TopLevel")),
+            Map.entry("{{DCF_SecondLevel}}", jsonUtils.getMetaDataKeyValue("dcf", "SecondLevel")),
+            Map.entry("{{DCF_ThirdLevel}}", jsonUtils.getMetaDataKeyValue("dcf", "ThirdLevel")),
+            Map.entry("{{DCF_BottomLevel}}", jsonUtils.getMetaDataKeyValue("dcf", "BottomLevel")),
+
             Map.entry("{{CM01_itemId}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_PTIURN_Number}}", fiveDigitNumber()),
             Map.entry("{{CM01_Def_PersonId}}", generateUppercaseAlphaNumeric(12)),
@@ -60,6 +73,9 @@ public class DCFPayloadBuilderForCM01 extends JsonReplacer {
             Map.entry("{{DEF_Email}}", email())
 
     );
+
+    public DCFPayloadBuilderForCM01() throws IOException {
+    }
 
     public String generatePayloadWithValues(String payloadFileName, ScenarioContext context) throws IOException {
         String modifiedJson = applyReplacements(payloadFileName, caseWithChargeMap);

@@ -2,16 +2,16 @@
   "PreChargeDecisionRequest": {
     "ItemId": "{{CM01_itemId}}",
     "PTIURN": {
-      "Force": "16",
-      "Unit": "GD",
+      "Force": "{{TWIF_Force}}",
+      "Unit": "{{TWIF_Unit}}",
       "Number": "{{CM01_PTIURN_Number}}",
-      "Year": "25"
+      "Year": "{{TWIF_Year}}"
     },
     "CPSUnit": {
-      "TopLevel": "A",
-      "SecondLevel": "16",
-      "ThirdLevel": "AD",
-      "BottomLevel": "00"
+      "TopLevel": "{{TWIF_TopLevel}}",
+      "SecondLevel": "{{TWIF_SecondLevel}}",
+      "ThirdLevel": "{{TWIF_ThirdLevel}}",
+      "BottomLevel": "{{TWIF_BottomLevel}}"
     },
     "Suspect": {
       "AccusedPerson": {
@@ -22,9 +22,9 @@
         }
       },
       "ASN": {
-        "Year": "25",
-        "Force": "16",
-        "Unit": "GD",
+        "Year": "{{TWIF_Year}}",
+        "Force": "{{TWIF_Force}}",
+        "Unit": "{{TWIF_Unit}}",
         "System": "00",
         "Number": "55150090052",
         "CheckCharacter": "B"

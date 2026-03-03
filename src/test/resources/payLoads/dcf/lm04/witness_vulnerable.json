@@ -16,7 +16,7 @@
     },
     "VictimWitness": {
       "Person": {
-        "UniqueId": "{{Witness_Vulnerable}}",
+        "UniqueId": "{{LM04_WitnessRef_vulnerable}}",
         "Name": {
           "Title": null,
           "GivenName": [

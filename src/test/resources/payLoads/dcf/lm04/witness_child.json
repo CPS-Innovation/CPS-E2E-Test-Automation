@@ -3,10 +3,10 @@
     "CaseId": "{{LM04_CaseId}}",
     "ItemId": "{{LM04_itemId}}",
     "PTIURN": {
-      "Force": "45",
-      "Unit": "AA",
+      "Force": "{{LM04_Force}}",
+      "Unit": "{{LM04_Unit}}",
       "Number": "{{LM04_PTIURN_Number}}",
-      "Year": "26",
+      "Year": "{{LM04_Year}}",
       "Split": null
     },
     "UpdateStatus": {
@@ -23,10 +23,6 @@
             {
               "NameSequenceSpecified": false,
               "Value": "{{FirstName}}"
-            },
-            {
-              "NameSequenceSpecified": false,
-              "Value": "{{MiddleName}}"
             }
           ],
           "RequestedName": null,

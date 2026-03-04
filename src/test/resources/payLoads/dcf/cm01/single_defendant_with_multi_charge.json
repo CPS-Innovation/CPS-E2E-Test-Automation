@@ -2,17 +2,17 @@
   "PreChargeDecisionRequest": {
     "ItemId": "{{CM01_itemId}}",
     "PTIURN": {
-      "Force": "45",
-      "Unit": "AA",
+      "Force": "{{DCF_Force}}",
+      "Unit": "{{DCF_Unit}}",
       "Number": "{{CM01_PTIURN_Number}}",
-      "Year": "26",
+      "Year": "{{DCF_Year}}",
       "Split": null
     },
     "CPSUnit": {
-      "TopLevel": "A",
-      "SecondLevel": "45",
-      "ThirdLevel": "AA",
-      "BottomLevel": "00",
+      "TopLevel": "{{DCF_TopLevel}}",
+      "SecondLevel": "{{DCF_SecondLevel}}",
+      "ThirdLevel": "{{DCF_ThirdLevel}}",
+      "BottomLevel": "{{DCF_BottomLevel}}",
       "LiteralValue": null
     },
     "CaseClassification": [

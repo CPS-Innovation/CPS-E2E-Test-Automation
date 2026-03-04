@@ -235,7 +235,7 @@
           "Occupation": "Defender Occupation",
           "Alias": null,
           "PNCId": {
-            "Year": "26",
+            "Year": "{{DCF_Year}}",
             "SerialNumber": "{{CM01_PTIURN_Number}}",
             "CheckCharacter": "X"
           },

@@ -16,7 +16,7 @@
     },
     "VictimWitness": {
       "Person": {
-        "UniqueId": "{{LM04_WitnessRef_police}}",
+        "UniqueId": "{{LM04_WitnessRef_interpreter}}",
         "Name": {
           "Title": null,
           "GivenName": [
@@ -53,7 +53,7 @@
           },
           {
             "ClassificationType": "TypeOfWitness",
-            "ClassificationCode": "P",
+            "ClassificationCode": "I",
             "ClassificationValue": {
               "ClassificationValueFlag": true
             }
@@ -61,11 +61,10 @@
         ]
       },
       "TypeOfPerson": "Witness",
+      "DateOfBirth": "1988-08-03",
       "Witness": {
-        "Officer": {
-          "PoliceOfficerRank": "Constable",
-          "ShoulderNumber": "{{LM04_Con_ShoulderNo}}"
-        },
+        "Occupation": "Worker",
+        "Officer": null,
         "WitnessNeeds": null,
         "WarnedByPolice": false,
         "AvailabilityToAttendCourt": null

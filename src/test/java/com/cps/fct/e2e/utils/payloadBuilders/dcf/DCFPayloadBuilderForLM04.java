@@ -19,11 +19,15 @@ public class DCFPayloadBuilderForLM04 extends JsonReplacer {
         Map<String, String> initialLM04Map = new java.util.HashMap<>(Map.of(
                 "{{LM04_CaseId}}", caseData.getCaseId(),
                 "{{LM04_PTIURN_Number}}", cm01Map.get("CM01_PTIURN_Number"),
+                "{{LM04_Force}}", cm01Map.get("DCF_Force"),
+                "{{LM04_Unit}}", cm01Map.get("DCF_Unit"),
+                "{{LM04_Year}}", cm01Map.get("DCF_Year"),
                 "{{LM04_itemId}}",generateUppercaseAlphaNumeric(12),
                 "{{FirstName}}",firstName(),
                 "{{MiddleName}}",middleName(),
                 "{{Surname}}",lastName(),
                 "{{LM04_CaseOffenceId}}", cm01Map.get("CM01_CaseOffenceId")));
+
 
         switch (type.toLowerCase()) {
             case "witness":
@@ -37,6 +41,19 @@ public class DCFPayloadBuilderForLM04 extends JsonReplacer {
                 break;
             case "witness vulnerable":
                 initialLM04Map.put("{{LM04_WitnessRef_vulnerable}}", cm01Map.get("CM01_WitnessRef_Vulnerable"));
+                break;
+            case "witness professional":
+                initialLM04Map.put("{{LM04_WitnessRef_professional}}", cm01Map.get("CM01_WitnessRef_Professional"));
+                break;
+            case "witness expert":
+                initialLM04Map.put("{{LM04_WitnessRef_expert}}", cm01Map.get("CM01_WitnessRef_Expert"));
+                break;
+            case "witness prisoner":
+                initialLM04Map.put("{{LM04_WitnessRef_prisoner}}", cm01Map.get("CM01_WitnessRef_Prisoner"));
+                break;
+            case "witness interpreter":
+                initialLM04Map.put("{{LM04_WitnessRef_interpreter}}", cm01Map.get("CM01_WitnessRef_Interpreter"));
+                break;
             case "witness police":
                 initialLM04Map.put("{{LM04_WitnessRef_police}}", cm01Map.get("CM01_WitnessRef_Police"));
                 initialLM04Map.put("{{LM04_Con_ShoulderNo}}", cm01Map.get("CM01_Con_ShoulderNo"));

@@ -54,7 +54,6 @@
         ]
       },
       "TypeOfPerson": "VictimWitness",
-      "DateOfBirth": "1985-09-03",
       "WitnessAndVictim": {
         "Witness": {
           "Officer": {

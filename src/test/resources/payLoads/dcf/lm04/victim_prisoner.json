@@ -54,7 +54,6 @@
         ]
       },
       "TypeOfPerson": "VictimWitness",
-      "DateOfBirth": "1988-09-03",
       "WitnessAndVictim": {
         "Witness": {
           "Occupation": "Serving prisoner or on remand"

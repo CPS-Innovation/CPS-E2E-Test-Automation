@@ -51,11 +51,10 @@ public class FakerUtils {
         return faker.address().cityName();
     }
 
-
     public static String populateSentences() {
-        return faker.yoda().quote();
+        return faker.yoda().quote();    }
 
-    }
+    public static String title() {return faker.name().prefix(); }
 
     public static String gender() {
         return faker.demographic().sex();

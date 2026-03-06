@@ -20,10 +20,12 @@ public class VictimWitnessPayloadBuilder {
 
     public static VictimWitnessDetails getVictimWitnessDetails() {
         return VictimWitnessDetails.builder()
+//                .title(FakerUtils.title())
                 .title("Mr")
-//                .firstName(FakerUtils.firstName())
-//                .surname(FakerUtils.lastName())
-                .dateOfBirth("05-02-1985")
+                .firstName(FakerUtils.firstName())
+                .surname(FakerUtils.lastName())
+                .dateOfBirth(FakerUtils.dateOfBirth().toString())
+                .gender(FakerUtils.gender())
                 .contactDetailsEmail(email())
                 .contactDetailsMobileNumber(mobilePhone())
                 .contactDetailsPhoneNumber(homePhone())
@@ -54,23 +56,30 @@ public class VictimWitnessPayloadBuilder {
                 .IsYouth(Boolean.FALSE)
                 .SuitableContactTimes("anytime between 9am to 6pm weekdays")
                 .SpecialConsiderationNeeds("Wheelchair access")
+                .Service(1)
+                .Onboarded(Boolean.FALSE)
                 .LastModifiedBy("CPS USER")
                 .build();
     }
 
     public static String payLoadForAddVictimWitnessToVCA(String caseUrn) {
-        Map<String, String> payload = new HashMap<>();
+        Map<String, Object> payload = new HashMap<>();
         payload.put("Urn", caseUrn);
         payload.put("CreatedBy", "E2ETestAutomation");
+        payload.put("Service", 1);
+        payload.put("Onboarded",false);
         return toJsonString(payload);
     }
 
     public static String payLoadForAddWitnessDetailsWitnessId(VictimWitnessDetails victimDetails ) {
         UpdateWitnessDetailsWitnessIdJsonBuilder builder = new UpdateWitnessDetailsWitnessIdJsonBuilder();
         List<Map<String, Object>> patchPayload = builder
-                .add("/contactDetails/title", victimDetails.getContactDetailsTitle())
-                .add("/contactDetails/gender", victimDetails.getContactDetailsGender())
+                .add("/contactDetails/title", victimDetails.getTitle())
+                .add("/contactDetails/gender", victimDetails.getGender())
                 .add("/dateOfBirth", victimDetails.getDateOfBirth())
+//                .add("/contactDetails/ethnicity", victimDetails.getEthnicity())
+//                .add("/contactDetails/disability", victimDetails.getDisability())
+//                .add("/previousConvictions", victimDetails.getPreviousConvictions())
                 .add("/contactDetails/phoneNumber", victimDetails.getContactDetailsPhoneNumber())
                 .add("/contactDetails/mobileNumber", victimDetails.getContactDetailsMobileNumber())
                 .add("/contactDetails/workPhoneNumber", victimDetails.getContactDetailsWorkPhoneNumber())

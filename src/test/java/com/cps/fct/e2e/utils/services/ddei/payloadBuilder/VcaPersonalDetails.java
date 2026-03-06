@@ -13,6 +13,8 @@ public class VcaPersonalDetails {
     private String SuitableContactTimes;
     private String SpecialConsiderationNeeds;
     private String LastModifiedBy;
+    private int Service;
+    private boolean Onboarded;
 }
 
 

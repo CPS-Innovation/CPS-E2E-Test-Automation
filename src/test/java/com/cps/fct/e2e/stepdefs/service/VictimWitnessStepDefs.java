@@ -55,7 +55,6 @@ public class VictimWitnessStepDefs {
         witnessService.persistVictimWitnessDetails(response, context);
     }
 
-
     @When("the witness's personal details are entered")
     public void theWitnessSPersonalDetailsAreEntered() {
 
@@ -98,9 +97,6 @@ public class VictimWitnessStepDefs {
         List<String> persistedVictimPoliceId = mapIdsToGuids(witnessVictimIds.getVictimPoliceId(), caseUrn, caseId);
         List<String> persistedVictimProfessionalId = mapIdsToGuids(witnessVictimIds.getVictimProfessionalId(), caseUrn, caseId);
         List<String> persistedVictimIntimidatedId = mapIdsToGuids(witnessVictimIds.getVictimIntimidatedId(), caseUrn, caseId);
-
-//        context.set("witnessVictimGuids", new WitnessVictim(persistedVictimId, persistedWitnessId));
-//        context.set("witnessVictimGuids", new WitnessVictim(persistedVictimId, persistedWitnessId));
 
         context.set("witnessVictimGuids", new WitnessVictim(persistedWitnessId, persistedWitnessChildId, persistedWitnessExpertId, persistedWitnessPrisonerId,
                 persistedWitnessInterpreterId, persistedWitnessVulnerableId, persistedWitnessPoliceId, persistedWitnessProfessionalId, persistedWitnessIntimidatedId,

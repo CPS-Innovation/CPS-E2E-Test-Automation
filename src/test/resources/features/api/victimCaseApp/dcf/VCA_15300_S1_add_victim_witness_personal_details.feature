@@ -16,23 +16,25 @@ Feature: Add witness and victim personal details and verify wm01u
     And a "witness expert" is added using LM04
     And a "witness prisoner" is added using LM04
     And a "witness interpreter" is added using LM04
-    And a "victim" is added using LM04
-    And a "victim child" is added using LM04
-#    And a "victim vulnerable" is added using LM04
+#    And a "victim" is added using LM04
+#    And a "victim child" is added using LM04
+    And a "victim vulnerable" is added using LM04
 #    And a "victim intimidated" is added using LM04
 #    And a "victim professional" is added using LM04
 #    And a "victim expert" is added using LM04
     And a "victim prisoner" is added using LM04
-    And a "victim interpreter" is added using LM04
-    And a "victim police" is added using LM04
+#    And a "victim interpreter" is added using LM04
+#    And a "victim police" is added using LM04
 
   @witnessAddPersonalDetails
   Scenario: Add witness title, preferred name, date of birth, gender, ethnicity, disability or access needs and previous convictions details
     Given witness and victim details are available
     And witness and victim are added to VCA
-    And the "witness" personal details are entered
-    And the "victim" personal details are entered
-#    When the witness's personal details are entered
+#    And the "witness" personal details are entered
+    When the "witnessChildId" personal details are entered
+    And the "witnessPoliceId" personal details are entered
+    And the "victimPrisonerId" personal details are entered
+    And the "victimVulnerableId" personal details are entered
 #    And the witness personal details are sent to VCA
 #    Then Witness personal details are updated correctly to CMS
 #    And Witness personal details are updated correctly to VCA

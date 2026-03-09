@@ -26,9 +26,6 @@ public class VictimWitnessDetails {
     private String contactDetailsPostalAddressAddressLine5;
     private String contactDetailsPostalAddressPostcode;
     private String contactDetailsPreferredCorrespondenceLanguage;
-
-
     private String justification;
-
 }
 

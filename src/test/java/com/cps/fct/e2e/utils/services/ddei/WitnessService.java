@@ -1,8 +1,6 @@
 package com.cps.fct.e2e.utils.services.ddei;
 
-import com.cps.fct.e2e.model.Victim;
 import com.cps.fct.e2e.model.VictimWitnessDetails;
-import com.cps.fct.e2e.model.Witness;
 import com.cps.fct.e2e.utils.common.EnvConfig;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
 import com.cps.fct.e2e.utils.httpClient.HttpClientBuilder;
@@ -10,7 +8,9 @@ import com.cps.fct.e2e.utils.httpClient.HttpResponseWrapper;
 import com.cps.fct.e2e.utils.services.BaseService;
 import com.jayway.jsonpath.JsonPath;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.cps.fct.e2e.utils.common.JsonUtils.extractFromJsonToList;
 import static com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimWitnessPayloadBuilder.payLoadForAddVictimWitnessToVCA;
@@ -103,10 +103,27 @@ public class WitnessService extends BaseService {
 //        assertIdsArePresent(context, victimProfessionalId);
 //        assertIdsArePresent(context, victimIntimidatedId);
 
-//        context.set("witnessVictimIds", new WitnessVictim(witnessId, witnessChildId, witnessExpertId, witnessPrisonerId, witnessInterpreterId, witnessVulnerableId, witnessPoliceId, witnessProfessionalId, witnessIntimidatedId, victimId, victimChildId, victimExpertId, victimPrisonerId, victimInterpreterId, victimVulnerableId, victimPoliceId, victimProfessionalId, victimIntimidatedId));
-        context.set("witnessIds", new Witness(witnessId, witnessChildId, witnessExpertId, witnessPrisonerId, witnessInterpreterId, witnessVulnerableId, witnessPoliceId, witnessProfessionalId, witnessIntimidatedId));
-        context.set("victimIds", new Victim(victimId, victimChildId, victimExpertId, victimPrisonerId, victimInterpreterId, victimVulnerableId, victimPoliceId, victimProfessionalId, victimIntimidatedId));
+        Map<String, List<String>> witnessVictimMapIds = new HashMap<>();
+        witnessVictimMapIds.put("witnessId", witnessId);
+        witnessVictimMapIds.put("witnessChildId", witnessChildId);
+        witnessVictimMapIds.put("witnessExpertId", witnessExpertId);
+        witnessVictimMapIds.put("witnessPrisonerId", witnessPrisonerId);
+        witnessVictimMapIds.put("witnessInterpreterId", witnessInterpreterId);
+        witnessVictimMapIds.put("witnessVulnerableId", witnessVulnerableId);
+        witnessVictimMapIds.put("witnessPoliceId", witnessPoliceId);
+        witnessVictimMapIds.put("witnessProfessionalId", witnessProfessionalId);
+        witnessVictimMapIds.put("witnessIntimidatedId", witnessIntimidatedId);
 
+        witnessVictimMapIds.put("victimId", victimId );
+        witnessVictimMapIds.put("victimChildId", victimChildId );
+        witnessVictimMapIds.put("victimExpertId", victimExpertId );
+        witnessVictimMapIds.put("victimPrisonerId", victimPrisonerId );
+        witnessVictimMapIds.put("victimInterpreterId", victimInterpreterId);
+        witnessVictimMapIds.put("victimVulnerableId", victimVulnerableId );
+        witnessVictimMapIds.put("victimPoliceId", victimPoliceId);
+        witnessVictimMapIds.put("victimProfessionalId", victimProfessionalId);
+        witnessVictimMapIds.put("victimIntimidatedId", victimIntimidatedId );
+        context.set("witnessVictimMapIds", witnessVictimMapIds);
      }
 
     private HttpClientBuilder witnessesDetailsRequestParams(String caseId) {

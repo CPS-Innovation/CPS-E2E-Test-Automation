@@ -31,6 +31,7 @@ Feature: Add witness and victim personal details and verify wm01u
     Given witness and victim details are available
     And witness and victim are added to VCA
     And the "witness" personal details are entered
+    And the "victim" personal details are entered
 #    When the witness's personal details are entered
 #    And the witness personal details are sent to VCA
 #    Then Witness personal details are updated correctly to CMS

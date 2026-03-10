@@ -7,18 +7,23 @@ import com.cps.fct.e2e.utils.httpClient.HttpClientBuilder;
 import com.cps.fct.e2e.utils.httpClient.HttpResponseWrapper;
 import com.cps.fct.e2e.utils.services.BaseService;
 import com.jayway.jsonpath.JsonPath;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import io.restassured.response.Response;
 
 import static com.cps.fct.e2e.utils.common.JsonUtils.extractFromJsonToList;
 import static com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimWitnessPayloadBuilder.payLoadForAddVictimWitnessToVCA;
 import static com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimWitnessPayloadBuilder.payLoadForAddWitnessDetailsWitnessId;
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
+import static io.restassured.RestAssured.*;
+import static io.restassured.matcher.RestAssuredMatchers.*;
+import static org.hamcrest.Matchers.*;
 
 public class WitnessService extends BaseService {
+     private Response response;
+     private String baseURI;
 
      public void addVictimWitnessCMSPersonalDetails(VictimWitnessDetails details, String caseId, String witnessId) {
        service.sendRequest(UpdateWitnessDetailsWitnessIdRequestParams(details, caseId, witnessId));
@@ -45,6 +50,8 @@ public class WitnessService extends BaseService {
     public void witnessesDetailsFromCMS( String caseUrn, String caseId, String witnessId) {
         service.sendRequest(witnessesDetailsFromCMSRequestParams(caseUrn,caseId, witnessId));
     }
+
+
 
     public void persistVictimWitnessDetails(HttpResponseWrapper response, ScenarioContext context) {
         String body = response.getBody();
@@ -126,6 +133,21 @@ public class WitnessService extends BaseService {
         context.set("witnessVictimMapIds", witnessVictimMapIds);
      }
 
+    public Response getCmsDetailsByWitnessOrVictimId(String caseId, String witnessVictimId ){
+        baseURI = "https://fa-wm-app-ddei-staging.azurewebsites.net/api";
+        String apiUrl = baseURI +"/cases/{caseId}/witnesses}";
+        response =
+                given()
+                    .pathParam("caseId",caseId )
+                    .headers(ddeiHeaders())
+                .when()
+                .get(apiUrl)
+                .then()
+                    .extract()
+                    .response();
+        return response;
+    }
+
     private HttpClientBuilder witnessesDetailsRequestParams(String caseId) {
         return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("DDEI_HOST"))
@@ -185,7 +207,6 @@ public class WitnessService extends BaseService {
                 .build();
     }
 
-
     private static void assertIdsArePresent(ScenarioContext context, List<String> victimIds) {
         assertThat(victimIds)
                 .withFailMessage("id's are should not be null " + context.get("caseId"))
@@ -193,5 +214,6 @@ public class WitnessService extends BaseService {
                 .withFailMessage("id should contain at least one items " + context.get("caseId"))
                 .isNotEmpty();
     }
+
 
 }

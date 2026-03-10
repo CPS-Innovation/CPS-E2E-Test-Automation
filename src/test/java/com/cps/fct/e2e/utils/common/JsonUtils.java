@@ -75,8 +75,6 @@ public class JsonUtils {
 
     }
 
-
-
     public static String toJsonString(Map<String, Object>payload) {
         return gson.toJson(payload);
     }

@@ -4,36 +4,39 @@ import com.cps.fct.e2e.model.VictimWitnessDetails;
 import com.cps.fct.e2e.utils.httpClient.HttpResponseWrapper;
 import com.cps.fct.e2e.utils.httpClient.ResourceResponseStore;
 import com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VcaPersonalDetails;
+import io.restassured.response.Response;
 import org.assertj.core.api.SoftAssertions;
 
+import java.util.List;
+import java.util.Map;
+import com.jayway.jsonpath.JsonPath;
+
+import io.restassured.RestAssured;
+import io.restassured.response.Response;
 import java.util.Map;
 
+import static com.cps.fct.e2e.utils.common.JsonUtils.extractFromJsonToList;
 import static com.cps.fct.e2e.utils.common.JsonUtils.readJsonPath;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class VictimWitnessAssertions {
 
-    public static void  assertVictimWitnessPersonalDetails(Map<String, VictimWitnessDetails> detailsMap)
+    public static void assertCMSPersonalDetails(String id,VictimWitnessDetails inputDetails,
+                                                 HttpResponseWrapper responsePayload)
     {
-       HttpResponseWrapper response = ResourceResponseStore.
-               getLatestResponse("witnessDetails");
-        String responseBody = response.getBody();
-        detailsMap.forEach((id, victimWitnessDetails) -> {
-            SoftAssertions softly = new SoftAssertions();
-            int witnessId = Integer.parseInt(id);
+        SoftAssertions softly = new SoftAssertions();
+        String body = responsePayload.getBody();
+        List<String> expectedEmail = extractFromJsonToList(body, "$[?(@.witnessId=="+id+")].contactDetails.email");
+        List<String> expectedMobileNumber = extractFromJsonToList(body, "$[?(@.witnessId=="+id+")].contactDetails.mobileNumber");
+        List<String> expectedPhoneNumber = extractFromJsonToList(body, "$[?(@.witnessId=="+id+")].contactDetails.phoneNumber");
+        List<String> expectedWorkPhoneNumber = extractFromJsonToList(body, "$[?(@.witnessId=="+id+")].contactDetails.workPhoneNumber");
 
-            String expectedEmail = getContactDetail(responseBody, witnessId, "email");
-            String expectedMobileNumber = getContactDetail(responseBody, witnessId, "mobileNumber");
-            String expectedPhoneNumber = getContactDetail(responseBody, witnessId, "phoneNumber");
-            String expectedWorkPhoneNumber = getContactDetail(responseBody, witnessId, "workPhoneNumber");
-
-            //assertions
-            assertThat(expectedEmail).isEqualTo(victimWitnessDetails.getContactDetailsEmail());
-            assertThat(expectedMobileNumber).isEqualTo(victimWitnessDetails.getContactDetailsMobileNumber());
-            assertThat(expectedPhoneNumber).isEqualTo(victimWitnessDetails.getContactDetailsPhoneNumber());
-            assertThat(expectedWorkPhoneNumber).isEqualTo(victimWitnessDetails.getContactDetailsWorkPhoneNumber());
-            softly.assertAll();
-        });
+        //assertions
+        assertThat(expectedEmail.getFirst()).isEqualTo(inputDetails.getContactDetailsEmail());
+        assertThat(expectedMobileNumber.getFirst()).isEqualTo(inputDetails.getContactDetailsMobileNumber());
+        assertThat(expectedPhoneNumber.getFirst()).isEqualTo(inputDetails.getContactDetailsPhoneNumber());
+        assertThat(expectedWorkPhoneNumber.getFirst()).isEqualTo(inputDetails.getContactDetailsWorkPhoneNumber());
+        softly.assertAll();
     }
 
     private static String getContactDetail(String responseBody, int id, String fieldName) {

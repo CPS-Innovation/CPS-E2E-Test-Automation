@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Builder(toBuilder = true)
+@Builder
 public class VcaPersonalDetails {
     private String PreferredName;
     private boolean IsYouth;

@@ -1,0 +1,74 @@
+{
+  "WitnessOrVictim": {
+    "CaseId": "{{LM04_CaseId}}",
+    "ItemId": "{{LM04_itemId}}",
+    "PTIURN": {
+      "Force": "{{LM04_Force}}",
+      "Unit": "{{LM04_Unit}}",
+      "Number": "{{LM04_PTIURN_Number}}",
+      "Year": "{{LM04_Year}}",
+      "Split": null
+    },
+    "UpdateStatus": {
+      "VersionId": "1",
+      "UpdateReasonType": "Create",
+      "UpdateReason": "Need to create witness"
+    },
+    "VictimWitness": {
+      "Person": {
+        "UniqueId": "{{LM04_VictimRef_2}}",
+        "Name": {
+          "Title": null,
+          "GivenName": [
+            {
+              "NameSequenceSpecified": false,
+              "Value": "{{FirstName}}"
+            }
+          ],
+          "RequestedName": null,
+          "FamilyName": {
+            "Value": "{{Surname}}"
+          }
+        },
+        "ContactDetails": {
+          "Address": null,
+          "ContactNumber": null,
+          "Email": null,
+          "DXAddress": null,
+          "SocialMedia": null,
+          "ContactPreferences": null
+        },
+        "PNCId": null,
+        "DateOfBirth": null,
+        "Nationality": null,
+        "AlternativeContact": null,
+        "Occupation": null,
+        "PersonClassification": [
+          {
+            "ClassificationType": "StatusInformation",
+            "ClassificationCode": "KeyWitness",
+            "ClassificationValue": {
+              "ClassificationValueText": "Y"
+            }
+          }
+        ]
+      },
+      "TypeOfPerson": "VictimWitness",
+      "WitnessAndVictim": {
+        "Witness": {
+          "Occupation": "Civilian"
+        },
+        "Victim": {
+          "XOffenceId": [
+            "{{LM04_CaseOffenceId}}"
+          ],
+          "VPSStatus": {
+            "ResponseToVPSOffer": "Accepted",
+            "SchemeExplained": false
+          }
+        }
+      },
+      "LinkedSuspects": null
+    }
+  }
+}

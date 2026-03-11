@@ -36,6 +36,9 @@ public class DCFPayloadBuilderForLM04 extends JsonReplacer {
             case "witness":
                 initialLM04Map.put("{{LM04_WitnessRef_1}}", cm01Map.get("CM01_WitnessRef_1"));
                 break;
+            case "witness 2":
+                initialLM04Map.put("{{LM04_WitnessRef_2}}", cm01Map.get("CM01_WitnessRef_2"));
+                break;
             case "witness intimidated":
                 initialLM04Map.put("{{LM04_WitnessRef_intimidated}}", cm01Map.get("CM01_WitnessRef_Intimidated"));
                 break;
@@ -63,6 +66,9 @@ public class DCFPayloadBuilderForLM04 extends JsonReplacer {
 
             case "victim":
                 initialLM04Map.put("{{LM04_VictimRef_1}}", cm01Map.get("CM01_VictimRef_1"));
+                break;
+            case "victim 2":
+                initialLM04Map.put("{{LM04_VictimRef_2}}", cm01Map.get("CM01_VictimRef_2"));
                 break;
             case "victim intimidated":
                 initialLM04Map.put("{{LM04_VictimRef_intimidated}}", cm01Map.get("CM01_VictimRef_Intimidated"));

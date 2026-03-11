@@ -110,6 +110,7 @@ public class WitnessService extends BaseService {
 
         Map<String, List<String>> witnessVictimMapIds = new HashMap<>();
         witnessVictimMapIds.put("witnessId", witnessId);
+        witnessVictimMapIds.put("witnessId2", witnessId);
         witnessVictimMapIds.put("witnessChildId", witnessChildId);
         witnessVictimMapIds.put("witnessExpertId", witnessExpertId);
         witnessVictimMapIds.put("witnessPrisonerId", witnessPrisonerId);
@@ -120,6 +121,7 @@ public class WitnessService extends BaseService {
         witnessVictimMapIds.put("witnessIntimidatedId", witnessIntimidatedId);
 
         witnessVictimMapIds.put("victimId", victimId );
+        witnessVictimMapIds.put("victimId2", victimId );
         witnessVictimMapIds.put("victimChildId", victimChildId );
         witnessVictimMapIds.put("victimExpertId", victimExpertId );
         witnessVictimMapIds.put("victimPrisonerId", victimPrisonerId );

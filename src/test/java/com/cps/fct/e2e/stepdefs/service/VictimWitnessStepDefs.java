@@ -62,6 +62,7 @@ public class VictimWitnessStepDefs {
         for (String id : witnessVictimMapIds.get(witnessVictimType)) {
             victimWitnessDetails = getVictimWitnessDetails();
             witnessService.addVictimWitnessCMSPersonalDetails(victimWitnessDetails, caseId, id);
+            System.out.println(id);
             victimWitnessDetailsToCMS.put(id, victimWitnessDetails);
             context.set("victimWitnessDetailsToCMS",victimWitnessDetailsToCMS);
             Thread.sleep(2000);
@@ -83,6 +84,7 @@ public class VictimWitnessStepDefs {
             witnessService.UpdateWitnessVictimDetailsToVCA(guid, requestPayload);
             victimWitnessDetailsToVCA.put(guid, vcaPersonalDetails);
             idGuidMap.put(id,guid);
+            System.out.println(idGuidMap);
             context.set("victimWitnessDetailsToVCA",victimWitnessDetailsToVCA);
             context.set("idGuidMap",idGuidMap);
             Thread.sleep(1000);

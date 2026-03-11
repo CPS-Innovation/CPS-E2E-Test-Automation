@@ -23,7 +23,6 @@ import java.util.Map;
 import static com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimWitnessPayloadBuilder.*;
 
 public class VictimWitnessStepDefs {
-
     @Inject
     private CaseService caseService;
 
@@ -51,6 +50,15 @@ public class VictimWitnessStepDefs {
     public void witnessAndVictimDetailsAreAvailable() {
         HttpResponseWrapper response = witnessService.listWitnessVictimDetails(context.get("caseId"));
         witnessService.persistVictimWitnessDetails(response, context);
+
+        Map<String, VictimWitnessDetails> victimWitnessDetailsToCMS = new HashMap<>();
+        context.set("victimWitnessDetailsToCMS",victimWitnessDetailsToCMS);
+
+        Map<String, VcaPersonalDetails> victimWitnessDetailsToVCA = new HashMap<>();
+        context.set("victimWitnessDetailsToVCA",victimWitnessDetailsToVCA);
+
+        Map<String, String> idGuidMap = new HashMap<>();
+        context.set("idGuidMap",idGuidMap);
     }
 
     @When("the {string} personal details are added to CMS")
@@ -58,22 +66,23 @@ public class VictimWitnessStepDefs {
         VictimWitnessDetails victimWitnessDetails;
         String caseId = context.get("caseId");
         Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
-        Map<String, VictimWitnessDetails> victimWitnessDetailsToCMS = new HashMap<>();
+        Map<String, VictimWitnessDetails> victimWitnessDetailsToCMS = context.get("victimWitnessDetailsToCMS");
+
         for (String id : witnessVictimMapIds.get(witnessVictimType)) {
             victimWitnessDetails = getVictimWitnessDetails();
             witnessService.addVictimWitnessCMSPersonalDetails(victimWitnessDetails, caseId, id);
             victimWitnessDetailsToCMS.put(id, victimWitnessDetails);
-            context.set("victimWitnessDetailsToCMS",victimWitnessDetailsToCMS);
             Thread.sleep(2000);
         }
+        context.set("victimWitnessDetailsToCMS",victimWitnessDetailsToCMS);
     }
 
     @Then("the {string} is onboarded and personal details are added to VCA")
     public void thePersonalDetailsAreAddedToVCA(String witnessVictimType) throws InterruptedException {
         VcaPersonalDetails vcaPersonalDetails;
         Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
-        Map<String, VcaPersonalDetails> victimWitnessDetailsToVCA = new HashMap<>();
-        Map<String, String> idGuidMap = new HashMap<>();
+        Map<String, VcaPersonalDetails> victimWitnessDetailsToVCA = context.get("victimWitnessDetailsToVCA");
+        Map<String, String> idGuidMap = context.get("idGuidMap");
 
         for (String id : witnessVictimMapIds.get(witnessVictimType)) {
             //Onboard process - creates GUID
@@ -83,10 +92,10 @@ public class VictimWitnessStepDefs {
             witnessService.UpdateWitnessVictimDetailsToVCA(guid, requestPayload);
             victimWitnessDetailsToVCA.put(guid, vcaPersonalDetails);
             idGuidMap.put(id,guid);
-            context.set("victimWitnessDetailsToVCA",victimWitnessDetailsToVCA);
-            context.set("idGuidMap",idGuidMap);
             Thread.sleep(1000);
         }
+        context.set("victimWitnessDetailsToVCA",victimWitnessDetailsToVCA);
+        context.set("idGuidMap",idGuidMap);
     }
 
     @Then("the {string} personal details are verified in CMS and VCA")

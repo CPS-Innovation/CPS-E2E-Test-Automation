@@ -34,10 +34,6 @@ public class DCFMapper implements FileMapper {
                 return path.toFile();
             }
 
-            if (normalized.startsWith("witnessDetails")) {
-                return path.toFile();
-            }
-
             if (normalized.startsWith("victim")) {
                 return path.toFile();
             }

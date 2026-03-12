@@ -1,13 +1,11 @@
 package com.cps.fct.e2e.stepdefs.service;
 
 import com.cps.fct.e2e.model.VictimWitnessDetails;
-import com.cps.fct.e2e.model.Witness;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
 import com.cps.fct.e2e.utils.httpClient.HttpResponseWrapper;
 import com.cps.fct.e2e.utils.services.ddei.CaseService;
 import com.cps.fct.e2e.utils.services.ddei.WitnessService;
 import com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VcaPersonalDetails;
-import com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VcaPersonalDetailsMapWrapper;
 import com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimWitnessPayloadBuilder;
 import com.cps.fct.e2e.utils.services.ddei.responseAssertions.VictimWitnessAssertions;
 import io.cucumber.java.en.And;
@@ -77,6 +75,22 @@ public class VictimWitnessStepDefs {
         context.set("victimWitnessDetailsToCMS",victimWitnessDetailsToCMS);
     }
 
+    @When("the {string} personal details are updated to CMS")
+    public void thePersonalDetailsAreUpdatedToCMS(String witnessVictimType) throws InterruptedException {
+        VictimWitnessDetails victimWitnessDetails;
+        String caseId = context.get("caseId");
+        Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
+        Map<String, VictimWitnessDetails> victimWitnessDetailsToCMS = context.get("victimWitnessDetailsToCMS");
+
+        for (String id : witnessVictimMapIds.get(witnessVictimType)) {
+            victimWitnessDetails = getVictimWitnessDetails();
+            witnessService.updateVictimWitnessCMSPersonalDetails(victimWitnessDetails, caseId, id);
+            victimWitnessDetailsToCMS.put(id, victimWitnessDetails);
+            Thread.sleep(2000);
+        }
+        context.set("victimWitnessDetailsToCMS",victimWitnessDetailsToCMS);
+    }
+
     @Then("the {string} is onboarded and personal details are added to VCA")
     public void thePersonalDetailsAreAddedToVCA(String witnessVictimType) throws InterruptedException {
         VcaPersonalDetails vcaPersonalDetails;
@@ -89,7 +103,7 @@ public class VictimWitnessStepDefs {
             String guid =  witnessService.victimWitnessGuid(context.get("caseUrn"), context.get("caseId"), id);
             vcaPersonalDetails = VictimWitnessPayloadBuilder.getVcaPersonalDetails();
             String requestPayload = VictimWitnessPayloadBuilder.convertObjectToString(vcaPersonalDetails);
-            witnessService.UpdateWitnessVictimDetailsToVCA(guid, requestPayload);
+            witnessService.addWitnessVictimDetailsToVCA(guid, requestPayload);
             victimWitnessDetailsToVCA.put(guid, vcaPersonalDetails);
             idGuidMap.put(id,guid);
             Thread.sleep(1000);
@@ -97,6 +111,28 @@ public class VictimWitnessStepDefs {
         context.set("victimWitnessDetailsToVCA",victimWitnessDetailsToVCA);
         context.set("idGuidMap",idGuidMap);
     }
+
+    @Then("the {string} is onboarded and personal details are update to VCA")
+    public void thePersonalDetailsAreUpdateToVCA(String witnessVictimType) throws InterruptedException {
+        VcaPersonalDetails vcaPersonalDetails;
+        Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
+        Map<String, VcaPersonalDetails> victimWitnessDetailsToVCA = context.get("victimWitnessDetailsToVCA");
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+
+        for (String id : witnessVictimMapIds.get(witnessVictimType)) {
+            //Onboard process - creates GUID
+            String guid =  witnessService.victimWitnessGuid(context.get("caseUrn"), context.get("caseId"), id);
+            vcaPersonalDetails = VictimWitnessPayloadBuilder.getVcaPersonalDetails();
+            String requestPayload = VictimWitnessPayloadBuilder.convertObjectToString(vcaPersonalDetails);
+            witnessService.updateWitnessVictimDetailsToVCA(guid, requestPayload);
+            victimWitnessDetailsToVCA.put(guid, vcaPersonalDetails);
+            idGuidMap.put(id,guid);
+            Thread.sleep(1000);
+        }
+        context.set("victimWitnessDetailsToVCA",victimWitnessDetailsToVCA);
+        context.set("idGuidMap",idGuidMap);
+    }
+
 
     @Then("the {string} personal details are verified in CMS and VCA")
     public void personalDetailsAreVerifiedInCMSAndVCA(String witnessVictimType) throws InterruptedException {

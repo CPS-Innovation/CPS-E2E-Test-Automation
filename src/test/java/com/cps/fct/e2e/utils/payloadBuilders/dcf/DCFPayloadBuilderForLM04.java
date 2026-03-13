@@ -18,7 +18,6 @@ public class DCFPayloadBuilderForLM04 extends JsonReplacer {
         Map<String, String> cm01Map = context.getAsMap("CM01ModifiedValues");
         CaseResponse caseData = context.getCastClazz("caseDetails", CaseResponse.class);
 
-
         Map<String, String> initialLM04Map = new HashMap<>();
         initialLM04Map.put("{{LM04_CaseId}}", caseData.getCaseId());
         initialLM04Map.put("{{LM04_PTIURN_Number}}", cm01Map.get("CM01_PTIURN_Number"));

@@ -29,6 +29,11 @@ public class WitnessService extends BaseService {
     public void updateVictimWitnessCMSPersonalDetails(VictimWitnessDetails details, String caseId, String witnessId) {
         service.sendRequest(updateWitnessDetailsWitnessIdRequestParams(details, caseId, witnessId));
     }
+
+    public void updateVictimWitnessCategoryDetails(VictimWitnessDetails details, String caseId, String witnessId) {
+        service.sendRequest(updateVictimWitnessCategoryRequestParams(details, caseId, witnessId));
+    }
+
      public String victimWitnessGuid(String caseUrn, String caseId, String WitnessVictimId){
         HttpResponseWrapper responseWrapper = service.sendRequest(
                 addVictimOrWitnessRequestParams(caseUrn, caseId, WitnessVictimId));
@@ -93,24 +98,6 @@ public class WitnessService extends BaseService {
                 "$[?(@.isWitnessAndVictim==true && @.isProfessional==true)].witnessId");
         List<String> victimIntimidatedId =  extractFromJsonToList(body,
                 "$[?(@.isWitnessAndVictim==true && @.isIntimidated==true)].witnessId");
-//        assertIdsArePresent(context, witnessId);
-//        assertIdsArePresent(context, witnessChildId);
-//        assertIdsArePresent(context, witnessExpertId);
-//        assertIdsArePresent(context, witnessPrisonerId);
-//        assertIdsArePresent(context, witnessInterpreterId);
-//        assertIdsArePresent(context, witnessVulnerableId);
-//        assertIdsArePresent(context, witnessPoliceId);
-//        assertIdsArePresent(context, witnessProfessionalId);
-//        assertIdsArePresent(context, witnessIntimidatedId);
-//        assertIdsArePresent(context, victimId);
-//        assertIdsArePresent(context, victimChildId);
-//        assertIdsArePresent(context, victimExpertId);
-//        assertIdsArePresent(context, victimPrisonerId);
-//        assertIdsArePresent(context, victimInterpreterId);
-//        assertIdsArePresent(context, victimVulnerableId);
-//        assertIdsArePresent(context, victimPoliceId);
-//        assertIdsArePresent(context, victimProfessionalId);
-//        assertIdsArePresent(context, victimIntimidatedId);
 
         Map<String, List<String>> witnessVictimMapIds = new HashMap<>();
         witnessVictimMapIds.put("witnessId", witnessId);
@@ -212,6 +199,18 @@ public class WitnessService extends BaseService {
                 .addHeaders(ddeiHeaders())
                 .method("PATCH")
                 .body(payLoadForUpdateWitnessDetailsWitnessId(victimDetails))
+                .resourceName("addVictimWitnessPersonalDetails")
+                .build();
+    }
+
+    private HttpClientBuilder updateVictimWitnessCategoryRequestParams(VictimWitnessDetails victimDetails,
+                                                                         String caseId, String WitnessId) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/cases/%s/witnesses/%s", caseId, WitnessId))
+                .addHeaders(ddeiHeaders())
+                .method("PATCH")
+                .body(payLoadForUpdateVictimWitnessCategory(victimDetails))
                 .resourceName("addVictimWitnessPersonalDetails")
                 .build();
     }

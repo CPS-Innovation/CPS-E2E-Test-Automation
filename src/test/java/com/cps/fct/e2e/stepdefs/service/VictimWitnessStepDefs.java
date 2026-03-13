@@ -8,6 +8,7 @@ import com.cps.fct.e2e.utils.services.ddei.WitnessService;
 import com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VcaPersonalDetails;
 import com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimWitnessPayloadBuilder;
 import com.cps.fct.e2e.utils.services.ddei.responseAssertions.VictimWitnessAssertions;
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -105,6 +106,46 @@ public class VictimWitnessStepDefs {
         context.set("victimWitnessDetailsToCMS",victimWitnessDetailsToCMS);
     }
 
+    @When("the following category are added to {string} in VCA")
+    public void addCategoryToVictimAndWitness(String witnessVictimType, DataTable dataTable) throws InterruptedException {
+        List<String> categoryList = dataTable.asList();
+        String categoryCode = null;
+
+        VictimWitnessDetails victimWitnessDetails;
+        String caseId = context.get("caseId");
+        Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
+        Map<String, VictimWitnessDetails> victimWitnessDetailsToCMS = context.get("victimWitnessDetailsToCMS");
+
+        // return CategoryCode from Category
+        for (String category : categoryList) {
+            categoryCode = switch (category) {
+                case "Victim" -> "V";
+                case "PoliceOfficer" -> "P";
+                case "Child" -> "C";
+                case "Professional" -> "F";
+                case "ExpertWitness" -> "X";
+                case "Vulnerable" -> "L";
+                case "Intimidated" -> "T";
+                case "ServingPrisoner" -> "H";
+                case "Interpreter" -> "I";
+                default -> categoryCode;
+            };
+            System.out.println("Category - Code: " + category + "-" + categoryCode);
+        }
+
+        victimWitnessDetails = getVictimWitnessCategory(categoryCode);
+
+        for (String id : witnessVictimMapIds.get(witnessVictimType)) {
+            victimWitnessDetails = getVictimWitnessCategory(categoryCode);
+            witnessService.updateVictimWitnessCategoryDetails(victimWitnessDetails, caseId, id);
+            victimWitnessDetailsToCMS.put(id, victimWitnessDetails);
+            Thread.sleep(2000);
+        }
+
+        context.set("victimWitnessDetailsToCMS",victimWitnessDetailsToCMS);
+
+    }
+
     @Then("the {string} personal details are added to VCA")
     public void personalDetailsAreAddedToVCA(String witnessVictimType) throws InterruptedException {
         VcaPersonalDetails vcaPersonalDetails;
@@ -113,8 +154,8 @@ public class VictimWitnessStepDefs {
         Map<String, String> idGuidMap = context.get("idGuidMap");
 
         for (String id : witnessVictimMapIds.get(witnessVictimType)) {
-            vcaPersonalDetails = VictimWitnessPayloadBuilder.addVcaPersonalDetails();
-            String requestPayload = VictimWitnessPayloadBuilder.convertObjectToString(vcaPersonalDetails);
+            vcaPersonalDetails = addVcaPersonalDetails();
+            String requestPayload = convertObjectToString(vcaPersonalDetails);
             witnessService.addWitnessVictimDetailsToVCA(idGuidMap.get(id), requestPayload);
             victimWitnessDetailsToVCA.put(idGuidMap.get(id), vcaPersonalDetails);
             Thread.sleep(2000);
@@ -130,8 +171,8 @@ public class VictimWitnessStepDefs {
         Map<String, String> idGuidMap = context.get("idGuidMap");
 
         for (String id : witnessVictimMapIds.get(witnessVictimType)) {
-            vcaPersonalDetails = VictimWitnessPayloadBuilder.updateVcaPersonalDetails();
-            String requestPayload = VictimWitnessPayloadBuilder.convertObjectToString(vcaPersonalDetails);
+            vcaPersonalDetails = updateVcaPersonalDetails();
+            String requestPayload = convertObjectToString(vcaPersonalDetails);
             witnessService.updateWitnessVictimDetailsToVCA(idGuidMap.get(id), requestPayload);
             victimWitnessDetailsToVCA.put(idGuidMap.get(id), vcaPersonalDetails);
         }

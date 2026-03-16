@@ -63,6 +63,10 @@ public class VictimWitnessStepDefs {
 
         Map<String, String> categoryMap = new HashMap<>();
         context.set("categoryMap",categoryMap);
+
+        Map<Integer, Integer> contactTypeMap = new HashMap<>();
+        context.set("contactTypeMap",contactTypeMap);
+
     }
 
     @When("the {string} is onboarded to VCA")
@@ -252,24 +256,25 @@ public class VictimWitnessStepDefs {
     }
 
     @When("the {string} is added to {string} in VCA")
-    public void theVictimContactIsAddedInVCA(String victimContact, String victimId) {
-        victimContactDetails victimContactDetails;
-        Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
-        Map<String, VcaPersonalDetails> victimWitnessDetailsToVCA = context.get("victimWitnessDetailsToVCA");
+    public void theVictimContactIsAddedInVCA(String contactType, String witnessVictimType) {
+        int contactTypeCode = 0;
         Map<String, String> idGuidMap = context.get("idGuidMap");
+//        Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
+//        Map<Integer, Integer> ContactTypeMap = context.get("contactTypeMap");
 
-        for (String id : witnessVictimMapIds.get(victimId)) {
-            victimContactDetails = addVictimContactDetails();
-            String requestPayload = convertObjectToString(victimContactDetails);
-//            witnessService.addWitnessVictimDetailsToVCA(idGuidMap.get(id), requestPayload);
-//            witnessService.addVictimContactDetailsToVCA(idGuidMap.get(id), requestPayload);
-//            victimWitnessDetailsToVCA.put(idGuidMap.get(id), vcaPersonalDetails);
+        contactTypeCode = switch (contactType) {
+            case "Victim Liaison Officer" -> 1;
+            case "Family Liaison Officer" -> 2;
+            case "Independent Sexual Violence Adviser (ISVA)" -> 3;
+            case "Independent Domestic Violence Adviser (IDVA)" -> 4;
+            default -> contactTypeCode;
+        };
+        System.out.println(contactTypeCode);
+        System.out.println(idGuidMap);
 
-        }
-        context.set("victimWitnessDetailsToVCA",victimWitnessDetailsToVCA);
 
 
-
+        witnessService.addVictimContactDetailsRequestParams(idGuidMap.get(id));
 
     }
 }

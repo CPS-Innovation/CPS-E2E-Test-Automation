@@ -56,10 +56,6 @@ public class WitnessService extends BaseService {
         return service.sendRequest(getWitnessesDetailsForCMSRequestParams(caseId));
     }
 
-    public Response listCaseDetails(String caseId) {
-        return getDetailsForCMSRequestParams(caseId);
-    }
-
     public void addWitnessVictimDetailsToVCA(String guid, String requestBody) {
         service.sendRequest(addWitnessVictimVCADetailsRequestParams(guid, requestBody));
     }
@@ -144,8 +140,7 @@ public class WitnessService extends BaseService {
                 .build();
     }
 
-    private Response getDetailsForCMSRequestParams(String caseId) {
-
+    private Response restAssuredSample(String caseId) {
         response = RestAssured
                 .given()
                 .log()

@@ -87,7 +87,7 @@
             }
           },
           "ItemText": "Witness Involvement",
-          "PersonUniqueId": "{{CM01_WitnessRef_Expert}}"
+          "PersonUniqueId": "{{CM01_WitnessRef_1}}"
         }
       ]
     },

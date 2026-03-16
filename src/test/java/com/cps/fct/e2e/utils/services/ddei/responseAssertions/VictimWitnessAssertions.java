@@ -9,8 +9,7 @@ import org.assertj.core.api.SoftAssertions;
 import java.util.List;
 import java.util.Map;
 
-import static com.cps.fct.e2e.utils.common.JsonUtils.extractFromJsonToList;
-import static com.cps.fct.e2e.utils.common.JsonUtils.readJsonPath;
+import static com.cps.fct.e2e.utils.common.JsonUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.in;
 
@@ -36,6 +35,18 @@ public class VictimWitnessAssertions {
         assertThat(expectedMobileNumber.getFirst()).isEqualTo(inputDetails.getContactDetailsMobileNumber());
         assertThat(expectedPhoneNumber.getFirst()).isEqualTo(inputDetails.getContactDetailsPhoneNumber());
         assertThat(expectedWorkPhoneNumber.getFirst()).isEqualTo(inputDetails.getContactDetailsWorkPhoneNumber());
+        softly.assertAll();
+    }
+
+    public static void assertCategoryDetails(String id,VictimWitnessDetails inputDetails,
+                                                HttpResponseWrapper responsePayload)
+    {
+        SoftAssertions softly = new SoftAssertions();
+        String responseBody = responsePayload.getBody();
+        String expectedCategory = extractCategoryFromJson(responseBody, "$[?(@.witnessId=="+id+")].types");
+
+        //assertions
+        assertThat(expectedCategory).isEqualTo(inputDetails.getCategory());
         softly.assertAll();
     }
 

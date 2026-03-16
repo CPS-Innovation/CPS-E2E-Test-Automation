@@ -7,9 +7,12 @@ import com.cps.fct.e2e.utils.httpClient.HttpClientBuilder;
 import com.cps.fct.e2e.utils.httpClient.HttpResponseWrapper;
 import com.cps.fct.e2e.utils.services.BaseService;
 import com.jayway.jsonpath.JsonPath;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import io.restassured.RestAssured;
 import io.restassured.response.Response;
 
 import static com.cps.fct.e2e.utils.common.JsonUtils.extractFromJsonToList;
@@ -19,22 +22,27 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static io.restassured.RestAssured.*;
 
 public class WitnessService extends BaseService {
-     private Response response;
-     private String baseURI;
+    private Response response;
+    private String baseURI;
 
-     public void addVictimWitnessCMSPersonalDetails(VictimWitnessDetails details, String caseId, String witnessId) {
-       service.sendRequest(addWitnessDetailsWitnessIdRequestParams(details, caseId, witnessId));
-     }
+    public void addVictimWitnessCMSPersonalDetails(VictimWitnessDetails details, String caseId, String witnessId) {
+        service.sendRequest(addWitnessDetailsWitnessIdRequestParams(details, caseId, witnessId));
+    }
 
     public void updateVictimWitnessCMSPersonalDetails(VictimWitnessDetails details, String caseId, String witnessId) {
         service.sendRequest(updateWitnessDetailsWitnessIdRequestParams(details, caseId, witnessId));
     }
 
-    public void updateVictimWitnessCategoryDetails(VictimWitnessDetails details, String caseId, String witnessId) {
-        service.sendRequest(updateVictimWitnessCategoryRequestParams(details, caseId, witnessId));
+    public void addVictimWitnessCategoryDetails(VictimWitnessDetails details, String caseId, String witnessId) {
+        service.sendRequest(addCategoryWitnessIdRequestParams(details, caseId, witnessId));
     }
 
-     public String victimWitnessGuid(String caseUrn, String caseId, String WitnessVictimId){
+    public void updateVictimWitnessCategoryDetails(VictimWitnessDetails details, String caseId, String witnessId) {
+        service.sendRequest(updateCategoryVictimIdRequestParams(details, caseId, witnessId));
+    }
+
+
+    public String victimWitnessGuid(String caseUrn, String caseId, String WitnessVictimId) {
         HttpResponseWrapper responseWrapper = service.sendRequest(
                 addVictimOrWitnessRequestParams(caseUrn, caseId, WitnessVictimId));
         String victimCaseInfoGuid = JsonPath.read(responseWrapper.getBody(), "$.value.victimCaseInfoGuid");
@@ -45,18 +53,22 @@ public class WitnessService extends BaseService {
     }
 
     public HttpResponseWrapper listWitnessVictimDetails(String caseId) {
-       return service.sendRequest(getWitnessesDetailsForCMSRequestParams(caseId));
+        return service.sendRequest(getWitnessesDetailsForCMSRequestParams(caseId));
     }
 
-    public void addWitnessVictimDetailsToVCA(String guid, String requestBody ) {
-        service.sendRequest(addWitnessVictimVCADetailsRequestParams(guid,requestBody));
+    public Response listCaseDetails(String caseId) {
+        return getDetailsForCMSRequestParams(caseId);
     }
 
-    public void updateWitnessVictimDetailsToVCA(String guid, String requestBody ) {
-        service.sendRequest(updateWitnessVictimVCADetailsRequestParams(guid,requestBody));
+    public void addWitnessVictimDetailsToVCA(String guid, String requestBody) {
+        service.sendRequest(addWitnessVictimVCADetailsRequestParams(guid, requestBody));
     }
 
-    public HttpResponseWrapper witnessesDetailsFromVCA( String guid) {
+    public void updateWitnessVictimDetailsToVCA(String guid, String requestBody) {
+        service.sendRequest(updateWitnessVictimVCADetailsRequestParams(guid, requestBody));
+    }
+
+    public HttpResponseWrapper witnessesDetailsFromVCA(String guid) {
         return service.sendRequest(getWitnessesDetailsFromVCARequestParams(guid));
     }
 
@@ -80,23 +92,23 @@ public class WitnessService extends BaseService {
                 "$[?(@.isWitnessAndVictim==false && @.isProfessional==true)].witnessId");
         List<String> witnessIntimidatedId = extractFromJsonToList(body,
                 "$[?(@.isWitnessAndVictim==false && @.isIntimidated==true)].witnessId");
-        List<String> victimId =  extractFromJsonToList(body,
+        List<String> victimId = extractFromJsonToList(body,
                 "$[?(@.isWitnessAndVictim==true && @.isKeyWitness=='Yes')].witnessId");
-        List<String> victimChildId =  extractFromJsonToList(body,
+        List<String> victimChildId = extractFromJsonToList(body,
                 "$[?(@.isWitnessAndVictim==true && @.isChild==true)].witnessId");
-        List<String> victimExpertId =  extractFromJsonToList(body,
+        List<String> victimExpertId = extractFromJsonToList(body,
                 "$[?(@.isWitnessAndVictim==true && @.isExpert==true)].witnessId");
-        List<String> victimPrisonerId =  extractFromJsonToList(body,
+        List<String> victimPrisonerId = extractFromJsonToList(body,
                 "$[?(@.isWitnessAndVictim==true && @.isPrisoner==true)].witnessId");
-        List<String> victimInterpreterId =  extractFromJsonToList(body,
+        List<String> victimInterpreterId = extractFromJsonToList(body,
                 "$[?(@.isWitnessAndVictim==true && @.isInterpreter==true)].witnessId");
-        List<String> victimVulnerableId =  extractFromJsonToList(body,
+        List<String> victimVulnerableId = extractFromJsonToList(body,
                 "$[?(@.isWitnessAndVictim==true && @.isVulnerable==true)].witnessId");
-        List<String> victimPoliceId =  extractFromJsonToList(body,
+        List<String> victimPoliceId = extractFromJsonToList(body,
                 "$[?(@.isWitnessAndVictim==true && @.isPolice==true)].witnessId");
-        List<String> victimProfessionalId =  extractFromJsonToList(body,
+        List<String> victimProfessionalId = extractFromJsonToList(body,
                 "$[?(@.isWitnessAndVictim==true && @.isProfessional==true)].witnessId");
-        List<String> victimIntimidatedId =  extractFromJsonToList(body,
+        List<String> victimIntimidatedId = extractFromJsonToList(body,
                 "$[?(@.isWitnessAndVictim==true && @.isIntimidated==true)].witnessId");
 
         Map<String, List<String>> witnessVictimMapIds = new HashMap<>();
@@ -110,17 +122,17 @@ public class WitnessService extends BaseService {
         witnessVictimMapIds.put("witnessProfessionalId", witnessProfessionalId);
         witnessVictimMapIds.put("witnessIntimidatedId", witnessIntimidatedId);
 
-        witnessVictimMapIds.put("victimId", victimId );
-        witnessVictimMapIds.put("victimChildId", victimChildId );
-        witnessVictimMapIds.put("victimExpertId", victimExpertId );
-        witnessVictimMapIds.put("victimPrisonerId", victimPrisonerId );
+        witnessVictimMapIds.put("victimId", victimId);
+        witnessVictimMapIds.put("victimChildId", victimChildId);
+        witnessVictimMapIds.put("victimExpertId", victimExpertId);
+        witnessVictimMapIds.put("victimPrisonerId", victimPrisonerId);
         witnessVictimMapIds.put("victimInterpreterId", victimInterpreterId);
-        witnessVictimMapIds.put("victimVulnerableId", victimVulnerableId );
+        witnessVictimMapIds.put("victimVulnerableId", victimVulnerableId);
         witnessVictimMapIds.put("victimPoliceId", victimPoliceId);
         witnessVictimMapIds.put("victimProfessionalId", victimProfessionalId);
-        witnessVictimMapIds.put("victimIntimidatedId", victimIntimidatedId );
+        witnessVictimMapIds.put("victimIntimidatedId", victimIntimidatedId);
         context.set("witnessVictimMapIds", witnessVictimMapIds);
-     }
+    }
 
     private HttpClientBuilder getWitnessesDetailsForCMSRequestParams(String caseId) {
         return new HttpClientBuilder.Builder()
@@ -130,6 +142,25 @@ public class WitnessService extends BaseService {
                 .method("GET")
                 .resourceName("witnessDetailsFromCMS")
                 .build();
+    }
+
+    private Response getDetailsForCMSRequestParams(String caseId) {
+
+        response = RestAssured
+                .given()
+                .log()
+                .all()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .basePath("/api/cases/{caseId}/witnesses")
+                .pathParam("caseId", caseId)
+                .headers(ddeiHeaders())
+                .when()
+                .get()
+                .then()
+                .log()
+                .all().extract().response();
+
+            return response;
     }
 
     private HttpClientBuilder getWitnessesDetailsFromVCARequestParams(String guid) {
@@ -156,7 +187,7 @@ public class WitnessService extends BaseService {
     }
 
     private HttpClientBuilder addWitnessVictimVCADetailsRequestParams(
-            String guid,String requestBody) {
+            String guid, String requestBody) {
         return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("DDEI_HOST"))
                 .endpoint(format("/api/victims/case-info/%s", guid))
@@ -169,7 +200,7 @@ public class WitnessService extends BaseService {
 
     // {{EnvUrl}}/api/victims/guid/4f08c3c1-1ab3-43c1-b279-0e88ac1e6c8e
     private HttpClientBuilder updateWitnessVictimVCADetailsRequestParams(
-            String guid,String requestBody) {
+            String guid, String requestBody) {
         return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("DDEI_HOST"))
                 .endpoint(format("/api/victims/case-info/%s", guid))
@@ -191,8 +222,9 @@ public class WitnessService extends BaseService {
                 .resourceName("addVictimWitnessPersonalDetails")
                 .build();
     }
+
     private HttpClientBuilder updateWitnessDetailsWitnessIdRequestParams(VictimWitnessDetails victimDetails,
-                                                                      String caseId, String WitnessId) {
+                                                                         String caseId, String WitnessId) {
         return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("DDEI_HOST"))
                 .endpoint(format("/api/cases/%s/witnesses/%s", caseId, WitnessId))
@@ -203,15 +235,27 @@ public class WitnessService extends BaseService {
                 .build();
     }
 
-    private HttpClientBuilder updateVictimWitnessCategoryRequestParams(VictimWitnessDetails victimDetails,
-                                                                         String caseId, String WitnessId) {
+    private HttpClientBuilder addCategoryWitnessIdRequestParams(VictimWitnessDetails victimDetails,
+                                                                String caseId, String WitnessId) {
         return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("DDEI_HOST"))
                 .endpoint(format("/api/cases/%s/witnesses/%s", caseId, WitnessId))
                 .addHeaders(ddeiHeaders())
                 .method("PATCH")
-                .body(payLoadForUpdateVictimWitnessCategory(victimDetails))
-                .resourceName("addVictimWitnessPersonalDetails")
+                .body(payLoadForAddOrUpdateCategory(victimDetails))
+                .resourceName("addWitnessCategoryDetails")
+                .build();
+    }
+
+    private HttpClientBuilder updateCategoryVictimIdRequestParams(VictimWitnessDetails victimDetails,
+                                                                  String caseId, String WitnessId) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/cases/%s/witnesses/%s", caseId, WitnessId))
+                .addHeaders(ddeiHeaders())
+                .method("PATCH")
+                .body(payLoadForAddOrUpdateCategory(victimDetails))
+                .resourceName("updateVictimCategoryDetails")
                 .build();
     }
 

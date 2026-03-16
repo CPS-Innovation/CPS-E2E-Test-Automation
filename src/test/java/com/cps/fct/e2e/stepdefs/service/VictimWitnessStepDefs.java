@@ -9,6 +9,7 @@ import com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VcaPersonalDetails;
 import com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimWitnessPayloadBuilder;
 import com.cps.fct.e2e.utils.services.ddei.responseAssertions.VictimWitnessAssertions;
 import io.cucumber.datatable.DataTable;
+import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -250,4 +251,25 @@ public class VictimWitnessStepDefs {
         }
     }
 
+    @When("the {string} is added to {string} in VCA")
+    public void theVictimContactIsAddedInVCA(String victimContact, String victimId) {
+        victimContactDetails victimContactDetails;
+        Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
+        Map<String, VcaPersonalDetails> victimWitnessDetailsToVCA = context.get("victimWitnessDetailsToVCA");
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+
+        for (String id : witnessVictimMapIds.get(victimId)) {
+            victimContactDetails = addVictimContactDetails();
+            String requestPayload = convertObjectToString(victimContactDetails);
+//            witnessService.addWitnessVictimDetailsToVCA(idGuidMap.get(id), requestPayload);
+//            witnessService.addVictimContactDetailsToVCA(idGuidMap.get(id), requestPayload);
+//            victimWitnessDetailsToVCA.put(idGuidMap.get(id), vcaPersonalDetails);
+
+        }
+        context.set("victimWitnessDetailsToVCA",victimWitnessDetailsToVCA);
+
+
+
+
+    }
 }

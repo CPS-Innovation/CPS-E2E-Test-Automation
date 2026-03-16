@@ -66,6 +66,24 @@ public class VictimWitnessPayloadBuilder {
                 .build();
     }
 
+    public static VictimContactDetails addVictimContactDetails() {
+        return VictimContactDetails.builder()
+                .ContactType("enum")
+                .ContactFullName("ABC adc")
+                .ContactTelephone("0125")
+                .ContactEmail("asd@asd.com")
+                .AddressAddressLine1(buildingNumber())
+                .AddressAddressLine2(streetName())
+                .AddressAddressLine3(StringUtils.EMPTY)
+                .AddressAddressLine4(StringUtils.EMPTY)
+                .AddressAddressLine5(cityName())
+                .AddressPostcode(ukPostCode())
+                .AddressCity(cityName())
+                .AddressCounty("Tyne and Wear")
+                .CreatedBy("E2E Automation")
+                .build();
+    }
+
     public static VcaPersonalDetails updateVcaPersonalDetails() {
         return VcaPersonalDetails.builder()
                 .PreferredName("Update E2E Automation")

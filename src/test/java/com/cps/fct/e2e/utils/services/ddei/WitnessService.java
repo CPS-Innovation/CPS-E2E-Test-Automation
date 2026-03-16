@@ -230,6 +230,8 @@ public class WitnessService extends BaseService {
                 .build();
     }
 
+
+
     private HttpClientBuilder addCategoryWitnessIdRequestParams(VictimWitnessDetails victimDetails,
                                                                 String caseId, String WitnessId) {
         return new HttpClientBuilder.Builder()
@@ -261,6 +263,27 @@ public class WitnessService extends BaseService {
                 .withFailMessage("id should contain at least one items " + context.get("caseId"))
                 .isNotEmpty();
     }
+
+    private HttpClientBuilder addVictimContactDetailsRequestParams(String guid, String vcaContactType) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/victims/%s/cps-contacts", guid))
+
+
+
+                .addHeaders(ddeiHeaders())
+                .method("PATCH")
+                .body(payLoadForAddOrUpdateCategory(victimDetails))
+                .resourceName("addWitnessCategoryDetails")
+                .build();
+    }
+
+    //    public void addVictimContactDetailsToVCA(String guid, String requestBody) {
+//        service.sendRequest(addWitnessVictimVCADetailsRequestParams(guid, requestBody));
+//
+//        service.sendRequest(addWitnessVictimVCADetailsRequestParams(guid, requestBody));
+//    }
+
 
 
 }

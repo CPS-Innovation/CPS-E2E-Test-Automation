@@ -232,25 +232,22 @@ public class VictimWitnessStepDefs {
 
     @Then("the {string} and {string} category is verified in CMS")
     public void categoryVerifiedInCMS(String witnessType, String victimType) throws InterruptedException {
-        HttpResponseWrapper response;
         Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
         Map<String, VictimWitnessDetails> victimWitnessDetailsToCMS = context.get("victimWitnessDetailsToCMS");
 
-        for (String id : witnessVictimMapIds.get(witnessType)) {
-            //Step1: Validate CMS data -Get input details from the Post request to CMS
-            VictimWitnessDetails victimWitnessDetails = victimWitnessDetailsToCMS.get(id);
-            // Get output details from the Get request from CMS
-            response = witnessService.listWitnessVictimDetails(context.get("caseId"));
-            VictimWitnessAssertions.assertCategoryDetails(id, victimWitnessDetails, response);
-        }
-        for (String id : witnessVictimMapIds.get(victimType)) {
-            //Step1: Validate CMS data -Get input details from the Post request to CMS
-            VictimWitnessDetails victimWitnessDetails = victimWitnessDetailsToCMS.get(id);
-            // Get output details from the Get request from CMS
-            response = witnessService.listWitnessVictimDetails(context.get("caseId"));
-            VictimWitnessAssertions.assertCategoryDetails(id, victimWitnessDetails, response);
-        }
+        assertCategoryDetails(witnessType, witnessVictimMapIds, victimWitnessDetailsToCMS);
+        assertCategoryDetails(victimType, witnessVictimMapIds, victimWitnessDetailsToCMS);
+    }
 
+    private void assertCategoryDetails(String witnessVictimType,  Map<String, List<String>> witnessVictimMapIds,
+                                       Map<String, VictimWitnessDetails> victimWitnessDetailsToCMS){
+        for (String id : witnessVictimMapIds.get(witnessVictimType)) {
+            //Step1: Validate CMS data -Get input details from the Post request to CMS
+            VictimWitnessDetails victimWitnessDetails = victimWitnessDetailsToCMS.get(id);
+            // Get output details from the Get request from CMS
+            HttpResponseWrapper response = witnessService.listWitnessVictimDetails(context.get("caseId"));
+            VictimWitnessAssertions.assertCategoryDetails(id, victimWitnessDetails, response);
+        }
     }
 
 }

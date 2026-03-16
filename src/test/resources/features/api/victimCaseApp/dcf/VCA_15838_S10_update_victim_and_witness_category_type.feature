@@ -11,7 +11,7 @@ Feature: Update category type for witness and victim and verify wm01u message
     And a "witness" is added using LM04
     And a "victim details" is added with details using LM04
 
-  @updatePersonalAndContactDetailsForWitnessVictim
+  @addWitnessCategoryAndUpdateVictimCategory
   Scenario: Update victim and witness category and verify that update details are sent in wm01u message
     Given witness and victim details are available
     And the "witnessId" is onboarded to VCA

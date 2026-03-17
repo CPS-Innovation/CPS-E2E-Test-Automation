@@ -76,6 +76,17 @@
             }
           },
           "ItemText": "Witness Involvement",
+          "PersonUniqueId": "{{CM01_WitnessDetailsRef_1}}"
+        },
+        {
+          "ItemHeading": {
+            "ClassificationType": "PoliceNarrative",
+            "ClassificationCode": "Factual Summary",
+            "ClassificationValue": {
+              "ClassificationValueText": "WITI"
+            }
+          },
+          "ItemText": "Witness Involvement",
           "PersonUniqueId": "{{CM01_VictimDetailsRef_1}}"
         }
       ]

@@ -282,7 +282,7 @@ public class VictimWitnessStepDefs {
     }
 
     @Then("the {string} for {string} is verified in VCA")
-    public void theForIsVerifiedInVCA(String contactType , String witnessVictimType) {
+    public void addDetailsIsVerifiedInVCA(String contactType , String witnessVictimType) {
         int contactTypeCode = 0;
         Map<String, String> idGuidMap = context.get("idGuidMap");
         Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
@@ -302,4 +302,53 @@ public class VictimWitnessStepDefs {
             VictimWitnessAssertions.assertContactTypeDetails(contactTypeCode, victimContactDetails, response);
         }
     }
+
+    @When("the {string} details are changed for {string} in VCA")
+    public void theVictimContactIsUpdatedInVCA(String contactType, String witnessVictimType) {
+        int contactTypeCode = 0;
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+        Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
+        Map<Integer, VictimContactDetails> victimContactDetailsMap = context.get("victimContactDetailsMap");
+
+        contactTypeCode = switch (contactType) {
+            case "Victim Liaison Officer" -> 1;
+            case "Family Liaison Officer" -> 2;
+            case "Independent Sexual Violence Adviser" -> 3;
+            case "Independent Domestic Violence Adviser" -> 4;
+            default -> contactTypeCode;
+        };
+
+        for (String id : witnessVictimMapIds.get(witnessVictimType)) {
+            VictimContactDetails victimContactDetails = VictimWitnessPayloadBuilder.payLoadForUpdateVictimContactDetails(contactTypeCode);
+            witnessService.updateVictimContactDetailsToVCA(idGuidMap.get(id), convertObjectToString(victimContactDetails));
+            victimContactDetailsMap.put(contactTypeCode, victimContactDetails);
+        }
+        context.set("victimContactDetailsMap",victimContactDetailsMap);
+    }
+
+    @Then("the {string} changes for {string} are verified in VCA")
+    public void updateDetailsAreVerifiedInVCA(String contactType , String witnessVictimType) {
+        int contactTypeCode = 0;
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+        Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
+        Map<Integer, VictimContactDetails> victimContactDetailsMap = context.get("victimContactDetailsMap");
+
+        contactTypeCode = switch (contactType) {
+            case "Victim Liaison Officer" -> 1;
+            case "Family Liaison Officer" -> 2;
+            case "Independent Sexual Violence Adviser" -> 3;
+            case "Independent Domestic Violence Adviser" -> 4;
+            default -> contactTypeCode;
+        };
+
+        for (String id : witnessVictimMapIds.get(witnessVictimType)) {
+            VictimContactDetails victimContactDetails = victimContactDetailsMap.get(contactTypeCode);
+            Response response = witnessService.listVictimContactTypeDetails(idGuidMap.get(id));
+            VictimWitnessAssertions.assertContactTypeDetails(contactTypeCode, victimContactDetails, response);
+        }
+    }
+
+
+
+
 }

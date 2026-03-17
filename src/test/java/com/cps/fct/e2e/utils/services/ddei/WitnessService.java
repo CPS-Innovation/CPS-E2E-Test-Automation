@@ -66,6 +66,10 @@ public class WitnessService extends BaseService {
         service.sendRequest(addVictimContactDetailsRequestParams(guid, requestBody));
     }
 
+    public void updateVictimContactDetailsToVCA(String guid, String requestBody) {
+        service.sendRequest(updateVictimContactDetailsRequestParams(guid, requestBody));
+    }
+
     public void updateWitnessVictimDetailsToVCA(String guid, String requestBody) {
         service.sendRequest(updateWitnessVictimVCADetailsRequestParams(guid, requestBody));
     }
@@ -261,7 +265,16 @@ public class WitnessService extends BaseService {
                 .resourceName("addVictimContactDetails")
                 .build();
     }
-
+    private HttpClientBuilder updateVictimContactDetailsRequestParams(String guid, String requestBody) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/victims/%s/cps-contacts", guid))
+                .addHeaders(ddeiHeaders())
+                .method("PATCH")
+                .body(requestBody)
+                .resourceName("addVictimContactDetails")
+                .build();
+    }
     private static void assertIdsArePresent(ScenarioContext context, List<String> victimIds) {
         assertThat(victimIds)
                 .withFailMessage("id's are should not be null " + context.get("caseId"))

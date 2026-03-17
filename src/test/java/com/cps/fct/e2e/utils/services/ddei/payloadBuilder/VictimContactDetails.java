@@ -14,5 +14,6 @@ public class VictimContactDetails {
     private String ContactEmail;
     private int ContactType;
     private String CreatedBy;
+    private String LastModifiedBy;
     private Address Address;
 }

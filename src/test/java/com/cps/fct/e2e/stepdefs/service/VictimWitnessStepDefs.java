@@ -259,7 +259,7 @@ public class VictimWitnessStepDefs {
     public void theVictimContactIsAddedInVCA(String contactType, String witnessVictimType) {
         int contactTypeCode = 0;
         Map<String, String> idGuidMap = context.get("idGuidMap");
-//        Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
+        Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
 //        Map<Integer, Integer> ContactTypeMap = context.get("contactTypeMap");
 
         contactTypeCode = switch (contactType) {
@@ -269,12 +269,18 @@ public class VictimWitnessStepDefs {
             case "Independent Domestic Violence Adviser (IDVA)" -> 4;
             default -> contactTypeCode;
         };
-        System.out.println(contactTypeCode);
-        System.out.println(idGuidMap);
 
+//        witnessService.addVictimContactDetailsRequestParams(idGuidMap.get(id));
 
-
-        witnessService.addVictimContactDetailsRequestParams(idGuidMap.get(id));
 
     }
+
+
+
+
+
+
+
+
+
 }

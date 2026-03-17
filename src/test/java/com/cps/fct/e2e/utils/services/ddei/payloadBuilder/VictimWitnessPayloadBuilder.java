@@ -79,6 +79,23 @@ public class VictimWitnessPayloadBuilder {
                 .build();
     }
 
+    public static VictimContactDetails payLoadForAddVictimContactDetails(int contactTypeCode) {
+        return VictimContactDetails.builder()
+                .ContactType(contactTypeCode)
+                .ContactFullName("ABC abc")
+                .ContactEmail("abc@abc.com")
+                .AddressAddressLine1("Line1")
+                .AddressAddressLine2("Line2")
+                .AddressAddressLine3("Line3")
+                .AddressAddressLine4("Line4")
+                .AddressAddressLine5("Line5")
+                .AddressPostcode("PC01PC")
+                .AddressCity("City")
+                .AddressCounty("County")
+                .CreatedBy("E2E TestAutomation")
+                .build();
+    }
+
     // This method used for Onboarding(first time)
     public static String payLoadForAddVictimWitnessToVCA(String caseUrn) {
         Map<String, Object> payload = new HashMap<>();
@@ -153,31 +170,6 @@ public class VictimWitnessPayloadBuilder {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         return  gson.toJson(patchPayload);
     }
-
-    public static VictimContactDetails payLoadForAddVictimContactDetails(int contactTypeCode) {
-        Map<String, Object> payload = new HashMap<>();
-        payload.put("ContactType",contactTypeCode);
-        payload.put("ContactName","ABC abc");
-        payload.put("ContactEmail","abc@abc.com");
-        payload.put("Address.addressLine1","Line1");
-        payload.put("Address.addressLine2","Line1");
-        payload.put("Address.addressLine3","Line1");
-        payload.put("Address.addressLine4","Line1");
-        payload.put("Address.addressLine5","Line1");
-        payload.put("Address.postcode","PC01PC");
-        payload.put("Address.city","City");
-        payload.put("Address.country","City");
-        payload.put("CreatedBy","E2E TestAutomation");
-//        return toJsonString(payload);
-        return null;
-    }
-
-
-
-
-
-
-
 
 
 

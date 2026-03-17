@@ -4,8 +4,10 @@ import com.cps.fct.e2e.model.VictimWitnessDetails;
 import com.cps.fct.e2e.utils.httpClient.HttpResponseWrapper;
 import com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VcaPersonalDetails;
 import com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimContactDetails;
+import io.restassured.response.Response;
 import org.assertj.core.api.SoftAssertions;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import static com.cps.fct.e2e.utils.common.JsonUtils.*;
@@ -78,15 +80,14 @@ public class VictimWitnessAssertions {
         softly.assertAll();
     }
 
-    public static void assertContactTypeDetails(String id, VictimContactDetails inputDetails,
-                                                HttpResponseWrapper responsePayload)
+    public static void assertContactTypeDetails(int contactTypeCode, VictimContactDetails inputDetails,
+                                                Response responsePayload)
     {
         SoftAssertions softly = new SoftAssertions();
-        String responseBody = responsePayload.getBody();
-        List<Object> expectedContactDetails = extractObjectListFromJson(responseBody, "$.value");
-        System.out.println(expectedContactDetails.getFirst());
-        //assertThat(expectedContactDetails).contains(inputDetails.getCategory());
+        //"value.find {it.contactType==1}"
+        String filter = "value.find {it.contactType=="+ contactTypeCode +"}";
+        LinkedHashMap<String, Object> result = responsePayload.getBody().jsonPath().get(filter);
+        System.out.println(result.get("contactType").toString());
         softly.assertAll();
     }
-
 }

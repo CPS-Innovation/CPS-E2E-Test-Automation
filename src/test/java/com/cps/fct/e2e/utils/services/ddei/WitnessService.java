@@ -54,8 +54,8 @@ public class WitnessService extends BaseService {
         return service.sendRequest(getWitnessesDetailsForCMSRequestParams(caseId));
     }
 
-    public HttpResponseWrapper listVictimContactTypeDetails(String guid) {
-        return service.sendRequest(getVictimContactTypeDetailsForRequestParams(guid));
+    public Response listVictimContactTypeDetails(String guid) {
+        return service.restAssuredRequest(getVictimContactTypeDetailsForRequestParams(guid));
     }
 
     public void addWitnessVictimDetailsToVCA(String guid, String requestBody) {

@@ -88,6 +88,17 @@ public class VictimWitnessAssertions {
         String filter = "value.find {it.contactType=="+ contactTypeCode +"}";
         LinkedHashMap<String, Object> result = responsePayload.getBody().jsonPath().get(filter);
         System.out.println(result.get("contactType").toString());
+
+        assertThat(result.get("name")).isEqualTo(inputDetails.getContactName());
+        assertThat(result.get("email")).isEqualTo(inputDetails.getContactEmail());
+        assertThat(result.get("telephone")).isEqualTo(inputDetails.getContactTelephone());
+        assertThat(result.get("contactType")).isEqualTo(inputDetails.getContactType());
+        if(contactTypeCode != 2){
+            assertThat((String) ((LinkedHashMap<?, ?>) result.get("addressFields")).get("addressLine1")).isEqualTo(inputDetails.getAddress().getAddressLine1());
+            assertThat((String) ((LinkedHashMap<?, ?>) result.get("addressFields")).get("addressLine2")).isEqualTo(inputDetails.getAddress().getAddressLine2());
+            assertThat((String) ((LinkedHashMap<?, ?>) result.get("addressFields")).get("city")).isEqualTo(inputDetails.getAddress().getCity());
+            assertThat((String) ((LinkedHashMap<?, ?>) result.get("addressFields")).get("postcode")).isEqualTo(inputDetails.getAddress().getPostcode());
+        }
         softly.assertAll();
     }
 }

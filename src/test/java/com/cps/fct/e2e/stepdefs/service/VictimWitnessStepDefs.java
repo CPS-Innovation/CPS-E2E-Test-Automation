@@ -277,10 +277,8 @@ public class VictimWitnessStepDefs {
             VictimContactDetails victimContactDetails = VictimWitnessPayloadBuilder.payLoadForAddVictimContactDetails(contactTypeCode);
             witnessService.addVictimContactDetailsToVCA(idGuidMap.get(id), convertObjectToString(victimContactDetails));
             victimContactDetailsMap.put(contactTypeCode, victimContactDetails);
-//            victimContactTypeMap.put(idGuidMap.get(id), contactTypeCode );
         }
         context.set("victimContactDetailsMap",victimContactDetailsMap);
-//        context.set("victimContactTypeMap", victimContactTypeMap );
     }
 
     @Then("the {string} for {string} is verified in VCA")
@@ -289,7 +287,6 @@ public class VictimWitnessStepDefs {
         Map<String, String> idGuidMap = context.get("idGuidMap");
         Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
         Map<Integer, VictimContactDetails> victimContactDetailsMap = context.get("victimContactDetailsMap");
-        Map<String, Integer> victimContactTypeMap =  context.get("victimContactTypeMap");
 
         contactTypeCode = switch (contactType) {
             case "Victim Liaison Officer" -> 1;

@@ -19,7 +19,6 @@ import static com.cps.fct.e2e.utils.common.JsonUtils.extractFromJsonToList;
 import static com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimWitnessPayloadBuilder.*;
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
-import static io.restassured.RestAssured.*;
 
 public class WitnessService extends BaseService {
     private Response response;
@@ -41,7 +40,6 @@ public class WitnessService extends BaseService {
         service.sendRequest(updateCategoryVictimIdRequestParams(details, caseId, witnessId));
     }
 
-
     public String victimWitnessGuid(String caseUrn, String caseId, String WitnessVictimId) {
         HttpResponseWrapper responseWrapper = service.sendRequest(
                 addVictimOrWitnessRequestParams(caseUrn, caseId, WitnessVictimId));
@@ -56,8 +54,16 @@ public class WitnessService extends BaseService {
         return service.sendRequest(getWitnessesDetailsForCMSRequestParams(caseId));
     }
 
+    public HttpResponseWrapper listVictimContactTypeDetails(String guid) {
+        return service.sendRequest(getVictimContactTypeDetailsForRequestParams(guid));
+    }
+
     public void addWitnessVictimDetailsToVCA(String guid, String requestBody) {
         service.sendRequest(addWitnessVictimVCADetailsRequestParams(guid, requestBody));
+    }
+
+    public void addVictimContactDetailsToVCA(String guid, String requestBody) {
+        service.sendRequest(addVictimContactDetailsRequestParams(guid, requestBody));
     }
 
     public void updateWitnessVictimDetailsToVCA(String guid, String requestBody) {
@@ -140,24 +146,6 @@ public class WitnessService extends BaseService {
                 .build();
     }
 
-    private Response restAssuredSample(String caseId) {
-        response = RestAssured
-                .given()
-                .log()
-                .all()
-                .baseUri(EnvConfig.get("DDEI_HOST"))
-                .basePath("/api/cases/{caseId}/witnesses")
-                .pathParam("caseId", caseId)
-                .headers(ddeiHeaders())
-                .when()
-                .get()
-                .then()
-                .log()
-                .all().extract().response();
-
-            return response;
-    }
-
     private HttpClientBuilder getWitnessesDetailsFromVCARequestParams(String guid) {
         return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("DDEI_HOST"))
@@ -165,6 +153,16 @@ public class WitnessService extends BaseService {
                 .addHeaders(ddeiHeaders())
                 .method("GET")
                 .resourceName("witnessDetailsFromVCA")
+                .build();
+    }
+
+    private HttpClientBuilder getVictimContactTypeDetailsForRequestParams(String guid) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/victims/%s/cps-contacts", guid))
+                .addHeaders(ddeiHeaders())
+                .method("GET")
+                .resourceName("getVictimContactTypeDetails")
                 .build();
     }
 
@@ -193,7 +191,6 @@ public class WitnessService extends BaseService {
                 .build();
     }
 
-    // {{EnvUrl}}/api/victims/guid/4f08c3c1-1ab3-43c1-b279-0e88ac1e6c8e
     private HttpClientBuilder updateWitnessVictimVCADetailsRequestParams(
             String guid, String requestBody) {
         return new HttpClientBuilder.Builder()
@@ -219,7 +216,7 @@ public class WitnessService extends BaseService {
     }
 
     private HttpClientBuilder updateWitnessDetailsWitnessIdRequestParams(VictimWitnessDetails victimDetails,
-                                                                         String caseId, String WitnessId) {
+                                                                        String caseId, String WitnessId) {
         return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("DDEI_HOST"))
                 .endpoint(format("/api/cases/%s/witnesses/%s", caseId, WitnessId))
@@ -229,8 +226,6 @@ public class WitnessService extends BaseService {
                 .resourceName("addVictimWitnessPersonalDetails")
                 .build();
     }
-
-
 
     private HttpClientBuilder addCategoryWitnessIdRequestParams(VictimWitnessDetails victimDetails,
                                                                 String caseId, String WitnessId) {
@@ -256,20 +251,7 @@ public class WitnessService extends BaseService {
                 .build();
     }
 
-    private static void assertIdsArePresent(ScenarioContext context, List<String> victimIds) {
-        assertThat(victimIds)
-                .withFailMessage("id's are should not be null " + context.get("caseId"))
-                .isNotNull()
-                .withFailMessage("id should contain at least one items " + context.get("caseId"))
-                .isNotEmpty();
-    }
-
-    public void addVictimContactDetails(String guid, String requestBody) {
-        service.sendRequest(addVictimContactDetailsRequestParams(guid, requestBody));
-    }
-
-    private HttpClientBuilder addVictimContactDetailsRequestParams(
-            String guid, String requestBody) {
+    private HttpClientBuilder addVictimContactDetailsRequestParams(String guid, String requestBody) {
         return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("DDEI_HOST"))
                 .endpoint(format("/api/victims/%s/cps-contacts", guid))
@@ -278,6 +260,32 @@ public class WitnessService extends BaseService {
                 .body(requestBody)
                 .resourceName("addVictimContactDetails")
                 .build();
+    }
+
+    private static void assertIdsArePresent(ScenarioContext context, List<String> victimIds) {
+        assertThat(victimIds)
+                .withFailMessage("id's are should not be null " + context.get("caseId"))
+                .isNotNull()
+                .withFailMessage("id should contain at least one items " + context.get("caseId"))
+                .isNotEmpty();
+    }
+
+    private Response restAssuredSample(String caseId) {
+        response = RestAssured
+                .given()
+                .log()
+                .all()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .basePath("/api/cases/{caseId}/witnesses")
+                .pathParam("caseId", caseId)
+                .headers(ddeiHeaders())
+                .when()
+                .get()
+                .then()
+                .log()
+                .all().extract().response();
+
+        return response;
     }
 
 }

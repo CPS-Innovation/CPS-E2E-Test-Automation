@@ -72,14 +72,18 @@ public class JsonUtils {
         return rawArray.stream()
                 .map(Object::toString)
                 .collect(Collectors.toList());
-
     }
 
-    public static String extractCategoryFromJson(String jsonBody, String jsonPathExpression) {
+    public static List<Object> extractObjectListFromJson(String jsonBody, String jsonPathExpression) {
+        JSONArray rawArray = JsonPath.read(jsonBody, jsonPathExpression);
+        return rawArray.stream()
+                .map(Object::toString)
+                .collect(Collectors.toList());
+    }
+
+    public static String extractFromJson(String jsonBody, String jsonPathExpression) {
         JSONArray rawArray = JsonPath.read(jsonBody, jsonPathExpression);
         return rawArray.getFirst().toString();
-
-
     }
 
     public static String toJsonString(Map<String, Object>payload) {

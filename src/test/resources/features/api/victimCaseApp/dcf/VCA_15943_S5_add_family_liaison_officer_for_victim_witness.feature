@@ -14,8 +14,4 @@ Feature: Add Family Liaison Officer to victim.
     Given witness and victim details are available
     And the "victimId" is onboarded to VCA
     When the "Family Liaison Officer" is added to "victimId" in VCA
-
-#
-#    When the category "Expert" is added to "witnessId" in VCA
-#    And the category "Vulnerable" is update to "victimId" in VCA
-#    Then the "witnessId" and "victimId" category is verified in CMS
+    Then the "Family Liaison Officer" for "victimId" is verified in VCA

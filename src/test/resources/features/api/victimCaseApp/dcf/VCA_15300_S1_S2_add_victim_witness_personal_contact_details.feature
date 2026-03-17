@@ -9,7 +9,7 @@ Feature: Add personal and contact details for all category types of witness and 
   Background: Create DCF cases with single defendant with charge with all category types of witness and victim
               with empty personal and contact details.
 
-    Given create case CM01 for type "single defendant with charge with all c types witness victim"
+    Given create case CM01 for type "single defendant with charge with all types witness victim"
     And a "witness" is added using LM04
     And a "witness child" is added using LM04
     And a "witness police" is added using LM04

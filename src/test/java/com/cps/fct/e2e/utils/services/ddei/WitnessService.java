@@ -49,7 +49,7 @@ public class WitnessService extends BaseService {
         String body = response.getBody();
         List<String> witnessId = extractFromJsonToList(body,
                 "$[?(@.isWitnessAndVictim==false && @.isKeyWitness=='Yes')].witnessId");
-        List<String> witnessChildId = extractFromJsonToList(body,
+                List<String> witnessChildId = extractFromJsonToList(body,
                 "$[?(@.isWitnessAndVictim==false && @.isChild==true)].witnessId");
         List<String> witnessExpertId = extractFromJsonToList(body,
                 "$[?(@.isWitnessAndVictim==false && @.isExpert==true)].witnessId");
@@ -101,6 +101,7 @@ public class WitnessService extends BaseService {
         assertIdsArePresent(context, victimPoliceId);
         assertIdsArePresent(context, victimProfessionalId);
         assertIdsArePresent(context, victimIntimidatedId);
+//        context.set("witnessVictimIds", new WitnessVictim(witnessId, victimId));
         context.set("witnessVictimIds", new WitnessVictim(witnessId, witnessChildId, witnessExpertId, witnessPrisonerId, witnessInterpreterId, witnessVulnerableId, witnessPoliceId, witnessProfessionalId, witnessIntimidatedId, victimId, victimChildId, victimExpertId, victimPrisonerId, victimInterpreterId, victimVulnerableId, victimPoliceId, victimProfessionalId, victimIntimidatedId));
     }
 

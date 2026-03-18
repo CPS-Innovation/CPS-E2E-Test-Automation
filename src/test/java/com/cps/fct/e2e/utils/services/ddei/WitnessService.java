@@ -13,22 +13,22 @@ import java.util.Map;
 import io.restassured.response.Response;
 
 import static com.cps.fct.e2e.utils.common.JsonUtils.extractFromJsonToList;
-import static com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimWitnessPayloadBuilder.*;
+import static com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimWitnessPayloadBuilder.payLoadForAddVictimWitnessToVCA;
+import static com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimWitnessPayloadBuilder.payLoadForAddWitnessDetailsWitnessId;
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
 import static io.restassured.RestAssured.*;
+import static io.restassured.matcher.RestAssuredMatchers.*;
+import static org.hamcrest.Matchers.*;
 
 public class WitnessService extends BaseService {
      private Response response;
      private String baseURI;
 
      public void addVictimWitnessCMSPersonalDetails(VictimWitnessDetails details, String caseId, String witnessId) {
-       service.sendRequest(addWitnessDetailsWitnessIdRequestParams(details, caseId, witnessId));
+       service.sendRequest(UpdateWitnessDetailsWitnessIdRequestParams(details, caseId, witnessId));
      }
 
-    public void updateVictimWitnessCMSPersonalDetails(VictimWitnessDetails details, String caseId, String witnessId) {
-        service.sendRequest(updateWitnessDetailsWitnessIdRequestParams(details, caseId, witnessId));
-    }
      public String victimWitnessGuid(String caseUrn, String caseId, String WitnessVictimId){
         HttpResponseWrapper responseWrapper = service.sendRequest(
                 addVictimOrWitnessRequestParams(caseUrn, caseId, WitnessVictimId));
@@ -43,12 +43,8 @@ public class WitnessService extends BaseService {
        return service.sendRequest(witnessesDetailsRequestParams(caseId));
     }
 
-    public void addWitnessVictimDetailsToVCA(String witnessGuid, String requestBody ) {
-        service.sendRequest(addWitnessVictimVCADetailsRequestParams(witnessGuid,requestBody));
-    }
-
-    public void updateWitnessVictimDetailsToVCA(String witnessGuid, String requestBody ) {
-        service.sendRequest(addWitnessVictimVCADetailsRequestParams(witnessGuid,requestBody));
+    public void UpdateWitnessVictimDetailsToVCA(String witnessGuid, String requestBody ) {
+        service.sendRequest(UpdateWitnessVictimVCADetailsRequestParams(witnessGuid,requestBody));
     }
 
     public HttpResponseWrapper witnessesDetailsFromVCA( String caseUrn, String caseId, String witnessId) {
@@ -185,7 +181,7 @@ public class WitnessService extends BaseService {
                 .build();
     }
 
-    private HttpClientBuilder addWitnessVictimVCADetailsRequestParams(
+    private HttpClientBuilder UpdateWitnessVictimVCADetailsRequestParams(
             String WitnessGuid,String requestBody) {
         return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("DDEI_HOST"))
@@ -197,37 +193,14 @@ public class WitnessService extends BaseService {
                 .build();
     }
 
-    private HttpClientBuilder updateWitnessVictimVCADetailsRequestParams(
-            String WitnessGuid,String requestBody) {
-        return new HttpClientBuilder.Builder()
-                .baseUri(EnvConfig.get("DDEI_HOST"))
-                .endpoint(format("/api/victims/case-info/%s", WitnessGuid))
-                .addHeaders(ddeiHeaders())
-                .method("PATCH")
-                .body(requestBody)
-                .resourceName("addVictimWitnessPersonalDetails")
-                .build();
-    }
-
-    private HttpClientBuilder addWitnessDetailsWitnessIdRequestParams(VictimWitnessDetails victimDetails,
-                                                                      String caseId, String WitnessId) {
+    private HttpClientBuilder UpdateWitnessDetailsWitnessIdRequestParams(VictimWitnessDetails victimDetails,
+                                                                         String caseId, String WitnessId) {
         return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("DDEI_HOST"))
                 .endpoint(format("/api/cases/%s/witnesses/%s", caseId, WitnessId))
                 .addHeaders(ddeiHeaders())
                 .method("PATCH")
                 .body(payLoadForAddWitnessDetailsWitnessId(victimDetails))
-                .resourceName("addVictimWitnessPersonalDetails")
-                .build();
-    }
-    private HttpClientBuilder updateWitnessDetailsWitnessIdRequestParams(VictimWitnessDetails victimDetails,
-                                                                      String caseId, String WitnessId) {
-        return new HttpClientBuilder.Builder()
-                .baseUri(EnvConfig.get("DDEI_HOST"))
-                .endpoint(format("/api/cases/%s/witnesses/%s", caseId, WitnessId))
-                .addHeaders(ddeiHeaders())
-                .method("PATCH")
-                .body(payLoadForUpdateWitnessDetailsWitnessId(victimDetails))
                 .resourceName("addVictimWitnessPersonalDetails")
                 .build();
     }

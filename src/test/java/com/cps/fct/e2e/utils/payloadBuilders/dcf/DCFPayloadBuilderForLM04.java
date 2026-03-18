@@ -23,7 +23,7 @@ public class DCFPayloadBuilderForLM04 extends JsonReplacer {
         initialLM04Map.put("{{LM04_CaseId}}", caseData.getCaseId());
         initialLM04Map.put("{{LM04_PTIURN_Number}}", cm01Map.get("CM01_PTIURN_Number"));
         initialLM04Map.put("{{LM04_Force}}", cm01Map.get("DCF_Force"));
-        initialLM04Map.put("{{LM04_Unit}}", cm01Map.get("DCF_Unit"));
+        initialLM04Map.put( "{{LM04_Unit}}", cm01Map.get("DCF_Unit"));
         initialLM04Map.put("{{LM04_Year}}", cm01Map.get("DCF_Year"));
         initialLM04Map.put("{{LM04_itemId}}",generateUppercaseAlphaNumeric(12));
         initialLM04Map.put("{{FirstName}}",firstName());
@@ -63,9 +63,6 @@ public class DCFPayloadBuilderForLM04 extends JsonReplacer {
             case "witness police":
                 initialLM04Map.put("{{LM04_WitnessRef_police}}", cm01Map.get("CM01_WitnessRef_Police"));
                 break;
-            case "witness details":
-                initialLM04Map.put("{{LM04_WitnessDetailsRef_1}}", cm01Map.get("CM01_WitnessDetailsRef_1"));
-                break;
 
             case "victim":
                 initialLM04Map.put("{{LM04_VictimRef_1}}", cm01Map.get("CM01_VictimRef_1"));
@@ -97,10 +94,6 @@ public class DCFPayloadBuilderForLM04 extends JsonReplacer {
             case "victim police":
                 initialLM04Map.put("{{LM04_VictimRef_police}}", cm01Map.get("CM01_VictimRef_Police"));
                 break;
-            case "victim details":
-                initialLM04Map.put("{{LM04_VictimDetailsRef_1}}", cm01Map.get("CM01_VictimDetailsRef_1"));
-                break;
-
         }
         return applyReplacements(payloadFileName, initialLM04Map);
     }

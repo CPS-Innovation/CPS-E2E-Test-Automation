@@ -46,7 +46,7 @@
         "PersonClassification": [
           {
             "ClassificationType": "TypeOfWitness",
-            "ClassificationCode": "R",
+            "ClassificationCode": "L",
             "ClassificationValue": {
               "ClassificationValueFlag": true
             }
@@ -54,6 +54,7 @@
         ]
       },
       "TypeOfPerson": "VictimWitness",
+      "DateOfBirth": "1985-09-03",
       "WitnessAndVictim": {
         "Witness": {
           "Occupation": "professional"

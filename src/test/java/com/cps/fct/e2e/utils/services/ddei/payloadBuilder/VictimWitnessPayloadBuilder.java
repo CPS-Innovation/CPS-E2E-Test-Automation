@@ -143,13 +143,14 @@ public class VictimWitnessPayloadBuilder {
         return  gson.toJson(patchPayload);
     }
 
-    public static String payLoadForAddOrUpdateCategory(VictimWitnessDetails victimDetails ) {
+    public static String payLoadForUpdateVictimWitnessCategory(VictimWitnessDetails victimDetails ) {
         UpdateWitnessDetailsWitnessIdJsonBuilder builder = new UpdateWitnessDetailsWitnessIdJsonBuilder();
         List<Map<String, Object>> patchPayload = builder
-                .replace("/types", victimDetails.getCategory())
+                .replace("/types", "Dr")
                 .add("/justification", victimDetails.getJustification())
                 .build();
 
+        //TODO : existing defect on address line
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         return  gson.toJson(patchPayload);
     }

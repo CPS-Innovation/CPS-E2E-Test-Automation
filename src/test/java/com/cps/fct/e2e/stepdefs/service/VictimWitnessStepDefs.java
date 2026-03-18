@@ -13,7 +13,6 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.restassured.response.Response;
 import org.picocontainer.annotations.Inject;
 
 import java.util.HashMap;
@@ -59,9 +58,6 @@ public class VictimWitnessStepDefs {
 
         Map<String, String> idGuidMap = new HashMap<>();
         context.set("idGuidMap",idGuidMap);
-
-        Map<String, String> categoryMap = new HashMap<>();
-        context.set("categoryMap",categoryMap);
     }
 
     @When("the {string} is onboarded to VCA")
@@ -110,66 +106,44 @@ public class VictimWitnessStepDefs {
         context.set("victimWitnessDetailsToCMS",victimWitnessDetailsToCMS);
     }
 
-    @When("the category {string} is added to {string} in VCA")
-    public void addCategoryToVictimAndWitness(String category, String witnessVictimType) throws InterruptedException {
+    @When("the following category are added to {string} in VCA")
+    public void addCategoryToVictimAndWitness(String witnessVictimType, DataTable dataTable) throws InterruptedException {
+        List<String> categoryList = dataTable.asList();
         String categoryCode = null;
+
         VictimWitnessDetails victimWitnessDetails;
         String caseId = context.get("caseId");
         Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
         Map<String, VictimWitnessDetails> victimWitnessDetailsToCMS = context.get("victimWitnessDetailsToCMS");
-        Map<String, String> categoryMap = context.get("categoryMap");
 
-        categoryCode = switch (category) {
-            case "Victim" -> "V";
-            case "PoliceOfficer" -> "P";
-            case "Child" -> "C";
-            case "Professional" -> "F";
-            case "Expert" -> "X";
-            case "Vulnerable" -> "L";
-            case "Intimidated" -> "T";
-            case "ServingPrisoner" -> "H";
-            case "Interpreter" -> "I";
-            default -> categoryCode;
-        };
-
-        for (String id : witnessVictimMapIds.get(witnessVictimType)) {
-            categoryMap.put(id, categoryCode);
-            victimWitnessDetails = getVictimWitnessCategory(categoryCode);
-            witnessService.addVictimWitnessCategoryDetails(victimWitnessDetails, caseId, id);
-            victimWitnessDetailsToCMS.put(id, victimWitnessDetails);
+        // return CategoryCode from Category
+        for (String category : categoryList) {
+            categoryCode = switch (category) {
+                case "Victim" -> "V";
+                case "PoliceOfficer" -> "P";
+                case "Child" -> "C";
+                case "Professional" -> "F";
+                case "ExpertWitness" -> "X";
+                case "Vulnerable" -> "L";
+                case "Intimidated" -> "T";
+                case "ServingPrisoner" -> "H";
+                case "Interpreter" -> "I";
+                default -> categoryCode;
+            };
+            System.out.println("Category - Code: " + category + "-" + categoryCode);
         }
-        context.set("victimWitnessDetailsToCMS",victimWitnessDetailsToCMS);
-        context.set("categoryMap", categoryMap);
-    }
 
-    @When("the category {string} is update to {string} in VCA")
-    public void updateCategoryToVictimAndWitness(String category, String witnessVictimType) throws InterruptedException {
-        String categoryCode = null;
-        VictimWitnessDetails victimWitnessDetails;
-        String caseId = context.get("caseId");
-        Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
-        Map<String, VictimWitnessDetails> victimWitnessDetailsToCMS = context.get("victimWitnessDetailsToCMS");
-        Map<String, String> categoryMap = context.get("categoryMap");
-
-        categoryCode = switch (category) {
-            case "PoliceOfficer" -> "V,P";
-            case "Child" -> "V,C";
-            case "Professional" -> "V,F";
-            case "Vulnerable" -> "V,L";
-            case "Intimidated" -> "V,T";
-            case "ServingPrisoner" -> "V,H";
-            default -> categoryCode;
-        };
+        victimWitnessDetails = getVictimWitnessCategory(categoryCode);
 
         for (String id : witnessVictimMapIds.get(witnessVictimType)) {
-            categoryMap.put(id, categoryCode);
             victimWitnessDetails = getVictimWitnessCategory(categoryCode);
             witnessService.updateVictimWitnessCategoryDetails(victimWitnessDetails, caseId, id);
             victimWitnessDetailsToCMS.put(id, victimWitnessDetails);
+            Thread.sleep(2000);
         }
 
         context.set("victimWitnessDetailsToCMS",victimWitnessDetailsToCMS);
-        context.set("categoryMap", categoryMap);
+
     }
 
     @Then("the {string} personal details are added to VCA")
@@ -229,20 +203,4 @@ public class VictimWitnessStepDefs {
             Thread.sleep(2000);
         }
     }
-
-    @Then("the {string} and {string} category is verified in CMS")
-    public void categoryVerifiedInCMS(String witnessType, String victimType) throws InterruptedException {
-        Response response;
-        Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
-        Map<String, VictimWitnessDetails> victimWitnessDetailsToCMS = context.get("victimWitnessDetailsToCMS");
-
-        for (String id : witnessVictimMapIds.get(witnessType)) {
-            //Step1: Validate CMS data -Get input details from the Post request to CMS
-            VictimWitnessDetails victimWitnessDetails = victimWitnessDetailsToCMS.get(id);
-            // Get output details from the Get request from CMS
-            response = witnessService.listCaseDetails(context.get("caseId"));
-            //VictimWitnessAssertions.assertCategoryDetails(id, victimWitnessDetails, response);
-        }
-    }
-
 }

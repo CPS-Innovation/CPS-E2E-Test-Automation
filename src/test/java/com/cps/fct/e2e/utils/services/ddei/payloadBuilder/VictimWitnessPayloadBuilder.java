@@ -111,38 +111,6 @@ public class VictimWitnessPayloadBuilder {
         }
     }
 
-    public static VictimContactDetails payLoadForUpdateVictimContactDetails(int contactTypeCode) {
-
-        if(contactTypeCode == 2){
-            return VictimContactDetails.builder()
-                    .ContactName("New ABC abc")
-                    .ContactTelephone("07777777777")
-                    .ContactEmail("new_email_abc@abc.com")
-                    .ContactType(contactTypeCode)
-                    .LastModifiedBy("Modified by E2E TestAutomation")
-                    .Address(Address.builder().build())
-                    .build();
-        } else {
-            return VictimContactDetails.builder()
-                    .ContactName("New ABC abc")
-                    .ContactTelephone("07777777777")
-                    .ContactEmail("new_email_abc@abc.com")
-                    .ContactType(contactTypeCode)
-                    .LastModifiedBy("Modified by E2E TestAutomation")
-                    .Address(Address.builder()
-                            .AddressLine1("New Address Line1")
-                            .AddressLine2("New Address Line2")
-                            .AddressLine3("New Address Line3")
-                            .AddressLine4("New Address Line4")
-                            .AddressLine5("New Address Line5")
-                            .Postcode("NW011NE")
-                            .City("New City")
-                            .Country("New County")
-                            .build())
-                    .build();
-        }
-    }
-
     // This method used for Onboarding(first time)
     public static String payLoadForAddVictimWitnessToVCA(String caseUrn) {
         Map<String, Object> payload = new HashMap<>();

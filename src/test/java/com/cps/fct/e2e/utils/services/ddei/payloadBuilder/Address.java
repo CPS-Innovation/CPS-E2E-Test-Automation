@@ -6,12 +6,12 @@ import lombok.Getter;
 @Getter
 @Builder
 public class Address {
-    private String AddressLine1;
-    private String AddressLine2;
-    private String AddressLine3;
-    private String AddressLine4;
-    private String AddressLine5;
-    private String Postcode;
-    private String City;
-    private String Country;
+    private String addressLine1;
+    private String addressLine2;
+    private String addressLine3;
+    private String addressLine4;
+    private String addressLine5;
+    private String postcode;
+    private String city;
+    private String county;
 }

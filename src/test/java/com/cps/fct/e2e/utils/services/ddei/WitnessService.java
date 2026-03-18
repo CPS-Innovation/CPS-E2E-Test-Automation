@@ -47,9 +47,11 @@ public class WitnessService extends BaseService {
         service.sendRequest(UpdateWitnessVictimVCADetailsRequestParams(witnessGuid,requestBody));
     }
 
-    public HttpResponseWrapper witnessesDetailsFromVCA( String caseUrn, String caseId, String witnessId) {
-        return service.sendRequest(witnessesDetailsFromCMSRequestParams(caseUrn,caseId, witnessId));
+    public void witnessesDetailsFromCMS( String caseUrn, String caseId, String witnessId) {
+        service.sendRequest(witnessesDetailsFromCMSRequestParams(caseUrn,caseId, witnessId));
     }
+
+
 
     public void persistVictimWitnessDetails(HttpResponseWrapper response, ScenarioContext context) {
         String body = response.getBody();

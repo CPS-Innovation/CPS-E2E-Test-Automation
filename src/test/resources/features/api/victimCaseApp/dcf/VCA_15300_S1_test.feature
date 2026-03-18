@@ -17,9 +17,9 @@ Feature: S1 test
     Given witness and victim details are available
     When the "witnessId" personal details are added to CMS
     And the "victimId" personal details are added to CMS
-
     When the "witnessId" is onboarded and personal details are added to VCA
     And the "victimId" is onboarded and personal details are added to VCA
+
 
     Then the "witnessId" personal details are verified in CMS and VCA
 #    And the "witnessId2" personal details are verified in CMS and VCA

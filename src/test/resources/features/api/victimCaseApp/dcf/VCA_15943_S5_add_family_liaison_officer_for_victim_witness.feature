@@ -13,11 +13,5 @@ Feature: Add Family Liaison Officer to victim.
   Scenario: Add Family Liaison Officer to victim and verify
     Given witness and victim details are available
     And the "victimId" is onboarded to VCA
-    When the "Victim Liaison Officer" is added to "victimId" in VCA
-    And the "Family Liaison Officer" is added to "victimId" in VCA
-#    And the "Independent Sexual Violence Adviser" is added to "victimId" in VCA
-#    And the "Independent Domestic Violence Adviser" is added to "victimId" in VCA
-    Then the "Victim Liaison Officer" for "victimId" is verified in VCA
-    And the "Family Liaison Officer" for "victimId" is verified in VCA
-#    And the "Independent Sexual Violence Adviser" for "victimId" is verified in VCA
-#    And the "Independent Domestic Violence Adviser" for "victimId" is verified in VCA
+    When the "Family Liaison Officer" is added to "victimId" in VCA
+    Then the "Family Liaison Officer" for "victimId" is verified in VCA

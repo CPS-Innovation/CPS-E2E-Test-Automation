@@ -80,35 +80,20 @@ public class VictimWitnessPayloadBuilder {
     }
 
     public static VictimContactDetails payLoadForAddVictimContactDetails(int contactTypeCode) {
-
-        if(contactTypeCode == 2){
-            return VictimContactDetails.builder()
-                    .ContactName("ABC abc")
-                    .ContactTelephone("01222222222")
-                    .ContactEmail("abc@abc.com")
-                    .ContactType(contactTypeCode)
-                    .CreatedBy("E2E TestAutomation")
-                    .Address(Address.builder().build())
-                    .build();
-        } else {
-            return VictimContactDetails.builder()
-                    .ContactName("ABC abc")
-                    .ContactTelephone("01222222222")
-                    .ContactEmail("abc@abc.com")
-                    .ContactType(contactTypeCode)
-                    .CreatedBy("E2E TestAutomation")
-                    .Address(Address.builder()
-                            .addressLine1("Line1")
-                            .addressLine2("Line2")
-                            .addressLine3("Line3")
-                            .addressLine4("Line4")
-                            .addressLine5("Line5")
-                            .postcode("PC01PC")
-                            .city("City")
-                            .county("County")
-                            .build())
-                    .build();
-        }
+        return VictimContactDetails.builder()
+                .ContactType(contactTypeCode)
+                .ContactFullName("ABC abc")
+                .ContactEmail("abc@abc.com")
+                .AddressAddressLine1("Line1")
+                .AddressAddressLine2("Line2")
+                .AddressAddressLine3("Line3")
+                .AddressAddressLine4("Line4")
+                .AddressAddressLine5("Line5")
+                .AddressPostcode("PC01PC")
+                .AddressCity("City")
+                .AddressCounty("County")
+                .CreatedBy("E2E TestAutomation")
+                .build();
     }
 
     // This method used for Onboarding(first time)
@@ -185,5 +170,7 @@ public class VictimWitnessPayloadBuilder {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         return  gson.toJson(patchPayload);
     }
+
+
 
 }

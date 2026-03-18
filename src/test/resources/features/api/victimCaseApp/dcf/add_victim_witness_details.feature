@@ -21,10 +21,11 @@ Feature: Add witness personal details and verify wm01u
     And a "witness expert" is added using LM04
     And a "witness prisoner" is added using LM04
     And a "witness interpreter" is added using LM04
-    And a "victim" is added using LM04
-    And a "victim child" is added using LM04
-    And a "victim vulnerable" is added using LM04
-    And a "victim intimidated" is added using LM04
+
+#    And a "victim" is added using LM04
+#    And a "victim child" is added using LM04
+#    And a "victim police" is added using LM04
+#    And a "victim intimidated" is added using LM04
 
 #    And witness details are available
 #    And witness and victim are added to VCA

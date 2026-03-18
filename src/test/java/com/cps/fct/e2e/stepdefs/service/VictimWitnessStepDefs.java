@@ -57,40 +57,22 @@ public class VictimWitnessStepDefs {
 
     @And("the {string} personal details are entered")
     public void thePersonalDetailsAreEntered(String witnessVictimType){
+
+        Witness witnessVictimIds = context.getCastClazz("witnessVictimIds", Witness.class);
+        System.out.println(witnessVictimIds);
         String caseId = context.get("caseId");
-        Witness witnessIds = null;
-        Victim victimIds = null;
-
-        if (witnessVictimType.equalsIgnoreCase("witness")) {
-            witnessIds = context.getCastClazz("witnessIds", Witness.class);
-            Map<String, VictimWitnessDetails> witnessDataMap = witnessIds.witnessId().stream()
-                    .collect(Collectors.toMap(
-                            id -> id,
-                            id -> {
-                                VictimWitnessDetails details = getVictimWitnessDetails();
-                                witnessService.addVictimWitnessCMSPersonalDetails(details, caseId, id);
-                                return details;
-                            }
-                    ));
-            context.set("victimWitnessDetailsWrapper", new VictimWitnessDetailsMapWrapper(witnessDataMap));
-
-        } else{
-            victimIds = context.getCastClazz("victimIds", Victim.class);
-            Map<String, VictimWitnessDetails> witnessDataMap = victimIds.victimId().stream()
-                    .collect(Collectors.toMap(
-                            id -> id,
-                            id -> {
-                                VictimWitnessDetails details = getVictimWitnessDetails();
-                                witnessService.addVictimWitnessCMSPersonalDetails(details, caseId, id);
-                                return details;
-                            }
-                    ));
-            context.set("victimWitnessDetailsWrapper", new VictimWitnessDetailsMapWrapper(witnessDataMap));
-        }
 
 
-
-
+        Map<String, VictimWitnessDetails> witnessDataMap = witnessVictimIds.witnessId().stream()
+                .collect(Collectors.toMap(
+                        id -> id,
+                        id -> {
+                            VictimWitnessDetails details = getVictimWitnessDetails();
+                            witnessService.addVictimWitnessCMSPersonalDetails(details, caseId, id);
+                            return details;
+                        }
+                ));
+        context.set("victimWitnessDetailsWrapper", new VictimWitnessDetailsMapWrapper(witnessDataMap));
 
 
     }

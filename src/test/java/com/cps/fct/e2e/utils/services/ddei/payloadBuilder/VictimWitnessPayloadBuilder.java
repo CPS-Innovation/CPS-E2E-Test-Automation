@@ -6,6 +6,7 @@ import com.cps.fct.e2e.utils.common.FakerUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.List;
@@ -34,13 +35,6 @@ public class VictimWitnessPayloadBuilder {
                 .contactDetailsPostalAddressAddressLine4(StringUtils.EMPTY)
                 .contactDetailsPostalAddressAddressLine5(cityName())
                 .contactDetailsPostalAddressPostcode(ukPostCode())
-                .justification("JUSTIFICATION TEXT")
-                .build();
-    }
-
-    public static VictimWitnessDetails getVictimWitnessCategory(String categoryCode) {
-        return VictimWitnessDetails.builder()
-                .category(categoryCode)
                 .justification("JUSTIFICATION TEXT")
                 .build();
     }
@@ -135,18 +129,6 @@ public class VictimWitnessPayloadBuilder {
                 .replace("/contactDetails/postalAddress/addressLine4", victimDetails.getContactDetailsPostalAddressAddressLine4())
                 .replace("/contactDetails/postalAddress/addressLine5", victimDetails.getContactDetailsPostalAddressAddressLine5())
                 .replace("/contactDetails/postalAddress/postcode", victimDetails.getContactDetailsPostalAddressPostcode())
-                .add("/justification", victimDetails.getJustification())
-                .build();
-
-        //TODO : existing defect on address line
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        return  gson.toJson(patchPayload);
-    }
-
-    public static String payLoadForUpdateVictimWitnessCategory(VictimWitnessDetails victimDetails ) {
-        UpdateWitnessDetailsWitnessIdJsonBuilder builder = new UpdateWitnessDetailsWitnessIdJsonBuilder();
-        List<Map<String, Object>> patchPayload = builder
-                .replace("/types", "Dr")
                 .add("/justification", victimDetails.getJustification())
                 .build();
 

@@ -27,7 +27,7 @@ Feature: Add witness and victim personal and contact details and verify wm01u
     And a "victim interpreter" is added using LM04
     And a "victim police" is added using LM04
 
-  @addPersonalAndContactDetailsForAllWitnessAndVictimType
+  @addWitnessVictimPersonalAndContactDetailsForAllWitnessVictimType
   Scenario: Add witness title, preferred name, date of birth, gender, ethnicity, disability or access needs and previous convictions details
     Given witness and victim details are available
     When the "witnessId" personal details are added to CMS

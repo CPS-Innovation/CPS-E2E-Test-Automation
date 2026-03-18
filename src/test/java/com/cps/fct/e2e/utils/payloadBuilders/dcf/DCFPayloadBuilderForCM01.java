@@ -42,7 +42,6 @@ public class DCFPayloadBuilderForCM01 extends JsonReplacer {
 
             Map.entry("{{CM01_WitnessRef_1}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_WitnessRef_2}}", generateUppercaseAlphaNumeric(12)),
-            Map.entry("{{CM01_WitnessDetailsRef_1}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_WitnessRef_Child}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_WitnessRef_Police}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_WitnessRef_Vulnerable}}", generateUppercaseAlphaNumeric(12)),
@@ -54,7 +53,6 @@ public class DCFPayloadBuilderForCM01 extends JsonReplacer {
 
             Map.entry("{{CM01_VictimRef_1}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_VictimRef_2}}", generateUppercaseAlphaNumeric(12)),
-            Map.entry("{{CM01_VictimDetailsRef_1}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_VictimRef_Child}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_VictimRef_Vulnerable}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_VictimRef_Intimidated}}", generateUppercaseAlphaNumeric(12)),

@@ -39,12 +39,34 @@ public class VictimWitnessPayloadBuilder {
                 .build();
     }
 
+    public static String payLoadForAddWitnessDetailToVca(VcaPersonalDetails payload) {
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(PreferredMethodOfContact.class, new PreferredMethodOfContactAdapter())
+                .setPrettyPrinting()
+                .create();
+        return gson.toJson(payload) ;
+    }
+
     public static String convertObjectToString(Object object) {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(PreferredMethodOfContact.class, new PreferredMethodOfContactAdapter())
                 .setPrettyPrinting()
                 .create();
         return gson.toJson(object) ;
+    }
+
+    @NotNull
+    public static VcaPersonalDetails getPersonDetailsVCAPayload(PreferredMethodOfContact method) {
+        return VcaPersonalDetails.builder()
+                .PreferredName("E2E Automation")
+                .preferredMethodOfContact(method)
+                .IsYouth(Boolean.FALSE)
+                .SuitableContactTimes("anytime between 9am to 6pm weekdays")
+                .SpecialConsiderationNeeds("Wheelchair access")
+                .Service(1)
+                .Onboarded(Boolean.FALSE)
+                .LastModifiedBy("CPS USER")
+                .build();
     }
 
     public static VcaPersonalDetails getVcaPersonalDetails() {
@@ -95,34 +117,4 @@ public class VictimWitnessPayloadBuilder {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         return  gson.toJson(patchPayload);
     }
-
-    public static String payLoadForUpdateWitnessDetailsWitnessId(VictimWitnessDetails victimDetails ) {
-        UpdateWitnessDetailsWitnessIdJsonBuilder builder = new UpdateWitnessDetailsWitnessIdJsonBuilder();
-        List<Map<String, Object>> patchPayload = builder
-                .replace("/contactDetails/title", "Dr")
-                .replace("/contactDetails/gender", "Unknown")
-                .replace("/dateOfBirth", "1990-02-01")
-                .replace("/contactDetails/ethnicity", "British")
-                .replace("/contactDetails/disability","Yes")
-                .replace("/previousConvictions", "True")
-                .replace("/contactDetails/phoneNumber", victimDetails.getContactDetailsPhoneNumber())
-                .replace("/contactDetails/mobileNumber", victimDetails.getContactDetailsMobileNumber())
-                .replace("/contactDetails/workPhoneNumber", victimDetails.getContactDetailsWorkPhoneNumber())
-                .replace("/contactDetails/email", victimDetails.getContactDetailsEmail())
-                .replace("/contactDetails/postalAddress/addressLine1", victimDetails.getContactDetailsPostalAddressAddressLine1())
-                .replace("/contactDetails/postalAddress/addressLine2", victimDetails.getContactDetailsPostalAddressAddressLine2())
-                .replace("/contactDetails/postalAddress/addressLine3", victimDetails.getContactDetailsPostalAddressAddressLine3())
-                .replace("/contactDetails/postalAddress/addressLine4", victimDetails.getContactDetailsPostalAddressAddressLine4())
-                .replace("/contactDetails/postalAddress/addressLine5", victimDetails.getContactDetailsPostalAddressAddressLine5())
-                .replace("/contactDetails/postalAddress/postcode", victimDetails.getContactDetailsPostalAddressPostcode())
-                .add("/justification", victimDetails.getJustification())
-                .build();
-
-        //TODO : existing defect on address line
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        return  gson.toJson(patchPayload);
-    }
-
-
-
 }

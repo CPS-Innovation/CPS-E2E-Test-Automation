@@ -21,7 +21,7 @@ import static io.cucumber.junit.platform.engine.Constants.OBJECT_FACTORY_PROPERT
 @IncludeEngines("cucumber")
 @SelectClasspathResource("features")
 @ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "com.cps.fct.e2e")
-@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@S1_S2_15300_15789 or @S3_S4_15791_15793" )
+@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@vca")
 @ConfigurationParameter(
         key = PLUGIN_PROPERTY_NAME,
         value = "pretty, json:target/cucumber-report/cucumber.json"
@@ -32,12 +32,6 @@ import static io.cucumber.junit.platform.engine.Constants.OBJECT_FACTORY_PROPERT
 )
 public class TestRunnerApi {
 
-//    static {
-//        System.setProperty("cucumber.filter.tags",
-//                        "@S1_S2_15300_15789" +
-//                        "@S3_S4_15791_15793"
-//        );
-//    }
     @Test
     void generateCucumberReport() {
         String jsonPath = "target/cucumber-report/cucumber.json";
@@ -47,12 +41,5 @@ public class TestRunnerApi {
         ReportBuilder reportBuilder = new ReportBuilder(jsonFiles, config);
         reportBuilder.generateReports();
     }
-
-
-
-
-
-
-
 
 }

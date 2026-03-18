@@ -14,17 +14,14 @@ Feature: Update existing witness and victim personal and contact details and ver
   @updatePersonalAndContactDetailsForWitnessVictim
   Scenario: Update existing title, preferred name, date of birth, gender, ethnicity, disability or access needs and previous convictions details
     Given witness and victim details are available
-    And the "witnessId" is onboarded to VCA
-    And the "victimId" is onboarded to VCA
-
     When the "witnessId" personal details are updated to CMS
     And the "victimId" personal details are updated to CMS
 
-    When the "witnessId" personal details are added to VCA
-    And the "victimId" personal details are added to VCA
-
-    When the "witnessId" personal details are update to VCA
-    And the "victimId" personal details are update to VCA
+#    When the "witnessId" is onboarded and personal details are added to VCA
+    When the "witnessId" is onboarded and personal details are update to VCA
+#    And the "victimId" is onboarded and personal details are added to VCA
+    And the "victimId" is onboarded and personal details are update to VCA
 
     Then the "witnessId" personal details are verified in CMS and VCA
     And the "victimId" personal details are verified in CMS and VCA
+

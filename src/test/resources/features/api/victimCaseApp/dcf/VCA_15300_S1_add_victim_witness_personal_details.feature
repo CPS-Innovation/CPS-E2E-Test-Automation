@@ -7,18 +7,18 @@ Feature: Add witness and victim personal details and verify wm01u
 
   Background:
     Given create case CM01 for type "single defendant with charge with all types witness victim"
-#    And a "witness" is added using LM04
+    And a "witness" is added using LM04
     And a "witness child" is added using LM04
-#    And a "witness police" is added using LM04
+    And a "witness police" is added using LM04
 #    And a "witness intimidated" is added using LM04
 #    And a "witness vulnerable" is added using LM04
 #    And a "witness professional" is added using LM04
-#    And a "witness expert" is added using LM04
-#    And a "witness prisoner" is added using LM04
-#    And a "witness interpreter" is added using LM04
+    And a "witness expert" is added using LM04
+    And a "witness prisoner" is added using LM04
+    And a "witness interpreter" is added using LM04
 #    And a "victim" is added using LM04
 #    And a "victim child" is added using LM04
-#    And a "victim vulnerable" is added using LM04
+    And a "victim vulnerable" is added using LM04
 #    And a "victim intimidated" is added using LM04
 #    And a "victim professional" is added using LM04
 #    And a "victim expert" is added using LM04
@@ -29,9 +29,12 @@ Feature: Add witness and victim personal details and verify wm01u
   @witnessAddPersonalDetails
   Scenario: Add witness title, preferred name, date of birth, gender, ethnicity, disability or access needs and previous convictions details
     Given witness and victim details are available
-    When the "witnessChildId" personal details are added to CMS
-    And the "victimPrisonerId" personal details are added to CMS
-    And the "witnessChildId" is onboarded and personal details are added to VCA
-    And the "victimPrisonerId" is onboarded and personal details are added to VCA
-    Then Witness personal details are updated correctly to CMS
+    And witness and victim are added to VCA
+#    And the "witness" personal details are entered
+    When the "witnessChildId" personal details are entered
+    And the "witnessPoliceId" personal details are entered
+    And the "victimPrisonerId" personal details are entered
+    And the "victimVulnerableId" personal details are entered
+#    And the witness personal details are sent to VCA
+#    Then Witness personal details are updated correctly to CMS
 #    And Witness personal details are updated correctly to VCA

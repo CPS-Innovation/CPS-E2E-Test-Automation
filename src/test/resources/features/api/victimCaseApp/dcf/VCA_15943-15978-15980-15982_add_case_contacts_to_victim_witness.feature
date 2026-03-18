@@ -2,16 +2,16 @@
 
 Feature: Add case contacts to victims and witness.
   As a Victim Liaison Officer
-  I want to add case contacts to victim and witness
-  Verify that case contacts are added to victim and witness
+  I want to add case contacts for victim and witness
+  Verify that case contacts are added
 
-  Background: Create DCF cases with multi defendant with multi charge with victim and witness.
+  Background: Create DCF cases with multi defendant with multi charge with a victim.
     Given create case CM01 for type "multi defendant with witness victim"
     And a "witness details" is added with details using LM04
     And a "victim details" is added with details using LM04
 
   @addCaseContactsToVictim
-  Scenario: Add case contacts to victims then verify
+  Scenario: Add case contacts to various categories of Victims and Witnesses and verify
     Given witness and victim details are available
     And the "witnessId" is onboarded to VCA
     And the "victimId" is onboarded to VCA
@@ -25,7 +25,7 @@ Feature: Add case contacts to victims and witness.
     And the "Independent Domestic Violence Adviser" for "victimId" is verified in VCA
 
   @addCaseContactsToWitness
-  Scenario: Add case contacts to witnesses then verify
+  Scenario: Add case contacts to various categories of Victims and Witnesses and verify
     Given witness and victim details are available
     And the "witnessId" is onboarded to VCA
     And the "victimId" is onboarded to VCA

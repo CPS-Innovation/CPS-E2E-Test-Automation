@@ -3,6 +3,7 @@ package com.cps.fct.e2e.stepdefs.service;
 import com.cps.fct.e2e.utils.FileMapping.FileUtils;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
 import com.cps.fct.e2e.utils.httpClient.HttpResponseWrapper;
+import com.cps.fct.e2e.utils.jsonMerge.JsonMergeUtil;
 import com.cps.fct.e2e.utils.services.ddei.CaseService;
 import com.cps.fct.e2e.utils.services.messagaingApi.DCFMessageService;
 import io.cucumber.java.en.And;

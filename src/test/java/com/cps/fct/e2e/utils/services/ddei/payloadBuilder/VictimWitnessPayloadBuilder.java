@@ -47,37 +47,24 @@ public class VictimWitnessPayloadBuilder {
         return gson.toJson(object) ;
     }
 
-    public static VcaPersonalDetails addVcaPersonalDetails() {
+    public static VcaPersonalDetails getVcaPersonalDetails() {
         return VcaPersonalDetails.builder()
-                .PreferredName("Add E2E Automation")
+                .PreferredName("E2E Automation")
                 .preferredMethodOfContact(PreferredMethodOfContact.EMAIL)
                 .IsYouth(Boolean.FALSE)
                 .SuitableContactTimes("anytime between 9am to 6pm weekdays")
                 .SpecialConsiderationNeeds("Wheelchair access")
                 .Service(1)
                 .Onboarded(Boolean.TRUE)
-                .LastModifiedBy("Add CPS user")
+                .LastModifiedBy("CPS USER")
                 .build();
     }
 
-    public static VcaPersonalDetails updateVcaPersonalDetails() {
-        return VcaPersonalDetails.builder()
-                .PreferredName("Update E2E Automation")
-                .preferredMethodOfContact(PreferredMethodOfContact.HOME_PHONE)
-                .IsYouth(Boolean.TRUE)
-                .SuitableContactTimes("Evening times only")
-                .SpecialConsiderationNeeds("Chair Support")
-                .Service(1)
-                .Onboarded(Boolean.TRUE)
-                .LastModifiedBy("Update CPS user")
-                .build();
-    }
-
-    // This method used for Onboarding(first time)
+    //Method called for Onboard process - creates GUID,with service as 1-Universal, Onboard as 'false'
     public static String payLoadForAddVictimWitnessToVCA(String caseUrn) {
         Map<String, Object> payload = new HashMap<>();
         payload.put("Urn", caseUrn);
-        payload.put("CreatedBy", "Onboard CPS user");
+        payload.put("CreatedBy", "E2ETestAutomation");
         payload.put("Service", 1);
         payload.put("Onboarded",false);
         return toJsonString(payload);
@@ -136,4 +123,7 @@ public class VictimWitnessPayloadBuilder {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         return  gson.toJson(patchPayload);
     }
+
+
+
 }

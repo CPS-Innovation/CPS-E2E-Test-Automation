@@ -55,12 +55,11 @@ public class VictimWitnessPayloadBuilder {
                 .SuitableContactTimes("anytime between 9am to 6pm weekdays")
                 .SpecialConsiderationNeeds("Wheelchair access")
                 .Service(1)
-                .Onboarded(Boolean.TRUE)
+                .Onboarded(Boolean.FALSE)
                 .LastModifiedBy("CPS USER")
                 .build();
     }
 
-    //Method called for Onboard process - creates GUID,with service as 1-Universal, Onboard as 'false'
     public static String payLoadForAddVictimWitnessToVCA(String caseUrn) {
         Map<String, Object> payload = new HashMap<>();
         payload.put("Urn", caseUrn);

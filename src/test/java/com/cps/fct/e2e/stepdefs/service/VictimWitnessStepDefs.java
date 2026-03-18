@@ -59,28 +59,6 @@ public class VictimWitnessStepDefs {
         context.set("idGuidMap",idGuidMap);
     }
 
-    @When("the {string} is onboarded to VCA")
-    public void onboardedToVCA(String witnessVictimType) throws InterruptedException {
-        VcaPersonalDetails vcaPersonalDetails;
-        Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
-        Map<String, VcaPersonalDetails> victimWitnessDetailsToVCA = context.get("victimWitnessDetailsToVCA");
-        Map<String, String> idGuidMap = context.get("idGuidMap");
-
-        for (String id : witnessVictimMapIds.get(witnessVictimType)) {
-            //Onboard process - creates GUID,with service as 1-Universal, Onboard as 'false'
-            String guid =  witnessService.victimWitnessGuid(context.get("caseUrn"), context.get("caseId"), id);
-
-//            vcaPersonalDetails = VictimWitnessPayloadBuilder.getVcaPersonalDetails();
-//            String requestPayload = VictimWitnessPayloadBuilder.convertObjectToString(vcaPersonalDetails);
-//            witnessService.addWitnessVictimDetailsToVCA(guid, requestPayload);
-//            victimWitnessDetailsToVCA.put(guid, vcaPersonalDetails);
-            idGuidMap.put(id,guid);
-//            Thread.sleep(1000);
-        }
-//        context.set("victimWitnessDetailsToVCA",victimWitnessDetailsToVCA);
-        context.set("idGuidMap",idGuidMap);
-    }
-
     @When("the {string} personal details are added to CMS")
     public void thePersonalDetailsAreAddedToCMS(String witnessVictimType) throws InterruptedException {
         VictimWitnessDetails victimWitnessDetails;
@@ -113,7 +91,7 @@ public class VictimWitnessStepDefs {
         context.set("victimWitnessDetailsToCMS",victimWitnessDetailsToCMS);
     }
 
-    @Then("the {string} personal details are added to VCA")
+    @Then("the {string} is onboarded and personal details are added to VCA")
     public void thePersonalDetailsAreAddedToVCA(String witnessVictimType) throws InterruptedException {
         VcaPersonalDetails vcaPersonalDetails;
         Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
@@ -121,13 +99,17 @@ public class VictimWitnessStepDefs {
         Map<String, String> idGuidMap = context.get("idGuidMap");
 
         for (String id : witnessVictimMapIds.get(witnessVictimType)) {
+            //Onboard process - creates GUID
+            String guid =  witnessService.victimWitnessGuid(context.get("caseUrn"), context.get("caseId"), id);
             vcaPersonalDetails = VictimWitnessPayloadBuilder.getVcaPersonalDetails();
             String requestPayload = VictimWitnessPayloadBuilder.convertObjectToString(vcaPersonalDetails);
-            witnessService.addWitnessVictimDetailsToVCA(idGuidMap.get(id), requestPayload);
-            victimWitnessDetailsToVCA.put(idGuidMap.get(id), vcaPersonalDetails);
+            witnessService.addWitnessVictimDetailsToVCA(guid, requestPayload);
+            victimWitnessDetailsToVCA.put(guid, vcaPersonalDetails);
+            idGuidMap.put(id,guid);
             Thread.sleep(1000);
         }
         context.set("victimWitnessDetailsToVCA",victimWitnessDetailsToVCA);
+        context.set("idGuidMap",idGuidMap);
     }
 
     @Then("the {string} is onboarded and personal details are update to VCA")
@@ -166,7 +148,6 @@ public class VictimWitnessStepDefs {
             // Get output details from the Get request from CMS
             response = witnessService.listWitnessVictimDetails(context.get("caseId"));
             VictimWitnessAssertions.assertCMSPersonalDetails(id, victimWitnessDetails, response);
-            Thread.sleep(1000);
 
             //Step2: Validate VCA data -Get input details from the Post request to VCA
             VcaPersonalDetails vcaPersonalDetails = victimWitnessDetailsToVCA.get(idGuidMap.get(id));

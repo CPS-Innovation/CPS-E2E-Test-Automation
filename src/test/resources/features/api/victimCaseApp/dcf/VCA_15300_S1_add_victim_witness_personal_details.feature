@@ -1,10 +1,9 @@
-@DCF @vca @regression @S1_S2_15300_15789
+@DCF @vca @regression @S1_addWitnessVictimPersonalDetails
 
-Feature: Add witness and victim personal and contact details and verify wm01u
+Feature: Add witness and victim personal details and verify wm01u
   As a Victim Liaison Officer
-  I want to add witness and victim personal and contact details
-  Added information is reflected in CMS and VCA database
-  wm01u message is sent to police system
+  I want to update witness and victim personal details
+  Updated information is reflected in CMS and wm01u message is sent to police system
 
   Background:
     Given create case CM01 for type "single defendant with charge with all types witness victim"
@@ -27,7 +26,7 @@ Feature: Add witness and victim personal and contact details and verify wm01u
     And a "victim interpreter" is added using LM04
     And a "victim police" is added using LM04
 
-  @addWitnessVictimPersonalAndContactDetailsForAllWitnessVictimType
+  @witnessAddPersonalDetails
   Scenario: Add witness title, preferred name, date of birth, gender, ethnicity, disability or access needs and previous convictions details
     Given witness and victim details are available
     When the "witnessId" personal details are added to CMS

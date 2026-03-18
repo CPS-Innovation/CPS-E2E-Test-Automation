@@ -78,8 +78,6 @@ public class JsonUtils {
     public static String extractCategoryFromJson(String jsonBody, String jsonPathExpression) {
         JSONArray rawArray = JsonPath.read(jsonBody, jsonPathExpression);
         return rawArray.getFirst().toString();
-
-
     }
 
     public static String toJsonString(Map<String, Object>payload) {

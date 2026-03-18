@@ -6,7 +6,6 @@ import com.cps.fct.e2e.utils.httpClient.ResourceResponseStore;
 import com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VcaPersonalDetails;
 import org.assertj.core.api.SoftAssertions;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -45,38 +44,10 @@ public class VictimWitnessAssertions {
         SoftAssertions softly = new SoftAssertions();
         String responseBody = responsePayload.getBody();
         String expectedCategory = extractCategoryFromJson(responseBody, "$[?(@.witnessId=="+id+")].types");
-//        System.out.println(expectedCategory);
 
-//        String actual = inputDetails.getCategory();
-//        List<String> actual = Arrays.asList(inputDetails.getCategory().split(" "));
-//        System.out.println(actual.get(0));
-//        System.out.println(actual.get(1));
-
-
-
-//        List<String> items = Arrays.asList(str.split("\\s*,\\s*"));
         //assertions
-
-        int len = inputDetails.getCategory().length();
-        System.out.println(len);
-        if (len==1){
-            assertThat(expectedCategory).contains(inputDetails.getCategory());
-        }
-        else{
-            String l = "L";
-            System.out.println(l);
-//            List<String> actual = Arrays.asList(inputDetails.getCategory().split(" "));
-            assertThat(expectedCategory).contains("L");
-//            System.out.println(actual.get(0));
-//            System.out.println(actual.get(1));
-//            System.out.println(actual.get(1));
-//            assertThat(expectedCategory).contains(actual.get(2));
-        }
-
-
-//        assertThat(expectedCategory).contains(inputDetails.getCategory());
-//        assertThat(expectedCategory).isEqualTo(inputDetails.getCategory());
-//        softly.assertAll();
+        assertThat(expectedCategory).isEqualTo(inputDetails.getCategory());
+        softly.assertAll();
     }
 
     public static void assertVCAPersonalDetails(String guid,VcaPersonalDetails inputDetails,

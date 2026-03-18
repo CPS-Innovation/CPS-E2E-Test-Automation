@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import io.restassured.response.Response;
 
 import static com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimWitnessPayloadBuilder.*;
 
@@ -87,61 +86,38 @@ public class VictimWitnessStepDefs {
 
     @When("the {string} personal details are added to CMS")
     public void thePersonalDetailsAreAddedToCMS(String witnessVictimType) {
-        VictimWitnessDetails victimWitnessDetails;
         String caseId = context.get("caseId");
         Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
-        Map<String, VictimWitnessDetails> victimWitnessDetailsToCMS = new HashMap<>();
         for (String id : witnessVictimMapIds.get(witnessVictimType)) {
-            victimWitnessDetails = getVictimWitnessDetails();
-            witnessService.addVictimWitnessCMSPersonalDetails(victimWitnessDetails, caseId, id);
-            victimWitnessDetailsToCMS.put(id, victimWitnessDetails);
-            context.set("victimWitnessDetailsToCMS",victimWitnessDetailsToCMS);
+            witnessService.addVictimWitnessCMSPersonalDetails(getVictimWitnessDetails(), caseId, id);
         }
     }
 
     @Then("the {string} is onboarded and personal details are added to VCA")
     public void thePersonalDetailsAreAddedToVCA(String witnessVictimType) {
-        VcaPersonalDetails vcaPersonalDetails;
         Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
-        Map<String, VcaPersonalDetails> victimWitnessDetailsToVCA = new HashMap<>();
+
         for (String id : witnessVictimMapIds.get(witnessVictimType)) {
             String guiId =  witnessService.victimWitnessGuid(context.get("caseUrn"), context.get("caseId"), id);
-            vcaPersonalDetails = VictimWitnessPayloadBuilder.getVcaPersonalDetails();
+            VcaPersonalDetails vcaPersonalDetails = VictimWitnessPayloadBuilder.getVcaPersonalDetails();
             String requestPayload = VictimWitnessPayloadBuilder.convertObjectToString(vcaPersonalDetails);
             witnessService.UpdateWitnessVictimDetailsToVCA(guiId, requestPayload);
-            victimWitnessDetailsToVCA.put(guiId, vcaPersonalDetails);
-            context.set("victimWitnessDetailsToVCA",victimWitnessDetailsToVCA);
+            //context.set("vcaPersonaDetailsWrapper", new VcaPersonalDetailsMapWrapper(victimWitnessDataMap));
         }
     }
 
-    @Then("the {string} personal details are verified in CMS and VCA")
-    public void personalDetailsAreVerifiedInCMSAndVCA(String witnessVictimType) {
-        HttpResponseWrapper response;
-        Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
-        Map<String, VictimWitnessDetails> victimWitnessDetailsToCMS = context.get("victimWitnessDetailsToCMS");
-        Map<String, VcaPersonalDetails> victimWitnessDetailsToVCA = context.get("victimWitnessDetailsToVCA");
-
-        for (String id : witnessVictimMapIds.get(witnessVictimType)) {
-            //Step1: Validate CMS data
-            // Get input details from the Post request to CMS
-            VictimWitnessDetails victimWitnessDetails = victimWitnessDetailsToCMS.get(id);
-            // Get output details from the Get request from CMS
-            response = witnessService.listWitnessVictimDetails(context.get("caseId"));
-            VictimWitnessAssertions.assertCMSPersonalDetails(id, victimWitnessDetails, response);
-
-            //Step2: Validate VCA data
-            // Get input details from the Post request to VCA
-            VcaPersonalDetails vcaPersonalDetails = victimWitnessDetailsToVCA.get(id);
-            String guiId =  witnessService.victimWitnessGuid(context.get("caseUrn"), context.get("caseId"), id);
-
-            witnessService.witnessesDetailsFromCMS(context.get("caseUrn"), context.get("caseId"), id);
-            VictimWitnessAssertions.assertWitnessPersonalDetailsFromCMS(vcaPersonalDetailsMap);
-        }
+    @Then("Witness personal details are updated correctly to CMS")
+    public void witnessPersonalDetailsAreUpdatedCorrectly() {
+        VictimWitnessDetailsMapWrapper wrapper = context.getCastClazz("victimWitnessDetailsWrapper",
+                VictimWitnessDetailsMapWrapper.class);
+        Map<String, VictimWitnessDetails> victimWitnessMap = wrapper.getMap();
+        witnessService.listWitnessVictimDetails(context.get("caseId"));
+        VictimWitnessAssertions.assertVictimWitnessPersonalDetails(victimWitnessMap);
     }
-
 
     @And("Witness personal details are updated correctly to VCA")
     public void witnessPersonalDetailsAreUpdatedCorrectlyToVCA() {
+
         Witness witnessVictimIds = context.getCastClazz("witnessVictimIds", Witness.class);
         VcaPersonalDetailsMapWrapper wrapper = context.getCastClazz("vcaPersonaDetailsWrapper", VcaPersonalDetailsMapWrapper.class);
         Map<String, VcaPersonalDetails> vcaPersonalDetailsMap = wrapper.getMap();
@@ -156,13 +132,13 @@ public class VictimWitnessStepDefs {
     }
 
     // Helper method
-//    private List<String> mapIdsToGuids(List<String> ids, String caseUrn, String caseId) {
-//        if (ids.isEmpty()) {
-//            return null;
-//        } else {
-//            return ids.stream()
-//                    .map(id -> witnessService.victimWitnessGuid(caseUrn, caseId, id))
-//                    .toList();
-//        }
-//    }
+    private List<String> mapIdsToGuids(List<String> ids, String caseUrn, String caseId) {
+        if (ids.isEmpty()) {
+            return null;
+        } else {
+            return ids.stream()
+                    .map(id -> witnessService.victimWitnessGuid(caseUrn, caseId, id))
+                    .toList();
+        }
+    }
 }

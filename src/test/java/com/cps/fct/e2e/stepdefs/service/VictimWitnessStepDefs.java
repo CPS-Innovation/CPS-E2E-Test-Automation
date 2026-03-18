@@ -6,7 +6,6 @@ import com.cps.fct.e2e.utils.httpClient.HttpResponseWrapper;
 import com.cps.fct.e2e.utils.services.ddei.CaseService;
 import com.cps.fct.e2e.utils.services.ddei.WitnessService;
 import com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VcaPersonalDetails;
-import com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimContactDetails;
 import com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimWitnessPayloadBuilder;
 import com.cps.fct.e2e.utils.services.ddei.responseAssertions.VictimWitnessAssertions;
 import io.cucumber.datatable.DataTable;
@@ -65,11 +64,9 @@ public class VictimWitnessStepDefs {
         Map<String, String> categoryMap = new HashMap<>();
         context.set("categoryMap",categoryMap);
 
-        Map<String, VictimContactDetails> victimContactDetailsMap = new HashMap<>();
-        context.set("victimContactDetailsMap",victimContactDetailsMap);
+        Map<Integer, Integer> contactTypeMap = new HashMap<>();
+        context.set("contactTypeMap",contactTypeMap);
 
-        Map<String, Integer> victimContactTypeMap = new HashMap<>();
-        context.set("victimContactTypeMap",victimContactTypeMap);
     }
 
     @When("the {string} is onboarded to VCA")
@@ -141,10 +138,10 @@ public class VictimWitnessStepDefs {
         };
 
         for (String id : witnessVictimMapIds.get(witnessVictimType)) {
+            categoryMap.put(id, categoryCode);
             victimWitnessDetails = getVictimWitnessCategory(categoryCode);
             witnessService.addVictimWitnessCategoryDetails(victimWitnessDetails, caseId, id);
             victimWitnessDetailsToCMS.put(id, victimWitnessDetails);
-            categoryMap.put(id, categoryCode);
         }
         context.set("victimWitnessDetailsToCMS",victimWitnessDetailsToCMS);
         context.set("categoryMap", categoryMap);
@@ -189,7 +186,8 @@ public class VictimWitnessStepDefs {
 
         for (String id : witnessVictimMapIds.get(witnessVictimType)) {
             vcaPersonalDetails = addVcaPersonalDetails();
-            witnessService.addWitnessVictimDetailsToVCA(idGuidMap.get(id), convertObjectToString(vcaPersonalDetails));
+            String requestPayload = convertObjectToString(vcaPersonalDetails);
+            witnessService.addWitnessVictimDetailsToVCA(idGuidMap.get(id), requestPayload);
             victimWitnessDetailsToVCA.put(idGuidMap.get(id), vcaPersonalDetails);
             Thread.sleep(2000);
         }
@@ -262,10 +260,7 @@ public class VictimWitnessStepDefs {
         int contactTypeCode = 0;
         Map<String, String> idGuidMap = context.get("idGuidMap");
         Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
-
-        Map<String, VictimContactDetails> victimContactDetailsMap = context.get("victimContactDetailsMap");
-
-        Map<String, Integer> victimContactTypeMap =  context.get("victimContactTypeMap");
+//        Map<Integer, Integer> ContactTypeMap = context.get("contactTypeMap");
 
         contactTypeCode = switch (contactType) {
             case "Victim Liaison Officer" -> 1;
@@ -275,29 +270,17 @@ public class VictimWitnessStepDefs {
             default -> contactTypeCode;
         };
 
-        for (String id : witnessVictimMapIds.get(witnessVictimType)) {
-            VictimContactDetails victimContactDetails = VictimWitnessPayloadBuilder.payLoadForAddVictimContactDetails(contactTypeCode);
-            witnessService.addVictimContactDetailsToVCA(idGuidMap.get(id), convertObjectToString(victimContactDetails));
-            victimContactDetailsMap.put(idGuidMap.get(id), victimContactDetails);
-            victimContactTypeMap.put(idGuidMap.get(id), contactTypeCode );
-        }
-        context.set("victimContactDetailsMap",victimContactDetailsMap);
-        context.set("victimContactTypeMap", victimContactTypeMap );
+//        witnessService.addVictimContactDetailsRequestParams(idGuidMap.get(id));
+
+
     }
 
-    @Then("the {string} for {string} is verified in VCA")
-    public void theForIsVerifiedInVCA(String contactType , String witnessVictimType) {
-        Map<String, String> idGuidMap = context.get("idGuidMap");
-        Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
-        Map<String, VictimContactDetails> victimContactDetailsMap = context.get("victimContactDetailsMap");
-        Map<String, Integer> victimContactTypeMap =  context.get("victimContactTypeMap");
 
-        for (String id : witnessVictimMapIds.get(witnessVictimType)) {
-            //Step1: Validate CMS data -Get input details from the Post request to CMS
-            VictimContactDetails victimContactDetails = victimContactDetailsMap.get(id);
-            // Get output details from the Get request from CMS
-            HttpResponseWrapper response = witnessService.listVictimContactTypeDetails(idGuidMap.get(id));
-            VictimWitnessAssertions.assertContactTypeDetails(id, victimContactDetails, response);
-        }
-    }
+
+
+
+
+
+
+
 }

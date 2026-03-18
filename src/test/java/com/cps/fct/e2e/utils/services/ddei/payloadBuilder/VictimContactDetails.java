@@ -10,7 +10,7 @@ public class VictimContactDetails {
     private String ContactFullName;
     private String ContactTelephone;
     private String ContactEmail;
-    private int ContactType;
+    private String ContactType;
     private String AddressAddressLine1;
     private String AddressAddressLine2;
     private String AddressAddressLine3;

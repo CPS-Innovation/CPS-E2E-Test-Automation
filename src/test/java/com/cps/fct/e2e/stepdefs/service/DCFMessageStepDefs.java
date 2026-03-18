@@ -35,10 +35,4 @@ public class DCFMessageStepDefs {
         File caseDataFile = FileUtils.getValidatedFile(context.get("caseType"), messageType, caseDataType);
         messageService.lmO4AddVictimWitness(caseDataFile, caseDataType, context);
     }
-
-    @And("a {string} is added with details using {word}")
-    public void addNewVictimOrWitnessWithDetails(String caseDataType, String messageType) throws IOException {
-        File caseDataFile = FileUtils.getValidatedFile(context.get("caseType"), messageType, caseDataType);
-        messageService.lmO4AddVictimWitness(caseDataFile, caseDataType, context);
-    }
 }

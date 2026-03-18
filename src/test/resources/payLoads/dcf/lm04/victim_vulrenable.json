@@ -1,12 +1,12 @@
 {
   "WitnessOrVictim": {
-    "CaseId": "{{LM04_CaseId}}",
-    "ItemId": "{{LM04_itemId}}",
+    "CaseId": "{{DCFCaseID}}",
+    "ItemId": "{{VictimVulnerableLM04ItemId}}",
     "PTIURN": {
-      "Force": "{{LM04_Force}}",
-      "Unit": "{{LM04_Unit}}",
-      "Number": "{{LM04_PTIURN_Number}}",
-      "Year": "{{LM04_Year}}",
+      "Force": "{{DCFforceNo}}",
+      "Unit": "{{DCFunit}}",
+      "Number": "{{DCFptnNo}}",
+      "Year": "{{DCFyear}}",
       "Split": null
     },
     "UpdateStatus": {
@@ -16,18 +16,18 @@
     },
     "VictimWitness": {
       "Person": {
-        "UniqueId": "{{LM04_VictimRef_vulnerable}}",
+        "UniqueId": "{{Victim_Vulnerable}}",
         "Name": {
-          "Title": null,
+          "Title": "{{$randomNamePrefix}}",
           "GivenName": [
             {
               "NameSequenceSpecified": false,
-              "Value": "{{FirstName}}"
+              "Value": "{{$randomFirstName}}"
             }
           ],
           "RequestedName": null,
           "FamilyName": {
-            "Value": "{{Surname}}"
+            "Value": "{{$randomLastName}}"
           }
         },
         "ContactDetails": {
@@ -61,7 +61,7 @@
         },
         "Victim": {
           "XOffenceId": [
-            "{{LM04_CaseOffenceId}}"
+            "{{CaseOffenceId}}"
           ],
           "VPSStatus": {
             "ResponseToVPSOffer": "Accepted",

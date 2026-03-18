@@ -5,7 +5,6 @@ import com.cps.fct.e2e.utils.common.JsonReplacer;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 import static com.cps.fct.e2e.utils.common.FakerUtils.*;
@@ -17,20 +16,18 @@ public class DCFPayloadBuilderForLM04 extends JsonReplacer {
 
         Map<String, String> cm01Map = context.getAsMap("CM01ModifiedValues");
         CaseResponse caseData = context.getCastClazz("caseDetails", CaseResponse.class);
+        Map<String, String> initialLM04Map = new java.util.HashMap<>(Map.of(
+                "{{LM04_CaseId}}", caseData.getCaseId(),
+                "{{LM04_PTIURN_Number}}", cm01Map.get("CM01_PTIURN_Number"),
+                "{{LM04_Force}}", cm01Map.get("DCF_Force"),
+                "{{LM04_Unit}}", cm01Map.get("DCF_Unit"),
+                "{{LM04_Year}}", cm01Map.get("DCF_Year"),
+                "{{LM04_itemId}}",generateUppercaseAlphaNumeric(12),
+                "{{FirstName}}",firstName(),
+                "{{MiddleName}}",middleName(),
+                "{{Surname}}",lastName(),
+                "{{LM04_CaseOffenceId}}", cm01Map.get("CM01_CaseOffenceId")));
 
-
-        Map<String, String> initialLM04Map = new HashMap<>();
-        initialLM04Map.put("{{LM04_CaseId}}", caseData.getCaseId());
-        initialLM04Map.put("{{LM04_PTIURN_Number}}", cm01Map.get("CM01_PTIURN_Number"));
-        initialLM04Map.put("{{LM04_Force}}", cm01Map.get("DCF_Force"));
-        initialLM04Map.put( "{{LM04_Unit}}", cm01Map.get("DCF_Unit"));
-        initialLM04Map.put("{{LM04_Year}}", cm01Map.get("DCF_Year"));
-        initialLM04Map.put("{{LM04_itemId}}",generateUppercaseAlphaNumeric(12));
-        initialLM04Map.put("{{FirstName}}",firstName());
-        initialLM04Map.put("{{MiddleName}}",middleName());
-        initialLM04Map.put("{{Surname}}",lastName());
-        initialLM04Map.put("{{LM04_CaseOffenceId}}", cm01Map.get("CM01_CaseOffenceId"));
-        initialLM04Map.put("{{LM04_Con_ShoulderNo}}", cm01Map.get("CM01_Con_ShoulderNo"));
 
         switch (type.toLowerCase()) {
             case "witness":
@@ -59,34 +56,16 @@ public class DCFPayloadBuilderForLM04 extends JsonReplacer {
                 break;
             case "witness police":
                 initialLM04Map.put("{{LM04_WitnessRef_police}}", cm01Map.get("CM01_WitnessRef_Police"));
+                initialLM04Map.put("{{LM04_Con_ShoulderNo}}", cm01Map.get("CM01_Con_ShoulderNo"));
                 break;
 
             case "victim":
                 initialLM04Map.put("{{LM04_VictimRef_1}}", cm01Map.get("CM01_VictimRef_1"));
                 break;
-            case "victim intimidated":
-                initialLM04Map.put("{{LM04_VictimRef_intimidated}}", cm01Map.get("CM01_VictimRef_Intimidated"));
+            case "victim witness":
+                initialLM04Map.put("{{LM04_VictimWitnessRef_1}}", cm01Map.get("CM01_VictimWitnessRef_1"));
                 break;
-            case "victim child":
-                initialLM04Map.put("{{LM04_VictimRef_child}}", cm01Map.get("CM01_VictimRef_Child"));
-                break;
-            case "victim vulnerable":
-                initialLM04Map.put("{{LM04_VictimRef_vulnerable}}", cm01Map.get("CM01_VictimRef_Vulnerable"));
-                break;
-            case "victim professional":
-                initialLM04Map.put("{{LM04_VictimRef_professional}}", cm01Map.get("CM01_VictimRef_Professional"));
-                break;
-            case "victim expert":
-                initialLM04Map.put("{{LM04_VictimRef_expert}}", cm01Map.get("CM01_VictimRef_Expert"));
-                break;
-            case "victim prisoner":
-                initialLM04Map.put("{{LM04_VictimRef_prisoner}}", cm01Map.get("CM01_VictimRef_Prisoner"));
-                break;
-            case "victim interpreter":
-                initialLM04Map.put("{{LM04_VictimRef_interpreter}}", cm01Map.get("CM01_VictimRef_Interpreter"));
-                break;
-            case "victim police":
-                initialLM04Map.put("{{LM04_VictimRef_police}}", cm01Map.get("CM01_VictimRef_Police"));
+            default:
                 break;
         }
         return applyReplacements(payloadFileName, initialLM04Map);

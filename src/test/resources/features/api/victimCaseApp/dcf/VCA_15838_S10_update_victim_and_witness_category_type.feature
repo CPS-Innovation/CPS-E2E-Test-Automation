@@ -19,3 +19,4 @@ Feature: Update category type for witness and victim and verify wm01u message
     When the category "Expert" is added to "witnessId" in VCA
     And the category "Vulnerable" is update to "victimId" in VCA
     Then the "witnessId" and "victimId" category is verified in CMS
+

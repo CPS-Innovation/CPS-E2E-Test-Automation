@@ -17,6 +17,7 @@ import static com.cps.fct.e2e.utils.common.JsonUtils.toJsonString;
 
 public class VictimWitnessPayloadBuilder {
 
+
     public static VictimWitnessDetails getVictimWitnessDetails() {
         return VictimWitnessDetails.builder()
 //                .title(FakerUtils.title())
@@ -47,32 +48,11 @@ public class VictimWitnessPayloadBuilder {
         return gson.toJson(payload) ;
     }
 
-    public static String convertObjectToString(Object object) {
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(PreferredMethodOfContact.class, new PreferredMethodOfContactAdapter())
-                .setPrettyPrinting()
-                .create();
-        return gson.toJson(object) ;
-    }
-
     @NotNull
     public static VcaPersonalDetails getPersonDetailsVCAPayload(PreferredMethodOfContact method) {
         return VcaPersonalDetails.builder()
                 .PreferredName("E2E Automation")
                 .preferredMethodOfContact(method)
-                .IsYouth(Boolean.FALSE)
-                .SuitableContactTimes("anytime between 9am to 6pm weekdays")
-                .SpecialConsiderationNeeds("Wheelchair access")
-                .Service(1)
-                .Onboarded(Boolean.FALSE)
-                .LastModifiedBy("CPS USER")
-                .build();
-    }
-
-    public static VcaPersonalDetails getVcaPersonalDetails() {
-        return VcaPersonalDetails.builder()
-                .PreferredName("E2E Automation")
-                .preferredMethodOfContact(PreferredMethodOfContact.EMAIL)
                 .IsYouth(Boolean.FALSE)
                 .SuitableContactTimes("anytime between 9am to 6pm weekdays")
                 .SpecialConsiderationNeeds("Wheelchair access")

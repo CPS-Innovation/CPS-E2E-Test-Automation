@@ -102,17 +102,8 @@ public class VictimWitnessStepDefs {
                 persistedWitnessInterpreterId, persistedWitnessVulnerableId, persistedWitnessPoliceId, persistedWitnessProfessionalId, persistedWitnessIntimidatedId,
                 persistedVictimId, persistedVictimChildId, persistedVictimExpertId, persistedVictimPrisonerId, persistedVictimInterpreterId,
                 persistedVictimVulnerableId, persistedVictimPoliceId, persistedVictimProfessionalId, persistedVictimIntimidatedId ));
+
     }
-
-    public List<String> getPersistedIds( List<String> witnessOrVictimIds, String caseUrn, String caseId){
-        if(witnessOrVictimIds.get)
-        return mapIdsToGuids(witnessOrVictimIds, caseUrn, caseId);
-    }
-
-
-
-
-
 
     @Then("the witness personal details are sent to VCA")
     public void theWitnessAndVictimPersonalDetailsAreSentToCMS() {
@@ -162,7 +153,6 @@ public class VictimWitnessStepDefs {
                 .map(id -> witnessService.victimWitnessGuid(caseUrn, caseId, id))
                 .toList();
     }
-
 
 
 }

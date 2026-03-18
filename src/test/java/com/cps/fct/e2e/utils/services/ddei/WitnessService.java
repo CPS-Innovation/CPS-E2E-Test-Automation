@@ -102,8 +102,7 @@ public class WitnessService extends BaseService {
         assertIdsArePresent(context, victimProfessionalId);
         assertIdsArePresent(context, victimIntimidatedId);
         context.set("witnessVictimIds", new WitnessVictim(witnessId, witnessChildId, witnessExpertId, witnessPrisonerId, witnessInterpreterId, witnessVulnerableId, witnessPoliceId, witnessProfessionalId, witnessIntimidatedId, victimId, victimChildId, victimExpertId, victimPrisonerId, victimInterpreterId, victimVulnerableId, victimPoliceId, victimProfessionalId, victimIntimidatedId));
-
-     }
+    }
 
     private HttpClientBuilder witnessesDetailsRequestParams(String caseId) {
         return new HttpClientBuilder.Builder()

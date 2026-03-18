@@ -1,5 +1,6 @@
 package com.cps.fct.e2e.stepdefs.service;
 
+import com.cps.fct.e2e.enums.PreferredMethodOfContact;
 import com.cps.fct.e2e.model.VictimWitnessDetails;
 import com.cps.fct.e2e.model.Witness;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
@@ -8,6 +9,7 @@ import com.cps.fct.e2e.utils.services.ddei.CaseService;
 import com.cps.fct.e2e.utils.services.ddei.WitnessService;
 import com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VcaPersonalDetails;
 import com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VcaPersonalDetailsMapWrapper;
+import com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimWitnessDetailsMapWrapper;
 import com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimWitnessPayloadBuilder;
 import com.cps.fct.e2e.utils.services.ddei.responseAssertions.VictimWitnessAssertions;
 import io.cucumber.java.en.And;
@@ -19,6 +21,8 @@ import org.picocontainer.annotations.Inject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import io.restassured.response.Response;
 
 import static com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimWitnessPayloadBuilder.*;
 
@@ -53,8 +57,36 @@ public class VictimWitnessStepDefs {
         witnessService.persistVictimWitnessDetails(response, context);
     }
 
+//    @And("witness and victim are added to VCA")
+//    public void witnessAndVictimDetailsAreAddedToVCA() {
+//        String caseUrn = context.get("caseUrn");
+//        String caseId = context.get("caseId");
+//        Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
+//
+//        Map<String, List<String>> witnessVictimMapGuids = new HashMap<>();
+//        witnessVictimMapGuids.put("witnessGuid", mapIdsToGuids(witnessVictimMapIds.get("witnessId"), caseUrn, caseId));
+//        witnessVictimMapGuids.put("witnessChildGuid", mapIdsToGuids(witnessVictimMapIds.get("witnessChildId"), caseUrn, caseId));
+//        witnessVictimMapGuids.put("witnessExpertGuid", mapIdsToGuids(witnessVictimMapIds.get("witnessExpertId"), caseUrn, caseId));
+//        witnessVictimMapGuids.put("witnessPrisonerGuid", mapIdsToGuids(witnessVictimMapIds.get("witnessPrisonerId"), caseUrn, caseId));
+//        witnessVictimMapGuids.put("witnessInterpreterGuid", mapIdsToGuids(witnessVictimMapIds.get("witnessInterpreterId"), caseUrn, caseId));
+//        witnessVictimMapGuids.put("witnessVulnerableGuid", mapIdsToGuids(witnessVictimMapIds.get("witnessVulnerableId"), caseUrn, caseId));
+//        witnessVictimMapGuids.put("witnessPoliceGuid", mapIdsToGuids(witnessVictimMapIds.get("witnessPoliceId"), caseUrn, caseId));
+//        witnessVictimMapGuids.put("witnessProfessionalGuid", mapIdsToGuids(witnessVictimMapIds.get("witnessProfessionalId"), caseUrn, caseId));
+//        witnessVictimMapGuids.put("witnessIntimidatedGuid", mapIdsToGuids(witnessVictimMapIds.get("witnessIntimidatedId"), caseUrn, caseId));
+//        witnessVictimMapGuids.put("victimGuid", mapIdsToGuids(witnessVictimMapIds.get("victimId"), caseUrn, caseId));
+//        witnessVictimMapGuids.put("victimChildGuid", mapIdsToGuids(witnessVictimMapIds.get("victimChildId"), caseUrn, caseId));
+//        witnessVictimMapGuids.put("victimExpertGuid", mapIdsToGuids(witnessVictimMapIds.get("victimExpertId"), caseUrn, caseId));
+//        witnessVictimMapGuids.put("victimPrisonerGuid", mapIdsToGuids(witnessVictimMapIds.get("victimPrisonerId"), caseUrn, caseId));
+//        witnessVictimMapGuids.put("victimInterpreterGuid", mapIdsToGuids(witnessVictimMapIds.get("victimInterpreterId"), caseUrn, caseId));
+//        witnessVictimMapGuids.put("victimVulnerableGuid", mapIdsToGuids(witnessVictimMapIds.get("victimVulnerableId"), caseUrn, caseId));
+//        witnessVictimMapGuids.put("victimPoliceGuid", mapIdsToGuids(witnessVictimMapIds.get("victimPoliceId"), caseUrn, caseId));
+//        witnessVictimMapGuids.put("victimProfessionalGuid", mapIdsToGuids(witnessVictimMapIds.get("victimProfessionalId"), caseUrn, caseId));
+//        witnessVictimMapGuids.put("victimIntimidatedGuid", mapIdsToGuids(witnessVictimMapIds.get("victimIntimidatedId"), caseUrn, caseId));
+//        context.set("witnessVictimMapGuids", witnessVictimMapGuids);
+//    }
+
     @When("the {string} personal details are added to CMS")
-    public void thePersonalDetailsAreAddedToCMS(String witnessVictimType) throws InterruptedException {
+    public void thePersonalDetailsAreAddedToCMS(String witnessVictimType) {
         VictimWitnessDetails victimWitnessDetails;
         String caseId = context.get("caseId");
         Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
@@ -64,52 +96,73 @@ public class VictimWitnessStepDefs {
             witnessService.addVictimWitnessCMSPersonalDetails(victimWitnessDetails, caseId, id);
             victimWitnessDetailsToCMS.put(id, victimWitnessDetails);
             context.set("victimWitnessDetailsToCMS",victimWitnessDetailsToCMS);
-            Thread.sleep(2000);
         }
     }
 
     @Then("the {string} is onboarded and personal details are added to VCA")
-    public void thePersonalDetailsAreAddedToVCA(String witnessVictimType) throws InterruptedException {
+    public void thePersonalDetailsAreAddedToVCA(String witnessVictimType) {
         VcaPersonalDetails vcaPersonalDetails;
         Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
         Map<String, VcaPersonalDetails> victimWitnessDetailsToVCA = new HashMap<>();
-        Map<String, String> idGuidMap = new HashMap<>();
-
         for (String id : witnessVictimMapIds.get(witnessVictimType)) {
-            //Onboard process - creates GUID
-            String guid =  witnessService.victimWitnessGuid(context.get("caseUrn"), context.get("caseId"), id);
+            String guiId =  witnessService.victimWitnessGuid(context.get("caseUrn"), context.get("caseId"), id);
             vcaPersonalDetails = VictimWitnessPayloadBuilder.getVcaPersonalDetails();
             String requestPayload = VictimWitnessPayloadBuilder.convertObjectToString(vcaPersonalDetails);
-            witnessService.UpdateWitnessVictimDetailsToVCA(guid, requestPayload);
-            victimWitnessDetailsToVCA.put(guid, vcaPersonalDetails);
-            idGuidMap.put(id,guid);
+            witnessService.UpdateWitnessVictimDetailsToVCA(guiId, requestPayload);
+            victimWitnessDetailsToVCA.put(guiId, vcaPersonalDetails);
             context.set("victimWitnessDetailsToVCA",victimWitnessDetailsToVCA);
-            context.set("idGuidMap",idGuidMap);
-            Thread.sleep(1000);
         }
     }
 
     @Then("the {string} personal details are verified in CMS and VCA")
-    public void personalDetailsAreVerifiedInCMSAndVCA(String witnessVictimType) throws InterruptedException {
+    public void personalDetailsAreVerifiedInCMSAndVCA(String witnessVictimType) {
         HttpResponseWrapper response;
         Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
         Map<String, VictimWitnessDetails> victimWitnessDetailsToCMS = context.get("victimWitnessDetailsToCMS");
         Map<String, VcaPersonalDetails> victimWitnessDetailsToVCA = context.get("victimWitnessDetailsToVCA");
-        Map<String, String> idGuidMap =  context.get("idGuidMap");
 
         for (String id : witnessVictimMapIds.get(witnessVictimType)) {
-            //Step1: Validate CMS data -Get input details from the Post request to CMS
+            //Step1: Validate CMS data
+            // Get input details from the Post request to CMS
             VictimWitnessDetails victimWitnessDetails = victimWitnessDetailsToCMS.get(id);
             // Get output details from the Get request from CMS
             response = witnessService.listWitnessVictimDetails(context.get("caseId"));
             VictimWitnessAssertions.assertCMSPersonalDetails(id, victimWitnessDetails, response);
 
-            //Step2: Validate VCA data -Get input details from the Post request to VCA
-            VcaPersonalDetails vcaPersonalDetails = victimWitnessDetailsToVCA.get(idGuidMap.get(id));
-            // Get output details from the Get request from VCA
-            response = witnessService.witnessesDetailsFromVCA(context.get("caseUrn"), context.get("caseId"), id);
-            VictimWitnessAssertions.assertVCAPersonalDetails(idGuidMap.get(id), vcaPersonalDetails, response);
-            Thread.sleep(1000);
+            //Step2: Validate VCA data
+            // Get input details from the Post request to VCA
+            VcaPersonalDetails vcaPersonalDetails = victimWitnessDetailsToVCA.get(id);
+            String guiId =  witnessService.victimWitnessGuid(context.get("caseUrn"), context.get("caseId"), id);
+
+            witnessService.witnessesDetailsFromCMS(context.get("caseUrn"), context.get("caseId"), id);
+            VictimWitnessAssertions.assertWitnessPersonalDetailsFromCMS(vcaPersonalDetailsMap);
         }
     }
+
+
+    @And("Witness personal details are updated correctly to VCA")
+    public void witnessPersonalDetailsAreUpdatedCorrectlyToVCA() {
+        Witness witnessVictimIds = context.getCastClazz("witnessVictimIds", Witness.class);
+        VcaPersonalDetailsMapWrapper wrapper = context.getCastClazz("vcaPersonaDetailsWrapper", VcaPersonalDetailsMapWrapper.class);
+        Map<String, VcaPersonalDetails> vcaPersonalDetailsMap = wrapper.getMap();
+
+        String caseUrn = context.get("caseUrn");
+        String caseId = context.get("caseId");
+
+        witnessVictimIds.witnessId().forEach(witnessId -> {
+            witnessService.witnessesDetailsFromCMS(caseUrn, caseId, witnessId);
+            VictimWitnessAssertions.assertWitnessPersonalDetailsFromCMS(vcaPersonalDetailsMap);
+        });
+    }
+
+    // Helper method
+//    private List<String> mapIdsToGuids(List<String> ids, String caseUrn, String caseId) {
+//        if (ids.isEmpty()) {
+//            return null;
+//        } else {
+//            return ids.stream()
+//                    .map(id -> witnessService.victimWitnessGuid(caseUrn, caseId, id))
+//                    .toList();
+//        }
+//    }
 }

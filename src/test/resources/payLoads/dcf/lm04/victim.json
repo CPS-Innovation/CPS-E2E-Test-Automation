@@ -54,6 +54,7 @@
         ]
       },
       "TypeOfPerson": "VictimWitness",
+      "DateOfBirth": "1970-08-03",
       "WitnessAndVictim": {
         "Witness": {
           "Occupation": "Civilian"

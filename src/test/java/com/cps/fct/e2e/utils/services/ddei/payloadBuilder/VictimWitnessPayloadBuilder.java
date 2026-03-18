@@ -21,9 +21,9 @@ public class VictimWitnessPayloadBuilder {
     public static VictimWitnessDetails getVictimWitnessDetails() {
         return VictimWitnessDetails.builder()
                 .title("Mr")
-//                .firstName(FakerUtils.firstName())
-//                .surname(FakerUtils.lastName())
-                .dateOfBirth("05-02-1985")
+                .firstName(FakerUtils.firstName())
+                .surname(FakerUtils.lastName())
+                .dateOfBirth("02-02-1985")
                 .contactDetailsEmail(email())
                 .contactDetailsMobileNumber(mobilePhone())
                 .contactDetailsPhoneNumber(homePhone())

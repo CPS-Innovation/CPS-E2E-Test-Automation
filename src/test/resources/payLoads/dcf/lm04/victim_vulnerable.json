@@ -54,6 +54,7 @@
         ]
       },
       "TypeOfPerson": "VictimWitness",
+      "DateOfBirth": "2012-09-03",
       "WitnessAndVictim": {
         "Witness": {
           "Occupation": "Student"

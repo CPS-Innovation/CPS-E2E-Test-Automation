@@ -23,8 +23,8 @@ public class FileUtils {
         assertThat(file)
                 .withFailMessage(" No matching file found for %s/%s with type: %s", caseType, messageType, caseDataType)
                 .isNotNull();
-        System.out.println(file.getName());
         return file;
+
     }
 
 }

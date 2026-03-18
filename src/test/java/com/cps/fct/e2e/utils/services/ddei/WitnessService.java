@@ -1,8 +1,7 @@
 package com.cps.fct.e2e.utils.services.ddei;
 
-import com.cps.fct.e2e.model.Victim;
 import com.cps.fct.e2e.model.VictimWitnessDetails;
-import com.cps.fct.e2e.model.Witness;
+import com.cps.fct.e2e.model.WitnessVictim;
 import com.cps.fct.e2e.utils.common.EnvConfig;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
 import com.cps.fct.e2e.utils.httpClient.HttpClientBuilder;
@@ -84,28 +83,25 @@ public class WitnessService extends BaseService {
                 "$[?(@.isWitnessAndVictim==true && @.isProfessional==true)].witnessId");
         List<String> victimIntimidatedId =  extractFromJsonToList(body,
                 "$[?(@.isWitnessAndVictim==true && @.isIntimidated==true)].witnessId");
-//        assertIdsArePresent(context, witnessId);
-//        assertIdsArePresent(context, witnessChildId);
-//        assertIdsArePresent(context, witnessExpertId);
-//        assertIdsArePresent(context, witnessPrisonerId);
-//        assertIdsArePresent(context, witnessInterpreterId);
-//        assertIdsArePresent(context, witnessVulnerableId);
-//        assertIdsArePresent(context, witnessPoliceId);
-//        assertIdsArePresent(context, witnessProfessionalId);
-//        assertIdsArePresent(context, witnessIntimidatedId);
-//        assertIdsArePresent(context, victimId);
-//        assertIdsArePresent(context, victimChildId);
-//        assertIdsArePresent(context, victimExpertId);
-//        assertIdsArePresent(context, victimPrisonerId);
-//        assertIdsArePresent(context, victimInterpreterId);
-//        assertIdsArePresent(context, victimVulnerableId);
-//        assertIdsArePresent(context, victimPoliceId);
-//        assertIdsArePresent(context, victimProfessionalId);
-//        assertIdsArePresent(context, victimIntimidatedId);
-
-//        context.set("witnessVictimIds", new WitnessVictim(witnessId, witnessChildId, witnessExpertId, witnessPrisonerId, witnessInterpreterId, witnessVulnerableId, witnessPoliceId, witnessProfessionalId, witnessIntimidatedId, victimId, victimChildId, victimExpertId, victimPrisonerId, victimInterpreterId, victimVulnerableId, victimPoliceId, victimProfessionalId, victimIntimidatedId));
-        context.set("witnessIds", new Witness(witnessId, witnessChildId, witnessExpertId, witnessPrisonerId, witnessInterpreterId, witnessVulnerableId, witnessPoliceId, witnessProfessionalId, witnessIntimidatedId));
-        context.set("victimIds", new Victim(victimId, victimChildId, victimExpertId, victimPrisonerId, victimInterpreterId, victimVulnerableId, victimPoliceId, victimProfessionalId, victimIntimidatedId));
+        assertIdsArePresent(context, witnessId);
+        assertIdsArePresent(context, witnessChildId);
+        assertIdsArePresent(context, witnessExpertId);
+        assertIdsArePresent(context, witnessPrisonerId);
+        assertIdsArePresent(context, witnessInterpreterId);
+        assertIdsArePresent(context, witnessVulnerableId);
+        assertIdsArePresent(context, witnessPoliceId);
+        assertIdsArePresent(context, witnessProfessionalId);
+        assertIdsArePresent(context, witnessIntimidatedId);
+        assertIdsArePresent(context, victimId);
+        assertIdsArePresent(context, victimChildId);
+        assertIdsArePresent(context, victimExpertId);
+        assertIdsArePresent(context, victimPrisonerId);
+        assertIdsArePresent(context, victimInterpreterId);
+        assertIdsArePresent(context, victimVulnerableId);
+        assertIdsArePresent(context, victimPoliceId);
+        assertIdsArePresent(context, victimProfessionalId);
+        assertIdsArePresent(context, victimIntimidatedId);
+        context.set("witnessVictimIds", new WitnessVictim(witnessId, witnessChildId, witnessExpertId, witnessPrisonerId, witnessInterpreterId, witnessVulnerableId, witnessPoliceId, witnessProfessionalId, witnessIntimidatedId, victimId, victimChildId, victimExpertId, victimPrisonerId, victimInterpreterId, victimVulnerableId, victimPoliceId, victimProfessionalId, victimIntimidatedId));
 
      }
 
@@ -155,6 +151,8 @@ public class WitnessService extends BaseService {
                 .resourceName("addVictimWitnessPersonalDetails")
                 .build();
     }
+
+
 
     private HttpClientBuilder UpdateWitnessDetailsWitnessIdRequestParams(VictimWitnessDetails victimDetails,
                                                                          String caseId, String WitnessId) {

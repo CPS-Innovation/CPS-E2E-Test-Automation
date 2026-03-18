@@ -47,4 +47,12 @@ public class TestRunnerApi {
         ReportBuilder reportBuilder = new ReportBuilder(jsonFiles, config);
         reportBuilder.generateReports();
     }
+
+
+
+
+
+
+
+
 }

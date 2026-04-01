@@ -1,4 +1,4 @@
-package com.cps.fct.e2e.utils.FileMapping;
+package com.cps.fct.e2e.utils.fileMapping;
 
 public class FileMapperFactory {
     public static FileMapper getMapper(String category) {

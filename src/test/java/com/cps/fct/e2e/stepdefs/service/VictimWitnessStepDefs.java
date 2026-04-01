@@ -263,7 +263,6 @@ public class VictimWitnessStepDefs {
         Map<String, String> idGuidMap = context.get("idGuidMap");
         Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
         Map<Integer, VictimContactDetails> victimContactDetailsMap = context.get("victimContactDetailsMap");
-//        Map<String, Integer> victimContactTypeMap =  context.get("victimContactTypeMap");
 
         contactTypeCode = switch (contactType) {
             case "Victim Liaison Officer" -> 1;

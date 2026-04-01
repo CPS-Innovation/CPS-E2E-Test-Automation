@@ -1,6 +1,6 @@
 package com.cps.fct.e2e.stepdefs.service;
 
-import com.cps.fct.e2e.utils.FileMapping.FileUtils;
+import com.cps.fct.e2e.utils.fileMapping.FileUtils;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
 import com.cps.fct.e2e.utils.httpClient.HttpResponseWrapper;
 import com.cps.fct.e2e.utils.services.ddei.CaseService;

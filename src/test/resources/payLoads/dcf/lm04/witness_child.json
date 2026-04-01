@@ -39,11 +39,18 @@
           "ContactPreferences": null
         },
         "PNCId": null,
-        "DateOfBirth":  null,
+        "DateOfBirth":  "2016-08-03",
         "Nationality": "England",
         "AlternativeContact": null,
         "Occupation": null,
         "PersonClassification": [
+          {
+            "ClassificationType": "StatusInformation",
+            "ClassificationCode": "KeyWitness",
+            "ClassificationValue": {
+              "ClassificationValueText": "Y"
+            }
+          },
           {
             "ClassificationType": "TypeOfWitness",
             "ClassificationCode": "C",

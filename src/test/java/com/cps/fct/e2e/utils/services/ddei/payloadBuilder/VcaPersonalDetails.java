@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Builder
+@Builder(toBuilder = true)
 public class VcaPersonalDetails {
     private String PreferredName;
     private boolean IsYouth;
@@ -13,8 +13,6 @@ public class VcaPersonalDetails {
     private String SuitableContactTimes;
     private String SpecialConsiderationNeeds;
     private String LastModifiedBy;
-    private int Service;
-    private boolean Onboarded;
 }
 
 

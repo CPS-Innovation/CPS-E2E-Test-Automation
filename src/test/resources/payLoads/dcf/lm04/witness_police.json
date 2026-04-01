@@ -45,6 +45,13 @@
         "Occupation": null,
         "PersonClassification": [
           {
+            "ClassificationType": "StatusInformation",
+            "ClassificationCode": "KeyWitness",
+            "ClassificationValue": {
+              "ClassificationValueText": "Y"
+            }
+          },
+          {
             "ClassificationType": "TypeOfWitness",
             "ClassificationCode": "P",
             "ClassificationValue": {

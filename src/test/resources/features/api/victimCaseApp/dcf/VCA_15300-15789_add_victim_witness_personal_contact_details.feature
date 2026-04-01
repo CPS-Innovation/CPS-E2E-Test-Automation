@@ -1,4 +1,4 @@
-@DCF @vca @regression @S1_S2_15300_15789
+@DCF @vca @regression @15300_15789_add_personal_details
 
 Feature: Add personal and contact details for all category types of witness and victim and verify wm01u message
          As a Victim Liaison Officer

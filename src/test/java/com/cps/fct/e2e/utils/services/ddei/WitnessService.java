@@ -272,7 +272,7 @@ public class WitnessService extends BaseService {
                 .addHeaders(ddeiHeaders())
                 .method("PATCH")
                 .body(requestBody)
-                .resourceName("addVictimContactDetails")
+                .resourceName("updateVictimContactDetails")
                 .build();
     }
     private static void assertIdsArePresent(ScenarioContext context, List<String> victimIds) {

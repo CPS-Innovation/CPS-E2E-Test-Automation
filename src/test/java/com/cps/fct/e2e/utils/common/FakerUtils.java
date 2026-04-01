@@ -20,7 +20,7 @@ public class FakerUtils {
     }
 
     public static String fullName() {
-        return faker.name().fullName();
+        return faker.name().lastName().toUpperCase() + " " + faker.name().firstName();
     }
 
     public static String firstName() {
@@ -49,6 +49,10 @@ public class FakerUtils {
 
     public static String cityName() {
         return faker.address().cityName();
+    }
+
+    public static String countyName() {
+        return faker.address().country();
     }
 
     public static String populateSentences() {
@@ -82,7 +86,7 @@ public class FakerUtils {
     }
 
     public static String ukPostCode() {
-        return faker.bothify("??## #??");
+        return faker.bothify("??## #??").toUpperCase();
     }
 
     public static String companyName() {

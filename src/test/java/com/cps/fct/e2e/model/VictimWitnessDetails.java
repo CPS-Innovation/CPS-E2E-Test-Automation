@@ -11,10 +11,8 @@ public class VictimWitnessDetails {
     private String surname;
     private String gender;
     private String dateOfBirth;
-    private String ethnicity;
-    private String disability;
-    private String category;
-    private String previousConvictions;
+    private String contactDetailsTitle;
+    private String contactDetailsGender;
     private String contactDetailsPhoneNumber;
     private String contactDetailsMobileNumber;
     private String contactDetailsWorkPhoneNumber;
@@ -26,6 +24,10 @@ public class VictimWitnessDetails {
     private String contactDetailsPostalAddressAddressLine5;
     private String contactDetailsPostalAddressPostcode;
     private String contactDetailsPreferredCorrespondenceLanguage;
+    private String contactDetailsDisability;
+    private String contactDetailsEthnicity;
+    private String previousConvictions;
     private String justification;
+
 }
 

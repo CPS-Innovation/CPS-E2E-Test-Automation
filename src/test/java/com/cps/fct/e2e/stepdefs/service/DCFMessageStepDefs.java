@@ -3,6 +3,7 @@ package com.cps.fct.e2e.stepdefs.service;
 import com.cps.fct.e2e.utils.fileMapping.FileUtils;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
 import com.cps.fct.e2e.utils.httpClient.HttpResponseWrapper;
+import com.cps.fct.e2e.utils.jsonMerge.JsonMergeUtil;
 import com.cps.fct.e2e.utils.services.ddei.CaseService;
 import com.cps.fct.e2e.utils.services.messagaingApi.DCFMessageService;
 import io.cucumber.java.en.And;
@@ -32,12 +33,6 @@ public class DCFMessageStepDefs {
 
     @And("a {string} is added using {word}")
     public void addNewVictimOrWitness(String caseDataType, String messageType) throws IOException {
-        File caseDataFile = FileUtils.getValidatedFile(context.get("caseType"), messageType, caseDataType);
-        messageService.lmO4AddVictimWitness(caseDataFile, caseDataType, context);
-    }
-
-    @And("a {string} is added with details using {word}")
-    public void addNewVictimOrWitnessWithDetails(String caseDataType, String messageType) throws IOException {
         File caseDataFile = FileUtils.getValidatedFile(context.get("caseType"), messageType, caseDataType);
         messageService.lmO4AddVictimWitness(caseDataFile, caseDataType, context);
     }

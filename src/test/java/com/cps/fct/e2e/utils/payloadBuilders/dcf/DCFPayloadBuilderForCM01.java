@@ -39,10 +39,7 @@ public class DCFPayloadBuilderForCM01 extends JsonReplacer {
             Map.entry("{{CM01_Ser_PersonId}}", generateUppercaseAlphaNumeric(10)),
             Map.entry("{{CM01_Con_ShoulderNo}}", generateUppercaseAlphaNumeric(6)),
             Map.entry("{{CM01_Con_PersonId}}", generateUppercaseAlphaNumeric(10)),
-
             Map.entry("{{CM01_WitnessRef_1}}", generateUppercaseAlphaNumeric(12)),
-            Map.entry("{{CM01_WitnessRef_2}}", generateUppercaseAlphaNumeric(12)),
-            Map.entry("{{CM01_WitnessDetailsRef_1}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_WitnessRef_Child}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_WitnessRef_Police}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_WitnessRef_Vulnerable}}", generateUppercaseAlphaNumeric(12)),
@@ -51,10 +48,7 @@ public class DCFPayloadBuilderForCM01 extends JsonReplacer {
             Map.entry("{{CM01_WitnessRef_Prisoner}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_WitnessRef_Interpreter}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_WitnessRef_Intimidated}}", generateUppercaseAlphaNumeric(12)),
-
             Map.entry("{{CM01_VictimRef_1}}", generateUppercaseAlphaNumeric(12)),
-            Map.entry("{{CM01_VictimRef_2}}", generateUppercaseAlphaNumeric(12)),
-            Map.entry("{{CM01_VictimDetailsRef_1}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_VictimRef_Child}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_VictimRef_Vulnerable}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_VictimRef_Intimidated}}", generateUppercaseAlphaNumeric(12)),
@@ -63,7 +57,6 @@ public class DCFPayloadBuilderForCM01 extends JsonReplacer {
             Map.entry("{{CM01_VictimRef_Prisoner}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_VictimRef_Interpreter}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_VictimRef_Police}}", generateUppercaseAlphaNumeric(12)),
-
             Map.entry("{{PoliceOfficer_GivenName}}", firstName()),
             Map.entry("{{PoliceOfficer_SurName}}", lastName()),
             Map.entry("{{PoliceOfficer2_GivenName}}", firstName()),
@@ -87,6 +80,7 @@ public class DCFPayloadBuilderForCM01 extends JsonReplacer {
             Map.entry("{{DEF_Mobile}}", mobilePhone()),
             Map.entry("{{DEF_HomePhone}}", homePhone()),
             Map.entry("{{DEF_Email}}", email())
+
     );
 
     public DCFPayloadBuilderForCM01() throws IOException {

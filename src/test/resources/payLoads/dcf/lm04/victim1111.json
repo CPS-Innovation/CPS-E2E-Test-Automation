@@ -3,10 +3,10 @@
     "CaseId": "{{LM04_CaseId}}",
     "ItemId": "{{LM04_itemId}}",
     "PTIURN": {
-      "Force": "{{LM04_Force}}",
-      "Unit": "{{LM04_Unit}}",
+      "Force": "25",
+      "Unit": "GD",
       "Number": "{{LM04_PTIURN_Number}}",
-      "Year": "{{LM04_Year}}",
+      "Year": "25",
       "Split": null
     },
     "UpdateStatus": {
@@ -16,13 +16,17 @@
     },
     "VictimWitness": {
       "Person": {
-        "UniqueId": "{{LM04_VictimRef_2}}",
+        "UniqueId": "{{LM04_VictimRef_1}}",
         "Name": {
           "Title": null,
           "GivenName": [
             {
               "NameSequenceSpecified": false,
               "Value": "{{FirstName}}"
+            },
+            {
+              "NameSequenceSpecified": false,
+              "Value": "{{MiddleName}}"
             }
           ],
           "RequestedName": null,
@@ -53,19 +57,14 @@
           }
         ]
       },
-      "TypeOfPerson": "VictimWitness",
-      "WitnessAndVictim": {
-        "Witness": {
-          "Occupation": "Civilian"
-        },
-        "Victim": {
-          "XOffenceId": [
-            "{{LM04_CaseOffenceId}}"
-          ],
-          "VPSStatus": {
-            "ResponseToVPSOffer": "Accepted",
-            "SchemeExplained": false
-          }
+      "TypeOfPerson": "Victim",
+      "Victim": {
+        "OffenceId": [
+          "{{LM04_CaseOffenceId}}"
+        ],
+        "VPSStatus": {
+          "ResponseToVPSOffer": "Declined",
+          "SchemeExplained": true
         }
       },
       "LinkedSuspects": null

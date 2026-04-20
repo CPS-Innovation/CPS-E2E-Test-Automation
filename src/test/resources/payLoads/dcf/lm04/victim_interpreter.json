@@ -16,7 +16,7 @@
     },
     "VictimWitness": {
       "Person": {
-        "UniqueId": "{{LM04_WitnessRef_child}}",
+        "UniqueId": "{{LM04_VictimRef_interpreter}}",
         "Name": {
           "Title": null,
           "GivenName": [
@@ -39,27 +39,34 @@
           "ContactPreferences": null
         },
         "PNCId": null,
-        "DateOfBirth":  null,
-        "Nationality": "England",
+        "DateOfBirth": null,
+        "Nationality": null,
         "AlternativeContact": null,
         "Occupation": null,
         "PersonClassification": [
           {
             "ClassificationType": "TypeOfWitness",
-            "ClassificationCode": "C",
+            "ClassificationCode": "I",
             "ClassificationValue": {
               "ClassificationValueFlag": true
             }
           }
         ]
       },
-      "TypeOfPerson": "Witness",
-      "Witness": {
-        "Occupation": "Student",
-        "Officer": null,
-        "WitnessNeeds": null,
-        "WarnedByPolice": false,
-        "AvailabilityToAttendCourt": null
+      "TypeOfPerson": "VictimWitness",
+      "WitnessAndVictim": {
+        "Witness": {
+          "Occupation": "English Interpreter"
+        },
+        "Victim": {
+          "XOffenceId": [
+            "{{LM04_CaseOffenceId}}"
+          ],
+          "VPSStatus": {
+            "ResponseToVPSOffer": "Accepted",
+            "SchemeExplained": false
+          }
+        }
       },
       "LinkedSuspects": null
     }

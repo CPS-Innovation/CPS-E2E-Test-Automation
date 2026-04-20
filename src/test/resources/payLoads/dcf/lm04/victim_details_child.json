@@ -16,7 +16,7 @@
     },
     "VictimWitness": {
       "Person": {
-        "UniqueId": "{{LM04_WitnessRef_child}}",
+        "UniqueId": "{{LM04_VictimRef_child}}",
         "Name": {
           "Title": null,
           "GivenName": [
@@ -31,16 +31,33 @@
           }
         },
         "ContactDetails": {
-          "Address": null,
-          "ContactNumber": null,
-          "Email": null,
+          "Address": {
+            "AddressLine": [ "Line 1","Line 2 ","Line 3" ],
+            "Postcode": "NE1 1AB",
+            "Country": "UK"
+          },
+          "ContactNumber": [
+            {
+              "Number": { "TelNationalNumber": "07111111111" },
+              "TypeOfNumber": "mobile"
+            },
+            {
+              "Number": { "TelNationalNumber": "01111111111" },
+              "TypeOfNumber": "home"
+            },
+            {
+              "Number": { "TelNationalNumber": "02111111111" },
+              "TypeOfNumber": "work"
+            }
+          ],
+          "Email": "adc.test@automation.com",
           "DXAddress": null,
           "SocialMedia": null,
           "ContactPreferences": null
         },
         "PNCId": null,
-        "DateOfBirth":  null,
-        "Nationality": "England",
+        "DateOfBirth": null,
+        "Nationality": null,
         "AlternativeContact": null,
         "Occupation": null,
         "PersonClassification": [
@@ -53,13 +70,20 @@
           }
         ]
       },
-      "TypeOfPerson": "Witness",
-      "Witness": {
-        "Occupation": "Student",
-        "Officer": null,
-        "WitnessNeeds": null,
-        "WarnedByPolice": false,
-        "AvailabilityToAttendCourt": null
+      "TypeOfPerson": "VictimWitness",
+      "WitnessAndVictim": {
+        "Witness": {
+          "Occupation": "Student"
+        },
+        "Victim": {
+          "XOffenceId": [
+            "{{LM04_CaseOffenceId}}"
+          ],
+          "VPSStatus": {
+            "ResponseToVPSOffer": "Accepted",
+            "SchemeExplained": false
+          }
+        }
       },
       "LinkedSuspects": null
     }

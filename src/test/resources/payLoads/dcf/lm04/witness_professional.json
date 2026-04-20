@@ -45,13 +45,6 @@
         "Occupation": null,
         "PersonClassification": [
           {
-            "ClassificationType": "StatusInformation",
-            "ClassificationCode": "KeyWitness",
-            "ClassificationValue": {
-              "ClassificationValueText": "Y"
-            }
-          },
-          {
             "ClassificationType": "TypeOfWitness",
             "ClassificationCode": "R",
             "ClassificationValue": {
@@ -61,7 +54,6 @@
         ]
       },
       "TypeOfPerson": "Witness",
-      "DateOfBirth": "1988-08-03",
       "Witness": {
         "Occupation": "Worker",
         "Officer": null,

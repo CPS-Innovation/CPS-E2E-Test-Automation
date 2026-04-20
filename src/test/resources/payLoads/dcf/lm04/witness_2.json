@@ -16,7 +16,7 @@
     },
     "VictimWitness": {
       "Person": {
-        "UniqueId": "{{LM04_WitnessRef_child}}",
+        "UniqueId": "{{LM04_WitnessRef_2}}",
         "Name": {
           "Title": null,
           "GivenName": [
@@ -39,23 +39,22 @@
           "ContactPreferences": null
         },
         "PNCId": null,
-        "DateOfBirth":  null,
-        "Nationality": "England",
+        "DateOfBirth": null,
+        "Nationality": null,
         "AlternativeContact": null,
         "Occupation": null,
         "PersonClassification": [
           {
-            "ClassificationType": "TypeOfWitness",
-            "ClassificationCode": "C",
+            "ClassificationType": "StatusInformation",
+            "ClassificationCode": "KeyWitness",
             "ClassificationValue": {
-              "ClassificationValueFlag": true
+              "ClassificationValueText": "Y"
             }
           }
         ]
       },
       "TypeOfPerson": "Witness",
       "Witness": {
-        "Occupation": "Student",
         "Officer": null,
         "WitnessNeeds": null,
         "WarnedByPolice": false,

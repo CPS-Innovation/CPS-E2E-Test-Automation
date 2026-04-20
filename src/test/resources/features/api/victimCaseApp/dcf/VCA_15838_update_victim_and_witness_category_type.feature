@@ -1,6 +1,6 @@
 @DCF @vca @regression @S10_15838
 
-Feature: Update category type for witness and victim and verify wm01u message
+Feature: JIRA - 15838 - Update category type for witness and victim and verify wm01u message
   As a Victim Liaison Officer
   I want to update category type for witness and victim
   Update information is reflected in CMS database

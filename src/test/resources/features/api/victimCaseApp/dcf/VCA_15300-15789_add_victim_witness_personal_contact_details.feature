@@ -1,6 +1,6 @@
 @DCF @vca @regression @15300_15789_add_personal_details
 
-Feature: Add personal and contact details for all category types of witness and victim and verify wm01u message
+Feature: JIRA - 15300_15789 - Add personal and contact details for all category types of witness and victim and verify wm01u message
          As a Victim Liaison Officer
          I want to add personal and contact details for all category types of witness and victim
          Added information is reflected in CMS and VCA database

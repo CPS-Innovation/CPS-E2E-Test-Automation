@@ -22,7 +22,7 @@ import static io.cucumber.junit.platform.engine.Constants.OBJECT_FACTORY_PROPERT
 @SelectClasspathResource("features")
 @ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "com.cps.fct.e2e")
 //@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@S1_S2_15300_15789 or @S3_S4_15791_15793" )
-@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@DCF" )
+@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@16007_cms_case_contacts_for_victim_witness" )
 @ConfigurationParameter(
         key = PLUGIN_PROPERTY_NAME,
         value = "pretty, json:target/cucumber-report/cucumber.json"

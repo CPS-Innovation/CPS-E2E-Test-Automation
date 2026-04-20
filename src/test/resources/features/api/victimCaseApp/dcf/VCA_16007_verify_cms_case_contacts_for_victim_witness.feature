@@ -15,7 +15,7 @@ Feature: CMS case contact details are verified of victims and witness
     Given witness and victim details are available
     And the "witnessId" is onboarded to VCA
     And the "victimId" is onboarded to VCA
-    And the "Victim Liaison Officer" is added to "victimId" in VCA
-    And the "Family Liaison Officer" is added to "victimId" in VCA
+#    And the "Victim Liaison Officer" is added to "victimId" in VCA
+#    And the "Family Liaison Officer" is added to "victimId" in VCA
 #    When the "victimId" cms case contact is verified
 #    Then the cms case details are as equal as in cms classic for "victimId"

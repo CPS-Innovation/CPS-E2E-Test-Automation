@@ -16,6 +16,10 @@ public class DefaultHttpService {
         return wrapped;
     }
 
+    public Response restAssuredRequest(HttpClientBuilder client) {
+        return client.execute();
+    }
+
     public HttpResponseWrapper getResponsesByResource(String resourceName) {
         return ResourceResponseStore.getLatestResponse(resourceName);
     }

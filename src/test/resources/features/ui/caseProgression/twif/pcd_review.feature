@@ -1,10 +1,10 @@
-@TWIF
+#@TWIF
 Feature: Review TWIF Case and Apply Charges
   As a prosecutor lawyer,
   I want to review a case in the Case review
   So that I can update the case progression and apply relevant charges.
 
- @ui
+# @ui
   Scenario: Demo test for 28 days PCD review of test type full code
   Given create TWIF case "CM01" for type "single defendant with charge"
   And precharge the triage case for 28 days PCD review

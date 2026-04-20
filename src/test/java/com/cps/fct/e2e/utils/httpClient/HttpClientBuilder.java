@@ -103,7 +103,6 @@ public class HttpClientBuilder {
         return response;
     }
 
-
     public static class Builder {
         private final Map<String, String> headers = new HashMap<>();
         private final Map<String, String> queryParams = new HashMap<>();

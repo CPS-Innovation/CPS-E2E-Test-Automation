@@ -32,6 +32,7 @@ import static io.cucumber.junit.platform.engine.Constants.OBJECT_FACTORY_PROPERT
         value = "com.cps.fct.e2e.support.CucumberObjectFactory"
 )
 public class TestRunnerApi {
+//    delete if not needed
 //    static {
 //        System.setProperty("cucumber.filter.tags",
 //                        "@S1_S2_15300_15789" +

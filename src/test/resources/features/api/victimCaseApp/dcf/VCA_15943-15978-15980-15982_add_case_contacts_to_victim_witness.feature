@@ -1,6 +1,6 @@
 @DCF @vca @regression @15943_15978_15980_15982_add_case_contacts
 
-Feature: Add case contacts to victims and witness.
+Feature: JIRA - 15943_15978_15980_15982 - Add case contacts to victims and witness.
   As a Victim Liaison Officer
   I want to add case contacts to victim and witness
   Verify that case contacts are added to victim and witness

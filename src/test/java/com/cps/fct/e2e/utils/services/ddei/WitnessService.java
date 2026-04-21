@@ -54,6 +54,10 @@ public class WitnessService extends BaseService {
         return service.sendRequest(getWitnessesDetailsForCMSRequestParams(caseId));
     }
 
+    public HttpResponseWrapper listVictimWitnessCMSContact(String caseId) {
+        return service.sendRequest(getListVictimWitnessCMSContact(caseId));
+    }
+
     public Response listVictimContactTypeDetails(String guid) {
         return service.restAssuredRequest(getVictimContactTypeDetailsForRequestParams(guid));
     }
@@ -147,6 +151,17 @@ public class WitnessService extends BaseService {
                 .addHeaders(ddeiHeaders())
                 .method("GET")
                 .resourceName("witnessDetailsFromCMS")
+                .build();
+    }
+
+    // {{StagingWmUrl}}/api/cases/{{DCFCaseID}}/contacts
+    private HttpClientBuilder getListVictimWitnessCMSContact(String caseId) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/cases/%s/contacts", caseId))
+                .addHeaders(ddeiHeaders())
+                .method("GET")
+                .resourceName("victimWitnessCMSContact")
                 .build();
     }
 

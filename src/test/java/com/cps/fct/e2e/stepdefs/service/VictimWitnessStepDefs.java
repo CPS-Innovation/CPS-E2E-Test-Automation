@@ -347,6 +347,11 @@ public class VictimWitnessStepDefs {
         }
     }
 
+    @Then("the CMS case contact details are requested")
+    public void requestCmsCaseContactDetails() {
+
+    }
+
 
 
 

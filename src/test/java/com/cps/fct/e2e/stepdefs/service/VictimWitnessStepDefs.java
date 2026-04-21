@@ -347,8 +347,18 @@ public class VictimWitnessStepDefs {
         }
     }
 
-    @Then("the CMS case contact details are requested")
-    public void requestCmsCaseContactDetails() {
+//    @Then("the CMS case contact details are requested")
+//    public void requestCmsCaseContactDetails() {
+//
+//    }
+
+    @Then("the cms case details should be equal as in cms classic")
+    public void assertCaseContactDetailsInVCA() {
+//        VictimWitnessDetails victimWitnessDetails;
+        String caseId = context.get("caseId");
+        Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
+        Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
+
 
     }
 

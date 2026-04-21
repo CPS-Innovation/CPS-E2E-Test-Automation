@@ -340,7 +340,7 @@
           "Firm": "{{Defender_Solicitor_Company}}",
           "UniqueId": "{{CM01_SolicitorId}}",
           "Name": {
-            "Title": null,
+            "Title": "Mr",
             "GivenName": [
               {
                 "NameSequenceSpecified": false,

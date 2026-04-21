@@ -1,5 +1,6 @@
 package com.cps.fct.e2e.stepdefs.service;
 
+import com.cps.fct.e2e.model.VictimWitnessCMSContact;
 import com.cps.fct.e2e.model.VictimWitnessDetails;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
 import com.cps.fct.e2e.utils.httpClient.HttpResponseWrapper;
@@ -18,10 +19,12 @@ import io.cucumber.java.en.When;
 import io.restassured.response.Response;
 import org.picocontainer.annotations.Inject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.cps.fct.e2e.utils.common.JsonUtils.*;
 import static com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimWitnessPayloadBuilder.*;
 
 public class VictimWitnessStepDefs {
@@ -70,6 +73,9 @@ public class VictimWitnessStepDefs {
 
         Map<String, Integer> victimContactTypeMap = new HashMap<>();
         context.set("victimContactTypeMap",victimContactTypeMap);
+
+        Map<String, VictimWitnessCMSContact> victimWitnessCMSContactMap = new HashMap<>();
+        context.set("victimWitnessCMSContactMap",victimWitnessCMSContactMap);
     }
 
     @When("the {string} is onboarded to VCA")
@@ -347,22 +353,52 @@ public class VictimWitnessStepDefs {
         }
     }
 
-//    @Then("the CMS case contact details are requested")
-//    public void requestCmsCaseContactDetails() {
-//
-//    }
-
     @Then("the cms case details should be equal as in cms classic")
     public void assertCaseContactDetailsInVCA() {
-//        VictimWitnessDetails victimWitnessDetails;
+        // api/cases/{{DCFCaseID}}/contacts
+        VictimWitnessDetails victimWitnessDetails;
         String caseId = context.get("caseId");
+        //String caseId = "122098";
         Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
-        Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
+        Map<String, VictimWitnessDetails> victimWitnessDetailsToCMS = context.get("victimWitnessDetailsToCMS");
+        Map<String, VictimWitnessCMSContact> victimWitnessCMSContactMap =  context.get("victimWitnessCMSContactMap");
+        Map<String, String> cm01RequestPayload = context.get("cm01RequestPayload");
+
+        HttpResponseWrapper response = witnessService.listVictimWitnessCMSContact(caseId);
+        ArrayList<String> contactTypeList = new ArrayList<String>();
+        contactTypeList.add("DEFENCE_SOLICITOR");
+        contactTypeList.add("DEFENCE_FIRM");
+        contactTypeList.add("OFFICER_IN_CASE");
+
+        for (String contactType : contactTypeList) {
+         List<String> nameList = extractStringFromJsonToList(response.getBody(),
+                "$[?(@.contactType=='" + contactType+"')].name");
+        /*
+        List<String> titleList = extractStringFromJsonToList(response.getBody(),
+                "$[?(@.contactType=='" + contactType+"')].title");
+        List<String> phoneList = extractStringFromJsonToList(response.getBody(),
+                "$[?(@.contactType=='" + contactType+"')].phone");
+        List<String> emailList = extractStringFromJsonToList(response.getBody(),
+                "$[?(@.contactType=='" + contactType+"')].email");
+         */
+
+        VictimWitnessCMSContact victimWitnessCMSContact =  VictimWitnessCMSContact.builder()
+                .contactType(contactType)
+                .name(nameList.get(0))
+                .email("email")
+                .title("title")
+                .phone("phone")
+//                .email(emailList.get(0))
+//                .title(titleList.get(0))
+//                .phone(phoneList.get(0))
+                .build();
+            victimWitnessCMSContactMap.put(contactType,victimWitnessCMSContact);
+        }
+        context.set("victimWitnessCMSContactMap",victimWitnessCMSContactMap);
+        // Validate/Assert requestPayload with victimWitnessCMSContactMap
+
+        String requestPayload = cm01RequestPayload.get("cm01RequestPayload");
 
 
     }
-
-
-
-
 }

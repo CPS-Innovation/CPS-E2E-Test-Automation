@@ -1,6 +1,7 @@
 package com.cps.fct.e2e.utils.services.messagaingApi;
 
 import com.cps.fct.e2e.model.CaseResponse;
+import com.cps.fct.e2e.model.VictimWitnessDetails;
 import com.cps.fct.e2e.utils.common.EnvConfig;
 import com.cps.fct.e2e.utils.common.JsonUtils;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
@@ -14,6 +15,7 @@ import org.picocontainer.annotations.Inject;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.HashMap;
 import java.util.Map;
 
 public class DCFMessageService extends BaseService {
@@ -26,9 +28,11 @@ public class DCFMessageService extends BaseService {
 
     public HttpResponseWrapper cm01WithADefendantCharge(File caseFile, String messageType, ScenarioContext context) throws IOException {
         String payloadForDefendantAndCharge = Files.readString(caseFile.toPath());
+        Map<String, String> cm01RequestPayload = new HashMap<>();
+        cm01RequestPayload.put("cm01RequestPayload", payloadForDefendantAndCharge);
+        context.set("cm01RequestPayload",cm01RequestPayload);
          return send(forCM01.generatePayloadWithValues(payloadForDefendantAndCharge, context), messageType);
     }
-
 
     public void lmO4AddVictimWitness(File victimWitness, String messageType, ScenarioContext context) throws IOException {
         String payloadForNewVictimWitness = Files.readString(victimWitness.toPath());

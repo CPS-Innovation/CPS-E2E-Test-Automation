@@ -74,6 +74,14 @@ public class JsonUtils {
                 .collect(Collectors.toList());
     }
 
+    public static List<String> extractStringFromJsonToList(String jsonBody, String jsonPathExpression) {
+        JSONArray rawArray = JsonPath.read(jsonBody, jsonPathExpression);
+        return rawArray.stream()
+                .map(Object::toString)
+                .collect(Collectors.toList());
+    }
+
+
     public static List<Object> extractObjectListFromJson(String jsonBody, String jsonPathExpression) {
         JSONArray rawArray = JsonPath.read(jsonBody, jsonPathExpression);
         return rawArray.stream()

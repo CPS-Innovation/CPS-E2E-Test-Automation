@@ -361,33 +361,80 @@ public class VictimWitnessStepDefs {
     public void assertCaseContactDetailsInVCA() {
         String caseId = context.get("caseId");
         VictimWitnessCMSContact expectedOfficerInCaseContact = context.get("expectedOfficerInCaseContact");
+        VictimWitnessCMSContact expectedDefenceFirmContact = context.get("expectedDefenceFirmContact");
+        VictimWitnessCMSContact expectedDefenceSolicitorContact = context.get("expectedDefenceSolicitorContact");
 
         HttpResponseWrapper response = witnessService.listVictimWitnessCMSContact(caseId);
 
+        //OFFICER_IN_CASE
         List<Map<String, Object>> officerInCaseList = JsonPath.read(
                 response.getBody(),
                 "$[?(@.contactType=='OFFICER_IN_CASE')]"
         );
-
         assertThat(officerInCaseList)
                 .as("OFFICER_IN_CASE contact should exist in CMS contacts response")
                 .isNotEmpty();
-
-        Map<String, Object> officerInCase = officerInCaseList.get(0);
+        Map<String, Object> officerInCase = officerInCaseList.getFirst();
 
         VictimWitnessCMSContact actualOfficerInCaseContact = VictimWitnessCMSContact.builder()
                 .contactType((String) officerInCase.get("contactType"))
                 .name((String) officerInCase.get("name"))
                 .phone((String) officerInCase.get("phone"))
                 .email((String) officerInCase.get("email"))
-                .title((String) officerInCase.get("title"))
                 .build();
-
         assertThat(actualOfficerInCaseContact.getContactType())
                 .isEqualTo(expectedOfficerInCaseContact.getContactType());
         assertThat(actualOfficerInCaseContact.getName())
                 .isEqualTo(expectedOfficerInCaseContact.getName());
         assertThat(actualOfficerInCaseContact.getPhone())
                 .isEqualTo(expectedOfficerInCaseContact.getPhone());
+        assertThat(actualOfficerInCaseContact.getEmail())
+                .isEqualTo(expectedOfficerInCaseContact.getEmail());
+
+        //DEFENCE_FIRM
+        List<Map<String, Object>> defenceFirmList = JsonPath.read(
+                response.getBody(),
+                "$[?(@.contactType=='DEFENCE_FIRM')]"
+        );
+        assertThat(defenceFirmList)
+                .as("DEFENCE_FIRM contact should exist in CMS contacts response")
+                .isNotEmpty();
+        Map<String, Object> defenceFirm = defenceFirmList.getFirst();
+
+        VictimWitnessCMSContact actualDefenceFirmContact = VictimWitnessCMSContact.builder()
+                .contactType((String) defenceFirm.get("contactType"))
+                .name((String) defenceFirm.get("name"))
+                .phone((String) defenceFirm.get("phone"))
+                .email((String) defenceFirm.get("email"))
+                .build();
+
+        assertThat(actualDefenceFirmContact.getContactType())
+                .isEqualTo(expectedDefenceFirmContact.getContactType());
+        assertThat(actualDefenceFirmContact.getName())
+                .isEqualTo(expectedDefenceFirmContact.getName());
+        assertThat(actualDefenceFirmContact.getPhone())
+                .isEqualTo(expectedDefenceFirmContact.getPhone());
+        assertThat(actualDefenceFirmContact.getEmail())
+                .isEqualTo(expectedDefenceFirmContact.getEmail());
+
+        //DEFENCE_SOLICITOR
+        List<Map<String, Object>> defenceSolicitormList = JsonPath.read(
+                response.getBody(),
+                "$[?(@.contactType=='DEFENCE_SOLICITOR')]"
+        );
+        assertThat(defenceSolicitormList)
+                .as("DEFENCE_SOLICITOR contact should exist in CMS contacts response")
+                .isNotEmpty();
+        Map<String, Object> defenceSolicitor = defenceSolicitormList.getFirst();
+
+        VictimWitnessCMSContact actualDefenceSolicitorContact = VictimWitnessCMSContact.builder()
+                .contactType((String) defenceSolicitor.get("contactType"))
+                .name((String) defenceSolicitor.get("name"))
+                .build();
+
+        assertThat(actualDefenceSolicitorContact.getContactType())
+                .isEqualTo(expectedDefenceSolicitorContact.getContactType());
+        assertThat(actualDefenceSolicitorContact.getName())
+                .isEqualTo(expectedDefenceSolicitorContact.getName());
     }
 }

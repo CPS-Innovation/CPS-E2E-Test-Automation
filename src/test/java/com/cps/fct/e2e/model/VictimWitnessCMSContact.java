@@ -9,6 +9,5 @@ public class VictimWitnessCMSContact {
     private String contactType;
     private String email;
     private String name;
-    private String title;
     private String phone;
 }

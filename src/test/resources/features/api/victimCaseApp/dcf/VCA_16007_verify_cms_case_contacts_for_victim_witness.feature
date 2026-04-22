@@ -15,7 +15,4 @@ Feature: JIRA - 16007 - CMS case contact details are verified of victims and wit
     Given witness and victim details are available
     And the "witnessId" is onboarded to VCA
     And the "victimId" is onboarded to VCA
-#  /api/cases/{{DCFCaseID}}
-#    When the CMS case contact details are requested
-#  api/cases/{{DCFCaseID}}/contacts
     Then the cms case details should be equal as in cms classic

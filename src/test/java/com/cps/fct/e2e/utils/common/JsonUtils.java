@@ -94,6 +94,11 @@ public class JsonUtils {
         return rawArray.getFirst().toString();
     }
 
+    public static String extractFromJsonNew(String jsonBody, String jsonPathExpression) {
+        JSONArray rawArray = JsonPath.read(jsonBody, jsonPathExpression);
+        return rawArray.getFirst().toString();
+    }
+
     public static String toJsonString(Map<String, Object>payload) {
         return gson.toJson(payload);
     }

@@ -32,76 +32,10 @@ public class DCFMessageService extends BaseService {
     @Inject
     DCFPayloadBuilderForLM04 forLM04;
 
-    private VictimWitnessCMSContact buildExpectedOfficerInCaseContact(String requestJson) {
-        List<String> givenName = JsonPath.read(requestJson,
-                "$.PreChargeDecisionRequest.CaseContacts[?(@.Officer.PoliceOfficerRank == 'PoliceUnit')].Name.GivenName[0].Value");
-
-        List<String> familyName = JsonPath.read(requestJson,
-                "$.PreChargeDecisionRequest.CaseContacts[?(@.Officer.PoliceOfficerRank == 'PoliceUnit')].Name.FamilyName.Value");
-
-        List<String> phone = JsonPath.read(requestJson,
-                "$.PreChargeDecisionRequest.CaseContacts[?(@.Officer.PoliceOfficerRank == 'PoliceUnit')].ContactDetails.ContactNumber[0].Number.TelNationalNumber");
-
-        List<String> email = JsonPath.read(requestJson,
-                "$.PreChargeDecisionRequest.CaseContacts[?(@.Officer.PoliceOfficerRank == 'PoliceUnit')].ContactDetails.Email");
-
-        return VictimWitnessCMSContact.builder()
-                .contactType("OFFICER_IN_CASE")
-                .name(familyName.getFirst() + ", " + givenName.getFirst())
-                .phone(phone.getFirst())
-                .email(email.getFirst())
-                .build();
-    }
-
-    private VictimWitnessCMSContact buildExpectedDefenceFirmContact(String requestJson) {
-        String firmName = JsonPath.read(requestJson,
-                "$.PreChargeDecisionRequest.Suspect[0].DefenceSolicitor.Firm");
-
-        String email = JsonPath.read(requestJson,
-                "$.PreChargeDecisionRequest.Suspect[0].DefenceSolicitor.ContactDetails.Email");
-
-        String phone = JsonPath.read(requestJson,
-                "$.PreChargeDecisionRequest.Suspect[0].DefenceSolicitor.ContactDetails.ContactNumber[0].Number.TelNationalNumber");
-
-        return VictimWitnessCMSContact.builder()
-                .contactType("DEFENCE_FIRM")
-                .name(firmName)
-                .phone(phone)
-                .email(email)
-                .build();
-    }
-
-    private VictimWitnessCMSContact buildExpectedDefenceSolicitorContact(String requestJson) {
-        String givenName = JsonPath.read(requestJson,
-                "$.PreChargeDecisionRequest.Suspect[0].DefenceSolicitor.Name.GivenName[0].Value");
-
-        String familyName = JsonPath.read(requestJson,
-                "$.PreChargeDecisionRequest.Suspect[0].DefenceSolicitor.Name.FamilyName.Value");
-        return VictimWitnessCMSContact.builder()
-                .contactType("DEFENCE_SOLICITOR")
-                .name(familyName + ", " + givenName)
-                .build();
-    }
-
     public HttpResponseWrapper cm01WithADefendantCharge(File caseFile, String messageType, ScenarioContext context) throws IOException {
         String payloadForDefendantAndCharge = Files.readString(caseFile.toPath());
         String modifiedRequestJson = forCM01.generatePayloadWithValues(payloadForDefendantAndCharge, context);
-
-        // Store raw payload for debugging
         context.set("modifiedRequestPayload", modifiedRequestJson);
-
-        VictimWitnessCMSContact expectedOfficerInCaseContact =
-                buildExpectedOfficerInCaseContact(modifiedRequestJson);
-        context.set("expectedOfficerInCaseContact", expectedOfficerInCaseContact);
-
-        VictimWitnessCMSContact expectedDefenceFirmContact =
-                buildExpectedDefenceFirmContact(modifiedRequestJson);
-        context.set("expectedDefenceFirmContact", expectedDefenceFirmContact);
-
-        VictimWitnessCMSContact expectedDefenceSolicitorContact =
-                buildExpectedDefenceSolicitorContact(modifiedRequestJson);
-        context.set("expectedDefenceSolicitorContact", expectedDefenceSolicitorContact);
-
         return send(modifiedRequestJson, messageType);
     }
 

@@ -1,6 +1,7 @@
 package com.cps.fct.e2e.utils.services.messagaingApi;
 
 import com.cps.fct.e2e.model.CaseResponse;
+import com.cps.fct.e2e.model.VictimWitnessCMSContact;
 import com.cps.fct.e2e.model.VictimWitnessDetails;
 import com.cps.fct.e2e.utils.common.EnvConfig;
 import com.cps.fct.e2e.utils.common.JsonUtils;
@@ -10,6 +11,7 @@ import com.cps.fct.e2e.utils.httpClient.HttpResponseWrapper;
 import com.cps.fct.e2e.utils.payloadBuilders.dcf.DCFPayloadBuilderForCM01;
 import com.cps.fct.e2e.utils.payloadBuilders.dcf.DCFPayloadBuilderForLM04;
 import com.cps.fct.e2e.utils.services.BaseService;
+import com.jayway.jsonpath.JsonPath;
 import org.picocontainer.annotations.Inject;
 
 import java.io.File;
@@ -29,23 +31,36 @@ public class DCFMessageService extends BaseService {
     @Inject
     DCFPayloadBuilderForLM04 forLM04;
 
+    private VictimWitnessCMSContact buildExpectedOfficerInCaseContact(String requestJson) {
+        String givenName = JsonPath.read(requestJson,
+                "$.PreChargeDecisionRequest.CaseContacts[1].Name.GivenName[0].Value");
+
+        String familyName = JsonPath.read(requestJson,
+                "$.PreChargeDecisionRequest.CaseContacts[1].Name.FamilyName.Value");
+
+        String phone = JsonPath.read(requestJson,
+                "$.PreChargeDecisionRequest.CaseContacts[1].ContactDetails.ContactNumber[0].Number.TelNationalNumber");
+
+        return VictimWitnessCMSContact.builder()
+                .contactType("OFFICER_IN_CASE")
+                .name(familyName + ", " + givenName)
+                .phone(phone)
+                .email(null)
+                .title(null)
+                .build();
+    }
+
     public HttpResponseWrapper cm01WithADefendantCharge(File caseFile, String messageType, ScenarioContext context) throws IOException {
         String payloadForDefendantAndCharge = Files.readString(caseFile.toPath());
-        Map<String, String> modifiedRequestPayload = new HashMap<>();
         String modifiedRequestJson = forCM01.generatePayloadWithValues(payloadForDefendantAndCharge, context);
-        modifiedRequestPayload.put("modifiedRequestPayload", modifiedRequestJson);
-        context.set("modifiedRequestPayload",modifiedRequestPayload);
 
-        //TODO:Need to remove
-        String givenName = extractFromJsonNew(modifiedRequestPayload.get("modifiedRequestPayload"),
-                "$.PreChargeDecisionRequest.CaseContacts[1].Name.GivenName[0].Value");
-        String familyName = extractFromJsonNew(modifiedRequestPayload.get("modifiedRequestPayload"),
-                "$.PreChargeDecisionRequest.CaseContacts[1].Name.FamilyName.Value");
-        String telNationalNumber = extractFromJsonNew(modifiedRequestPayload.get("modifiedRequestPayload"),
-                "$.PreChargeDecisionRequest.CaseContacts[1].ContactDetails.ContactNumber[0].Number.TelNationalNumber");
-        String firm = extractFromJsonNew(modifiedRequestPayload.get("modifiedRequestPayload"),
-                "$.PreChargeDecisionRequest.Suspect[0].DefenceSolicitor.Firm");
-        System.out.println(givenName + "," + familyName + "," + telNationalNumber + "," + firm);
+        // Store raw payload for debugging
+        context.set("modifiedRequestPayload", modifiedRequestJson);
+
+        VictimWitnessCMSContact expectedOfficerInCaseContact =
+                buildExpectedOfficerInCaseContact(modifiedRequestJson);
+
+        context.set("expectedOfficerInCaseContact", expectedOfficerInCaseContact);
 
         return send(modifiedRequestJson, messageType);
     }

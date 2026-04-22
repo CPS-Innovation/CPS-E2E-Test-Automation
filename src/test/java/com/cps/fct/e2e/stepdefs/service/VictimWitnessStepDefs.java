@@ -10,6 +10,7 @@ import com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VcaPersonalDetails;
 import com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimContactDetails;
 import com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimWitnessPayloadBuilder;
 import com.cps.fct.e2e.utils.services.ddei.responseAssertions.VictimWitnessAssertions;
+import com.jayway.jsonpath.JsonPath;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
@@ -355,67 +356,38 @@ public class VictimWitnessStepDefs {
         }
     }
 
+
     @Then("the cms case details should be equal as in cms classic")
     public void assertCaseContactDetailsInVCA() {
-        // api/cases/{{DCFCaseID}}/contacts
-        VictimWitnessDetails victimWitnessDetails;
         String caseId = context.get("caseId");
-        //String caseId = "122098";
-        Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
-        Map<String, VictimWitnessDetails> victimWitnessDetailsToCMS = context.get("victimWitnessDetailsToCMS");
-        Map<String, VictimWitnessCMSContact> victimWitnessCMSContactMap =  context.get("victimWitnessCMSContactMap");
-        Map<String, String> modifiedRequestPayload = context.get("modifiedRequestPayload");
+        VictimWitnessCMSContact expectedOfficerInCaseContact = context.get("expectedOfficerInCaseContact");
 
         HttpResponseWrapper response = witnessService.listVictimWitnessCMSContact(caseId);
-        ArrayList<String> contactTypeList = new ArrayList<String>();
-        //contactTypeList.add("DEFENCE_SOLICITOR");
-        //contactTypeList.add("DEFENCE_FIRM");
-        contactTypeList.add("OFFICER_IN_CASE");
 
-        for (String contactType : contactTypeList) {
-            List<String> nameList = extractStringFromJsonToList(response.getBody(),
-                    "$[?(@.contactType=='" + contactType + "')].name");
-        /*
-        List<String> titleList = extractStringFromJsonToList(response.getBody(),
-                "$[?(@.contactType=='" + contactType+"')].title");
-        List<String> phoneList = extractStringFromJsonToList(response.getBody(),
-                "$[?(@.contactType=='" + contactType+"')].phone");
-        List<String> emailList = extractStringFromJsonToList(response.getBody(),
-                "$[?(@.contactType=='" + contactType+"')].email");
-         */
+        List<Map<String, Object>> officerInCaseList = JsonPath.read(
+                response.getBody(),
+                "$[?(@.contactType=='OFFICER_IN_CASE')]"
+        );
 
-            VictimWitnessCMSContact victimWitnessCMSContact = VictimWitnessCMSContact.builder()
-                    .contactType(contactType)
-                    .name(nameList.get(0))
-                    .email("email")
-                    .title("title")
-                    .phone("phone")
-//                .email(emailList.get(0))
-//                .title(titleList.get(0))
-//                .phone(phoneList.get(0))
-                    .build();
+        assertThat(officerInCaseList)
+                .as("OFFICER_IN_CASE contact should exist in CMS contacts response")
+                .isNotEmpty();
 
-            // $.PreChargeDecisionRequest.CaseContacts[1].Name.GivenName[0].Value
-            String givenName = extractFromJson(modifiedRequestPayload.get("modifiedRequestPayload"),
-                    "$.PreChargeDecisionRequest.CaseContacts[1].Name.GivenName[0].Value");
-            String familyName = extractFromJson(modifiedRequestPayload.get("modifiedRequestPayload"),
-                    "$.PreChargeDecisionRequest.CaseContacts[1].Name.FamilyName.Value");
-            String telNationalNumber = extractFromJson(modifiedRequestPayload.get("modifiedRequestPayload"),
-                    "$.PreChargeDecisionRequest.CaseContacts[1].ContactDetails.ContactNumber[0].Number.TelNationalNumber");
-            String firm = extractFromJson(modifiedRequestPayload.get("modifiedRequestPayload"),
-                    "$.PreChargeDecisionRequest.Suspect[0].DefenceSolicitor.Firm");
-            System.out.println(givenName + "," + familyName + "," + telNationalNumber + "," + firm);
-            /*
-            // Validate/Assert requestPayload with victimWitnessCMSContact
-            assertThat(
-                    extractFromJson(modifiedRequestPayload.get("modifiedRequestPayload"),
-                            "$[?(@.isWitnessAndVictim==false && @.isKeyWitness=='Yes')].witnessId")
-            ).isEqualTo(victimWitnessCMSContact.getName());
-            assertThat(extractFromJson(modifiedRequestPayload.get("modifiedRequestPayload"),
-                    "$[?(@.isWitnessAndVictim==false && @.isKeyWitness=='Yes')].witnessId")
-            ).isEqualTo(victimWitnessCMSContact.getName());
-            */
-        }
+        Map<String, Object> officerInCase = officerInCaseList.get(0);
 
+        VictimWitnessCMSContact actualOfficerInCaseContact = VictimWitnessCMSContact.builder()
+                .contactType((String) officerInCase.get("contactType"))
+                .name((String) officerInCase.get("name"))
+                .phone((String) officerInCase.get("phone"))
+                .email((String) officerInCase.get("email"))
+                .title((String) officerInCase.get("title"))
+                .build();
+
+        assertThat(actualOfficerInCaseContact.getContactType())
+                .isEqualTo(expectedOfficerInCaseContact.getContactType());
+        assertThat(actualOfficerInCaseContact.getName())
+                .isEqualTo(expectedOfficerInCaseContact.getName());
+        assertThat(actualOfficerInCaseContact.getPhone())
+                .isEqualTo(expectedOfficerInCaseContact.getPhone());
     }
 }

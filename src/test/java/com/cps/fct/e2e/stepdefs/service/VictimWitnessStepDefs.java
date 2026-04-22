@@ -26,6 +26,8 @@ import java.util.Map;
 
 import static com.cps.fct.e2e.utils.common.JsonUtils.*;
 import static com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimWitnessPayloadBuilder.*;
+import static org.assertj.core.api.Assertions.assertThat;
+
 
 public class VictimWitnessStepDefs {
     @Inject
@@ -362,17 +364,17 @@ public class VictimWitnessStepDefs {
         Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
         Map<String, VictimWitnessDetails> victimWitnessDetailsToCMS = context.get("victimWitnessDetailsToCMS");
         Map<String, VictimWitnessCMSContact> victimWitnessCMSContactMap =  context.get("victimWitnessCMSContactMap");
-        Map<String, String> cm01RequestPayload = context.get("cm01RequestPayload");
+        Map<String, String> modifiedRequestPayload = context.get("modifiedRequestPayload");
 
         HttpResponseWrapper response = witnessService.listVictimWitnessCMSContact(caseId);
         ArrayList<String> contactTypeList = new ArrayList<String>();
-        contactTypeList.add("DEFENCE_SOLICITOR");
-        contactTypeList.add("DEFENCE_FIRM");
+        //contactTypeList.add("DEFENCE_SOLICITOR");
+        //contactTypeList.add("DEFENCE_FIRM");
         contactTypeList.add("OFFICER_IN_CASE");
 
         for (String contactType : contactTypeList) {
-         List<String> nameList = extractStringFromJsonToList(response.getBody(),
-                "$[?(@.contactType=='" + contactType+"')].name");
+            List<String> nameList = extractStringFromJsonToList(response.getBody(),
+                    "$[?(@.contactType=='" + contactType + "')].name");
         /*
         List<String> titleList = extractStringFromJsonToList(response.getBody(),
                 "$[?(@.contactType=='" + contactType+"')].title");
@@ -382,23 +384,38 @@ public class VictimWitnessStepDefs {
                 "$[?(@.contactType=='" + contactType+"')].email");
          */
 
-        VictimWitnessCMSContact victimWitnessCMSContact =  VictimWitnessCMSContact.builder()
-                .contactType(contactType)
-                .name(nameList.get(0))
-                .email("email")
-                .title("title")
-                .phone("phone")
+            VictimWitnessCMSContact victimWitnessCMSContact = VictimWitnessCMSContact.builder()
+                    .contactType(contactType)
+                    .name(nameList.get(0))
+                    .email("email")
+                    .title("title")
+                    .phone("phone")
 //                .email(emailList.get(0))
 //                .title(titleList.get(0))
 //                .phone(phoneList.get(0))
-                .build();
-            victimWitnessCMSContactMap.put(contactType,victimWitnessCMSContact);
+                    .build();
+
+            // $.PreChargeDecisionRequest.CaseContacts[1].Name.GivenName[0].Value
+            String givenName = extractFromJson(modifiedRequestPayload.get("modifiedRequestPayload"),
+                    "$.PreChargeDecisionRequest.CaseContacts[1].Name.GivenName[0].Value");
+            String familyName = extractFromJson(modifiedRequestPayload.get("modifiedRequestPayload"),
+                    "$.PreChargeDecisionRequest.CaseContacts[1].Name.FamilyName.Value");
+            String telNationalNumber = extractFromJson(modifiedRequestPayload.get("modifiedRequestPayload"),
+                    "$.PreChargeDecisionRequest.CaseContacts[1].ContactDetails.ContactNumber[0].Number.TelNationalNumber");
+            String firm = extractFromJson(modifiedRequestPayload.get("modifiedRequestPayload"),
+                    "$.PreChargeDecisionRequest.Suspect[0].DefenceSolicitor.Firm");
+            System.out.println(givenName + "," + familyName + "," + telNationalNumber + "," + firm);
+            /*
+            // Validate/Assert requestPayload with victimWitnessCMSContact
+            assertThat(
+                    extractFromJson(modifiedRequestPayload.get("modifiedRequestPayload"),
+                            "$[?(@.isWitnessAndVictim==false && @.isKeyWitness=='Yes')].witnessId")
+            ).isEqualTo(victimWitnessCMSContact.getName());
+            assertThat(extractFromJson(modifiedRequestPayload.get("modifiedRequestPayload"),
+                    "$[?(@.isWitnessAndVictim==false && @.isKeyWitness=='Yes')].witnessId")
+            ).isEqualTo(victimWitnessCMSContact.getName());
+            */
         }
-        context.set("victimWitnessCMSContactMap",victimWitnessCMSContactMap);
-        // Validate/Assert requestPayload with victimWitnessCMSContactMap
-
-        String requestPayload = cm01RequestPayload.get("cm01RequestPayload");
-
 
     }
 }

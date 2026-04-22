@@ -18,6 +18,9 @@ import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.cps.fct.e2e.utils.common.JsonUtils.extractFromJson;
+import static com.cps.fct.e2e.utils.common.JsonUtils.extractFromJsonNew;
+
 public class DCFMessageService extends BaseService {
 
     @Inject
@@ -28,10 +31,23 @@ public class DCFMessageService extends BaseService {
 
     public HttpResponseWrapper cm01WithADefendantCharge(File caseFile, String messageType, ScenarioContext context) throws IOException {
         String payloadForDefendantAndCharge = Files.readString(caseFile.toPath());
-        Map<String, String> cm01RequestPayload = new HashMap<>();
-        cm01RequestPayload.put("cm01RequestPayload", payloadForDefendantAndCharge);
-        context.set("cm01RequestPayload",cm01RequestPayload);
-         return send(forCM01.generatePayloadWithValues(payloadForDefendantAndCharge, context), messageType);
+        Map<String, String> modifiedRequestPayload = new HashMap<>();
+        String modifiedRequestJson = forCM01.generatePayloadWithValues(payloadForDefendantAndCharge, context);
+        modifiedRequestPayload.put("modifiedRequestPayload", modifiedRequestJson);
+        context.set("modifiedRequestPayload",modifiedRequestPayload);
+
+        //TODO:Need to remove
+        String givenName = extractFromJsonNew(modifiedRequestPayload.get("modifiedRequestPayload"),
+                "$.PreChargeDecisionRequest.CaseContacts[1].Name.GivenName[0].Value");
+        String familyName = extractFromJsonNew(modifiedRequestPayload.get("modifiedRequestPayload"),
+                "$.PreChargeDecisionRequest.CaseContacts[1].Name.FamilyName.Value");
+        String telNationalNumber = extractFromJsonNew(modifiedRequestPayload.get("modifiedRequestPayload"),
+                "$.PreChargeDecisionRequest.CaseContacts[1].ContactDetails.ContactNumber[0].Number.TelNationalNumber");
+        String firm = extractFromJsonNew(modifiedRequestPayload.get("modifiedRequestPayload"),
+                "$.PreChargeDecisionRequest.Suspect[0].DefenceSolicitor.Firm");
+        System.out.println(givenName + "," + familyName + "," + telNationalNumber + "," + firm);
+
+        return send(modifiedRequestJson, messageType);
     }
 
     public void lmO4AddVictimWitness(File victimWitness, String messageType, ScenarioContext context) throws IOException {

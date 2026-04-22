@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.cps.fct.e2e.utils.common.JsonUtils.extractFromJson;
@@ -32,21 +33,53 @@ public class DCFMessageService extends BaseService {
     DCFPayloadBuilderForLM04 forLM04;
 
     private VictimWitnessCMSContact buildExpectedOfficerInCaseContact(String requestJson) {
-        String givenName = JsonPath.read(requestJson,
-                "$.PreChargeDecisionRequest.CaseContacts[1].Name.GivenName[0].Value");
+        List<String> givenName = JsonPath.read(requestJson,
+                "$.PreChargeDecisionRequest.CaseContacts[?(@.Officer.PoliceOfficerRank == 'PoliceUnit')].Name.GivenName[0].Value");
 
-        String familyName = JsonPath.read(requestJson,
-                "$.PreChargeDecisionRequest.CaseContacts[1].Name.FamilyName.Value");
+        List<String> familyName = JsonPath.read(requestJson,
+                "$.PreChargeDecisionRequest.CaseContacts[?(@.Officer.PoliceOfficerRank == 'PoliceUnit')].Name.FamilyName.Value");
 
-        String phone = JsonPath.read(requestJson,
-                "$.PreChargeDecisionRequest.CaseContacts[1].ContactDetails.ContactNumber[0].Number.TelNationalNumber");
+        List<String> phone = JsonPath.read(requestJson,
+                "$.PreChargeDecisionRequest.CaseContacts[?(@.Officer.PoliceOfficerRank == 'PoliceUnit')].ContactDetails.ContactNumber[0].Number.TelNationalNumber");
+
+        List<String> email = JsonPath.read(requestJson,
+                "$.PreChargeDecisionRequest.CaseContacts[?(@.Officer.PoliceOfficerRank == 'PoliceUnit')].ContactDetails.Email");
 
         return VictimWitnessCMSContact.builder()
                 .contactType("OFFICER_IN_CASE")
-                .name(familyName + ", " + givenName)
+                .name(familyName.getFirst() + ", " + givenName.getFirst())
+                .phone(phone.getFirst())
+                .email(email.getFirst())
+                .build();
+    }
+
+    private VictimWitnessCMSContact buildExpectedDefenceFirmContact(String requestJson) {
+        String firmName = JsonPath.read(requestJson,
+                "$.PreChargeDecisionRequest.Suspect[0].DefenceSolicitor.Firm");
+
+        String email = JsonPath.read(requestJson,
+                "$.PreChargeDecisionRequest.Suspect[0].DefenceSolicitor.ContactDetails.Email");
+
+        String phone = JsonPath.read(requestJson,
+                "$.PreChargeDecisionRequest.Suspect[0].DefenceSolicitor.ContactDetails.ContactNumber[0].Number.TelNationalNumber");
+
+        return VictimWitnessCMSContact.builder()
+                .contactType("DEFENCE_FIRM")
+                .name(firmName)
                 .phone(phone)
-                .email(null)
-                .title(null)
+                .email(email)
+                .build();
+    }
+
+    private VictimWitnessCMSContact buildExpectedDefenceSolicitorContact(String requestJson) {
+        String givenName = JsonPath.read(requestJson,
+                "$.PreChargeDecisionRequest.Suspect[0].DefenceSolicitor.Name.GivenName[0].Value");
+
+        String familyName = JsonPath.read(requestJson,
+                "$.PreChargeDecisionRequest.Suspect[0].DefenceSolicitor.Name.FamilyName.Value");
+        return VictimWitnessCMSContact.builder()
+                .contactType("DEFENCE_SOLICITOR")
+                .name(familyName + ", " + givenName)
                 .build();
     }
 
@@ -59,8 +92,15 @@ public class DCFMessageService extends BaseService {
 
         VictimWitnessCMSContact expectedOfficerInCaseContact =
                 buildExpectedOfficerInCaseContact(modifiedRequestJson);
-
         context.set("expectedOfficerInCaseContact", expectedOfficerInCaseContact);
+
+        VictimWitnessCMSContact expectedDefenceFirmContact =
+                buildExpectedDefenceFirmContact(modifiedRequestJson);
+        context.set("expectedDefenceFirmContact", expectedDefenceFirmContact);
+
+        VictimWitnessCMSContact expectedDefenceSolicitorContact =
+                buildExpectedDefenceSolicitorContact(modifiedRequestJson);
+        context.set("expectedDefenceSolicitorContact", expectedDefenceSolicitorContact);
 
         return send(modifiedRequestJson, messageType);
     }
@@ -69,7 +109,6 @@ public class DCFMessageService extends BaseService {
         String payloadForNewVictimWitness = Files.readString(victimWitness.toPath());
         send(forLM04.generatePayloadWithValues(messageType, payloadForNewVictimWitness, context), messageType);
     }
-
 
     private HttpResponseWrapper send(String payload, String messageType) {
         return  service.sendRequest(createDCFMessage(payload, messageType));

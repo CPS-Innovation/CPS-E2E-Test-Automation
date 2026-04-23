@@ -20,7 +20,7 @@
         <playwright.version>1.58.0</playwright.version>
         <assertj.version>3.27.7</assertj.version>
         <lombook.version>1.18.42</lombook.version>
-        <jackson.core.version>3.0.4</jackson.core.version>
+        <jackson.core.version>3.1.1</jackson.core.version>
         <cucumber.version>7.18.0</cucumber.version>
         <junit.jupiter.version>5.10.1</junit.jupiter.version>
         <restassured.version>5.5.7</restassured.version>

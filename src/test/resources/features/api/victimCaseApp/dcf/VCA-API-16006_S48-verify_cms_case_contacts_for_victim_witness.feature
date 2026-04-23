@@ -1,6 +1,6 @@
-@DCF @vca @regression @16007_cms_case_contacts_for_victim_witness
+@DCF @regression @VCA_API_DCF_S48
 
-Feature: JIRA - 16007 - CMS case contact details are verified of victims and witness
+Feature: VCA-API-S48 - CMS case contact details are verified of victims and witness
   As a Victim Liaison Officer
   I want to verify CMS case contact details of victim and witness
   Verify that CMS case contact details are as equal as in cms classic for victim and witness

@@ -1,4 +1,4 @@
-@DCF @vca @regression @VCA_API_DCF_S5_S6_S7
+@DCF @regression @VCA_API_DCF_S5_S6_S7
 
 Feature: VCA-API-S5_S6_S7 - Add and update case contacts to victims and witness.
   As a Victim Liaison Officer

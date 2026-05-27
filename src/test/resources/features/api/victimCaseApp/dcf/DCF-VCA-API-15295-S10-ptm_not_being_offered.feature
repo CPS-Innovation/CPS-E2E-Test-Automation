@@ -1,4 +1,4 @@
-@DCF @regression @VCA_API_DCF_S10
+@DCF @regression @DCF_VCA_API_S10
 
 Feature: VCA-API-S10 -
 

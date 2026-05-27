@@ -1,4 +1,4 @@
-@DCF @regression @VCA_API_DCF_S48
+@DCF @regression @DCF_VCA_API_S48
 
 Feature: VCA-API-S48 - CMS case contact details are verified of victims and witness
   As a Victim Liaison Officer

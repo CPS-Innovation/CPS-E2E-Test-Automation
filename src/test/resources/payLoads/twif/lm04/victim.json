@@ -1,0 +1,33 @@
+{
+  "NewWitnessOrVictim": {
+    "ItemId": "{{LM04_itemId}}",
+    "PTIURN": {
+      "Force": "{{TWIF_Force}}",
+      "Unit": "{{TWIF_Unit}}",
+      "Number": "{{CM01_PTIURN_Number}}",
+      "Year": "{{TWIF_Year}}"
+    },
+    "Person": {
+      "UniqueId": "{{TWIF_LM04_VictimRef_1}}",
+      "Name": {
+        "GivenName": "{{FirstName}}",
+        "FamilyName": "{{Surname}}"
+      },
+      "ContactDetails": {
+        "Address": null,
+        "ContactNumber": null,
+        "Email": null
+      },
+      "TypeOfPerson": "VictimWitness",
+      "DateOfBirth": null,
+      "WitnessAndVictim": {
+        "Witness": {
+          "Occupation": "Civilian"
+        },
+        "Victim": {
+          "dummy": "Head"
+        }
+      }
+    }
+  }
+}

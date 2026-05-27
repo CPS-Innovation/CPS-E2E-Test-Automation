@@ -3,6 +3,7 @@ package com.cps.fct.e2e.utils.payloadBuilders.twif;
 import com.cps.fct.e2e.utils.common.JsonReplacer;
 import com.cps.fct.e2e.utils.common.JsonUtils;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
+import net.masterthought.cucumber.generators.StepsOverviewPage;
 
 import java.io.IOException;
 import java.util.Map;
@@ -50,7 +51,11 @@ public class TWIFPayloadBuilderForCM01 extends JsonReplacer {
 
     private void extractCaseUrnAndSave(ScenarioContext context) {
         Map<String, String> caseDataMap = removeCurlyBracesFromKeys(caseWithChargeMap);
-        String casePtrUrn = caseDataMap.get("CM01_PTIURN_Number");
-        context.set("caseUrn", String.format("16GD%s25", casePtrUrn));
+        String casePtr = caseDataMap.get("CM01_PTIURN_Number");
+        String force =  caseDataMap.get("TWIF_Force");
+        String unit =  caseDataMap.get("TWIF_Unit");
+        String year =  caseDataMap.get("TWIF_Year");
+        String casePtrUrn = force+unit+casePtr+year;
+        context.set("caseUrn", String.format(casePtrUrn));
     }
 }

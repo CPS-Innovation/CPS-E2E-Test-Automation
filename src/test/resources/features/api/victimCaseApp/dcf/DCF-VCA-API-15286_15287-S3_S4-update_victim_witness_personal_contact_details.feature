@@ -1,4 +1,4 @@
-@DCF @regression @VCA_API_DCF_S3_S4
+@DCF @regression @DCF_VCA_API_S3_S4
 
 Feature: VCA-API-S3_S4 - Update existing witness and victim personal and contact details and verify wm01u
   As a Victim Liaison Officer

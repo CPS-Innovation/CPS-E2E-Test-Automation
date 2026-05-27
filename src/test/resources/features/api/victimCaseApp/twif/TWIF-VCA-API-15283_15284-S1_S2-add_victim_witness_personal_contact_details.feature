@@ -1,16 +1,16 @@
-@DCF @regression @VCA_API_DCF_S1_S2
+@TWIF @regression @TWIF_VCA_API_S1_S2
 
-Feature: VCA-API-S1_S2 - Add personal and contact details for all category types of witness and victim and verify wm01u message
+Feature: TWIF-VCA-API-S1_S2 - Add personal and contact details for all category types of witness and victim and verify wm01u message
          As a Victim Liaison Officer
          I want to add personal and contact details for all category types of witness and victim
          Added information is reflected in CMS and VCA database
          Verify wm01u message is sent to police system
 
-  Background: Create DCF cases with single defendant with charge with all category types of witness and victim
+  Background: Create TWIF cases with single defendant with charge with all category types of witness and victim
               with empty personal and contact details.
 
-    Given create case CM01 for type "single defendant with charge with all types witness victim"
-    And a "witness" is added using LM04
+    Given create TWIF case "CM01" for type "single defendant with charge"
+#    And a "witness" is added using LM04
     And a "victim" is added using LM04
 
 #    And a "witness child" is added using LM04

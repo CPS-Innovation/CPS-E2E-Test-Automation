@@ -1,0 +1,65 @@
+{
+  "WitnessOrVictim": {
+    "ItemId": "{{LM04_itemId}}",
+    "PTIURN": {
+      "Force": "{{LM04_Force}}",
+      "Unit": "{{LM04_Unit}}",
+      "Number": "{{LM04_PTIURN_Number}}",
+      "Year": "{{LM04_Year}}"
+    },
+    "UpdateStatus": {
+      "VersionId": "1",
+      "UpdateReasonType": "Create",
+      "UpdateReason": "Need to create witness"
+    },
+    "VictimWitness": {
+      "Person": {
+        "UniqueId": "{{LM04_VictimRef_1}}",
+        "Name": {
+          "Title": "Mr",
+          "GivenName": "{{FirstName}}",
+          "FamilyName": "{{Surname}}"
+        },
+        "ContactDetails": {
+          "Address": {
+            "AddressLine": [
+              "{{AddressLin1}}",
+              "{{AddressLin2}}",
+              "{{AddressLin3}}"
+            ],
+            "Postcode": "NE1 1BB",
+            "Country": "UK"
+          }
+        },
+        "DateOfBirth": "1985-02-10",
+        "PersonClassification": [
+          {
+            "ClassificationType": "StatusInformation",
+            "ClassificationCode": "KeyWitness",
+            "ClassificationValue": {
+              "ClassificationValueText": "Yes"
+            }
+          }
+        ]
+      },
+      "TypeOfPerson": "VictimWitness",
+      "DateOfBirth": "1970-08-03",
+      "WitnessAndVictim": {
+        "Witness": {
+          "Occupation": "Civilian",
+          "WarnedByPolice": false
+        },
+        "Victim": {
+          "XOffenceId": [
+            "{{LM04_CaseOffenceId}}"
+          ],
+          "VPSStatus": {
+            "ResponseToVPSOffer": "Accepted",
+            "SchemeExplained": false
+          }
+        }
+      },
+      "LinkedSuspects": null
+    }
+  }
+}

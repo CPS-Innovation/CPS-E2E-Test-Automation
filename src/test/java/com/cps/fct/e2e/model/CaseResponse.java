@@ -9,19 +9,24 @@ public class CaseResponse {
 
     // Getters and Setters
     private String message;
-        private String caseId;
-        private String urn;
-        private Response response;
-        private String result;
+    private String caseId;
+    private String urn;
+    private Response response;
+    private String result;
 
-        // Inner class for response
-        @Setter
-        @Getter
-        public static class Response {
-            private int code;
-            private String text;
+    private String requestId;
+    private boolean success;
+    private String caseUrn;
 
-        }
+    // Inner class for response
+    @Setter
+    @Getter
+    public static class Response {
+        private int code;
+        private String text;
+        private boolean success;
+
+    }
 
 }
 

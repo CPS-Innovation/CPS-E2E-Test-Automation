@@ -110,12 +110,8 @@ public class FakerUtils {
         return String.valueOf(random.nextInt(90000) + 10000);
     }
 
-    public static String generateFiveDigitNumber() {
-        return String.valueOf(10000 + random.nextInt(90000));
-    }
-
-    public static String generateTenDigitNumber() {
-        return String.valueOf(1000000000L + (long) (random.nextDouble() * 9000000000L));
+    public static String elevenDigitNumber() {
+        return String.valueOf(10000000000L + (long) (random.nextDouble() * 90000000000L));
     }
 
     public static String generateUppercaseAlphaNumeric(int length) {

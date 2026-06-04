@@ -1,6 +1,5 @@
 package com.cps.fct.e2e.utils.payloadBuilders.dcf;
 
-import com.cps.fct.e2e.model.CaseResponse;
 import com.cps.fct.e2e.utils.common.JsonReplacer;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
 
@@ -12,24 +11,29 @@ import static com.cps.fct.e2e.utils.common.FakerUtils.*;
 
 public class DCFPayloadBuilderForLM04 extends JsonReplacer {
 
-    public String generatePayloadWithValues(
+    public String generateLM04PayloadWithValues(
             String type, String payloadFileName, ScenarioContext context) throws IOException {
 
         Map<String, String> cm01Map = context.getAsMap("CM01ModifiedValues");
-        CaseResponse caseData = context.getCastClazz("caseDetails", CaseResponse.class);
+//        CaseResponse caseData = context.getCastClazz("caseDetails", CaseResponse.class);
 
         Map<String, String> initialLM04Map = new HashMap<>();
-        initialLM04Map.put("{{LM04_CaseId}}", caseData.getCaseId());
+//        initialLM04Map.put("{{LM04_CaseId}}", caseData.getCaseId());
         initialLM04Map.put("{{LM04_PTIURN_Number}}", cm01Map.get("CM01_PTIURN_Number"));
         initialLM04Map.put("{{LM04_Force}}", cm01Map.get("DCF_Force"));
         initialLM04Map.put("{{LM04_Unit}}", cm01Map.get("DCF_Unit"));
         initialLM04Map.put("{{LM04_Year}}", cm01Map.get("DCF_Year"));
         initialLM04Map.put("{{LM04_itemId}}",generateUppercaseAlphaNumeric(12));
+        initialLM04Map.put("{{LM04_Dcf_itemId}}",generateUppercaseAlphaNumeric(12));
         initialLM04Map.put("{{FirstName}}",firstName());
         initialLM04Map.put("{{MiddleName}}",middleName());
         initialLM04Map.put("{{Surname}}",lastName());
+        initialLM04Map.put("{{AddressLin1}}",buildingNumber());
+        initialLM04Map.put("{{AddressLin2}}",streetAddress());
+        initialLM04Map.put("{{AddressLin3}}",cityName());
         initialLM04Map.put("{{LM04_CaseOffenceId}}", cm01Map.get("CM01_CaseOffenceId"));
         initialLM04Map.put("{{LM04_Con_ShoulderNo}}", cm01Map.get("CM01_Con_ShoulderNo"));
+
 
         switch (type.toLowerCase()) {
             case "witness":
@@ -65,8 +69,7 @@ public class DCFPayloadBuilderForLM04 extends JsonReplacer {
             case "witness details":
                 initialLM04Map.put("{{LM04_WitnessDetailsRef_1}}", cm01Map.get("CM01_WitnessDetailsRef_1"));
                 break;
-
-            case "victim":
+            case "dcf victim":
                 initialLM04Map.put("{{LM04_VictimRef_1}}", cm01Map.get("CM01_VictimRef_1"));
                 break;
             case "victim 2":
@@ -103,6 +106,7 @@ public class DCFPayloadBuilderForLM04 extends JsonReplacer {
         }
         return applyReplacements(payloadFileName, initialLM04Map);
     }
+
 
 }
 

@@ -13,6 +13,11 @@ import java.util.Map;
 
 public class CommonService extends BaseService {
 
+    public void caseCreateAuthToken(ScenarioContext context) {
+        HttpResponseWrapper responseWrapper = service.sendRequest(caseCreateAuthRequest(context));
+        context.set("Case-Create-Auth-Values", responseWrapper.getBody());
+    }
+
     public void createCmsAuthToken(ScenarioContext context) {
         HttpResponseWrapper responseWrapper = service.sendRequest(authRequestParams(context));
         context.set("Cms-Auth-Values", responseWrapper.getBody());
@@ -21,6 +26,18 @@ public class CommonService extends BaseService {
     public boolean isDDEIHealthy() {
         HttpResponseWrapper responseWrapper = service.sendRequest(healthCheck());
         return responseWrapper.getStatusCode()==HttpStatus.SC_OK;
+    }
+
+    private HttpClientBuilder caseCreateAuthRequest(ScenarioContext context) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("CASE_CREATE_AUTH_URL"))
+                .endpoint("/api/authenticate")
+                .addHeaders(caseCreateAuthHeaders())
+                .addFormParams(caseCreateFormData(context))
+                .method("POST")
+                .retry(0)
+                .resourceName("caseCreateService")
+                .build();
     }
 
     private HttpClientBuilder authRequestParams(ScenarioContext context) {
@@ -44,6 +61,23 @@ public class CommonService extends BaseService {
                 .retry(1)
                 .resourceName("healthCheck")
                 .build();
+    }
+
+    private Map<String, String> caseCreateAuthHeaders() {
+        return Map.of(
+                "x-functions-key", EnvConfig.get("CASE_CREATE_XFUN_KEY"),
+                "Accept", "application/json",
+                "Content-Type", "application/x-www-form-urlencoded"
+        );
+    }
+
+    private Map<String, String> caseCreateFormData(ScenarioContext context) {
+        String username = EnvConfig.getEnv("CPS_USER") + context.getAsString("envSuffix");
+        String password = SecurePassCode.decode(EnvConfig.getEnv("PASSWORD"));
+        return Map.of(
+                "username", username,
+                "password", password
+        );
     }
 
 

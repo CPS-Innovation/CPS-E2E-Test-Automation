@@ -26,6 +26,7 @@ public class TWIFPayloadBuilderForCM01 extends JsonReplacer {
 
             Map.entry("{{CM01_itemId}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_PTIURN_Number}}", fiveDigitNumber()),
+            Map.entry("{{CM01_ASN_Number}}", elevenDigitNumber()),
             Map.entry("{{CM01_Suspect_UniqueId}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_CaseOffenceId}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_Officer_UniqueId}}", generateUppercaseAlphaNumeric(12)),
@@ -37,7 +38,17 @@ public class TWIFPayloadBuilderForCM01 extends JsonReplacer {
             Map.entry("{{DEF_FirstName}}", firstName()),
             Map.entry("{{DEF_Surname}}",lastName()),
             Map.entry("{{CM01_PCD_Request_Date}}", pcdRequestDate()),
-            Map.entry("{{CM01_PCD_Decision_By_Date}}", pcdDecisionByDate())
+            Map.entry("{{CM01_PCD_Decision_By_Date}}", pcdDecisionByDate()),
+            Map.entry("{{DEF_Building_number}}", buildingNumber()),
+            Map.entry("{{DEF_Street_Address}}", streetAddress()),
+            Map.entry("{{DEF_City}}", cityName()),
+            Map.entry("{{DEF_Mobile}}", mobilePhone()),
+            Map.entry("{{DEF_HomePhone}}", homePhone()),
+            Map.entry("{{DEF_Email}}", email()),
+            Map.entry("{{CM01_Ser_ShoulderNo}}", generateUppercaseAlphaNumeric(6)),
+            Map.entry("{{CM01_Ser_PersonId}}", generateUppercaseAlphaNumeric(10)),
+            Map.entry("{{CM01_Con_ShoulderNo}}", generateUppercaseAlphaNumeric(6)),
+            Map.entry("{{CM01_Con_PersonId}}", generateUppercaseAlphaNumeric(10))
     );
 
     public TWIFPayloadBuilderForCM01() throws IOException {

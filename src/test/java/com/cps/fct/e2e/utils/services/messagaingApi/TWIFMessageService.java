@@ -24,7 +24,7 @@ public class TWIFMessageService extends BaseService {
     }
 
     private  void send(String payload, String messageType) {
-           service.sendRequest(requestParams(payload, messageType));
+        service.sendRequest(requestParams(payload, messageType));
     }
 
     private HttpClientBuilder requestParams(String payloadInString, String messageType) {

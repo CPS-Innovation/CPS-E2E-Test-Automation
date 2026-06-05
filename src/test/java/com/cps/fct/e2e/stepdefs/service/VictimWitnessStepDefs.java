@@ -4,6 +4,7 @@ import com.cps.fct.e2e.model.VictimWitnessCMSContact;
 import com.cps.fct.e2e.model.VictimWitnessDetails;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
 import com.cps.fct.e2e.utils.httpClient.HttpResponseWrapper;
+import com.cps.fct.e2e.utils.services.ddei.CommonService;
 import com.cps.fct.e2e.utils.services.ddei.CaseService;
 import com.cps.fct.e2e.utils.services.ddei.WitnessService;
 import com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VcaPersonalDetails;
@@ -40,6 +41,9 @@ public class VictimWitnessStepDefs {
     @Inject
     private ScenarioContext context;
 
+    @Inject
+    private CommonService service;
+
     public VictimWitnessStepDefs() {
     }
 
@@ -56,6 +60,7 @@ public class VictimWitnessStepDefs {
 
     @Given("witness and victim details are available")
     public void witnessAndVictimDetailsAreAvailable() {
+        service.createCmsAuthToken(context);
         HttpResponseWrapper response = witnessService.listWitnessVictimDetails(context.get("caseId"));
         witnessService.persistVictimWitnessDetails(response, context);
 

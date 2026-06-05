@@ -1,4 +1,4 @@
-package com.cps.fct.e2e.utils.payloadBuilders.dcf;
+package com.cps.fct.e2e.utils.payloadBuilders;
 
 import com.cps.fct.e2e.utils.common.JsonReplacer;
 import com.cps.fct.e2e.utils.common.JsonUtils;
@@ -9,7 +9,7 @@ import java.util.Map;
 
 import static com.cps.fct.e2e.utils.common.FakerUtils.*;
 
-public class DCFPayloadBuilderForCM01 extends JsonReplacer {
+public class PayloadBuilderForCM01 extends JsonReplacer {
 
     JsonUtils jsonUtils = new JsonUtils();
     private final Map<String, String> caseWithChargeMap = Map.ofEntries(
@@ -21,6 +21,15 @@ public class DCFPayloadBuilderForCM01 extends JsonReplacer {
             Map.entry("{{DCF_SecondLevel}}", jsonUtils.getMetaDataKeyValue("dcf", "SecondLevel")),
             Map.entry("{{DCF_ThirdLevel}}", jsonUtils.getMetaDataKeyValue("dcf", "ThirdLevel")),
             Map.entry("{{DCF_BottomLevel}}", jsonUtils.getMetaDataKeyValue("dcf", "BottomLevel")),
+
+            Map.entry("{{TWIF_Force}}", jsonUtils.getMetaDataKeyValue("twif", "Force")),
+            Map.entry("{{TWIF_Unit}}", jsonUtils.getMetaDataKeyValue("twif", "Unit")),
+            Map.entry("{{TWIF_Year}}", jsonUtils.getMetaDataKeyValue("twif", "Year")),
+
+            Map.entry("{{TWIF_TopLevel}}", jsonUtils.getMetaDataKeyValue("twif", "TopLevel")),
+            Map.entry("{{TWIF_SecondLevel}}", jsonUtils.getMetaDataKeyValue("twif", "SecondLevel")),
+            Map.entry("{{TWIF_ThirdLevel}}", jsonUtils.getMetaDataKeyValue("twif", "ThirdLevel")),
+            Map.entry("{{TWIF_BottomLevel}}", jsonUtils.getMetaDataKeyValue("twif", "BottomLevel")),
 
             Map.entry("{{CM01_itemId}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_PTIURN_Number}}", fiveDigitNumber()),
@@ -85,12 +94,14 @@ public class DCFPayloadBuilderForCM01 extends JsonReplacer {
             Map.entry("{{DEF_Mobile}}", mobilePhone()),
             Map.entry("{{DEF_HomePhone}}", homePhone()),
             Map.entry("{{DEF_Email}}", email())
+
+
     );
 
-    public DCFPayloadBuilderForCM01() throws IOException {
+    public PayloadBuilderForCM01() throws IOException {
     }
 
-    public String generateDcfCM01PayloadWithValues(String payloadFileName, ScenarioContext context) throws IOException {
+    public String generateCM01PayloadWithValues(String payloadFileName, ScenarioContext context) throws IOException {
         String modifiedJson = applyReplacements(payloadFileName, caseWithChargeMap);
         context.set("CM01ModifiedValues", removeCurlyBracesFromKeys(caseWithChargeMap));
         return modifiedJson;

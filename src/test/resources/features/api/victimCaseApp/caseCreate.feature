@@ -7,7 +7,6 @@ Feature: sample
     And add "victim" using "LM04" for the case
     And add "witness" using "LM04" for the case
 
-
   Scenario:Sample to VCA onboard
     Given witness and victim details are available
     And the "victimId" is onboarded to VCA

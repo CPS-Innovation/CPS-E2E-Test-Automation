@@ -25,16 +25,6 @@ public class CaseCreateService extends BaseService{
     @Inject
     PayloadBuilderForLM04 LM04;
 
-//    @Inject
-//    DCFPayloadBuilderForLM04 dcfLM04;
-//
-//    @Inject
-//    TWIFPayloadBuilderForCM01 twifCM01;
-//
-//    @Inject
-//    TWIFPayloadBuilderForLM04 twifLM04;
-
-
     public HttpResponseWrapper cm01WithCaseDetails(File caseFile, String messageType, ScenarioContext context) throws IOException {
         String payloadForDefendantAndCharge = Files.readString(caseFile.toPath());
         String modifiedRequestJson = CM01.generateCM01PayloadWithValues(payloadForDefendantAndCharge, context);
@@ -69,7 +59,6 @@ public class CaseCreateService extends BaseService{
     }
 
     private HttpClientBuilder getCaseDetails(String caseCreateRequestId) throws InterruptedException {
-//        Thread.sleep(90000);
         return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("CASE_CREATE_API"))
                 .endpoint(format("/api/request/%s",caseCreateRequestId))
@@ -88,12 +77,6 @@ public class CaseCreateService extends BaseService{
 
     public HttpResponseWrapper lm04AddVictimWitness(File victimWitness, String messageType, ScenarioContext context) throws IOException {
         String payloadForNewVictimWitness = Files.readString(victimWitness.toPath());
-//        sendLM04(LM04.generateLM04PayloadWithValues(messageType, payloadForNewVictimWitness, context), messageType);
-//        return null;
-//
-//        sendLM04(LM04.generateLM04PayloadWithValues(messageType, payloadForNewVictimWitness, context), messageType);
-//        return null;
-
         String modifiedRequestJson = LM04.generateLM04PayloadWithValues(messageType, payloadForNewVictimWitness, context);
         context.set("modifiedRequestPayload", modifiedRequestJson);
         return sendLM04(modifiedRequestJson, messageType);
@@ -124,9 +107,6 @@ public class CaseCreateService extends BaseService{
         context.set("lm04Success", caseResponse.isSuccess());
         context.set("lm04RequestId", caseResponse.getRequestId());
     }
-
-
-
 
 }
 

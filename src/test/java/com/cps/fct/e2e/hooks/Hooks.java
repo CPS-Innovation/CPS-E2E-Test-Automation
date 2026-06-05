@@ -58,20 +58,11 @@ public class Hooks {
     @Before(order = 1)
     public void beforeScenario(Scenario scenario) {
         RestAssuredConfig.configure();
-
         setSuffixBasedOnCaseTypeInEnv(scenario);
 
-//        setSuffixBasedOnTag(scenario);
-
-//        service.isDDEIHealthy();
-
         if (service.isDDEIHealthy()) {
-
             service.caseCreateAuthToken(context);
-
-//            service.createCmsAuthToken(context);
         }
-
 
         isUIScenario = scenario.getSourceTagNames().contains("@ui");
         if (isUIScenario) {
@@ -132,13 +123,6 @@ public class Hooks {
             context.set("caseType", caseTypeValue);
             context.set("envSuffix", suffix);
         }
-
-
-
-
-
-
-
 
 }
 

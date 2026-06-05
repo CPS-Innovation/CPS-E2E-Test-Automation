@@ -16,7 +16,7 @@
     },
     "VictimWitness": {
       "Person": {
-        "UniqueId": "{{LM04_VictimRef_1}}",
+        "UniqueId": "{{LM04_WitnessRef_1}}",
         "Name": {
           "Title": null,
           "GivenName": [
@@ -53,20 +53,12 @@
           }
         ]
       },
-      "TypeOfPerson": "VictimWitness",
-      "WitnessAndVictim": {
-        "Witness": {
-          "Occupation": "Civilian"
-        },
-        "Victim": {
-          "XOffenceId": [
-            "{{LM04_CaseOffenceId}}"
-          ],
-          "VPSStatus": {
-            "ResponseToVPSOffer": "Accepted",
-            "SchemeExplained": false
-          }
-        }
+      "TypeOfPerson": "Witness",
+      "Witness": {
+        "Officer": null,
+        "WitnessNeeds": null,
+        "WarnedByPolice": false,
+        "AvailabilityToAttendCourt": null
       },
       "LinkedSuspects": null
     }

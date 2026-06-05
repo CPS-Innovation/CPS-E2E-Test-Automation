@@ -27,7 +27,7 @@ public class DCFMessageService extends BaseService {
 
     public HttpResponseWrapper cm01WithADefendantCharge(File caseFile, String messageType, ScenarioContext context) throws IOException {
         String payloadForDefendantAndCharge = Files.readString(caseFile.toPath());
-        String modifiedRequestJson = forCM01.generateCM01PayloadWithValues(payloadForDefendantAndCharge, context);
+        String modifiedRequestJson = forCM01.generateDcfCM01PayloadWithValues(payloadForDefendantAndCharge, context);
         context.set("modifiedRequestPayload", modifiedRequestJson);
         return sendCM01(modifiedRequestJson, messageType);
     }
@@ -105,7 +105,6 @@ public class DCFMessageService extends BaseService {
     public void lmO4AddVictimWitness(File victimWitness, String messageType, ScenarioContext context) throws IOException {
         String payloadForNewVictimWitness = Files.readString(victimWitness.toPath());
         sendLM04(forLM04.generateLM04PayloadWithValues(messageType, payloadForNewVictimWitness, context), messageType);
-
 
     }
 

@@ -5,6 +5,7 @@ import com.cps.fct.e2e.utils.common.ScenarioContext;
 import com.cps.fct.e2e.utils.httpClient.HttpResponseWrapper;
 import com.cps.fct.e2e.utils.services.ddei.CaseService;
 import com.cps.fct.e2e.utils.services.messagaingApi.DCFMessageService;
+import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import org.picocontainer.annotations.Inject;
@@ -62,10 +63,6 @@ public class DCFMessageStepDefs {
     public void addNewVictimOrWitness(String caseDataType, String messageType) throws IOException {
         File caseDataFile = FileUtils.getValidatedFile(context.get("caseType"), messageType, caseDataType);
         messageService.lmO4AddVictimWitness(caseDataFile, caseDataType, context);
-
-
-
-
     }
 
     @And("a {string} is added with details using {word}")
@@ -73,4 +70,6 @@ public class DCFMessageStepDefs {
         File caseDataFile = FileUtils.getValidatedFile(context.get("caseType"), messageType, caseDataType);
         messageService.lmO4AddVictimWitness(caseDataFile, caseDataType, context);
     }
+
+
 }

@@ -2,10 +2,10 @@
   "WitnessOrVictim": {
     "ItemId": "{{LM04_itemId}}",
     "PTIURN": {
-      "Force": "{{LM04_Force}}",
-      "Unit": "{{LM04_Unit}}",
+      "Force": "{{DCF_Force}}",
+      "Unit": "{{DCF_Unit}}",
       "Number": "{{LM04_PTIURN_Number}}",
-      "Year": "{{LM04_Year}}"
+      "Year": "{{DCF_Year}}"
     },
     "UpdateStatus": {
       "VersionId": "1",
@@ -14,7 +14,7 @@
     },
     "VictimWitness": {
       "Person": {
-        "UniqueId": "{{LM04_VictimRef_1}}",
+        "UniqueId": "{{LM04_Victim_Witness_Ref}}",
         "Name": {
           "Title": "Mr",
           "GivenName": "{{FirstName}}",

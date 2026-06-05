@@ -56,12 +56,15 @@ public class Hooks {
     public void beforeScenario(Scenario scenario) {
         RestAssuredConfig.configure();
         setSuffixBasedOnTag(scenario);
+        service.isDDEIHealthy();
 
-        if (service.isDDEIHealthy()) {
-            service.createCmsAuthToken(context);
-        }
+//        if (service.isDDEIHealthy()) {
+//            service.createCmsAuthToken(context);
+//        }
 
         service.caseCreateAuthToken(context);
+
+
 
         isUIScenario = scenario.getSourceTagNames().contains("@ui");
         if (isUIScenario) {

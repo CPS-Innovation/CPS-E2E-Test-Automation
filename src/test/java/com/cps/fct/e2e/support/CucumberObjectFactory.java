@@ -6,6 +6,8 @@ import com.cps.fct.e2e.stepdefs.ui.PageObjects;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
 import com.cps.fct.e2e.utils.httpClient.DefaultHttpService;
 import com.cps.fct.e2e.utils.httpClient.HttpStatusValidator;
+import com.cps.fct.e2e.utils.payloadBuilders.PayloadBuilderForCM01;
+import com.cps.fct.e2e.utils.payloadBuilders.PayloadBuilderForLM04;
 import com.cps.fct.e2e.utils.payloadBuilders.dcf.DCFPayloadBuilderForCM01;
 import com.cps.fct.e2e.utils.payloadBuilders.dcf.DCFPayloadBuilderForLM04;
 import com.cps.fct.e2e.utils.payloadBuilders.twif.TWIFPayloadBuilderForCM01;
@@ -14,6 +16,7 @@ import com.cps.fct.e2e.utils.playwright.PlaywrightManager;
 import com.cps.fct.e2e.utils.services.ddei.CaseService;
 import com.cps.fct.e2e.utils.services.ddei.CommonService;
 import com.cps.fct.e2e.utils.services.ddei.WitnessService;
+import com.cps.fct.e2e.utils.services.messagaingApi.CaseCreateService;
 import com.cps.fct.e2e.utils.services.messagaingApi.DCFMessageService;
 import com.cps.fct.e2e.utils.services.messagaingApi.TWIFMessageService;
 import io.cucumber.core.backend.ObjectFactory;
@@ -33,6 +36,8 @@ public class CucumberObjectFactory implements ObjectFactory {
         delegate.addClass(ScenarioContext.class);
         delegate.addClass(DefaultHttpService.class);
         delegate.addClass(HttpStatusValidator.class);
+        delegate.addClass(PayloadBuilderForCM01.class);
+        delegate.addClass(PayloadBuilderForLM04.class);
         delegate.addClass(DCFMessageService.class);
         delegate.addClass(WitnessService.class);
         delegate.addClass(DCFPayloadBuilderForCM01.class);
@@ -42,6 +47,8 @@ public class CucumberObjectFactory implements ObjectFactory {
         delegate.addClass(PlaywrightManager.class);
         delegate.addClass(PlaywrightContext.class);
         delegate.addClass(PageObjects.class);
+        delegate.addClass(CaseCreateService.class);
+
         addedAllPageClass();
     }
 

@@ -25,11 +25,7 @@ public class TWIFMessageStepDefs {
 
     @Given("create TWIF case {string} for type {string}")
     public void createTWIFCaseForType(String messageType, String caseDataType) throws IOException {
-        File caseDataFile = FileUtils.getValidatedFile(
-                context.get("caseType"),
-                messageType,
-                caseDataType
-        );
+        File caseDataFile = FileUtils.getValidatedFile( context.get("caseType"), messageType, caseDataType);
         messageService.cm01WithADefendantCharge(caseDataFile, messageType, context);
         assertTWIFRequest(messageType);
         caseService.retryUntilCaseIsInCMS(context);

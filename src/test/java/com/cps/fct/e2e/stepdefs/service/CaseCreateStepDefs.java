@@ -25,11 +25,11 @@ public class CaseCreateStepDefs {
     @Inject
     private CaseCreateService messageService;
 
-    @Given("create {string} case using {string} for type {string}")
-    public void createCaseForType(String CaseType, String messageType, String caseDataType) throws IOException, InterruptedException
+    @Given("create new case using {string} for type {string}")
+    public void createCaseForType(String messageType, String caseDataType) throws IOException, InterruptedException
     {
         File caseDataFile = FileUtils.getValidatedFile( context.get("caseType"), messageType, caseDataType);
-        HttpResponseWrapper responseWrapper = messageService.cm01WithCaseDetails(CaseType,caseDataFile, messageType, context);
+        HttpResponseWrapper responseWrapper = messageService.cm01WithCaseDetails(caseDataFile, messageType, context);
         messageService.getCM01RequestId(responseWrapper, context);
         if ((Boolean) context.get("cm01Success") == true) {
             String caseId = null;

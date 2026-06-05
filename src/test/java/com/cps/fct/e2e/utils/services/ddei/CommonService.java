@@ -13,6 +13,11 @@ import java.util.Map;
 
 public class CommonService extends BaseService {
 
+    public boolean isDDEIHealthy() {
+        HttpResponseWrapper responseWrapper = service.sendRequest(healthCheck());
+        return responseWrapper.getStatusCode() == HttpStatus.SC_OK;
+    }
+
     public void caseCreateAuthToken(ScenarioContext context) {
         HttpResponseWrapper responseWrapper = service.sendRequest(caseCreateAuthRequest(context));
         context.set("Case-Create-Auth-Values", responseWrapper.getBody());
@@ -23,10 +28,6 @@ public class CommonService extends BaseService {
         context.set("Cms-Auth-Values", responseWrapper.getBody());
     }
 
-    public boolean isDDEIHealthy() {
-        HttpResponseWrapper responseWrapper = service.sendRequest(healthCheck());
-        return responseWrapper.getStatusCode()==HttpStatus.SC_OK;
-    }
 
     private HttpClientBuilder caseCreateAuthRequest(ScenarioContext context) {
         return new HttpClientBuilder.Builder()

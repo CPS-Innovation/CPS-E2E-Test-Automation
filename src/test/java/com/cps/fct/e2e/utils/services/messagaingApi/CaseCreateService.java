@@ -35,7 +35,7 @@ public class CaseCreateService extends BaseService{
 //    TWIFPayloadBuilderForLM04 twifLM04;
 
 
-    public HttpResponseWrapper cm01WithCaseDetails(String CaseType,File caseFile, String messageType, ScenarioContext context) throws IOException {
+    public HttpResponseWrapper cm01WithCaseDetails(File caseFile, String messageType, ScenarioContext context) throws IOException {
         String payloadForDefendantAndCharge = Files.readString(caseFile.toPath());
         String modifiedRequestJson = CM01.generateCM01PayloadWithValues(payloadForDefendantAndCharge, context);
         context.set("modifiedRequestPayload", modifiedRequestJson);

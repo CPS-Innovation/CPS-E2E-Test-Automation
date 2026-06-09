@@ -39,17 +39,18 @@
       },
       "PersonClassification": [
         {
-          "ClassificationType": "StatusInformation",
-          "ClassificationCode": "KeyWitness",
+          "ClassificationType": "TypeOfWitness",
+          "ClassificationCode": "Child",
+          "InternalCode": "C",
           "ClassificationValue": {
-            "ClassificationValueText": "Yes"
+            "ClassificationValueFlag": true
           }
         }
       ],
       "TypeOfPerson": "Witness",
       "DateOfBirth": "1970-08-03",
       "Witness": {
-        "Occupation": "Civillian"
+        "Occupation": "Student"
       }
     }
   }

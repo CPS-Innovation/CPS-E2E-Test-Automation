@@ -93,7 +93,16 @@ public class PayloadBuilderForCM01 extends JsonReplacer {
             Map.entry("{{DEF_City}}", cityName()),
             Map.entry("{{DEF_Mobile}}", mobilePhone()),
             Map.entry("{{DEF_HomePhone}}", homePhone()),
-            Map.entry("{{DEF_Email}}", email())
+            Map.entry("{{DEF_Email}}", email()),
+            Map.entry("{{Soli_Building_number}}", buildingNumber()),
+            Map.entry("{{Soli_Street_Address}}", streetAddress()),
+            Map.entry("{{Soli_HomePhone}}", homePhone()),
+            Map.entry("{{Soli_City}}", cityName()),
+            Map.entry("{{Police_Building_number}}", buildingNumber()),
+            Map.entry("{{Police_Street_Address}}", streetAddress()),
+            Map.entry("{{Police_HomePhone}}", homePhone()),
+            Map.entry("{{Police_City}}", cityName())
+
 
 
     );

@@ -63,6 +63,35 @@
           "Number": "{{CM01_ASN_Number}}",
           "CheckCharacter": "W"
         },
+        "DefenceSolicitor": {
+          "Firm": "{{Defender_Solicitor_Company}}",
+          "UniqueId": "{{CM01_SolicitorId}}",
+          "Name": {
+            "Title": "Mr",
+            "GivenName": "{{Solicitor_FirstName}}",
+            "FamilyName": "{{Solicitor_lastName}}"
+          },
+          "ContactDetails": {
+            "Address": {
+              "AddressLine": [
+                "{{Soli_Building_number}}",
+                "{{Soli_Street_Address}}",
+                "{{Soli_City}}"
+              ],
+              "Postcode": "AA1 1BB",
+              "Country": "UK"
+            },
+            "ContactNumber": [
+              {
+                "Number": {
+                  "TelNationalNumber": "{{Soli_HomePhone}}"
+                },
+                "TypeOfNumber": "work"
+              }
+            ],
+            "Email": "{{Solicitor_email}}"
+          }
+        },
         "ProposedCharge": [
           {
             "UniqueID": "{{CM01_CaseOffenceId}}",
@@ -134,6 +163,29 @@
           "GivenName": "{{PoliceOfficer_GivenName}}",
           "FamilyName": "{{PoliceOfficer_SurName}}"
         },
+        "ContactDetails": {
+          "Address": {
+            "AddressLine": [
+              "{{Police_Building_number}}",
+              "{{Police_Street_Address}}",
+              "{{Police_City}}"
+            ],
+            "Postcode": "NE1 1AB",
+            "Country": "UK"
+          },
+          "ContactNumber": [
+            {
+              "Number": {
+                "TelNationalNumber": "{{Police_HomePhone}}"
+              },
+              "TypeOfNumber": "work"
+            }
+          ],
+          "Email": "police.constable@police-station.uk",
+          "ContactPreferences": {
+            "PreferredMethod": "Work Tel"
+          }
+        },
         "Rank": "PC",
         "Station": "Surrey",
         "ShoulderNumber": "{{CM01_Ser_ShoulderNo}}"
@@ -144,6 +196,29 @@
         "Name": {
           "GivenName": "{{PoliceOfficer2_GivenName}}",
           "FamilyName": "{{PoliceOfficer2_Surname}}"
+        },
+        "ContactDetails": {
+          "Address": {
+            "AddressLine": [
+              "{{Police_Building_number}}",
+              "{{Police_Street_Address}}",
+              "{{Police_City}}"
+            ],
+            "Postcode": "NE1 1AB",
+            "Country": "UK"
+          },
+          "ContactNumber": [
+            {
+              "Number": {
+                "TelNationalNumber": "{{Police_HomePhone}}"
+              },
+              "TypeOfNumber": "work"
+            }
+          ],
+          "Email": "police.constable@police-station.uk",
+          "ContactPreferences": {
+            "PreferredMethod": "Work Tel"
+          }
         },
         "Rank": "PC",
         "Station": "Surrey",

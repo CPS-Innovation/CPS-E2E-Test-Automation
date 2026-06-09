@@ -365,7 +365,8 @@ public class VictimWitnessStepDefs {
     @Then("the cms case details should be equal as in cms classic")
     public void assertCaseContactDetailsInVCA() {
         String caseId = context.get("caseId");
-        String modifiedRequestJson = context.get("modifiedRequestPayload");
+        String modifiedRequestJson = context.get("modifiedCM01RequestPayload");
+//        System.out.println(modifiedRequestJson);
         HttpResponseWrapper response = witnessService.listVictimWitnessCMSContact(caseId);
 
         VictimWitnessCMSContact expectedOfficerInCaseContact =
@@ -454,16 +455,16 @@ public class VictimWitnessStepDefs {
 
     private VictimWitnessCMSContact buildExpectedOfficerInCaseContact(String requestJson) {
         List<String> givenName = JsonPath.read(requestJson,
-                "$.PreChargeDecisionRequest.CaseContacts[?(@.Officer.PoliceOfficerRank == 'PoliceUnit')].Name.GivenName[0].Value");
+                "$.PreChargeDecisionRequest.PCDPoliceContactDetails.OfficerCompleting.Name.GivenName");
 
         List<String> familyName = JsonPath.read(requestJson,
-                "$.PreChargeDecisionRequest.CaseContacts[?(@.Officer.PoliceOfficerRank == 'PoliceUnit')].Name.FamilyName.Value");
+                "$.PreChargeDecisionRequest.PCDPoliceContactDetails.OfficerCompleting.Name.FamilyName");
 
         List<String> phone = JsonPath.read(requestJson,
-                "$.PreChargeDecisionRequest.CaseContacts[?(@.Officer.PoliceOfficerRank == 'PoliceUnit')].ContactDetails.ContactNumber[0].Number.TelNationalNumber");
+                "$.PreChargeDecisionRequest.PCDPoliceContactDetails.OfficerCompleting.ContactDetails.ContactNumber[0].Number.TelNationalNumber");
 
         List<String> email = JsonPath.read(requestJson,
-                "$.PreChargeDecisionRequest.CaseContacts[?(@.Officer.PoliceOfficerRank == 'PoliceUnit')].ContactDetails.Email");
+                "$.PreChargeDecisionRequest.PCDPoliceContactDetails.OfficerCompleting.ContactDetails.Email");
 
         return VictimWitnessCMSContact.builder()
                 .contactType("OFFICER_IN_CASE")
@@ -493,10 +494,10 @@ public class VictimWitnessStepDefs {
 
     private VictimWitnessCMSContact buildExpectedDefenceSolicitorContact(String requestJson) {
         String givenName = JsonPath.read(requestJson,
-                "$.PreChargeDecisionRequest.Suspect[0].DefenceSolicitor.Name.GivenName[0].Value");
+                "$.PreChargeDecisionRequest.Suspect[0].DefenceSolicitor.Name.GivenName");
 
         String familyName = JsonPath.read(requestJson,
-                "$.PreChargeDecisionRequest.Suspect[0].DefenceSolicitor.Name.FamilyName.Value");
+                "$.PreChargeDecisionRequest.Suspect[0].DefenceSolicitor.Name.FamilyName");
         return VictimWitnessCMSContact.builder()
                 .contactType("DEFENCE_SOLICITOR")
                 .name(familyName + ", " + givenName)

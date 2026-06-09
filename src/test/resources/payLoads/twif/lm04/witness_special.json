@@ -39,10 +39,10 @@
       },
       "PersonClassification": [
         {
-          "ClassificationType": "StatusInformation",
-          "ClassificationCode": "KeyWitness",
+          "ClassificationType": "TypeOfWitness",
+          "ClassificationCode": "Special",
           "ClassificationValue": {
-            "ClassificationValueText": "Yes"
+            "ClassificationValueFlag": true
           }
         }
       ],

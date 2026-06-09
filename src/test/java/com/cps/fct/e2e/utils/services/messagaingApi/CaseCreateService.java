@@ -28,7 +28,7 @@ public class CaseCreateService extends BaseService{
     public HttpResponseWrapper cm01WithCaseDetails(File caseFile, String messageType, ScenarioContext context) throws IOException {
         String payloadForDefendantAndCharge = Files.readString(caseFile.toPath());
         String modifiedRequestJson = CM01.generateCM01PayloadWithValues(payloadForDefendantAndCharge, context);
-        context.set("modifiedRequestPayload", modifiedRequestJson);
+        context.set("modifiedCM01RequestPayload", modifiedRequestJson);
         return sendCM01(modifiedRequestJson, messageType);
     }
         private HttpResponseWrapper sendCM01 (String payload, String messageType) {
@@ -78,7 +78,7 @@ public class CaseCreateService extends BaseService{
     public HttpResponseWrapper lm04AddVictimWitness(File victimWitness, String messageType, ScenarioContext context) throws IOException {
         String payloadForNewVictimWitness = Files.readString(victimWitness.toPath());
         String modifiedRequestJson = LM04.generateLM04PayloadWithValues(messageType, payloadForNewVictimWitness, context);
-        context.set("modifiedRequestPayload", modifiedRequestJson);
+        context.set("modifiedLM04RequestPayload", modifiedRequestJson);
         return sendLM04(modifiedRequestJson, messageType);
 
     }

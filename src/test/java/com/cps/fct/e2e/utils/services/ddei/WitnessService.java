@@ -154,7 +154,6 @@ public class WitnessService extends BaseService {
                 .build();
     }
 
-    // {{StagingWmUrl}}/api/cases/{{DCFCaseID}}/contacts
     private HttpClientBuilder getListVictimWitnessCMSContact(String caseId) {
         return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("DDEI_HOST"))

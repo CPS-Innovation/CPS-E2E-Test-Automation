@@ -37,6 +37,15 @@
         ],
         "Email": "victim_test@email.co.gov.uk"
       },
+      "PersonClassification": [
+        {
+          "ClassificationType": "StatusInformation",
+          "ClassificationCode": "KeyWitness",
+          "ClassificationValue": {
+            "ClassificationValueText": "Yes"
+          }
+        }
+      ],
       "TypeOfPerson": "VictimWitness",
       "DateOfBirth": "1970-08-03",
       "WitnessAndVictim": {

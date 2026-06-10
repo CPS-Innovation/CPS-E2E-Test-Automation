@@ -36,7 +36,6 @@ Feature: DCF-VCA-API-S1_S2 - Add personal and contact details for all category t
     Given witness and victim details are available
     And the "witnessId" is onboarded to VCA
     And the "victimId" is onboarded to VCA
-
 #    And the "witnessChildId" is onboarded to VCA
 #    And the "witnessExpertId" is onboarded to VCA
 #    And the "witnessPrisonerId" is onboarded to VCA

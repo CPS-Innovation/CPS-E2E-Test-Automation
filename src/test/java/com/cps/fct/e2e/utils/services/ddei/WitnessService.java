@@ -102,6 +102,8 @@ public class WitnessService extends BaseService {
                 "$[?(@.isWitnessAndVictim==false && @.isProfessional==true)].witnessId");
         List<String> witnessIntimidatedId = extractFromJsonToList(body,
                 "$[?(@.isWitnessAndVictim==false && @.isIntimidated==true)].witnessId");
+        List<String> witnessSpecialId = extractFromJsonToList(body,
+                "$[?(@.isWitnessAndVictim==false && @.isSpecialNeeds==true)].witnessId");
         List<String> victimId = extractFromJsonToList(body,
                 "$[?(@.isWitnessAndVictim==true && @.isKeyWitness=='Yes')].witnessId");
         List<String> victimChildId = extractFromJsonToList(body,
@@ -120,6 +122,8 @@ public class WitnessService extends BaseService {
                 "$[?(@.isWitnessAndVictim==true && @.isProfessional==true)].witnessId");
         List<String> victimIntimidatedId = extractFromJsonToList(body,
                 "$[?(@.isWitnessAndVictim==true && @.isIntimidated==true)].witnessId");
+        List<String> victimSpecialId = extractFromJsonToList(body,
+                "$[?(@.isWitnessAndVictim==true && @.isSpecialNeeds==true)].witnessId");
 
         Map<String, List<String>> witnessVictimMapIds = new HashMap<>();
         witnessVictimMapIds.put("witnessId", witnessId);
@@ -131,6 +135,7 @@ public class WitnessService extends BaseService {
         witnessVictimMapIds.put("witnessPoliceId", witnessPoliceId);
         witnessVictimMapIds.put("witnessProfessionalId", witnessProfessionalId);
         witnessVictimMapIds.put("witnessIntimidatedId", witnessIntimidatedId);
+        witnessVictimMapIds.put("witnessSpecialId", witnessSpecialId);
 
         witnessVictimMapIds.put("victimId", victimId);
         witnessVictimMapIds.put("victimChildId", victimChildId);
@@ -141,6 +146,7 @@ public class WitnessService extends BaseService {
         witnessVictimMapIds.put("victimPoliceId", victimPoliceId);
         witnessVictimMapIds.put("victimProfessionalId", victimProfessionalId);
         witnessVictimMapIds.put("victimIntimidatedId", victimIntimidatedId);
+        witnessVictimMapIds.put("victimSpecialId", victimSpecialId);
         context.set("witnessVictimMapIds", witnessVictimMapIds);
     }
 

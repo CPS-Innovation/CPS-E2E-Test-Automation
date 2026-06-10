@@ -49,10 +49,10 @@
         "DateOfBirth": "1985-02-10",
         "PersonClassification": [
           {
-            "ClassificationType": "StatusInformation",
-            "ClassificationCode": "KeyWitness",
+            "ClassificationType": "TypeOfWitness",
+            "ClassificationCode": "Expert",
             "ClassificationValue": {
-              "ClassificationValueText": "Yes"
+              "ClassificationValueFlag": true
             }
           }
         ]

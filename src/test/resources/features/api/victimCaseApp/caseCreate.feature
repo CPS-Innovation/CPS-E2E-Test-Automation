@@ -14,14 +14,36 @@ Feature: sample
     And add "witness special" using "LM04" for the case
     And add "witness prisoner" using "LM04" for the case
     And add "witness interpreter" using "LM04" for the case
+    And add "victim" using "LM04" for the case
+    And add "victim child" using "LM04" for the case
+    And add "victim expert" using "LM04" for the case
+    And add "victim interpreter" using "LM04" for the case
+    And add "victim intimidated" using "LM04" for the case
+    And add "victim police" using "LM04" for the case
+    And add "victim prisoner" using "LM04" for the case
+    And add "victim professional" using "LM04" for the case
+    And add "victim special" using "LM04" for the case
+    And add "victim vulnerable" using "LM04" for the case
+
 
   Scenario:Sample to VCA onboard
     Given witness and victim details are available
     And the "witnessId" is onboarded to VCA
-#    And the "victimId" is onboarded to VCA
-#    When the "witnessId" personal details are added to CMS
-#    And the "victimId" personal details are added to CMS
-#    When the "witnessId" personal details are added to VCA
-#    And the "victimId" personal details are added to VCA
-#    Then the "witnessId" personal details are verified in CMS and VCA
-#    And the "victimId" personal details are verified in CMS and VCA
+    And the "victimId" is onboarded to VCA
+    And the "witnessChildId" is onboarded to VCA
+    And the "witnessExpertId" is onboarded to VCA
+    And the "witnessPrisonerId" is onboarded to VCA
+    And the "witnessInterpreterId" is onboarded to VCA
+    And the "witnessVulnerableId" is onboarded to VCA
+    And the "witnessPoliceId" is onboarded to VCA
+    And the "witnessProfessionalId" is onboarded to VCA
+    And the "witnessIntimidatedId" is onboarded to VCA
+    And the "victimChildId" is onboarded to VCA
+    And the "victimExpertId" is onboarded to VCA
+    And the "victimPrisonerId" is onboarded to VCA
+    And the "victimInterpreterId" is onboarded to VCA
+    And the "victimVulnerableId" is onboarded to VCA
+    And the "victimPoliceId" is onboarded to VCA
+    And the "victimProfessionalId" is onboarded to VCA
+    And the "victimIntimidatedId" is onboarded to VCA
+    And the "victimSpecialId" is onboarded to VCA

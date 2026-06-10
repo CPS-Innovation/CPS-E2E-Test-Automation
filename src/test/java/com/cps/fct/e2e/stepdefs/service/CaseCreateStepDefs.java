@@ -67,17 +67,7 @@ public class CaseCreateStepDefs {
     public void addNewVictimOrWitness(String caseDataType, String messageType) throws IOException, InterruptedException {
         File caseDataFile = FileUtils.getValidatedFile( context.get("caseType"), messageType, caseDataType);
         HttpResponseWrapper responseWrapper = messageService.lm04AddVictimWitness(caseDataFile, messageType, context);
-
         messageService.getLM04RequestId(responseWrapper, context);
-
-        Boolean status = (Boolean) context.get("lm04Success");
-        System.out.println(status);
-        String lm04reqId = context.get("lm04RequestId");
-        System.out.println(lm04reqId);
-
-
-
-
         if ((Boolean) context.get("lm04Success") == true) {
             String caseId = null;
             String caseUrn = null;
@@ -91,7 +81,7 @@ public class CaseCreateStepDefs {
                 caseUrn = context.get("caseUrn");
 
                 if (caseId == null && caseUrn == null) {
-                    Thread.sleep(2000); // wait before retrying
+                    Thread.sleep(3000); // wait before retrying
                 }
             }
 

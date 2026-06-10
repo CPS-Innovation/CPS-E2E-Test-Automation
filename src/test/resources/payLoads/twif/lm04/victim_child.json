@@ -35,7 +35,7 @@
             "TypeOfNumber": "home"
           }
         ],
-        "Email": "Witness_test@email.co.gov.uk"
+        "Email": "victim_test@email.co.gov.uk"
       },
       "PersonClassification": [
         {
@@ -46,10 +46,15 @@
           }
         }
       ],
-      "TypeOfPerson": "Witness",
+      "TypeOfPerson": "VictimWitness",
       "DateOfBirth": "1970-08-03",
-      "Witness": {
-        "Occupation": "Student"
+      "WitnessAndVictim": {
+        "Witness": {
+          "Occupation": "Civillian"
+        },
+        "Victim": {
+          "dummy": "Head"
+        }
       }
     }
   }

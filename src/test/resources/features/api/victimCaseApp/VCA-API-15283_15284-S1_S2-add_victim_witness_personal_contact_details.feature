@@ -11,32 +11,29 @@ Feature: VCA-API-S1_S2 - Add personal and contact details for all category types
 
     Given create new case using "CM01" for type "single defendant multiple offence"
     And add "witness" using "LM04" for the case
-    And add "witness child" using "LM04" for the case
-    And add "witness police" using "LM04" for the case
-    And add "witness intimidated" using "LM04" for the case
-    And add "witness vulnerable" using "LM04" for the case
-    And add "witness professional" using "LM04" for the case
-    And add "witness expert" using "LM04" for the case
-    And add "witness special" using "LM04" for the case
-    And add "witness prisoner" using "LM04" for the case
-    And add "witness interpreter" using "LM04" for the case
 
-#    And a "witness child" is added using LM04
-#    And a "witness police" is added using LM04
-#    And a "witness intimidated" is added using LM04
-#    And a "witness vulnerable" is added using LM04
-#    And a "witness professional" is added using LM04
-#    And a "witness expert" is added using LM04
-#    And a "witness prisoner" is added using LM04
-#    And a "witness interpreter" is added using LM04
-#    And a "victim child" is added using LM04
-#    And a "victim vulnerable" is added using LM04
-#    And a "victim intimidated" is added using LM04
-#    And a "victim professional" is added using LM04
-#    And a "victim expert" is added using LM04
-#    And a "victim prisoner" is added using LM04
-#    And a "victim interpreter" is added using LM04
-#    And a "victim police" is added using LM04
+    And add "victim" using "LM04" for the case
+
+#    And add "witness child" using "LM04" for the case
+#    And add "witness police" using "LM04" for the case
+#    And add "witness intimidated" using "LM04" for the case
+#    And add "witness vulnerable" using "LM04" for the case
+#    And add "witness professional" using "LM04" for the case
+#    And add "witness expert" using "LM04" for the case
+#    And add "witness special" using "LM04" for the case
+#    And add "witness prisoner" using "LM04" for the case
+#    And add "witness interpreter" using "LM04" for the case
+
+
+#    And add "victim child" using "LM04" for the case
+#    And add "victim expert" using "LM04" for the case
+#    And add "victim interpreter" using "LM04" for the case
+#    And add "victim intimidated" using "LM04" for the case
+#    And add "victim police" using "LM04" for the case
+#    And add "victim prisoner" using "LM04" for the case
+#    And add "victim professional" using "LM04" for the case
+#    And add "victim special" using "LM04" for the case
+#    And add "victim vulnerable" using "LM04" for the case
 
   @addPersonalAndContactDetailsForAllWitnessAndVictimType
   Scenario: Add witness title, preferred name, date of birth, gender, ethnicity, disability or access needs and previous convictions details
@@ -53,6 +50,8 @@ Feature: VCA-API-S1_S2 - Add personal and contact details for all category types
 #    And the "witnessPoliceId" is onboarded to VCA
 #    And the "witnessProfessionalId" is onboarded to VCA
 #    And the "witnessIntimidatedId" is onboarded to VCA
+#    And the "witnessSpecialId" is onboarded to VCA
+#
 #    And the "victimChildId" is onboarded to VCA
 #    And the "victimExpertId" is onboarded to VCA
 #    And the "victimPrisonerId" is onboarded to VCA
@@ -61,6 +60,7 @@ Feature: VCA-API-S1_S2 - Add personal and contact details for all category types
 #    And the "victimPoliceId" is onboarded to VCA
 #    And the "victimProfessionalId" is onboarded to VCA
 #    And the "victimIntimidatedId" is onboarded to VCA
+#    And the "victimSpecialId" is onboarded to VCA
 
     When the "witnessId" personal details are added to CMS
     And the "victimId" personal details are added to CMS
@@ -73,6 +73,8 @@ Feature: VCA-API-S1_S2 - Add personal and contact details for all category types
 #    And the "witnessPoliceId" personal details are added to CMS
 #    And the "witnessProfessionalId" personal details are added to CMS
 #    And the "witnessIntimidatedId" personal details are added to CMS
+#    And the "witnessSpecialId" personal details are added to CMS
+#
 #    And the "victimChildId" personal details are added to CMS
 #    And the "victimExpertId" personal details are added to CMS
 #    And the "victimPrisonerId" personal details are added to CMS
@@ -81,6 +83,7 @@ Feature: VCA-API-S1_S2 - Add personal and contact details for all category types
 #    And the "victimPoliceId" personal details are added to CMS
 #    And the "victimProfessionalId" personal details are added to CMS
 #    And the "victimIntimidatedId" personal details are added to CMS
+#    And the "victimSpecialId" personal details are added to CMS
 
     When the "witnessId" personal details are added to VCA
     And the "victimId" personal details are added to VCA
@@ -93,6 +96,8 @@ Feature: VCA-API-S1_S2 - Add personal and contact details for all category types
 #    And the "witnessPoliceId" personal details are added to VCA
 #    And the "witnessProfessionalId" personal details are added to VCA
 #    And the "witnessIntimidatedId" personal details are added to VCA
+#    And the "witnessSpecialId" personal details are added to VCA
+#
 #    And the "victimChildId" personal details are added to VCA
 #    And the "victimExpertId" personal details are added to VCA
 #    And the "victimPrisonerId" personal details are added to VCA
@@ -101,6 +106,7 @@ Feature: VCA-API-S1_S2 - Add personal and contact details for all category types
 #    And the "victimPoliceId" personal details are added to VCA
 #    And the "victimProfessionalId" personal details are added to VCA
 #    And the "victimIntimidatedId" personal details are added to VCA
+#    And the "victimSpecialId" personal details are added to VCA
 
     Then the "witnessId" personal details are verified in CMS and VCA
     And the "victimId" personal details are verified in CMS and VCA
@@ -113,6 +119,8 @@ Feature: VCA-API-S1_S2 - Add personal and contact details for all category types
 #    And the "witnessPoliceId" personal details are verified in CMS and VCA
 #    And the "witnessProfessionalId" personal details are verified in CMS and VCA
 #    And the "witnessIntimidatedId" personal details are verified in CMS and VCA
+#    And the "witnessSpecialId" personal details are verified in CMS and VCA
+#
 #    And the "victimChildId" personal details are verified in CMS and VCA
 #    And the "victimExpertId" personal details are verified in CMS and VCA
 #    And the "victimPrisonerId" personal details are verified in CMS and VCA
@@ -121,3 +129,4 @@ Feature: VCA-API-S1_S2 - Add personal and contact details for all category types
 #    And the "victimPoliceId" personal details are verified in CMS and VCA
 #    And the "victimProfessionalId" personal details are verified in CMS and VCA
 #    And the "victimIntimidatedId" personal details are verified in CMS and VCA
+#    And the "victimSpecialId" personal details are verified in CMS and VCA

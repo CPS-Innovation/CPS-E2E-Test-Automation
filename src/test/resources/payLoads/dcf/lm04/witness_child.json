@@ -49,17 +49,17 @@
         "DateOfBirth": "1985-02-10",
         "PersonClassification": [
           {
-            "ClassificationType": "StatusInformation",
-            "ClassificationCode": "KeyWitness",
+            "ClassificationType": "TypeOfWitness",
+            "ClassificationCode": "Child",
             "ClassificationValue": {
-              "ClassificationValueText": "Yes"
+              "ClassificationValueFlag": true
             }
           }
         ]
       },
       "TypeOfPerson": "Witness",
       "Witness": {
-        "Occupation": "Civilian",
+        "Occupation": "Student",
         "WarnedByPolice": false
       },
       "LinkedSuspects": null

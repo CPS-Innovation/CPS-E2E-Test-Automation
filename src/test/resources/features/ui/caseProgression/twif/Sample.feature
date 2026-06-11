@@ -6,7 +6,7 @@ Feature: Review TWIF Case and Apply Charges
 
  @ui
   Scenario: Demo test for 28 days PCD review of test type full code
-  Given login to case review app using "mgovindachar.CIN3" and "TangoFoxtrotLima88!"
+  Given login to case review app using "mgovindachar.CIN3" and "Pass!"
   And Search the case urn "05AQ6221426"
   When I start "28 day PCD Review"
   And select test as "Full Code Test"

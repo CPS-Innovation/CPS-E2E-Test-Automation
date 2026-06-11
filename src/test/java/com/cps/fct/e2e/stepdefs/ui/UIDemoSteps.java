@@ -31,9 +31,19 @@ public class UIDemoSteps {
         pages.loginPage.loginIntoCaseReview(username,password);
     }
 
+    @Given("login to case review app using {string} and {string}")
+    public void loginToCaseReviewUsingLogin(String userName, String password) throws InterruptedException {
+        pages.loginPage.loginIntoCaseReview(userName,password);
+    }
+
     @And("Search the case")
     public void searchTheCaseAndStartReview() {
         pages.caseIdSearchPage.searchCase(context.get("caseId"));
+    }
+
+    @And("Search the case urn {string}")
+    public void searchTheCaseAndStartReviewUsingUrn (String urn) {
+        pages.caseIdSearchPage.searchCaseUrn(urn);
     }
 
     @When("I start {string}")

@@ -123,6 +123,10 @@ public class FakerUtils {
                 .toString();
     }
 
+    public static String defaultDate() {
+        return "1900-01-01";
+    }
+
 
     public static String uniqueId() {
         String pattern = "??-#-??-#";

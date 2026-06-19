@@ -218,4 +218,23 @@ public class VictimWitnessPayloadBuilder {
         return  gson.toJson(patchPayload);
     }
 
+    public static VictimMeetingDetails payLoadForAddVictimMeetingDetails(int meetingTypeCode) {
+
+        return VictimMeetingDetails.builder()
+                .MeetingType(meetingTypeCode)
+                .MeetingContextGuid(FakerUtils.uuid())
+                .MeetingOffered(false)
+                .MeetingRequested(false)
+                .MethodOfOffer(10)
+                .DateOfOffer(defaultDate())
+                .ReasonForNoOffer("API Test Automation")
+                .CreatedBy("automationUser")
+                .build();
+    }
+
+
+
+
+
+
 }

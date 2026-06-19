@@ -82,6 +82,18 @@ public class WitnessService extends BaseService {
         return service.sendRequest(getWitnessesDetailsFromVCARequestParams(guid));
     }
 
+    public void addVictimMeetingDetailsToVCA(String guid, String requestBody) {
+        service.sendRequest(addVictimMeetingDetailsRequestParams(guid, requestBody));
+    }
+
+    public Response listVictimMeetingDetails(String guid, Integer meetingTypeCode) {
+        return service.restAssuredRequest(getVictimMeetingDetailsForRequestParams(guid,meetingTypeCode ));
+    }
+
+
+
+
+
     public void persistVictimWitnessDetails(HttpResponseWrapper response, ScenarioContext context) {
         String body = response.getBody();
         List<String> witnessId = extractFromJsonToList(body,
@@ -295,6 +307,31 @@ public class WitnessService extends BaseService {
                 .resourceName("updateVictimContactDetails")
                 .build();
     }
+
+    private HttpClientBuilder addVictimMeetingDetailsRequestParams(String guid, String requestBody) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/victims/%s/meeting-offers", guid))
+                .addHeaders(ddeiHeaders())
+                .method("POST")
+                .body(requestBody)
+                .resourceName("addVictimMeetingDetails")
+                .build();
+    }
+
+    private HttpClientBuilder getVictimMeetingDetailsForRequestParams(String guid, Integer meetingTypeCode) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/victims/%s/meeting-offers/%s", guid,meetingTypeCode))
+                .addHeaders(ddeiHeaders())
+                .method("GET")
+                .resourceName("getVictimMeetingTypeDetails")
+                .build();
+    }
+
+
+
+
     private static void assertIdsArePresent(ScenarioContext context, List<String> victimIds) {
         assertThat(victimIds)
                 .withFailMessage("id's are should not be null " + context.get("caseId"))

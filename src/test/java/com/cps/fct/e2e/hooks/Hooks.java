@@ -18,6 +18,8 @@ import org.picocontainer.annotations.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static com.cps.fct.e2e.utils.common.EnvConfig.getEnv;
+
 
 public class Hooks {
     private static final Logger logger = LoggerFactory.getLogger(Hooks.class);
@@ -31,6 +33,7 @@ public class Hooks {
 
     private static final String CIN3_SUFFIX = ".CIN3";
     private static final String CIN5_SUFFIX = ".CIN5";
+    private static final String CASE_TYPE_KEY = "CASE_TYPE";
 
 
     @Getter
@@ -55,9 +58,10 @@ public class Hooks {
     @Before(order = 1)
     public void beforeScenario(Scenario scenario) {
         RestAssuredConfig.configure();
-        setSuffixBasedOnTag(scenario);
+        setSuffixBasedOnCaseTypeInEnv(scenario);
+
         if (service.isDDEIHealthy()) {
-            service.createCmsAuthToken(context);
+            service.caseCreateAuthToken(context);
         }
 
         isUIScenario = scenario.getSourceTagNames().contains("@ui");
@@ -79,7 +83,7 @@ public class Hooks {
 
     private void attachReport(Scenario scenario) {
         Response failedResponse = context.get("failedResponse");
-        if (failedResponse!=null) {
+        if (failedResponse != null) {
             scenario.attach(failedResponse.toString().getBytes(), "text/plain", "Failed Response");
         }
     }
@@ -87,6 +91,7 @@ public class Hooks {
     public void setSuffixBasedOnTag(Scenario scenario) {
         String suffix = "";
         String caseType = "";
+
         for (String tag : scenario.getSourceTagNames()) {
             String tagName = tag.toUpperCase();
             if (tagName.contains("@DCF")) {
@@ -99,9 +104,38 @@ public class Hooks {
                 break;
             }
         }
+
         context.set("caseType", caseType.replace("@", ""));
         context.set("envSuffix", suffix);
     }
+
+    public void setSuffixBasedOnCaseTypeInEnv(Scenario scenario) {
+        String caseTypeValue = requireEnvValue(CASE_TYPE_KEY).toUpperCase();
+        String suffix = suffixForCaseType(caseTypeValue);
+
+        context.set("caseType", caseTypeValue);
+        context.set("envSuffix", suffix);
+    }
+
+    private String suffixForCaseType(String caseType) {
+        if (caseType.contains("DCF")) {
+            return CIN5_SUFFIX;
+        }
+        if (caseType.contains("TWIF")) {
+            return CIN3_SUFFIX;
+        }
+        throw new IllegalArgumentException("Unsupported CASE_TYPE value: " + caseType
+                + ". Expected DCF or TWIF.");
+    }
+
+    private String requireEnvValue(String key) {
+        String value = getEnv(key);
+        if (value == null || value.isBlank()) {
+            throw new IllegalStateException("No value found in environment for key: " + key);
+        }
+        return value;
+    }
+
 }
 
 

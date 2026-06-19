@@ -1,10 +1,10 @@
-#@TWIF
+@regression
 Feature: Review TWIF Case and Apply Charges
   As a prosecutor lawyer,
   I want to review a case in the Case review
   So that I can update the case progression and apply relevant charges.
 
-# @ui
+ @ui
   Scenario: Demo test for 28 days PCD review of test type full code
   Given create TWIF case "CM01" for type "single defendant with charge"
   And precharge the triage case for 28 days PCD review
@@ -21,7 +21,8 @@ Feature: Review TWIF Case and Apply Charges
   And I write the "Trial and sentencing preparation"
   And I choose "Not at this time" in Human Rights
   And I write the "Advocate and operational delivery instructions"
-  And I choose Global monitoring codes as
+  And I add suspect victim relationship as "Partner"
+  And I choose "Global" monitoring codes as
     |Asset Recovery  |
     |DA specialist court  |
   And I preview pre charge analysis
@@ -31,8 +32,8 @@ Feature: Review TWIF Case and Apply Charges
     |No further action|K - No prosecution - Evidential |D81 |D80| Robbery|
   And I continue without action plan
   And I submit the charging decision as following
-    | Investigative stage        | Method |
-    | Bail for charging decision | Area   |
+    | Investigative stage        | Method | Create MG3 document |
+    | Bail for charging decision | Area   | true                |
   Then review is submitted successfully
 
 

@@ -82,6 +82,18 @@ public class WitnessService extends BaseService {
         return service.sendRequest(getWitnessesDetailsFromVCARequestParams(guid));
     }
 
+    public void addVictimMeetingDetailsToVCA(String guid, String requestBody) {
+        service.sendRequest(addVictimMeetingDetailsRequestParams(guid, requestBody));
+    }
+
+    public Response listVictimMeetingDetails(String guid, Integer meetingTypeCode) {
+        return service.restAssuredRequest(getVictimMeetingDetailsForRequestParams(guid,meetingTypeCode ));
+    }
+
+
+
+
+
     public void persistVictimWitnessDetails(HttpResponseWrapper response, ScenarioContext context) {
         String body = response.getBody();
         List<String> witnessId = extractFromJsonToList(body,
@@ -102,6 +114,8 @@ public class WitnessService extends BaseService {
                 "$[?(@.isWitnessAndVictim==false && @.isProfessional==true)].witnessId");
         List<String> witnessIntimidatedId = extractFromJsonToList(body,
                 "$[?(@.isWitnessAndVictim==false && @.isIntimidated==true)].witnessId");
+        List<String> witnessSpecialId = extractFromJsonToList(body,
+                "$[?(@.isWitnessAndVictim==false && @.isSpecialNeeds==true)].witnessId");
         List<String> victimId = extractFromJsonToList(body,
                 "$[?(@.isWitnessAndVictim==true && @.isKeyWitness=='Yes')].witnessId");
         List<String> victimChildId = extractFromJsonToList(body,
@@ -120,6 +134,8 @@ public class WitnessService extends BaseService {
                 "$[?(@.isWitnessAndVictim==true && @.isProfessional==true)].witnessId");
         List<String> victimIntimidatedId = extractFromJsonToList(body,
                 "$[?(@.isWitnessAndVictim==true && @.isIntimidated==true)].witnessId");
+        List<String> victimSpecialId = extractFromJsonToList(body,
+                "$[?(@.isWitnessAndVictim==true && @.isSpecialNeeds==true)].witnessId");
 
         Map<String, List<String>> witnessVictimMapIds = new HashMap<>();
         witnessVictimMapIds.put("witnessId", witnessId);
@@ -131,6 +147,7 @@ public class WitnessService extends BaseService {
         witnessVictimMapIds.put("witnessPoliceId", witnessPoliceId);
         witnessVictimMapIds.put("witnessProfessionalId", witnessProfessionalId);
         witnessVictimMapIds.put("witnessIntimidatedId", witnessIntimidatedId);
+        witnessVictimMapIds.put("witnessSpecialId", witnessSpecialId);
 
         witnessVictimMapIds.put("victimId", victimId);
         witnessVictimMapIds.put("victimChildId", victimChildId);
@@ -141,6 +158,7 @@ public class WitnessService extends BaseService {
         witnessVictimMapIds.put("victimPoliceId", victimPoliceId);
         witnessVictimMapIds.put("victimProfessionalId", victimProfessionalId);
         witnessVictimMapIds.put("victimIntimidatedId", victimIntimidatedId);
+        witnessVictimMapIds.put("victimSpecialId", victimSpecialId);
         context.set("witnessVictimMapIds", witnessVictimMapIds);
     }
 
@@ -154,7 +172,6 @@ public class WitnessService extends BaseService {
                 .build();
     }
 
-    // {{StagingWmUrl}}/api/cases/{{DCFCaseID}}/contacts
     private HttpClientBuilder getListVictimWitnessCMSContact(String caseId) {
         return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("DDEI_HOST"))
@@ -290,6 +307,31 @@ public class WitnessService extends BaseService {
                 .resourceName("updateVictimContactDetails")
                 .build();
     }
+
+    private HttpClientBuilder addVictimMeetingDetailsRequestParams(String guid, String requestBody) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/victims/%s/meeting-offers", guid))
+                .addHeaders(ddeiHeaders())
+                .method("POST")
+                .body(requestBody)
+                .resourceName("addVictimMeetingDetails")
+                .build();
+    }
+
+    private HttpClientBuilder getVictimMeetingDetailsForRequestParams(String guid, Integer meetingTypeCode) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/victims/%s/meeting-offers/%s", guid,meetingTypeCode))
+                .addHeaders(ddeiHeaders())
+                .method("GET")
+                .resourceName("getVictimMeetingTypeDetails")
+                .build();
+    }
+
+
+
+
     private static void assertIdsArePresent(ScenarioContext context, List<String> victimIds) {
         assertThat(victimIds)
                 .withFailMessage("id's are should not be null " + context.get("caseId"))

@@ -19,6 +19,10 @@ public abstract class BasePage {
 
 
     private static final int DEFAULT_TIMEOUT_MILLIS = 10000;
+    private static final int RICH_TEXT_EDITOR_WAIT_TIMEOUT_MILLIS = 10000;
+    private static final int RICH_TEXT_TYPING_TIMEOUT_MILLIS = 15000;
+    private static final int RICH_TEXT_TYPING_DELAY_MILLIS = 0;
+    private static final int RICH_TEXT_STABLE_FOR_MILLIS = 500;
 
     protected Page page;
 
@@ -296,14 +300,97 @@ public abstract class BasePage {
 
     public void fillRichTextEditor(String editorSelector, String textToEnter) {
         Locator editor = page.locator(editorSelector);
-        editor.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
-
-        // Click to focus
+        editor.waitFor(new Locator.WaitForOptions()
+                .setState(WaitForSelectorState.VISIBLE)
+                .setTimeout(RICH_TEXT_EDITOR_WAIT_TIMEOUT_MILLIS));
+        editor.scrollIntoViewIfNeeded();
         editor.click();
+        editor.press("Control+A");
+        editor.press("Backspace");
+        editor.pressSequentially(
+                textToEnter,
+                new Locator.PressSequentiallyOptions()
+                        .setDelay(RICH_TEXT_TYPING_DELAY_MILLIS)
+                        .setTimeout(RICH_TEXT_TYPING_TIMEOUT_MILLIS)
+        );
 
-        // Fill or type the text
-        editor.type(textToEnter, new Locator.TypeOptions().setDelay(5));
+        waitForRichTextEditorToCommit(editor, textToEnter);
+    }
 
+    private void waitForRichTextEditorToCommit(Locator editor, String expectedText) {
+        waitForRichTextEditorToContain(editor, expectedText);
+        editor.press("Tab");
+        dispatchRichTextEditorCommitEvents(editor);
+        waitForRichTextEditorTextToSettle(editor, expectedText);
+    }
+
+    private void waitForRichTextEditorToContain(Locator editor, String expectedText) {
+        String normalizedExpectedText = normalizeRichText(expectedText);
+        page.waitForCondition(() -> {
+            try {
+                return normalizeRichText(editor.innerText()).contains(normalizedExpectedText);
+            } catch (Exception e) {
+                return false;
+            }
+        });
+    }
+
+    private void waitForRichTextEditorTextToSettle(Locator editor, String expectedText) {
+        String[] lastEditorText = {null};
+        long[] stableSince = {0};
+        String normalizedExpectedText = normalizeRichText(expectedText);
+
+        page.waitForCondition(() -> {
+            try {
+                String currentEditorText = editor.innerText();
+                if (!normalizeRichText(currentEditorText).contains(normalizedExpectedText)) {
+                    stableSince[0] = 0;
+                    lastEditorText[0] = currentEditorText;
+                    return false;
+                }
+
+                long now = System.currentTimeMillis();
+                if (!currentEditorText.equals(lastEditorText[0])) {
+                    stableSince[0] = now;
+                    lastEditorText[0] = currentEditorText;
+                    return false;
+                }
+
+                return now - stableSince[0] >= RICH_TEXT_STABLE_FOR_MILLIS
+                        && !richTextEditorHasFocus(editor);
+            } catch (Exception e) {
+                return false;
+            }
+        });
+    }
+
+    private String normalizeRichText(String text) {
+        return text
+                .replace("\u00A0", " ")
+                .replace("\u2026", "...")
+                .replace("\u2018", "'")
+                .replace("\u2019", "'")
+                .replace("\u201C", "\"")
+                .replace("\u201D", "\"")
+                .replaceAll("\\s+", " ")
+                .trim();
+    }
+
+    private void dispatchRichTextEditorCommitEvents(Locator editor) {
+        editor.evaluate("""
+                element => {
+                    element.dispatchEvent(new InputEvent('input', { bubbles: true, inputType: 'insertText' }));
+                    element.dispatchEvent(new Event('change', { bubbles: true }));
+                    element.dispatchEvent(new FocusEvent('blur', { bubbles: true }));
+                    element.dispatchEvent(new FocusEvent('focusout', { bubbles: true }));
+                    element.blur();
+                }
+                """);
+    }
+
+    private boolean richTextEditorHasFocus(Locator editor) {
+        Object hasFocus = editor.evaluate("element => element === document.activeElement || element.contains(document.activeElement)");
+        return Boolean.TRUE.equals(hasFocus);
     }
 
 

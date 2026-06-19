@@ -77,6 +77,18 @@ public class FakerUtils {
         return faker.internet().emailAddress();
     }
 
+    public static String cpsEmail() {
+        String firstName = faker.name().firstName().replaceAll("[^A-Za-z]", "").toLowerCase(Locale.ROOT);
+        String lastName = faker.name().lastName().replaceAll("[^A-Za-z]", "").toLowerCase(Locale.ROOT);
+        if (firstName.isBlank()) {
+            firstName = "firstname";
+        }
+        if (lastName.isBlank()) {
+            lastName = "lastname";
+        }
+        return firstName + "." + lastName + "@cps.gov.uk";
+    }
+
     public static String homePhone() {
         return "01" + faker.numerify("#########");
     }
@@ -110,12 +122,8 @@ public class FakerUtils {
         return String.valueOf(random.nextInt(90000) + 10000);
     }
 
-    public static String generateFiveDigitNumber() {
-        return String.valueOf(10000 + random.nextInt(90000));
-    }
-
-    public static String generateTenDigitNumber() {
-        return String.valueOf(1000000000L + (long) (random.nextDouble() * 9000000000L));
+    public static String elevenDigitNumber() {
+        return String.valueOf(10000000000L + (long) (random.nextDouble() * 90000000000L));
     }
 
     public static String generateUppercaseAlphaNumeric(int length) {
@@ -125,6 +133,10 @@ public class FakerUtils {
                 .mapToObj(CHARS::charAt)
                 .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
                 .toString();
+    }
+
+    public static String defaultDate() {
+        return "1900-01-01";
     }
 
 

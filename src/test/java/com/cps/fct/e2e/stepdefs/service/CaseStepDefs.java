@@ -3,6 +3,7 @@ package com.cps.fct.e2e.stepdefs.service;
 import com.cps.fct.e2e.model.Case;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
 import com.cps.fct.e2e.utils.services.ddei.CaseService;
+import com.cps.fct.e2e.utils.services.ddei.CommonService;
 //import com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.core.internal.com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.java.en.And;
@@ -18,6 +19,9 @@ public class CaseStepDefs  {
     private CaseService caseService;
 
     @Inject
+    private CommonService service;
+
+    @Inject
     private ScenarioContext context;
 
 
@@ -29,8 +33,17 @@ public class CaseStepDefs  {
 
     @And("precharge the triage case for 28 days PCD review")
     public void prechargeTheTriageCaseForDaysPCD28DaysReview() throws JsonProcessingException {
+      service.createCmsAuthToken(context);
       caseService.prechargeTheTirageCaseFor28DaysMCAccepted(
-              context.get("caseUrn"), context.get("caseId"));
+              requiredContextValue("caseUrn"), requiredContextValue("caseId"));
+    }
+
+    private String requiredContextValue(String key) {
+        String value = context.getAsString(key);
+        if (value == null || value.isBlank()) {
+            throw new IllegalStateException("No value found in scenario context for key: " + key);
+        }
+        return value;
     }
 
 }

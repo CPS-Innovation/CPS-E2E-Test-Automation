@@ -6,16 +6,14 @@ import com.cps.fct.e2e.stepdefs.ui.PageObjects;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
 import com.cps.fct.e2e.utils.httpClient.DefaultHttpService;
 import com.cps.fct.e2e.utils.httpClient.HttpStatusValidator;
-import com.cps.fct.e2e.utils.payloadBuilders.dcf.DCFPayloadBuilderForCM01;
-import com.cps.fct.e2e.utils.payloadBuilders.dcf.DCFPayloadBuilderForLM04;
-import com.cps.fct.e2e.utils.payloadBuilders.twif.TWIFPayloadBuilderForCM01;
+import com.cps.fct.e2e.utils.payloadBuilders.PayloadBuilderForCM01;
+import com.cps.fct.e2e.utils.payloadBuilders.PayloadBuilderForLM04;
 import com.cps.fct.e2e.utils.playwright.PlaywrightContext;
 import com.cps.fct.e2e.utils.playwright.PlaywrightManager;
 import com.cps.fct.e2e.utils.services.ddei.CaseService;
 import com.cps.fct.e2e.utils.services.ddei.CommonService;
 import com.cps.fct.e2e.utils.services.ddei.WitnessService;
-import com.cps.fct.e2e.utils.services.messagaingApi.DCFMessageService;
-import com.cps.fct.e2e.utils.services.messagaingApi.TWIFMessageService;
+import com.cps.fct.e2e.utils.services.messagaingApi.CaseCreateService;
 import io.cucumber.core.backend.ObjectFactory;
 import io.cucumber.picocontainer.PicoFactory;
 import org.reflections.Reflections;
@@ -33,15 +31,14 @@ public class CucumberObjectFactory implements ObjectFactory {
         delegate.addClass(ScenarioContext.class);
         delegate.addClass(DefaultHttpService.class);
         delegate.addClass(HttpStatusValidator.class);
-        delegate.addClass(DCFMessageService.class);
+        delegate.addClass(PayloadBuilderForCM01.class);
+        delegate.addClass(PayloadBuilderForLM04.class);
         delegate.addClass(WitnessService.class);
-        delegate.addClass(DCFPayloadBuilderForCM01.class);
-        delegate.addClass(DCFPayloadBuilderForLM04.class);
-        delegate.addClass(TWIFMessageService.class);
-        delegate.addClass(TWIFPayloadBuilderForCM01.class);
         delegate.addClass(PlaywrightManager.class);
         delegate.addClass(PlaywrightContext.class);
         delegate.addClass(PageObjects.class);
+        delegate.addClass(CaseCreateService.class);
+
         addedAllPageClass();
     }
 

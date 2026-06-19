@@ -14,8 +14,15 @@ import org.picocontainer.annotations.Inject;
 import java.util.List;
 import java.util.Map;
 
+import static com.cps.fct.e2e.utils.common.DataTableUtils.booleanValue;
+
 
 public class UIDemoSteps {
+
+    private static final String CREATE_MG3_DOCUMENT_COLUMN = "Create MG3 document";
+    private static final String CREATE_MG3_DOCUMENT_CONTEXT_KEY = "createMg3Document";
+    private static final String CPS_USER_KEY = "CPS_USER";
+    private static final String PASSWORD_KEY = "PASSWORD";
 
     @Inject private PageObjects pages;
 
@@ -24,11 +31,22 @@ public class UIDemoSteps {
     public UIDemoSteps() {
     }
 
-    @Given("login to case review app")
+    @Given("I login to case review app")
     public void loginToCaseReviewApp() throws InterruptedException {
-        String username = EnvConfig.get("CPS_USER") + context.getAsString("envSuffix");
-        String password = SecurePassCode.decode(EnvConfig.get("PASSWORD"));
-        pages.loginPage.loginIntoCaseReview(username,password);
+        pages.loginPage.loginIntoCaseReview(caseReviewUsername(), caseReviewPassword());
+    }
+
+    @Given("login to case review app")
+    public void loginToCaseReviewAppWithPlainWording() throws InterruptedException {
+        loginToCaseReviewApp();
+    }
+
+    @Given("login to case review app using {string} and {string}")
+    public void loginToCaseReviewUsingLogin(String userName, String password) throws InterruptedException {
+        pages.loginPage.loginIntoCaseReview(
+                isBlank(userName) ? caseReviewUsername() : userName,
+                caseReviewPassword()
+        );
     }
 
     @And("Search the case")
@@ -36,9 +54,44 @@ public class UIDemoSteps {
         pages.caseIdSearchPage.searchCase(context.get("caseId"));
     }
 
+    @And("Search the case {string}")
+    public void searchTheCaseUsingContextValue(String searchType) {
+        String normalizedSearchType = searchType.trim().toLowerCase();
+
+        switch (normalizedSearchType) {
+            case "urn":
+            case "caseurn":
+            case "case urn":
+                String urn = requiredContextValue("caseUrn");
+                String caseId = pages.caseIdSearchPage.searchCaseUrn(urn);
+                context.set("caseId", caseId);
+                break;
+            case "caseid":
+            case "case id":
+                pages.caseIdSearchPage.searchCase(requiredContextValue("caseId"));
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported case search type: " + searchType
+                        + ". Use URN or caseId.");
+        }
+    }
+
+    @And("Search the case urn {string}")
+    public void searchTheCaseAndStartReviewUsingUrn (String urn) {
+        String caseId = pages.caseIdSearchPage.searchCaseUrn(urn);
+        context.set("caseUrn", urn);
+        context.set("caseId", caseId);
+    }
+
     @When("I start {string}")
     public void iStartDaysPCDReview(String typeOfReview) {
         pages.caseReviewPage.startReview(context.get("caseId"),typeOfReview);
+        context.set("typeOfReview", typeOfReview);
+    }
+
+    @When("I resume already existing  {string}")
+    public void iResumeAlreadyExistingReview(String typeOfReview) {
+        pages.caseReviewPage.resumeReview(context.get("caseId"), typeOfReview);
         context.set("typeOfReview", typeOfReview);
     }
 
@@ -51,9 +104,8 @@ public class UIDemoSteps {
     @And("the case headline is entered")
     public void enterTheCaseHeadlineText() {
         String randomWords = FakerUtils.populateSentences();
-        pages.decisionAnalysisPage.enterCaseHeadLine(context.get("reviewType"), randomWords);
+        pages.decisionAnalysisPage.enterCaseHeadLine("Full Code Test", randomWords);
         context.set("caseHeadlineText", randomWords);
-
     }
 
     @And("the evidential analysis is entered")
@@ -84,10 +136,15 @@ public class UIDemoSteps {
     }
 
 
-    @And("I choose Global monitoring codes as")
-    public void iChooseGlobalMonitoringCodesAs(List<String> monitoringCodes) {
-        pages.decisionAnalysisPage.selectGlobalMonitoringCodesAndSaveContinue(monitoringCodes);
+    @And("I choose {string} monitoring codes as")
+    public void iChooseMonitoringCodesAs(String monitoringCodeType, List<String> monitoringCodes) {
+        pages.decisionAnalysisPage.selectMonitoringCodesAndSaveContinue(monitoringCodeType, monitoringCodes);
 
+    }
+
+    @And("I add suspect victim relationship as {string}")
+    public void iAddSuspectVictimRelationshipAs(String relationshipType) {
+        pages.decisionAnalysisPage.addSuspectVictimRelationship(relationshipType);
     }
 
     @And("I preview pre charge analysis")
@@ -119,14 +176,51 @@ public class UIDemoSteps {
         Map<String, String> submitReviewData =
                 dataTable.asMaps(String.class, String.class).getFirst();
 
-        pages.completeSubmissionPage.completeReviewSubmission(submitReviewData);
+        boolean createMg3Document = booleanValue(submitReviewData, CREATE_MG3_DOCUMENT_COLUMN);
+        context.set(CREATE_MG3_DOCUMENT_CONTEXT_KEY, createMg3Document);
+
+        pages.completeSubmissionPage.completeReviewSubmission(
+                submitReviewData,
+                createMg3Document
+        );
 
     }
 
     @Then("review is submitted successfully")
     public void reviewIsSubmittedSuccessfully() {
-        pages.completeSubmissionPage.verifyReviewSubmission(context.get("typeOfReview"));
+        pages.completeSubmissionPage.verifyReviewSubmission(
+                context.get("typeOfReview"),
+                Boolean.TRUE.equals(context.get(CREATE_MG3_DOCUMENT_CONTEXT_KEY))
+        );
     }
 
+    private String requiredContextValue(String key) {
+        String value = context.getAsString(key);
+        if (value == null || value.isBlank()) {
+            throw new IllegalStateException("No value found in scenario context for key: " + key);
+        }
+        return value;
+    }
+
+    private String caseReviewUsername() {
+        String envSuffix = requiredContextValue("envSuffix");
+        return requiredEnvValue(CPS_USER_KEY) + envSuffix;
+    }
+
+    private String caseReviewPassword() {
+        return SecurePassCode.decode(requiredEnvValue(PASSWORD_KEY));
+    }
+
+    private String requiredEnvValue(String key) {
+        String value = EnvConfig.getEnv(key);
+        if (isBlank(value)) {
+            throw new IllegalStateException("No value found in environment for key: " + key);
+        }
+        return value;
+    }
+
+    private boolean isBlank(String value) {
+        return value == null || value.isBlank();
+    }
 
 }

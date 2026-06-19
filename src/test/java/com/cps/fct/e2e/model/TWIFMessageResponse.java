@@ -14,9 +14,6 @@ public class TWIFMessageResponse {
     @JsonProperty("success")
     private boolean success;
 
-//    @JsonProperty("messageType")
-//    private String messageType;
-
     @JsonProperty("validationResult")
     private ValidationResult validationResult;
 

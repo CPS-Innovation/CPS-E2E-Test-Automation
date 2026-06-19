@@ -21,6 +21,10 @@ public class CaseReviewPage extends BasePage {
         return page.locator("button:has-text('Start review')");
     }
 
+    private Locator resumeReviewButton() {
+        return page.locator("button:has-text('Resume')");
+    }
+
 
     @Override
     public CaseReviewPage waitForLoginPageToLoadCompletely() {
@@ -41,10 +45,22 @@ public class CaseReviewPage extends BasePage {
         return this;
     }
 
+    public CaseReviewPage clickResumeButton() {
+        resumeReviewButton().click();
+        return this;
+    }
+
     public void startReview(String caseId, String typeOfReview) {
         waitForLoginPageToLoadCompletely().
                 assertPageLoadSuccessful(caseId, typeOfReview)
                 .clickReviewButton()
+                .waitUntilLoadingIndicatorIsGone();
+    }
+
+    public void resumeReview(String caseId, String typeOfReview) {
+        waitForLoginPageToLoadCompletely().
+                assertPageLoadSuccessful(caseId, typeOfReview)
+                .clickResumeButton()
                 .waitUntilLoadingIndicatorIsGone();
     }
 

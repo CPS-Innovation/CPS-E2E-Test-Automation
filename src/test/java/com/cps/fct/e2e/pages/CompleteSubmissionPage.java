@@ -20,6 +20,10 @@ public class CompleteSubmissionPage extends BasePage {
     private static final String MG3_SUBMISSION_SUCCESS_STATUS = "Success";
     private static final String MG3_SUBMISSION_SUCCESS_MESSAGE =
             "Your review and MG3 document have been successfully submitted to CMS.";
+    private static final String MG3_CREATION_ERROR_MESSAGE = "We could not create the MG3 document.";
+    private static final String MG3_CREATION_RETRY_LINK_TEXT = "You can try again now";
+    private static final int MG3_CREATION_RETRY_ATTEMPTS = 3;
+    private static final int MG3_CREATION_RETRY_DELAY_MILLIS = 20_000;
     private static final String INVALID_EMAIL = "invalid-email";
     private static final String INCOMPLETE_PHONE_NUMBER = "01234";
 
@@ -60,6 +64,16 @@ public class CompleteSubmissionPage extends BasePage {
         return page.locator("[role='alert'], .govuk-notification-banner, .alert, [id$='Alert']")
                 .filter(new Locator.FilterOptions().setHasText(MG3_SUBMISSION_SUCCESS_STATUS))
                 .first();
+    }
+
+    private Locator mg3CreationErrorAlert() {
+        return page.locator("[role='alert'], .govuk-notification-banner, .alert, [id$='Alert']")
+                .filter(new Locator.FilterOptions().setHasText(MG3_CREATION_ERROR_MESSAGE))
+                .first();
+    }
+
+    private Locator mg3CreationRetryLink() {
+        return page.getByText(MG3_CREATION_RETRY_LINK_TEXT).first();
     }
 
     private Locator submitReviewButton() {
@@ -161,8 +175,50 @@ public class CompleteSubmissionPage extends BasePage {
     }
 
     private void assertMg3SubmissionSuccessAlert() {
+        for (int retryAttempt = 0; retryAttempt <= MG3_CREATION_RETRY_ATTEMPTS; retryAttempt++) {
+            if (isMg3SubmissionSuccessVisible()) {
+                return;
+            }
+
+            if (retryAttempt == MG3_CREATION_RETRY_ATTEMPTS || !isMg3CreationRetryAvailable()) {
+                break;
+            }
+
+            retryMg3Creation();
+            page.waitForTimeout(MG3_CREATION_RETRY_DELAY_MILLIS);
+        }
+
         assertThat(mg3SubmissionSuccessAlert()).containsText(MG3_SUBMISSION_SUCCESS_STATUS);
         assertThat(mg3SubmissionSuccessAlert()).containsText(MG3_SUBMISSION_SUCCESS_MESSAGE);
+    }
+
+    private boolean isMg3SubmissionSuccessVisible() {
+        try {
+            String alertText = mg3SubmissionSuccessAlert()
+                    .innerText(new Locator.InnerTextOptions().setTimeout(1000));
+            return alertText.contains(MG3_SUBMISSION_SUCCESS_STATUS)
+                    && alertText.contains(MG3_SUBMISSION_SUCCESS_MESSAGE);
+        } catch (Exception ignored) {
+            return false;
+        }
+    }
+
+    private boolean isMg3CreationRetryAvailable() {
+        try {
+            String alertText = mg3CreationErrorAlert()
+                    .innerText(new Locator.InnerTextOptions().setTimeout(1000));
+            return alertText.contains(MG3_CREATION_ERROR_MESSAGE)
+                    && mg3CreationRetryLink().isVisible();
+        } catch (Exception ignored) {
+            return false;
+        }
+    }
+
+    private void retryMg3Creation() {
+        Locator retryLink = mg3CreationRetryLink();
+        retryLink.scrollIntoViewIfNeeded();
+        retryLink.click();
+        waitForLoginPageToLoadCompletely();
     }
 
     private void setCreateMg3Document(boolean createMg3Document) {

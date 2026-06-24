@@ -6,6 +6,8 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import org.assertj.core.api.Assertions;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,10 +29,7 @@ public class ChargeDecisionAnalysisPage extends BasePage {
     private static final String GLOBAL_MONITORING_CODES_LABEL = "Global monitoring codes";
     private static final String GLOBAL_MONITORING_CODES_SELECTOR = "[id$='GlobalMonitoringFlags']";
     private static final String LOCAL_MONITORING_CODES_LABEL = "Local monitoring codes";
-    private static final String GLOBAL_MONITORING_CODE_LABEL_SELECTOR =
-            ".govuk-label.govuk-checkboxes__label.break-word.OSFillParent";
-    private static final String LOCAL_MONITORING_CODE_LABEL_SELECTOR =
-            ".govuk-label.govuk-checkboxes__label.OSFillParent:not(.break-word)";
+    private static final String MONITORING_CODE_LABEL_SELECTOR = ".govuk-checkboxes__label";
     private static final String CASE_HEADLINE_CONTAINER_SELECTOR = "[id$='Step2_A_CaseHeadline']";
     private static final String PRE_CHARGE_DECISION_LABEL = "Pre-charge decision";
     private static final String NGAP_QUESTION_TEXT = "Has the file been submitted as NGAP?";
@@ -60,6 +59,17 @@ public class ChargeDecisionAnalysisPage extends BasePage {
     private static final String CHARGING_DECISION_HEADER_SELECTOR = "span.govuk-heading-l";
     private static final String CHARGING_DECISION_SUSPECT_COUNT_SELECTOR = "h2.govuk-heading-m";
     private static final String ONE_DEFENDANT_SELECTOR = "[id$='OneDefendant']";
+    private static final String PREVIEW_SCROLL_SELECTOR = ".previewScroll";
+    private static final String PREVIEW_ANALYSIS_STEPS_SELECTOR =
+            PREVIEW_SCROLL_SELECTOR + " [id$='AnalysisSteps']";
+    private static final String PREVIEW_GLOBAL_MONITORING_CODES_SELECTOR =
+            "#b10-b12-b3-GlobalMonitoringCodesSection";
+    private static final String PREVIEW_SUSPECT_RELATIONSHIP_SELECTOR =
+            "[data-block='MonitoringBlocks.DefendantRelationships']";
+    private static final String PREVIEW_LOCAL_MONITORING_CODES_SELECTOR = "#b10-b12-b3-b6-Column2";
+    private static final String HUMAN_RIGHTS_PREVIEW_TEXT =
+            "Human rights factors are not an issue in this case at this time";
+    private static final String NONE_SELECTED_TEXT = "None selected";
     private static final String SUSPECT_AWAITING_CHARGING_DECISION_TEXT = "There is 1 suspect awaiting a charging decision.";
     private static final int DEFAULT_WAIT_TIMEOUT_MS = 200;
     private static final int UI_SETTLE_TIMEOUT_MILLIS = 30_000;
@@ -76,6 +86,10 @@ public class ChargeDecisionAnalysisPage extends BasePage {
             Map.entry(HUMAN_RIGHTS_LABEL, ADVOCATE_AND_OPERATIONAL_DELIVERY_INSTRUCTIONS_LABEL),
             Map.entry(ADVOCATE_AND_OPERATIONAL_DELIVERY_INSTRUCTIONS_LABEL, MONITORING_CODES_LABEL)
     );
+    private final Map<String, String> enteredAnalysisTextBySection = new LinkedHashMap<>();
+    private final List<String> selectedGlobalMonitoringCodes = new ArrayList<>();
+    private final List<String> selectedLocalMonitoringCodes = new ArrayList<>();
+    private String selectedSuspectVictimRelationship;
 
     public ChargeDecisionAnalysisPage(PlaywrightContext context) {
         super(context);
@@ -147,16 +161,19 @@ public class ChargeDecisionAnalysisPage extends BasePage {
     }
 
     public void enterCaseHeadLine(String typeOfReview, String randomWords) {
+        enteredAnalysisTextBySection.put(CASE_HEADLINE_LABEL, randomWords);
         assertCaseHeadlineSection(typeOfReview)
                 .enterTextInRichEditor(randomWords)
                 .clickSaveAndContinueAndAssertSectionProgress(CASE_HEADLINE_LABEL);
     }
 
     public void enterSectionText(String headerLabel, String randomWords) {
+        enteredAnalysisTextBySection.put(headerLabel, randomWords);
         assertSection(headerLabel).enterTextInRichEditor(randomWords).clickSaveAndContinueAndAssertSectionProgress(headerLabel);
     }
 
     public ChargeDecisionAnalysisPage enterSectionTextOnly(String headerLabel, String randomWords) {
+        enteredAnalysisTextBySection.put(headerLabel, randomWords);
         assertSection(headerLabel).enterTextInRichEditor(randomWords);
         return this;
     }
@@ -164,21 +181,28 @@ public class ChargeDecisionAnalysisPage extends BasePage {
     public void humanRightsOptionHasNotAtThisTime() {
         assertThat(page.locator(FIELDSET_LEGEND_SELECTOR)).containsText(HUMAN_RIGHTS_QUESTION_TEXT);
         checkCheckbox(RADIO_ROLE_NOT_AT_THIS_TIME);
+        enteredAnalysisTextBySection.put(HUMAN_RIGHTS_LABEL, HUMAN_RIGHTS_PREVIEW_TEXT);
         clickSaveAndContinueAndAssertSectionProgress(HUMAN_RIGHTS_LABEL);
     }
 
     public void selectMonitoringCodesAndSaveContinue(String monitoringCodeType, List<String> monitoringCodes) {
         assertThat(page.getByText(MONITORING_CODES_HEADER, new Page.GetByTextOptions().setExact(true))).isVisible();
-        scrollToMonitoringCodeSection(monitoringCodeType);
-
-        for (String monitoringCode : monitoringCodes) {
-            checkMonitoringCode(monitoringCodeType, monitoringCode);
-        }
+        selectMonitoringCodes(monitoringCodeType, monitoringCodes);
         clickSaveAndContinueAndAssertSectionProgress(MONITORING_CODES_LABEL);
     }
 
     public void selectGlobalMonitoringCodesAndSaveContinue(List<String> monitoringCodes) {
         selectMonitoringCodesAndSaveContinue("Global", monitoringCodes);
+    }
+
+    public void selectMonitoringCodesAndSaveContinue(
+            List<String> globalMonitoringCodes,
+            List<String> localMonitoringCodes
+    ) {
+        assertThat(page.getByText(MONITORING_CODES_HEADER, new Page.GetByTextOptions().setExact(true))).isVisible();
+        selectMonitoringCodes("Global", globalMonitoringCodes);
+        selectMonitoringCodes("Local", localMonitoringCodes);
+        clickSaveAndContinueAndAssertSectionProgress(MONITORING_CODES_LABEL);
     }
 
     private void clickSaveAndContinueButton() {
@@ -292,8 +316,22 @@ public class ChargeDecisionAnalysisPage extends BasePage {
                     ([labelSelector, monitoringCode]) => {
                         const normalize = value => value.replace(/\\s+/g, ' ').trim().toLowerCase();
                         const expectedText = normalize(monitoringCode);
+                        const isVisible = element => {
+                            const style = window.getComputedStyle(element);
+                            const rect = element.getBoundingClientRect();
+                            return style.display !== 'none'
+                                && style.visibility !== 'hidden'
+                                && rect.width > 0
+                                && rect.height > 0;
+                        };
                         const labels = Array.from(document.querySelectorAll(labelSelector));
-                        const label = labels.find(item => normalize(item.innerText).includes(expectedText));
+                        const visibleLabels = labels.filter(isVisible);
+                        const exactMatch = item => normalize(item.innerText) === expectedText;
+                        const containsMatch = item => normalize(item.innerText).includes(expectedText);
+                        const label = visibleLabels.find(exactMatch)
+                            || visibleLabels.find(containsMatch)
+                            || labels.find(exactMatch)
+                            || labels.find(containsMatch);
 
                         if (!label) {
                             return false;
@@ -329,8 +367,7 @@ public class ChargeDecisionAnalysisPage extends BasePage {
 
     private String monitoringCodeLabelSelector(String monitoringCodeType) {
         return switch (normalizedMonitoringCodeType(monitoringCodeType)) {
-            case "global" -> GLOBAL_MONITORING_CODE_LABEL_SELECTOR;
-            case "local" -> LOCAL_MONITORING_CODE_LABEL_SELECTOR;
+            case "global", "local" -> MONITORING_CODE_LABEL_SELECTOR;
             default -> throw new IllegalArgumentException("Unsupported monitoring code type: " + monitoringCodeType
                     + ". Use Global or Local.");
         };
@@ -338,6 +375,120 @@ public class ChargeDecisionAnalysisPage extends BasePage {
 
     private String normalizedMonitoringCodeType(String monitoringCodeType) {
         return monitoringCodeType.trim().toLowerCase();
+    }
+
+    private void selectMonitoringCodes(String monitoringCodeType, List<String> monitoringCodes) {
+        rememberSelectedMonitoringCodes(monitoringCodeType, monitoringCodes);
+
+        if (monitoringCodes == null || monitoringCodes.isEmpty()) {
+            return;
+        }
+
+        scrollToMonitoringCodeSection(monitoringCodeType);
+        for (String monitoringCode : monitoringCodes) {
+            checkMonitoringCode(monitoringCodeType, monitoringCode);
+        }
+    }
+
+    private void rememberSelectedMonitoringCodes(String monitoringCodeType, List<String> monitoringCodes) {
+        List<String> targetCodes = switch (normalizedMonitoringCodeType(monitoringCodeType)) {
+            case "global" -> selectedGlobalMonitoringCodes;
+            case "local" -> selectedLocalMonitoringCodes;
+            default -> throw new IllegalArgumentException("Unsupported monitoring code type: " + monitoringCodeType
+                    + ". Use Global or Local.");
+        };
+
+        targetCodes.clear();
+        if (monitoringCodes == null) {
+            return;
+        }
+
+        monitoringCodes.stream()
+                .map(String::trim)
+                .filter(code -> !code.isBlank())
+                .forEach(targetCodes::add);
+    }
+
+    private void assertPreviewAnalysisSteps() {
+        Locator previewScroll = page.locator(PREVIEW_SCROLL_SELECTOR);
+        previewScroll.scrollIntoViewIfNeeded();
+        assertThat(previewScroll).isVisible();
+        assertThat(page.locator(PREVIEW_ANALYSIS_STEPS_SELECTOR).first()).isVisible();
+
+        enteredAnalysisTextBySection.values()
+                .forEach(enteredText -> assertLocatorContainsNormalizedText(
+                        previewScroll,
+                        enteredText,
+                        "Preview analysis text"
+                ));
+    }
+
+    private void assertPreviewGlobalMonitoringCodes() {
+        assertPreviewMonitoringCodes(
+                page.locator(PREVIEW_GLOBAL_MONITORING_CODES_SELECTOR),
+                selectedGlobalMonitoringCodes
+        );
+    }
+
+    private void assertPreviewLocalMonitoringCodes() {
+        assertPreviewMonitoringCodes(
+                page.locator(PREVIEW_LOCAL_MONITORING_CODES_SELECTOR),
+                selectedLocalMonitoringCodes
+        );
+    }
+
+    private void assertPreviewMonitoringCodes(Locator previewSection, List<String> expectedCodes) {
+        previewSection.scrollIntoViewIfNeeded();
+        assertThat(previewSection).isVisible();
+
+        if (expectedCodes.isEmpty()) {
+            assertLocatorContainsNormalizedText(previewSection, NONE_SELECTED_TEXT, "Preview monitoring codes");
+            return;
+        }
+
+        expectedCodes.forEach(code -> assertLocatorContainsNormalizedText(
+                previewSection,
+                code,
+                "Preview monitoring codes"
+        ));
+    }
+
+    private void assertPreviewSuspectVictimRelationship() {
+        Locator suspectRelationshipSection = page.locator(PREVIEW_SUSPECT_RELATIONSHIP_SELECTOR);
+        suspectRelationshipSection.scrollIntoViewIfNeeded();
+        assertThat(suspectRelationshipSection).isVisible();
+
+        if (selectedSuspectVictimRelationship != null && !selectedSuspectVictimRelationship.isBlank()) {
+            assertLocatorContainsNormalizedText(
+                    suspectRelationshipSection,
+                    selectedSuspectVictimRelationship,
+                    "Preview suspect-victim relationship"
+            );
+        }
+    }
+
+    private void assertLocatorContainsNormalizedText(Locator locator, String expectedText, String description) {
+        Assertions.assertThat(normalizePreviewText(locator.innerText()))
+                .as(description)
+                .contains(normalizePreviewText(expectedText));
+    }
+
+    private String normalizePreviewText(String text) {
+        if (text == null) {
+            return "";
+        }
+
+        return text
+                .replace('\u00A0', ' ')
+                .replace("\u2026", "...")
+                .replace("\u2018", "'")
+                .replace("\u2019", "'")
+                .replace("\u201C", "\"")
+                .replace("\u201D", "\"")
+                .replace("\u2013", "-")
+                .replace("\u2014", "-")
+                .replaceAll("\\s+", " ")
+                .trim();
     }
 
     public void addSuspectVictimRelationship(String relationshipType) {
@@ -351,6 +502,7 @@ public class ChargeDecisionAnalysisPage extends BasePage {
         );
         assertThat(relationshipCheckbox).isVisible();
         relationshipCheckbox.check();
+        selectedSuspectVictimRelationship = relationshipType;
 
         page.getByRole(
                 AriaRole.BUTTON,
@@ -362,6 +514,10 @@ public class ChargeDecisionAnalysisPage extends BasePage {
 
     public void checkPreviewChargeAnalysis() {
         assertThat(page.locator(CHARGING_DECISION_HEADER_SELECTOR)).containsText(PREVIEW_HEADER);
+        assertPreviewAnalysisSteps();
+        assertPreviewGlobalMonitoringCodes();
+        assertPreviewSuspectVictimRelationship();
+        assertPreviewLocalMonitoringCodes();
         clickSaveAndContinue();
     }
 

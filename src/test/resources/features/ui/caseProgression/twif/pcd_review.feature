@@ -7,7 +7,7 @@ Feature: Review TWIF Case and Apply Charges
  @ui
   Scenario: Demo test for 28 days PCD review of test type full code
   Given create TWIF case "CM01" for type "single defendant with charge"
-  And precharge the triage case for 28 days PCD review
+  And precharge the "MC" triage case for "28Day" PCD review
   And login to case review app
   And Search the case
   When I start "28 day PCD Review"

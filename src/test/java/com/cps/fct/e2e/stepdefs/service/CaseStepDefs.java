@@ -31,11 +31,14 @@ public class CaseStepDefs  {
         context.set("caseDetails", caseDetails);
     }
 
-    @And("precharge the triage case for 28 days PCD review")
-    public void prechargeTheTriageCaseForDaysPCD28DaysReview() throws JsonProcessingException {
-      service.createCmsAuthToken(context);
-      caseService.prechargeTheTirageCaseFor28DaysMCAccepted(
-              requiredContextValue("caseUrn"), requiredContextValue("caseId"));
+    @And("precharge the {string} triage case for {string} PCD review")
+    public void prechargeTriageCaseForPcdReview(String caseType, String decisionToBeMade) throws JsonProcessingException {
+        service.createCmsAuthToken(context);
+        caseService.prechargeTriageCaseAccepted(
+                requiredContextValue("caseUrn"),
+                requiredContextValue("caseId"),
+                caseType,
+                decisionToBeMade);
     }
 
     private String requiredContextValue(String key) {

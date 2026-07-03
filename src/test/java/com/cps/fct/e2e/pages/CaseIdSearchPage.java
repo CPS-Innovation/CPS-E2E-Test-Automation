@@ -1,7 +1,6 @@
 package com.cps.fct.e2e.pages;
 
 import com.cps.fct.e2e.utils.playwright.PlaywrightContext;
-import com.microsoft.playwright.Locator;
 import org.assertj.core.api.SoftAssertions;
 
 import java.net.URI;
@@ -9,10 +8,16 @@ import java.net.URI;
 public class CaseIdSearchPage extends BasePage {
 
     private static final int LANDING_PAGE_TIMEOUT_MILLIS = 30_000;
+    private static final int SEARCH_POLL_INTERVAL_MILLIS = 250;
+    private static final int MAX_SEARCH_ATTEMPTS = 5;
+    private static final int CASE_NOT_FOUND_BACKOFF_MILLIS = 3_000;
+    private static final String CASE_NOT_FOUND_TEXT = "No Case Found";
     private static final String CASE_ID_RADIO_SELECTOR = "#Radio_CaseID-input";
     private static final String CASE_ID_INPUT_SELECTOR = "#Input_CaseID2";
     private static final String URN_RADIO_SELECTOR = "#Radio_URN-input";
     private static final String URN_INPUT_SELECTOR = "#Input_URN";
+
+    private enum SearchOutcome { LANDED, CASE_NOT_FOUND, TIMED_OUT }
 
     public CaseIdSearchPage(PlaywrightContext context) {
         super(context);
@@ -38,9 +43,33 @@ public class CaseIdSearchPage extends BasePage {
     }
 
     private void selectSearchType(String radioSelector) {
-        Locator radio = page.locator(radioSelector);
-        if (!radio.isChecked()) {
-            radio.check(new Locator.CheckOptions().setForce(true));
+        boolean selected = Boolean.TRUE.equals(page.evaluate("""
+                selector => {
+                    const radio = document.querySelector(selector);
+                    if (!radio) {
+                        return false;
+                    }
+
+                    const label = radio.id
+                        ? document.querySelector(`label[for="${radio.id}"]`)
+                        : null;
+                    const clickable = label || radio;
+
+                    clickable.scrollIntoView({ block: 'center', inline: 'nearest' });
+                    clickable.click();
+
+                    if (!radio.checked) {
+                        radio.checked = true;
+                        radio.dispatchEvent(new Event('input', { bubbles: true }));
+                        radio.dispatchEvent(new Event('change', { bubbles: true }));
+                    }
+
+                    return radio.checked;
+                }
+                """, radioSelector));
+
+        if (!selected) {
+            throw new IllegalStateException("Search type radio was not selected: " + radioSelector);
         }
     }
 
@@ -51,34 +80,67 @@ public class CaseIdSearchPage extends BasePage {
     }
 
     public void searchCase(String caseId) {
-        waitForLoginPageToLoadCompletely()
-                 .assertPageLoadSuccessful()
-                 .inputCaseId(caseId)
-                 .clickOnViewCaseButton();
-        waitUntilLoadingIndicatorIsGone();
-        waitForLandingPage();
+        waitForLoginPageToLoadCompletely().assertPageLoadSuccessful();
+        submitSearchWithRetries(() -> inputCaseId(caseId).clickOnViewCaseButton(), "Case ID " + caseId);
     }
 
     public String searchCaseUrn(String urn) {
-        waitForLoginPageToLoadCompletely()
-                .assertPageLoadSuccessful()
-                .inputUrn(urn)
-                .clickOnViewCaseButton();
-        waitUntilLoadingIndicatorIsGone();
-        waitForLandingPage();
+        waitForLoginPageToLoadCompletely().assertPageLoadSuccessful();
+        submitSearchWithRetries(() -> inputUrn(urn).clickOnViewCaseButton(), "URN " + urn);
         return cmsCaseIdFromCurrentUrl();
     }
 
-    private CaseIdSearchPage waitForLandingPage() {
+    private void submitSearchWithRetries(Runnable submitSearch, String searchDescription) {
+        for (int attempt = 1; attempt <= MAX_SEARCH_ATTEMPTS; attempt++) {
+            submitSearch.run();
+            waitUntilLoadingIndicatorIsGone();
+            SearchOutcome outcome = waitForSearchOutcome();
+
+            if (outcome == SearchOutcome.LANDED) {
+                return;
+            }
+            if (outcome == SearchOutcome.CASE_NOT_FOUND) {
+                if (attempt == MAX_SEARCH_ATTEMPTS) {
+                    throw new IllegalStateException("Search for " + searchDescription
+                            + " returned '" + CASE_NOT_FOUND_TEXT + "' after " + attempt + " attempts.");
+                }
+                page.waitForTimeout(CASE_NOT_FOUND_BACKOFF_MILLIS);
+                continue;
+            }
+            throw new IllegalStateException("Landing page was not reached after searching for "
+                    + searchDescription + ". Current URL: " + page.url());
+        }
+    }
+
+    private SearchOutcome waitForSearchOutcome() {
         long deadline = System.currentTimeMillis() + LANDING_PAGE_TIMEOUT_MILLIS;
         while (System.currentTimeMillis() < deadline) {
-            if (page.url().contains("/LandingPage") && page.url().contains("CMSCaseId=")) {
-                return this;
+            String url = page.url();
+            if (isOnLandingPage(url)) {
+                return SearchOutcome.LANDED;
             }
-            page.waitForTimeout(250);
+            if (!hasLeftSearchPage(url) && isCaseNotFoundVisible()) {
+                return SearchOutcome.CASE_NOT_FOUND;
+            }
+            page.waitForTimeout(SEARCH_POLL_INTERVAL_MILLIS);
         }
+        return SearchOutcome.TIMED_OUT;
+    }
 
-        throw new IllegalStateException("Landing page was not reached after searching for a case. Current URL: " + page.url());
+    private boolean isOnLandingPage(String url) {
+        return url.contains("/LandingPage") && url.contains("CMSCaseId=");
+    }
+
+    private boolean hasLeftSearchPage(String url) {
+        return url.contains("/LandingPage");
+    }
+
+    private boolean isCaseNotFoundVisible() {
+        try {
+            return page.getByText(CASE_NOT_FOUND_TEXT).first().isVisible();
+        } catch (RuntimeException ignored) {
+            return false;
+        }
     }
 
     private String cmsCaseIdFromCurrentUrl() {

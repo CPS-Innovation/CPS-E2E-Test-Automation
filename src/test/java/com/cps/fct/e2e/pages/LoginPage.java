@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 
 public class LoginPage extends BasePage {
 
-    private static final int LOGIN_TIMEOUT_MILLIS = 60_000;
+    private static final int LOGIN_TIMEOUT_MILLIS = 10_000;
     private static final int SHORT_TIMEOUT_MILLIS = 2_000;
     private static final int MICROSOFT_PRIMARY_CLICK_TIMEOUT_MILLIS = 15_000;
     private static final int MICROSOFT_POST_EMAIL_ROUTE_TIMEOUT_MILLIS = 10_000;
@@ -32,9 +32,9 @@ public class LoginPage extends BasePage {
     private static final String CHOOSE_WAY_TO_SIGN_IN_TEXT = "Choose a way to sign in";
     private static final String MICROSOFT_PASSKEY_ERROR_TEXT = "Something went wrong";
     private static final String MICROSOFT_PASSWORD_FIELD =
-            "input[name='passwd']:not([type='hidden']):not([aria-hidden='true']):not([tabindex='-1']):not(.moveOffScreen):not([readonly]):visible, "
-                    + "#i0118:not([type='hidden']):not([aria-hidden='true']):not([tabindex='-1']):not(.moveOffScreen):not([readonly]):visible, "
-                    + "input[type='password']:not([type='hidden']):not([aria-hidden='true']):not([tabindex='-1']):not(.moveOffScreen):not([readonly]):visible";
+            "input[name='passwd']:not([aria-hidden='true']):not(.moveOffScreen), "
+                    + "#i0118:not([aria-hidden='true']):not(.moveOffScreen), "
+                    + "input[type='password']:not([aria-hidden='true']):not(.moveOffScreen)";
     private static final String MICROSOFT_PRIMARY_BUTTON =
             "#idSIButton9:visible, input[type='submit']:visible, button[type='submit']:visible, input[value='Next']:visible, button:has-text('Next'):visible";
 
@@ -85,7 +85,7 @@ public class LoginPage extends BasePage {
 
         if (isMicrosoftUsernameVisible()) {
             enterMicrosoftUsername(getAadUsernameConfig());
-            choosePasswordSignInIfPresent(LOGIN_TIMEOUT_MILLIS);
+            choosePasswordSignInIfPresent();
             enterMicrosoftPassword(getAadPasswordConfig());
             answerStaySignedInPromptIfPresent();
         }
@@ -170,29 +170,37 @@ public class LoginPage extends BasePage {
         clickMicrosoftPrimaryButton();
     }
 
-    private void choosePasswordSignInIfPresent(int timeoutMillis) {
-        if (isMicrosoftPasswordVisible()) {
-            return;
-        }
+    private void choosePasswordSignInIfPresent() {
+        long deadline = System.currentTimeMillis() + LOGIN_TIMEOUT_MILLIS;
+        while (System.currentTimeMillis() < deadline) {
+            if (isMicrosoftPasswordVisible()) {
+                return;
+            }
 
-        if (clickUseMyPasswordIfPresent(SHORT_TIMEOUT_MILLIS)) {
-            waitForMicrosoftPasswordPageReady();
-            return;
-        }
+            if (isLocatorVisible(useMyPasswordOption())) {
+                try {
+                    clickUseMyPassword(useMyPasswordOption());
+                } catch (PlaywrightException exception) {
+                    if (!isMicrosoftPasswordVisible()) {
+                        throw exception;
+                    }
+                }
+                page.waitForLoadState(LoadState.DOMCONTENTLOADED);
+                waitForMicrosoftPasswordPageReady();
+                return;
+            }
 
-        Locator signInAnotherWay = signInAnotherWayLink();
-        if (!isVisible(signInAnotherWay, timeoutMillis)) {
-            return;
-        }
+            if (isLocatorVisible(signInAnotherWayLink())
+                    && isLocatorVisible(microsoftPasskeyErrorText())) {
+                clickSignInAnotherWay(signInAnotherWayLink());
+                page.waitForLoadState(LoadState.DOMCONTENTLOADED);
+                waitForMicrosoftPasskeyErrorToDisappear();
+                waitForUseMyPasswordOrPasswordField();
+                return;
+            }
 
-        if (!isVisible(microsoftPasskeyErrorText(), SHORT_TIMEOUT_MILLIS)) {
-            return;
+            page.waitForTimeout(100);
         }
-
-        clickSignInAnotherWay(signInAnotherWay);
-        page.waitForLoadState(LoadState.DOMCONTENTLOADED);
-        waitForMicrosoftPasskeyErrorToDisappear();
-        waitForUseMyPasswordOrPasswordField();
     }
 
     private void waitForUseMyPasswordOrPasswordField() {
@@ -267,9 +275,7 @@ public class LoginPage extends BasePage {
     }
 
     private boolean isMicrosoftPasswordVisible() {
-        Locator passwordField = microsoftPasswordField();
-        return isLocatorVisible(passwordField)
-                && isLocatorEditable(passwordField)
+        return isLocatorVisible(microsoftPasswordField())
                 && !isChooseWayToSignInVisible();
     }
 

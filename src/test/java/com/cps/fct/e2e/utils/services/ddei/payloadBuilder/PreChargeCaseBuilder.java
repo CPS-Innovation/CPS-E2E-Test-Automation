@@ -10,14 +10,9 @@ import io.cucumber.core.internal.com.fasterxml.jackson.core.JsonProcessingExcept
 
 public class PreChargeCaseBuilder {
 
-    public static String constructPreChargeTriageFor28DaysMCAccepted(String partyId) throws JsonProcessingException {
-       return  PreChargeCaseBuilder.constructPreChargeTriagePayloadBuilder(
-               "Accepted", "MC", "28Day", partyId);
-    }
-
-    public static String constructPreChargeTriageFor5DaysMCAccepted(String partyId) throws JsonProcessingException {
-        return  PreChargeCaseBuilder.constructPreChargeTriagePayloadBuilder(
-                "Accepted", "MC", "5Day", partyId);
+    public static String constructPreChargeTriageAccepted(
+            String caseType, String decisionToBeMade, String partyId) throws JsonProcessingException {
+        return constructPreChargeTriagePayloadBuilder("Accepted", caseType, decisionToBeMade, partyId);
     }
 
     private static String constructPreChargeTriagePayloadBuilder(

@@ -22,10 +22,19 @@ public class CompleteSubmissionPage extends BasePage {
             "Your review and MG3 document have been successfully submitted to CMS.";
     private static final String MG3_CREATION_ERROR_MESSAGE = "We could not create the MG3 document.";
     private static final String MG3_CREATION_RETRY_LINK_TEXT = "You can try again now";
+    private static final String MG3_SUBMISSION_TEXT = "Submit review with MG3 document";
     private static final int MG3_CREATION_RETRY_ATTEMPTS = 3;
     private static final int MG3_CREATION_RETRY_DELAY_MILLIS = 20_000;
+    private static final int MG3_SUBMISSION_SUCCESS_TIMEOUT_MILLIS = 65_000;
+    private static final int MG3_SUBMISSION_POLL_INTERVAL_MILLIS = 1_000;
+    private static final int REVIEW_SUBMISSION_SETTLE_DELAY_MILLIS = 20_000;
+    private static final String SUBMITTING_REVIEW_TEXT = "Submitting review...";
+    private static final String LOADING_TEXT = "Loading...";
     private static final String INVALID_EMAIL = "invalid-email";
     private static final String INCOMPLETE_PHONE_NUMBER = "01234";
+    private static final String SUBMIT_WITH_MG3_BUTTON_SELECTOR = "#b18-b4-b3-SubmitWithMG3";
+    private static final String VALIDATION_ERROR_SELECTOR =
+            ".govuk-error-summary, .govuk-error-message, [id*='ErrorMessage']";
 
 
     private Locator pageTitle() {
@@ -52,14 +61,6 @@ public class CompleteSubmissionPage extends BasePage {
         return page.locator("[id$='Checkbox_ShowCreateMG3']");
     }
 
-    private Locator emailErrorMessage() {
-        return page.locator("[id$='ErrorMessage5']");
-    }
-
-    private Locator phoneNumberErrorMessage() {
-        return page.locator("[id$='ErrorMessage6']");
-    }
-
     private Locator mg3SubmissionSuccessAlert() {
         return page.locator("[role='alert'], .govuk-notification-banner, .alert, [id$='Alert']")
                 .filter(new Locator.FilterOptions().setHasText(MG3_SUBMISSION_SUCCESS_STATUS))
@@ -81,7 +82,9 @@ public class CompleteSubmissionPage extends BasePage {
     }
 
     private Locator submitReviewWithMg3DocumentButton() {
-        return submitReviewButton("Submit review with MG3 document");
+        return page.locator("button")
+                .filter(new Locator.FilterOptions().setHasText(MG3_SUBMISSION_TEXT))
+                .first();
     }
 
     private Locator submitReviewButton(String buttonText) {
@@ -108,7 +111,7 @@ public class CompleteSubmissionPage extends BasePage {
         waitForPageToLoad();
 
         selectFromList(investigativeStageDropdown(), submissionData.get("Investigative stage"));
-        selectFromList(methodDropdown(), submissionData.get("Method"));
+        selectMethodIfPresent(submissionData.get("Method"));
         setCreateMg3Document(createMg3Document);
 
         submitWithoutContactDetailsAndAssertErrors(createMg3Document);
@@ -116,12 +119,15 @@ public class CompleteSubmissionPage extends BasePage {
         enterContactDetails();
 
         clickSubmitReviewButton(createMg3Document);
-        waitUntilSpinnersAreGone("Submitting review...", "Loading...");
+        waitForSubmitReviewProgressToFinish(createMg3Document);
         waitForLoginPageToLoadCompletely();
     }
 
     public void verifyReviewSubmission(String reviewType, boolean createMg3Document) {
-        page.waitForTimeout(20000); // To-Do: Replace with proper wait - use wait for submit http request to complete
+        if (!createMg3Document) {
+            page.waitForTimeout(REVIEW_SUBMISSION_SETTLE_DELAY_MILLIS);
+        }
+
         assertReviewSubmissionSuccess(reviewType, createMg3Document);
     }
 
@@ -143,6 +149,14 @@ public class CompleteSubmissionPage extends BasePage {
         dropdown.selectOption(value);
     }
 
+    private void selectMethodIfPresent(String method) {
+        if (isBlank(method) || methodDropdown().count() == 0) {
+            return;
+        }
+
+        selectFromList(methodDropdown(), method);
+    }
+
     private void enterContactDetails() {
         enterContactDetails(FakerUtils.cpsEmail(), FakerUtils.homePhone());
     }
@@ -155,28 +169,50 @@ public class CompleteSubmissionPage extends BasePage {
     private void submitWithoutContactDetailsAndAssertErrors(boolean createMg3Document) {
         enterContactDetails("", "");
         clickSubmitReviewButton(createMg3Document);
-        assertThat(emailErrorMessage()).containsText(EMPTY_EMAIL_ERROR_MESSAGE);
-        assertThat(phoneNumberErrorMessage()).containsText(EMPTY_PHONE_NUMBER_ERROR_MESSAGE);
+        assertValidationErrorMessage(EMPTY_EMAIL_ERROR_MESSAGE);
+        assertValidationErrorMessage(EMPTY_PHONE_NUMBER_ERROR_MESSAGE);
     }
 
     private void submitWithInvalidContactDetailsAndAssertErrors(boolean createMg3Document) {
         enterContactDetails(INVALID_EMAIL, INCOMPLETE_PHONE_NUMBER);
         clickSubmitReviewButton(createMg3Document);
-        assertThat(emailErrorMessage()).containsText(INVALID_EMAIL_ERROR_MESSAGE);
-        assertThat(phoneNumberErrorMessage()).containsText(INVALID_PHONE_NUMBER_ERROR_MESSAGE);
+        assertValidationErrorMessage(INVALID_EMAIL_ERROR_MESSAGE);
+        assertValidationErrorMessage(INVALID_PHONE_NUMBER_ERROR_MESSAGE);
+    }
+
+    private void assertValidationErrorMessage(String expectedMessage) {
+        Locator validationError = page.locator(VALIDATION_ERROR_SELECTOR)
+                .filter(new Locator.FilterOptions().setHasText(expectedMessage))
+                .first();
+        assertThat(validationError).isVisible();
     }
 
     private void clickSubmitReviewButton(boolean createMg3Document) {
         if (createMg3Document) {
-            submitReviewWithMg3DocumentButton().click();
+            Locator submitWithMg3Button = submitReviewWithMg3DocumentButton();
+            assertThat(submitWithMg3Button)
+                    .isVisible(new com.microsoft.playwright.assertions.LocatorAssertions.IsVisibleOptions()
+                            .setTimeout(25_000));
+            submitWithMg3Button.scrollIntoViewIfNeeded();
+            submitWithMg3Button.click();
         } else {
             submitReviewButton().click();
         }
     }
 
+    private void waitForSubmitReviewProgressToFinish(boolean createMg3Document) {
+        if (createMg3Document) {
+            waitUntilVisibleTextIsGone(SUBMITTING_REVIEW_TEXT, MG3_SUBMISSION_SUCCESS_TIMEOUT_MILLIS);
+            waitUntilVisibleTextIsGone(LOADING_TEXT, MG3_SUBMISSION_SUCCESS_TIMEOUT_MILLIS);
+            return;
+        }
+
+        waitUntilSpinnersAreGone(SUBMITTING_REVIEW_TEXT, LOADING_TEXT);
+    }
+
     private void assertMg3SubmissionSuccessAlert() {
         for (int retryAttempt = 0; retryAttempt <= MG3_CREATION_RETRY_ATTEMPTS; retryAttempt++) {
-            if (isMg3SubmissionSuccessVisible()) {
+            if (waitForMg3SubmissionSuccessOrRetryAvailable()) {
                 return;
             }
 
@@ -188,8 +224,63 @@ public class CompleteSubmissionPage extends BasePage {
             page.waitForTimeout(MG3_CREATION_RETRY_DELAY_MILLIS);
         }
 
-        assertThat(mg3SubmissionSuccessAlert()).containsText(MG3_SUBMISSION_SUCCESS_STATUS);
-        assertThat(mg3SubmissionSuccessAlert()).containsText(MG3_SUBMISSION_SUCCESS_MESSAGE);
+        com.microsoft.playwright.assertions.LocatorAssertions.ContainsTextOptions textTimeout =
+                new com.microsoft.playwright.assertions.LocatorAssertions.ContainsTextOptions().setTimeout(25_000);
+        assertThat(mg3SubmissionSuccessAlert()).containsText(MG3_SUBMISSION_SUCCESS_STATUS, textTimeout);
+        assertThat(mg3SubmissionSuccessAlert()).containsText(MG3_SUBMISSION_SUCCESS_MESSAGE, textTimeout);
+    }
+
+    private boolean waitForMg3SubmissionSuccessOrRetryAvailable() {
+        long deadline = System.currentTimeMillis() + MG3_SUBMISSION_SUCCESS_TIMEOUT_MILLIS;
+
+        while (System.currentTimeMillis() < deadline) {
+            if (isMg3SubmissionSuccessVisible()) {
+                return true;
+            }
+
+            if (isMg3CreationRetryAvailable()) {
+                return false;
+            }
+
+            page.waitForTimeout(MG3_SUBMISSION_POLL_INTERVAL_MILLIS);
+        }
+
+        return false;
+    }
+
+    private void waitUntilVisibleTextIsGone(String text, int timeoutMillis) {
+        long deadline = System.currentTimeMillis() + timeoutMillis;
+
+        while (System.currentTimeMillis() < deadline) {
+            if (!isVisibleTextPresent(text)) {
+                return;
+            }
+
+            page.waitForTimeout(MG3_SUBMISSION_POLL_INTERVAL_MILLIS);
+        }
+
+        throw new IllegalStateException("Visible text did not disappear within "
+                + timeoutMillis + "ms: " + text);
+    }
+
+    private boolean isVisibleTextPresent(String text) {
+        return Boolean.TRUE.equals(page.evaluate("""
+                expectedText => {
+                    const isVisible = element => {
+                        const style = window.getComputedStyle(element);
+                        const rect = element.getBoundingClientRect();
+                        return style.display !== 'none'
+                            && style.visibility !== 'hidden'
+                            && rect.width > 0
+                            && rect.height > 0;
+                    };
+
+                    return Array.from(document.querySelectorAll('body *')).some(element =>
+                        isVisible(element)
+                            && (element.innerText || element.textContent || '').includes(expectedText)
+                    );
+                }
+                """, text));
     }
 
     private boolean isMg3SubmissionSuccessVisible() {
@@ -228,5 +319,9 @@ public class CompleteSubmissionPage extends BasePage {
         } else if (!createMg3Document && checkbox.isChecked()) {
             checkbox.uncheck(new Locator.UncheckOptions().setForce(true));
         }
+    }
+
+    private boolean isBlank(String value) {
+        return value == null || value.isBlank();
     }
 }

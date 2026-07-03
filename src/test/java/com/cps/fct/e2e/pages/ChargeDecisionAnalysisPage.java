@@ -4,6 +4,7 @@ import com.cps.fct.e2e.utils.playwright.PlaywrightContext;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
+import com.microsoft.playwright.options.SelectOption;
 import org.assertj.core.api.Assertions;
 
 import java.util.ArrayList;
@@ -16,6 +17,10 @@ public class ChargeDecisionAnalysisPage extends BasePage {
 
     private static final String CASE_HEADLINE_LABEL = "Case headline";
     private static final String EVIDENTIAL_ANALYSIS_LABEL = "Evidential analysis";
+    private static final String WHAT_ADVICE_IS_SOUGHT_LABEL = "What advice is sought?";
+    private static final String MATERIALS_AND_INFORMATION_CONSIDERED_LABEL =
+            "Materials and information considered";
+    private static final String YOUR_ADVICE_LABEL = "Your advice";
     private static final String PUBLIC_INTEREST_ASSESSMENT_LABEL = "Public interest assessment";
     private static final String DISCLOSURE_MANAGEMENT_LABEL = "Disclosure management";
     private static final String ALLOCATION_LABEL = "Allocation";
@@ -27,10 +32,8 @@ public class ChargeDecisionAnalysisPage extends BasePage {
     private static final String MONITORING_CODES_LABEL = "Monitoring codes";
     private static final String MONITORING_CODES_HEADER = "Monitoring Codes";
     private static final String GLOBAL_MONITORING_CODES_LABEL = "Global monitoring codes";
-    private static final String GLOBAL_MONITORING_CODES_SELECTOR = "[id$='GlobalMonitoringFlags']";
     private static final String LOCAL_MONITORING_CODES_LABEL = "Local monitoring codes";
-    private static final String MONITORING_CODE_LABEL_SELECTOR = ".govuk-checkboxes__label";
-    private static final String CASE_HEADLINE_CONTAINER_SELECTOR = "[id$='Step2_A_CaseHeadline']";
+    private static final String SUSPECT_VICTIM_RELATIONSHIP_LABEL = "Suspect-victim relationship";
     private static final String PRE_CHARGE_DECISION_LABEL = "Pre-charge decision";
     private static final String NGAP_QUESTION_TEXT = "Has the file been submitted as NGAP?";
     private static final String FIELDSET_LEGEND_SELECTOR = "legend.cps-fieldset__legend";
@@ -55,18 +58,26 @@ public class ChargeDecisionAnalysisPage extends BasePage {
     private static final String DECISION_CODE_QUESTION = "Select a decision code";
     private static final String NFA_REASON_QUESTION = "What is your reason for no further action?";
     private static final String OUTCOME_REASON_QUESTION = "Was undermining, unused material a key factor in the outcome of the case?";
+    private static final String DECISION_TYPE_NO_FURTHER_ACTION = "No further action";
+    private static final String DECISION_TYPE_FURTHER_EVIDENCE_REQUIRED = "Further evidence required";
+    private static final String DECISION_TYPE_CHARGE = "Charge";
+    private static final String DECISION_TYPE_NON_CONVICTION_DISPOSAL = "Non-conviction disposal";
+    private static final String PRINCIPAL_OFFENCE_CATEGORY_LABEL = "Principal offence category";
+    private static final String EARLY_ADVICE_POC_DROPDOWN_SELECTOR = "#b16-b4-POC_Dropdown";
+    private static final String CASE_ACTION_PLAN_LABEL = "Case action plan";
     private static final String OFFENCE_CATEGORY_LABEL = "PCD principal offence category";
+    // Charging-decision summary card on the offence-category page. Match on the stable OutSystems
+    // widget-name suffixes (no numeric prefixes) so the selectors hold across case types.
+    private static final String CHARGING_SUMMARY_CARD_SELECTOR = "[id$='ChargingSummaryGDS']";
+    private static final String SUMMARY_ROW_DECISION_SELECTOR = "[id$='List_row_Decision']";
+    private static final String SUMMARY_ROW_DECISION_CODE_SELECTOR = "[id$='List_row_DecisionCode']";
+    private static final String SUMMARY_ROW_FOCUS_SELECTOR = "[id$='List_row_Focus']";
     private static final String CHARGING_DECISION_HEADER_SELECTOR = "span.govuk-heading-l";
     private static final String CHARGING_DECISION_SUSPECT_COUNT_SELECTOR = "h2.govuk-heading-m";
     private static final String ONE_DEFENDANT_SELECTOR = "[id$='OneDefendant']";
     private static final String PREVIEW_SCROLL_SELECTOR = ".previewScroll";
     private static final String PREVIEW_ANALYSIS_STEPS_SELECTOR =
             PREVIEW_SCROLL_SELECTOR + " [id$='AnalysisSteps']";
-    private static final String PREVIEW_GLOBAL_MONITORING_CODES_SELECTOR =
-            "#b10-b12-b3-GlobalMonitoringCodesSection";
-    private static final String PREVIEW_SUSPECT_RELATIONSHIP_SELECTOR =
-            "[data-block='MonitoringBlocks.DefendantRelationships']";
-    private static final String PREVIEW_LOCAL_MONITORING_CODES_SELECTOR = "#b10-b12-b3-b6-Column2";
     private static final String HUMAN_RIGHTS_PREVIEW_TEXT =
             "Human rights factors are not an issue in this case at this time";
     private static final String NONE_SELECTED_TEXT = "None selected";
@@ -84,7 +95,10 @@ public class ChargeDecisionAnalysisPage extends BasePage {
             Map.entry(VICTIM_AND_WITNESS_NEEDS_LABEL, TRIAL_AND_SENTENCING_PREPARATION_LABEL),
             Map.entry(TRIAL_AND_SENTENCING_PREPARATION_LABEL, HUMAN_RIGHTS_LABEL),
             Map.entry(HUMAN_RIGHTS_LABEL, ADVOCATE_AND_OPERATIONAL_DELIVERY_INSTRUCTIONS_LABEL),
-            Map.entry(ADVOCATE_AND_OPERATIONAL_DELIVERY_INSTRUCTIONS_LABEL, MONITORING_CODES_LABEL)
+            Map.entry(ADVOCATE_AND_OPERATIONAL_DELIVERY_INSTRUCTIONS_LABEL, MONITORING_CODES_LABEL),
+            Map.entry(WHAT_ADVICE_IS_SOUGHT_LABEL, MATERIALS_AND_INFORMATION_CONSIDERED_LABEL),
+            Map.entry(MATERIALS_AND_INFORMATION_CONSIDERED_LABEL, YOUR_ADVICE_LABEL),
+            Map.entry(YOUR_ADVICE_LABEL, PREVIEW_HEADER)
     );
     private final Map<String, String> enteredAnalysisTextBySection = new LinkedHashMap<>();
     private final List<String> selectedGlobalMonitoringCodes = new ArrayList<>();
@@ -96,8 +110,10 @@ public class ChargeDecisionAnalysisPage extends BasePage {
     }
 
     public ChargeDecisionAnalysisPage assertCaseHeadlineSection(String typeOfReview) {
-        assertThat(page.locator(CASE_HEADLINE_CONTAINER_SELECTOR)).containsText(typeOfReview);
+        assertThat(page.getByText("You've selected " + typeOfReview, new Page.GetByTextOptions().setExact(true)))
+                .isVisible();
         clickSectionIfNotVisible(CASE_HEADLINE_LABEL);
+        assertThat(page.locator("h1")).containsText(CASE_HEADLINE_LABEL);
         return this;
     }
 
@@ -125,6 +141,11 @@ public class ChargeDecisionAnalysisPage extends BasePage {
         clickSaveAndContinue();
         assertSectionCompleted(completedSectionName);
         assertNextSectionSelectedIfKnown(completedSectionName);
+    }
+
+    private void clickSaveAndContinueAndAssertSectionCompleted(String completedSectionName) {
+        clickSaveAndContinue();
+        assertSectionCompleted(completedSectionName);
     }
 
     public ChargeDecisionAnalysisPage enterTextInRichEditor(String randomWords) {
@@ -167,14 +188,54 @@ public class ChargeDecisionAnalysisPage extends BasePage {
                 .clickSaveAndContinueAndAssertSectionProgress(CASE_HEADLINE_LABEL);
     }
 
+    public void enterThresholdCaseHeadLine(String typeOfReview, String randomWords) {
+        enteredAnalysisTextBySection.put(CASE_HEADLINE_LABEL, randomWords);
+        assertCaseHeadlineSection(typeOfReview)
+                .enterTextInRichEditor(randomWords)
+                .clickSaveAndContinueAndAssertSectionCompleted(CASE_HEADLINE_LABEL);
+    }
+
     public void enterSectionText(String headerLabel, String randomWords) {
         enteredAnalysisTextBySection.put(headerLabel, randomWords);
         assertSection(headerLabel).enterTextInRichEditor(randomWords).clickSaveAndContinueAndAssertSectionProgress(headerLabel);
     }
 
+    public void enterEarlyAdviceSectionText(String headerLabel, String randomWords, String expectedNextHeader) {
+        enteredAnalysisTextBySection.put(headerLabel, randomWords);
+        assertSection(headerLabel)
+                .enterTextInRichEditor(randomWords)
+                .clickSaveAndContinue();
+        assertPageHeaderContains(expectedNextHeader);
+    }
+
+    public void enterThresholdConditionSection(String headerLabel, String randomWords, String answer) {
+        enteredAnalysisTextBySection.put(headerLabel, randomWords);
+        assertSection(headerLabel)
+                .enterTextInRichEditor(randomWords)
+                .chooseVisibleRadioAnswer(answer)
+                .clickSaveAndContinueAndAssertSectionCompleted(headerLabel);
+    }
+
+    public void skipThresholdAdditionalAnalysis(String headerLabel) {
+        assertSection(headerLabel)
+                .clickSaveAndContinueAndAssertSectionCompleted(headerLabel);
+    }
+
     public ChargeDecisionAnalysisPage enterSectionTextOnly(String headerLabel, String randomWords) {
         enteredAnalysisTextBySection.put(headerLabel, randomWords);
         assertSection(headerLabel).enterTextInRichEditor(randomWords);
+        return this;
+    }
+
+    private ChargeDecisionAnalysisPage chooseVisibleRadioAnswer(String answer) {
+        Locator radio = page.getByRole(
+                AriaRole.RADIO,
+                new Page.GetByRoleOptions().setName(answer).setExact(true)
+        ).first();
+        radio.scrollIntoViewIfNeeded();
+        assertThat(radio).isVisible();
+        radio.check(new Locator.CheckOptions().setForce(true));
+        assertThat(radio).isChecked();
         return this;
     }
 
@@ -186,7 +247,7 @@ public class ChargeDecisionAnalysisPage extends BasePage {
     }
 
     public void selectMonitoringCodesAndSaveContinue(String monitoringCodeType, List<String> monitoringCodes) {
-        assertThat(page.getByText(MONITORING_CODES_HEADER, new Page.GetByTextOptions().setExact(true))).isVisible();
+        assertMonitoringCodesPageVisible();
         selectMonitoringCodes(monitoringCodeType, monitoringCodes);
         clickSaveAndContinueAndAssertSectionProgress(MONITORING_CODES_LABEL);
     }
@@ -199,10 +260,161 @@ public class ChargeDecisionAnalysisPage extends BasePage {
             List<String> globalMonitoringCodes,
             List<String> localMonitoringCodes
     ) {
-        assertThat(page.getByText(MONITORING_CODES_HEADER, new Page.GetByTextOptions().setExact(true))).isVisible();
+        assertMonitoringCodesPageVisible();
         selectMonitoringCodes("Global", globalMonitoringCodes);
         selectMonitoringCodes("Local", localMonitoringCodes);
         clickSaveAndContinueAndAssertSectionProgress(MONITORING_CODES_LABEL);
+    }
+
+    public void selectEarlyAdviceMonitoringCodesAndSaveContinue(
+            List<String> globalMonitoringCodes,
+            List<String> localMonitoringCodes
+    ) {
+        assertMonitoringCodesPageVisible();
+        selectMonitoringCodes("Global", globalMonitoringCodes);
+        selectMonitoringCodes("Local", localMonitoringCodes);
+        clickSaveAndContinue();
+        assertPageHeaderContains(PRINCIPAL_OFFENCE_CATEGORY_LABEL);
+    }
+
+    public void selectPrincipalOffenceCategory(String offenceCategory) {
+        assertPageHeaderContains(PRINCIPAL_OFFENCE_CATEGORY_LABEL);
+        selectEarlyAdvicePocDropdownOption(offenceCategory);
+        clickSaveAndContinue();
+    }
+
+    public void selectEarlyAdvicePrincipalOffenceCategoryAndContinue(String offenceCategory) {
+        assertPageHeaderContains(PRINCIPAL_OFFENCE_CATEGORY_LABEL);
+        selectEarlyAdvicePocDropdownOption(offenceCategory);
+        clickSaveAndContinue();
+        assertPageHeaderContains(CASE_ACTION_PLAN_LABEL);
+    }
+
+    private void selectEarlyAdvicePocDropdownOption(String optionText) {
+        Locator dropdown = page.locator(EARLY_ADVICE_POC_DROPDOWN_SELECTOR);
+        assertThat(dropdown).isVisible();
+        dropdown.scrollIntoViewIfNeeded();
+
+        if (isNativeSelect(dropdown)) {
+            selectNativeDropdownOption(dropdown, optionText, PRINCIPAL_OFFENCE_CATEGORY_LABEL);
+            return;
+        }
+
+        selectTypeAheadDropdownOption(dropdown, optionText, PRINCIPAL_OFFENCE_CATEGORY_LABEL);
+    }
+
+    private boolean isNativeSelect(Locator locator) {
+        return Boolean.TRUE.equals(locator.evaluate("element => element.tagName.toLowerCase() === 'select'"));
+    }
+
+    private void selectNativeDropdownOption(Locator dropdown, String optionText, String fieldName) {
+        Locator options = dropdown.locator("option");
+        for (int optionIndex = 0; optionIndex < options.count(); optionIndex++) {
+            String visibleText = options.nth(optionIndex).innerText().trim();
+            if (optionMatches(visibleText, optionText)) {
+                dropdown.selectOption(new SelectOption().setIndex(optionIndex));
+                return;
+            }
+        }
+
+        throw new IllegalArgumentException(fieldName + " option was not found: " + optionText);
+    }
+
+    private void selectTypeAheadDropdownOption(Locator dropdown, String optionText, String fieldName) {
+        dropdown.click();
+        Locator textInput = dropdown.locator("input").first();
+        if (textInput.count() == 0) {
+            textInput = page.locator(EARLY_ADVICE_POC_DROPDOWN_SELECTOR + " input").first();
+        }
+
+        if (textInput.count() > 0 && textInput.isVisible()) {
+            textInput.fill(optionText);
+        } else {
+            dropdown.pressSequentially(optionText);
+        }
+
+        if (selectVisibleTypeAheadOption(optionText)) {
+            return;
+        }
+
+        throw new IllegalArgumentException(fieldName + " option was not found: " + optionText);
+    }
+
+    private boolean selectVisibleTypeAheadOption(String optionText) {
+        return Boolean.TRUE.equals(page.evaluate("""
+                optionText => {
+                    const normalize = value => (value || '').replace(/\\s+/g, ' ').trim().toLowerCase();
+                    const expected = normalize(optionText);
+                    const isVisible = element => {
+                        const style = window.getComputedStyle(element);
+                        const rect = element.getBoundingClientRect();
+                        return style.display !== 'none'
+                            && style.visibility !== 'hidden'
+                            && rect.width > 0
+                            && rect.height > 0;
+                    };
+                    const optionSelectors = [
+                        '[role="option"]',
+                        '.select2-results__option',
+                        '.choices__item--choice',
+                        '.dropdown-item',
+                        'li',
+                        'option'
+                    ];
+                    const candidates = Array.from(document.querySelectorAll(optionSelectors.join(',')))
+                        .filter(isVisible);
+                    const option = candidates.find(element => normalize(element.innerText || element.textContent) === expected)
+                        || candidates.find(element => normalize(element.innerText || element.textContent).includes(expected));
+
+                    if (!option) {
+                        return false;
+                    }
+
+                    option.scrollIntoView({ block: 'center', inline: 'nearest' });
+                    option.click();
+                    return true;
+                }
+                """, optionText));
+    }
+
+    private boolean optionMatches(String actualText, String expectedText) {
+        String actual = normalizeText(actualText);
+        String expected = normalizeText(expectedText);
+        return actual.equals(expected) || actual.contains(expected);
+    }
+
+    private String normalizeText(String text) {
+        return text == null ? "" : text.replaceAll("\\s+", " ").trim().toLowerCase();
+    }
+
+    private void assertPageHeaderContains(String expectedText) {
+        page.waitForCondition(() -> Boolean.TRUE.equals(page.evaluate("""
+                expectedText => {
+                    const normalize = value => (value || '').replace(/\\s+/g, ' ').trim().toLowerCase();
+                    const expected = normalize(expectedText);
+                    const isVisible = element => {
+                        const style = window.getComputedStyle(element);
+                        const rect = element.getBoundingClientRect();
+                        return style.display !== 'none'
+                            && style.visibility !== 'hidden'
+                            && rect.width > 0
+                            && rect.height > 0;
+                    };
+
+                    return Array.from(document.querySelectorAll('h1, span.govuk-heading-l'))
+                        .some(element =>
+                            isVisible(element)
+                                && normalize(element.innerText || element.textContent).includes(expected)
+                        );
+                }
+                """, expectedText)));
+    }
+
+    private void assertMonitoringCodesPageVisible() {
+        Locator pageHeading = page.locator(CHARGING_DECISION_HEADER_SELECTOR)
+                .filter(new Locator.FilterOptions().setHasText(MONITORING_CODES_HEADER))
+                .first();
+        assertThat(pageHeading).isVisible();
     }
 
     private void clickSaveAndContinueButton() {
@@ -286,91 +498,152 @@ public class ChargeDecisionAnalysisPage extends BasePage {
                 + UI_SETTLE_TIMEOUT_MILLIS + "ms.");
     }
 
-    private void scrollToMonitoringCodeSection(String monitoringCodeType) {
-        switch (normalizedMonitoringCodeType(monitoringCodeType)) {
-            case "global":
-                Locator globalMonitoringCodes = page.locator(GLOBAL_MONITORING_CODES_SELECTOR);
-                assertThat(globalMonitoringCodes).containsText(GLOBAL_MONITORING_CODES_LABEL);
-                globalMonitoringCodes.scrollIntoViewIfNeeded();
-                break;
-            case "local":
-                Locator localMonitoringCodes = page.getByText(
-                        LOCAL_MONITORING_CODES_LABEL,
-                        new Page.GetByTextOptions().setExact(true)
-                ).first();
-                assertThat(localMonitoringCodes).isVisible();
-                localMonitoringCodes.scrollIntoViewIfNeeded();
-                break;
-            default:
-                throw new IllegalArgumentException("Unsupported monitoring code type: " + monitoringCodeType
-                        + ". Use Global or Local.");
-        }
-    }
-
     private void checkMonitoringCode(String monitoringCodeType, String monitoringCode) {
         String normalizedMonitoringCode = monitoringCode.trim();
-        String labelSelector = monitoringCodeLabelSelector(monitoringCodeType);
+        Locator label = monitoringCodeLabel(monitoringCodeType, normalizedMonitoringCode);
+        Locator checkbox = checkboxForMonitoringCodeLabel(label);
 
-        for (int attempt = 1; attempt <= 3; attempt++) {
-            boolean checked = Boolean.TRUE.equals(page.evaluate("""
-                    ([labelSelector, monitoringCode]) => {
-                        const normalize = value => value.replace(/\\s+/g, ' ').trim().toLowerCase();
-                        const expectedText = normalize(monitoringCode);
-                        const isVisible = element => {
-                            const style = window.getComputedStyle(element);
-                            const rect = element.getBoundingClientRect();
-                            return style.display !== 'none'
-                                && style.visibility !== 'hidden'
-                                && rect.width > 0
-                                && rect.height > 0;
-                        };
-                        const labels = Array.from(document.querySelectorAll(labelSelector));
-                        const visibleLabels = labels.filter(isVisible);
-                        const exactMatch = item => normalize(item.innerText) === expectedText;
-                        const containsMatch = item => normalize(item.innerText).includes(expectedText);
-                        const label = visibleLabels.find(exactMatch)
-                            || visibleLabels.find(containsMatch)
-                            || labels.find(exactMatch)
-                            || labels.find(containsMatch);
-
-                        if (!label) {
-                            return false;
-                        }
-
-                        label.scrollIntoView({ block: 'center', inline: 'nearest' });
-
-                        const checkboxItem = label.closest('.govuk-checkboxes__item');
-                        const checkbox = checkboxItem?.querySelector('input[type="checkbox"]');
-                        if (!checkbox) {
-                            return false;
-                        }
-
-                        checkbox.scrollIntoView({ block: 'center', inline: 'nearest' });
-                        if (!checkbox.checked) {
-                            checkbox.click();
-                        }
-
-                        return checkbox.checked;
-                    }
-                    """, List.of(labelSelector, normalizedMonitoringCode)));
-
-            if (checked) {
-                return;
-            }
-
-            page.waitForTimeout(DEFAULT_WAIT_TIMEOUT_MS);
+        if (checkbox.isChecked()) {
+            return;
         }
 
-        throw new IllegalStateException("Monitoring code checkbox was not found or checked: "
-                + monitoringCodeType + " - " + normalizedMonitoringCode);
+        label.scrollIntoViewIfNeeded();
+        label.click();
+        assertThat(checkbox).isChecked();
     }
 
-    private String monitoringCodeLabelSelector(String monitoringCodeType) {
-        return switch (normalizedMonitoringCodeType(monitoringCodeType)) {
-            case "global", "local" -> MONITORING_CODE_LABEL_SELECTOR;
+    private void assertMonitoringCodeChecked(String monitoringCodeType, String monitoringCode) {
+        Locator checkbox = checkboxForMonitoringCodeLabel(
+                monitoringCodeLabel(monitoringCodeType, monitoringCode.trim())
+        );
+        assertThat(checkbox).isChecked();
+    }
+
+    private static final String MONITORING_CODE_LABEL_MARKER = "data-e2e-monitoring-code-label";
+
+    private Locator monitoringCodeLabel(String monitoringCodeType, String monitoringCode) {
+        String sectionHeading = switch (normalizedMonitoringCodeType(monitoringCodeType)) {
+            case "global" -> GLOBAL_MONITORING_CODES_LABEL;
+            case "local" -> LOCAL_MONITORING_CODES_LABEL;
             default -> throw new IllegalArgumentException("Unsupported monitoring code type: " + monitoringCodeType
                     + ". Use Global or Local.");
         };
+
+        long deadline = System.currentTimeMillis() + UI_SETTLE_TIMEOUT_MILLIS;
+        while (System.currentTimeMillis() < deadline) {
+            if (markMonitoringCodeLabel(sectionHeading, monitoringCode)) {
+                Locator label = page.locator("[" + MONITORING_CODE_LABEL_MARKER + "='true']");
+                assertThat(label).isVisible();
+                return label;
+            }
+            page.waitForTimeout(250);
+        }
+
+        throw new IllegalStateException("Monitoring code label not found within "
+                + UI_SETTLE_TIMEOUT_MILLIS + "ms: section='" + sectionHeading
+                + "', code='" + monitoringCode + "'.");
+    }
+
+    private boolean markMonitoringCodeLabel(String sectionHeading, String monitoringCode) {
+        return Boolean.TRUE.equals(page.evaluate("""
+                ([sectionHeading, codeLabel, markerAttr, sectionHeadings]) => {
+                    const normalize = value => (value || '').replace(/\\s+/g, ' ').trim().toLowerCase();
+                    const targetHeading = normalize(sectionHeading);
+                    const targetLabel = normalize(codeLabel);
+                    const knownHeadings = sectionHeadings.map(normalize);
+                    const isVisible = element => {
+                        const style = window.getComputedStyle(element);
+                        const rect = element.getBoundingClientRect();
+                        return style.display !== 'none'
+                            && style.visibility !== 'hidden'
+                            && rect.width > 0
+                            && rect.height > 0;
+                    };
+
+                    const headingSelector = 'h1, h2, h3, h4, h5, h6, legend, span, label, p, div, strong, b';
+                    const allElements = Array.from(document.querySelectorAll(headingSelector));
+                    const textOf = el => normalize(el.innerText || el.textContent);
+                    const matchesHeading = (el, target) => {
+                        const text = textOf(el);
+                        return text === target || text.startsWith(target) || text.includes(target);
+                    };
+
+                    const headingCandidates = allElements
+                        .filter(el => isVisible(el) && matchesHeading(el, targetHeading))
+                        .sort((a, b) => textOf(a).length - textOf(b).length);
+
+                    if (headingCandidates.length === 0) {
+                        return false;
+                    }
+
+                    const boundaryCandidates = allElements
+                        .filter(el => isVisible(el)
+                            && knownHeadings.some(known => known !== targetHeading && matchesHeading(el, known)));
+
+                    const allVisibleLabels = Array.from(document.querySelectorAll('label')).filter(isVisible);
+
+                    for (const heading of headingCandidates) {
+                        const followingBoundary = boundaryCandidates.find(el =>
+                            heading.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING
+                        );
+
+                        const match = allVisibleLabels.find(l => {
+                            if (normalize(l.innerText || l.textContent) !== targetLabel) {
+                                return false;
+                            }
+                            const afterHeading = Boolean(
+                                heading.compareDocumentPosition(l) & Node.DOCUMENT_POSITION_FOLLOWING
+                            );
+                            if (!afterHeading) {
+                                return false;
+                            }
+                            if (!followingBoundary) {
+                                return true;
+                            }
+                            return Boolean(
+                                followingBoundary.compareDocumentPosition(l) & Node.DOCUMENT_POSITION_PRECEDING
+                            );
+                        });
+
+                        if (match) {
+                            document.querySelectorAll('[' + markerAttr + '="true"]')
+                                .forEach(el => el.removeAttribute(markerAttr));
+                            match.setAttribute(markerAttr, 'true');
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+                """, List.of(
+                        sectionHeading,
+                        monitoringCode.trim(),
+                        MONITORING_CODE_LABEL_MARKER,
+                        List.of(
+                                GLOBAL_MONITORING_CODES_LABEL,
+                                LOCAL_MONITORING_CODES_LABEL,
+                                SUSPECT_VICTIM_RELATIONSHIP_LABEL
+                        )
+                )));
+    }
+
+    private Locator checkboxForMonitoringCodeLabel(Locator label) {
+        String checkboxId = label.getAttribute("for");
+        if (checkboxId != null && !checkboxId.isBlank()) {
+            Locator checkbox = page.locator("input[type='checkbox'][id=" + cssString(checkboxId) + "]");
+            assertThat(checkbox).isVisible();
+            return checkbox;
+        }
+
+        Locator checkbox = label.locator(
+                "xpath=ancestor::*[contains(concat(' ', normalize-space(@class), ' '), "
+                        + "' govuk-checkboxes__item ')][1]//input[@type='checkbox']"
+        ).first();
+        assertThat(checkbox).isVisible();
+        return checkbox;
+    }
+
+    private String cssString(String value) {
+        return "\"" + value.replace("\\", "\\\\").replace("\"", "\\\"") + "\"";
     }
 
     private String normalizedMonitoringCodeType(String monitoringCodeType) {
@@ -384,9 +657,13 @@ public class ChargeDecisionAnalysisPage extends BasePage {
             return;
         }
 
-        scrollToMonitoringCodeSection(monitoringCodeType);
         for (String monitoringCode : monitoringCodes) {
             checkMonitoringCode(monitoringCodeType, monitoringCode);
+            page.waitForTimeout(DEFAULT_WAIT_TIMEOUT_MS);
+            waitUntilBusyIndicatorsAreGone();
+        }
+        for (String monitoringCode : monitoringCodes) {
+            assertMonitoringCodeChecked(monitoringCodeType, monitoringCode);
         }
     }
 
@@ -425,14 +702,14 @@ public class ChargeDecisionAnalysisPage extends BasePage {
 
     private void assertPreviewGlobalMonitoringCodes() {
         assertPreviewMonitoringCodes(
-                page.locator(PREVIEW_GLOBAL_MONITORING_CODES_SELECTOR),
+                previewRowByLabel(GLOBAL_MONITORING_CODES_LABEL),
                 selectedGlobalMonitoringCodes
         );
     }
 
     private void assertPreviewLocalMonitoringCodes() {
         assertPreviewMonitoringCodes(
-                page.locator(PREVIEW_LOCAL_MONITORING_CODES_SELECTOR),
+                previewRowByLabel(LOCAL_MONITORING_CODES_LABEL),
                 selectedLocalMonitoringCodes
         );
     }
@@ -454,7 +731,7 @@ public class ChargeDecisionAnalysisPage extends BasePage {
     }
 
     private void assertPreviewSuspectVictimRelationship() {
-        Locator suspectRelationshipSection = page.locator(PREVIEW_SUSPECT_RELATIONSHIP_SELECTOR);
+        Locator suspectRelationshipSection = previewRowByLabel("Suspect-victim relationship");
         suspectRelationshipSection.scrollIntoViewIfNeeded();
         assertThat(suspectRelationshipSection).isVisible();
 
@@ -465,6 +742,62 @@ public class ChargeDecisionAnalysisPage extends BasePage {
                     "Preview suspect-victim relationship"
             );
         }
+    }
+
+    private Locator previewRowByLabel(String label) {
+        page.locator(PREVIEW_SCROLL_SELECTOR).scrollIntoViewIfNeeded();
+
+        boolean rowMarked = Boolean.TRUE.equals(page.evaluate("""
+                ([previewSelector, label]) => {
+                    const normalize = value => (value || '').replace(/\\s+/g, ' ').trim().toLowerCase();
+                    const expectedLabel = normalize(label);
+                    const previewRoot = document.querySelector(previewSelector)?.parentElement || document.body;
+                    const isVisible = element => {
+                        const style = window.getComputedStyle(element);
+                        const rect = element.getBoundingClientRect();
+                        return style.display !== 'none'
+                            && style.visibility !== 'hidden'
+                            && rect.width > 0
+                            && rect.height > 0;
+                    };
+
+                    const candidates = Array.from(previewRoot.querySelectorAll('div, section, article, tr'));
+                    const matchingLabel = candidates.find(element =>
+                        isVisible(element)
+                            && normalize(element.innerText || element.textContent).startsWith(expectedLabel)
+                    );
+
+                    if (!matchingLabel) {
+                        return false;
+                    }
+
+                    let row = matchingLabel;
+                    for (let i = 0; row && i < 5; i++) {
+                        const rowText = normalize(row.innerText || row.textContent);
+                        if (rowText.includes(expectedLabel)
+                                && (rowText.length > expectedLabel.length || row.querySelector('a, button'))) {
+                            break;
+                        }
+                        row = row.parentElement;
+                    }
+
+                    if (!row) {
+                        return false;
+                    }
+
+                    document.querySelectorAll("[data-e2e-preview-row='true']")
+                        .forEach(element => element.removeAttribute('data-e2e-preview-row'));
+                    row.setAttribute('data-e2e-preview-row', 'true');
+                    row.scrollIntoView({ block: 'center', inline: 'nearest' });
+                    return true;
+                }
+                """, List.of(PREVIEW_SCROLL_SELECTOR, label)));
+
+        if (!rowMarked) {
+            throw new IllegalStateException("Preview row was not found: " + label);
+        }
+
+        return page.locator("[data-e2e-preview-row='true']");
     }
 
     private void assertLocatorContainsNormalizedText(Locator locator, String expectedText, String description) {
@@ -521,20 +854,33 @@ public class ChargeDecisionAnalysisPage extends BasePage {
         clickSaveAndContinue();
     }
 
+    public void checkPreviewEarlyAdviceAnalysis() {
+        assertPageHeaderContains(PREVIEW_HEADER);
+        clickSaveAndContinue();
+        assertPageHeaderContains(MONITORING_CODES_HEADER);
+    }
+
     public void checkDGComplaintAsYes() {
+        String headingText = page.locator("h1").first().innerText();
+        if (normalizePreviewText(headingText).contains(DECISION_HEADER)) {
+            return;
+        }
+
         assertThat(page.locator("h1")).containsText(DG_COMPLAINT_HEADER);
         assertThat(page.getByText(DG_COMPLAINT_SUBHEADER, new Page.GetByTextOptions().setExact(true))).isVisible();
         checkCheckbox(RADIO_ROLE_YES);
         clickSaveAndContinue();
     }
 
-    public void applyDecisionChargeForNFA(Map<String, String> decisionChargingData) {
+    public void applyChargingDecision(Map<String, String> decisionChargingData) {
+        String decisionType = decisionChargingData.get("decision type");
+
         waitForTextInLocator("h1", DECISION_HEADER);
         clickSaveAndContinue();
         page.waitForTimeout(DEFAULT_WAIT_TIMEOUT_MS);
 
         waitForTextInLocator("h1", DECISION_TYPE_QUESTION);
-        checkRadioByName(decisionChargingData.get("decision type"));
+        checkRadioByName(decisionType);
         page.waitForTimeout(DEFAULT_WAIT_TIMEOUT_MS);
 
         waitForTextInLocator("h2", DECISION_CODE_QUESTION);
@@ -542,15 +888,67 @@ public class ChargeDecisionAnalysisPage extends BasePage {
         clickSaveAndContinue();
         page.waitForTimeout(DEFAULT_WAIT_TIMEOUT_MS);
 
+        if (DECISION_TYPE_NO_FURTHER_ACTION.equalsIgnoreCase(decisionType)) {
+            applyNoFurtherActionDecision(decisionChargingData);
+        } else if (DECISION_TYPE_FURTHER_EVIDENCE_REQUIRED.equalsIgnoreCase(decisionType)) {
+            applyFurtherEvidenceRequiredDecision(decisionChargingData);
+        } else if (DECISION_TYPE_CHARGE.equalsIgnoreCase(decisionType)) {
+            applyChargeDecision(decisionChargingData);
+        } else if (DECISION_TYPE_NON_CONVICTION_DISPOSAL.equalsIgnoreCase(decisionType)) {
+            applyNonConvictionDisposalDecision(decisionChargingData);
+        } else {
+            throw new IllegalArgumentException("Unsupported decision type: " + decisionType);
+        }
+    }
+
+    private void applyNoFurtherActionDecision(Map<String, String> decisionChargingData) {
         applyDecisionCode(NFA_REASON_QUESTION, decisionChargingData.get("reason"));
         applyDecisionCode(OUTCOME_REASON_QUESTION, decisionChargingData.get("out come of case"));
+        assertChargingDecisionSelections(decisionChargingData);
+        selectOffenceCategoryAndFinish(decisionChargingData.get("offence category"));
+    }
 
+    private void applyFurtherEvidenceRequiredDecision(Map<String, String> decisionChargingData) {
+        selectOffenceCategoryAndFinish(decisionChargingData.get("offence category"));
+    }
+
+    private void applyChargeDecision(Map<String, String> decisionChargingData) {
+        // TODO: implement Charge decision flow
+    }
+
+    private void applyNonConvictionDisposalDecision(Map<String, String> decisionChargingData) {
+        applyDecisionCode(OUTCOME_REASON_QUESTION, decisionChargingData.get("out come of case"));
+        assertChargingDecisionSelections(decisionChargingData);
+        selectOffenceCategoryAndFinish(decisionChargingData.get("offence category"));
+    }
+
+    private void selectOffenceCategoryAndFinish(String offenceCategory) {
         assertThat(page.getByText(OFFENCE_CATEGORY_LABEL)).isVisible();
-        selectComboBoxByVisibleText(decisionChargingData.get("offence category"));
+        selectComboBoxByVisibleText(offenceCategory);
         clickSaveAndContinue();
         waitUntilLoadingIndicatorIsGone(LOADING_INDICATOR_TEXT);
         waitForLoginPageToLoadCompletely();
         clickSaveAndContinue();
+    }
+
+    // Verifies the choices captured on the charging-decision summary card (shown on the offence
+    // category page) match what the scenario selected. Each value is asserted within its own
+    // summary row; reason/outcome are only shown for some decision types, so they are asserted
+    // only when supplied.
+    private void assertChargingDecisionSelections(Map<String, String> decisionChargingData) {
+        assertThat(page.locator(CHARGING_SUMMARY_CARD_SELECTOR)).isVisible();
+
+        assertSummaryRowContains(SUMMARY_ROW_DECISION_SELECTOR, decisionChargingData.get("decision type"));
+        assertSummaryRowContains(SUMMARY_ROW_DECISION_CODE_SELECTOR, decisionChargingData.get("decision code"));
+        assertSummaryRowContains(SUMMARY_ROW_DECISION_CODE_SELECTOR, decisionChargingData.get("reason"));
+        assertSummaryRowContains(SUMMARY_ROW_FOCUS_SELECTOR, decisionChargingData.get("out come of case"));
+    }
+
+    private void assertSummaryRowContains(String rowSelector, String expectedValue) {
+        if (expectedValue == null || expectedValue.isBlank()) {
+            return;
+        }
+        assertThat(page.locator(rowSelector)).containsText(expectedValue);
     }
 
     private void applyDecisionCode(String questionHeader, String radioValue) {

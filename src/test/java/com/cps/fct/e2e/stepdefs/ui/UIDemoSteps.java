@@ -28,9 +28,29 @@ public class UIDemoSteps {
     private static final String PASSWORD_KEY = "PASSWORD";
     private static final String AUTO_GENERATED_VALUE = "Auto-generated";
     private static final String DEFAULT_REVIEW_TYPE = "Full Code Test";
+    private static final String THRESHOLD_TEST_REVIEW_TYPE = "Threshold Test";
+    private static final String EARLY_ADVICE_REVIEW_TYPE = "Early Advice";
     private static final String CASE_HEADLINE_FIELD = "Case headline";
     private static final String EVIDENTIAL_ANALYSIS_FIELD = "Evidential analysis";
+    private static final String WHAT_ADVICE_IS_SOUGHT_FIELD = "What advice is sought";
+    private static final String WHAT_ADVICE_IS_SOUGHT_SECTION = "What advice is sought?";
+    private static final String MATERIALS_AND_INFORMATION_CONSIDERED_FIELD =
+            "Materials and information considered";
+    private static final String YOUR_ADVICE_FIELD = "Your advice";
+    private static final String PREVIEW_SECTION = "Preview";
+    private static final String REASONABLE_GROUNDS_TO_SUSPECT_FIELD = "Reasonable grounds to suspect";
+    private static final String REASONABLE_GROUNDS_TO_SUSPECT_MET_FIELD = "Reasonable grounds to suspect met";
+    private static final String FURTHER_EVIDENCE_OBTAINABLE_FIELD = "Further evidence obtainable";
+    private static final String FURTHER_EVIDENCE_OBTAINABLE_MET_FIELD = "Further evidence obtainable met";
+    private static final String SERIOUSNESS_JUSTIFIES_IMMEDIATE_CHARGE_FIELD =
+            "Seriousness justifies immediate charge";
+    private static final String SERIOUSNESS_JUSTIFIES_IMMEDIATE_CHARGE_MET_FIELD =
+            "Seriousness justifies immediate charge met";
+    private static final String GROUNDS_TO_OBJECT_BAIL_FIELD = "Grounds to object bail";
+    private static final String GROUNDS_TO_OBJECT_BAIL_MET_FIELD = "Grounds to object bail met";
     private static final String PUBLIC_INTEREST_ASSESSMENT_FIELD = "Public interest assessment";
+    private static final String PUBLIC_INTEREST_ASSESSMENT_MET_FIELD = "Public interest assessment met";
+    private static final String ADDITIONAL_ANALYSIS_FIELD = "Additional analysis";
     private static final String DISCLOSURE_MANAGEMENT_FIELD = "Disclosure management";
     private static final String ALLOCATION_FIELD = "Allocation";
     private static final String ALLOCATION_NGAP_FIELD = "Allocation NGAP";
@@ -42,6 +62,15 @@ public class UIDemoSteps {
     private static final String SUSPECT_VICTIM_RELATIONSHIP_FIELD = "Suspect-victim relationship";
     private static final String GLOBAL_MONITORING_CODES_FIELD = "Global monitoring codes";
     private static final String LOCAL_MONITORING_CODES_FIELD = "Local monitoring codes";
+    private static final String PRINCIPAL_OFFENCE_CATEGORY_FIELD = "Principal offence category";
+    private static final String DATE_REQUIRED_BY_FIELD = "Date required by";
+    private static final String CHASER_TASK_FIELD = "Chaser task";
+    private static final String CHASER_TASK_DATE_FIELD = "Chaser task date";
+    private static final String RELATED_TO_SUSPECT_FIELD = "Related to suspect";
+    private static final String ACTION_FIELD = "Action";
+    private static final String DEFAULT_RELATED_SUSPECT = "All";
+    private static final String CHASER_ONE_DAY_BEFORE_VALUE = "1 day before date required";
+    private static final String NO_VALUE = "No";
     private static final String YES_VALUE = "Yes";
     private static final String NOT_AT_THIS_TIME_VALUE = "Not at this time";
 
@@ -125,7 +154,7 @@ public class UIDemoSteps {
     @And("the case headline is entered")
     public void enterTheCaseHeadlineText() {
         String randomWords = FakerUtils.populateSentences();
-        pages.decisionAnalysisPage.enterCaseHeadLine("Full Code Test", randomWords);
+        pages.decisionAnalysisPage.enterCaseHeadLine(selectedReviewType(), randomWords);
         context.set("caseHeadlineText", randomWords);
     }
 
@@ -168,6 +197,12 @@ public class UIDemoSteps {
         pages.decisionAnalysisPage.addSuspectVictimRelationship(relationshipType);
     }
 
+    @And("I select PCD principal offence category as {string}")
+    public void iSelectPcdPrincipalOffenceCategoryAs(String offenceCategory) {
+        pages.decisionAnalysisPage.selectEarlyAdvicePrincipalOffenceCategoryAndContinue(offenceCategory);
+        context.set(PRINCIPAL_OFFENCE_CATEGORY_FIELD, offenceCategory);
+    }
+
     @And("I complete the pre-charge analysis details:")
     public void iCompletePreChargeAnalysisDetails(DataTable dataTable) {
         completePreChargeAnalysisDetails(dataTable);
@@ -176,6 +211,16 @@ public class UIDemoSteps {
     @And("I complete the pre-charge analysis details with:")
     public void iCompletePreChargeAnalysisDetailsWithOverrides(DataTable dataTable) {
         completePreChargeAnalysisDetails(dataTable);
+    }
+
+    @And("I complete the Threshold Test pre-charge analysis details with:")
+    public void iCompleteThresholdTestPreChargeAnalysisDetailsWithOverrides(DataTable dataTable) {
+        completeThresholdTestPreChargeAnalysisDetails(dataTable);
+    }
+
+    @And("^I complete the Early Advice pre[- ]charge analysis details with\\s?:$")
+    public void iCompleteEarlyAdvicePreChargeAnalysisDetailsWithOverrides(DataTable dataTable) {
+        completeEarlyAdvicePreChargeAnalysisDetails(dataTable);
     }
 
     private void completePreChargeAnalysisDetails(DataTable dataTable) {
@@ -226,8 +271,95 @@ public class UIDemoSteps {
         pages.decisionAnalysisPage.selectMonitoringCodesAndSaveContinue(globalMonitoringCodes, localMonitoringCodes);
     }
 
+    private void completeThresholdTestPreChargeAnalysisDetails(DataTable dataTable) {
+        if (!THRESHOLD_TEST_REVIEW_TYPE.equalsIgnoreCase(selectedReviewType())) {
+            throw new IllegalStateException("Threshold pre-charge analysis step requires selected review type "
+                    + THRESHOLD_TEST_REVIEW_TYPE + ". Actual: " + selectedReviewType());
+        }
+
+        Map<String, String> analysisDetails = defaultThresholdPreChargeAnalysisDetails();
+        analysisDetails.putAll(analysisDetails(dataTable));
+
+        String caseHeadline = resolvedAnalysisText(analysisDetails, CASE_HEADLINE_FIELD);
+        pages.decisionAnalysisPage.enterThresholdCaseHeadLine(THRESHOLD_TEST_REVIEW_TYPE, caseHeadline);
+        context.set("caseHeadlineText", caseHeadline);
+
+        enterThresholdConditionSection(
+                analysisDetails,
+                REASONABLE_GROUNDS_TO_SUSPECT_FIELD,
+                REASONABLE_GROUNDS_TO_SUSPECT_MET_FIELD
+        );
+        enterThresholdConditionSection(
+                analysisDetails,
+                FURTHER_EVIDENCE_OBTAINABLE_FIELD,
+                FURTHER_EVIDENCE_OBTAINABLE_MET_FIELD
+        );
+        enterThresholdConditionSection(
+                analysisDetails,
+                SERIOUSNESS_JUSTIFIES_IMMEDIATE_CHARGE_FIELD,
+                SERIOUSNESS_JUSTIFIES_IMMEDIATE_CHARGE_MET_FIELD
+        );
+        enterThresholdConditionSection(
+                analysisDetails,
+                GROUNDS_TO_OBJECT_BAIL_FIELD,
+                GROUNDS_TO_OBJECT_BAIL_MET_FIELD
+        );
+
+        enterThresholdConditionSection(
+                analysisDetails,
+                PUBLIC_INTEREST_ASSESSMENT_FIELD,
+                PUBLIC_INTEREST_ASSESSMENT_MET_FIELD
+        );
+        skipThresholdAdditionalAnalysis(analysisDetails);
+
+        String relationship = optionalAnalysisValue(analysisDetails, SUSPECT_VICTIM_RELATIONSHIP_FIELD);
+        if (!isBlank(relationship)) {
+            pages.decisionAnalysisPage.addSuspectVictimRelationship(relationship);
+            context.set(SUSPECT_VICTIM_RELATIONSHIP_FIELD, relationship);
+        }
+
+        List<String> globalMonitoringCodes = monitoringCodes(analysisDetails, GLOBAL_MONITORING_CODES_FIELD);
+        List<String> localMonitoringCodes = monitoringCodes(analysisDetails, LOCAL_MONITORING_CODES_FIELD);
+        pages.decisionAnalysisPage.selectMonitoringCodesAndSaveContinue(globalMonitoringCodes, localMonitoringCodes);
+    }
+
+    private void completeEarlyAdvicePreChargeAnalysisDetails(DataTable dataTable) {
+        if (!EARLY_ADVICE_REVIEW_TYPE.equalsIgnoreCase(selectedReviewType())) {
+            throw new IllegalStateException("Early Advice pre-charge analysis step requires selected review type "
+                    + EARLY_ADVICE_REVIEW_TYPE + ". Actual: " + selectedReviewType());
+        }
+
+        Map<String, String> analysisDetails = defaultEarlyAdvicePreChargeAnalysisDetails();
+        analysisDetails.putAll(analysisDetails(dataTable));
+
+        enterEarlyAdviceAnalysisSection(
+                analysisDetails,
+                WHAT_ADVICE_IS_SOUGHT_FIELD,
+                WHAT_ADVICE_IS_SOUGHT_SECTION,
+                MATERIALS_AND_INFORMATION_CONSIDERED_FIELD
+        );
+        enterEarlyAdviceAnalysisSection(
+                analysisDetails,
+                MATERIALS_AND_INFORMATION_CONSIDERED_FIELD,
+                MATERIALS_AND_INFORMATION_CONSIDERED_FIELD,
+                YOUR_ADVICE_FIELD
+        );
+        enterEarlyAdviceAnalysisSection(
+                analysisDetails,
+                YOUR_ADVICE_FIELD,
+                YOUR_ADVICE_FIELD,
+                PREVIEW_SECTION
+        );
+        completeEarlyAdvicePostPreviewDetails(analysisDetails);
+    }
+
     @And("I preview pre charge analysis")
     public void iPreviewPreChargeAnalysis() {
+        if (EARLY_ADVICE_REVIEW_TYPE.equalsIgnoreCase(selectedReviewType())) {
+            pages.decisionAnalysisPage.checkPreviewEarlyAdviceAnalysis();
+            return;
+        }
+
         pages.decisionAnalysisPage.checkPreviewChargeAnalysis();
     }
 
@@ -241,12 +373,59 @@ public class UIDemoSteps {
     public void iMakeChargingDecisionAsFollowing(DataTable dataTable) {
         Map<String, String> decisionChargingData =
                 dataTable.asMaps(String.class, String.class).getFirst();
-        pages.decisionAnalysisPage.applyDecisionChargeForNFA(decisionChargingData);
+        pages.decisionAnalysisPage.applyChargingDecision(decisionChargingData);
     }
 
     @And("I continue without action plan")
     public void iContinueWithoutActionPlan() {
         pages.actionPlanPage.continueWithOutActionPlan();
+    }
+
+    @And("I add an action point plan for {string} and {string}")
+    public void iAddAnActionPointPlanForAnd(String daysToAdd, String actionPointOption) {
+        pages.actionPlanPage.addActionPointPlan(daysToAdd, actionPointOption);
+    }
+
+    @And("I add an action point plan with:")
+    public void iAddAnActionPointPlanWith(DataTable dataTable) {
+        Map<String, String> actionPlan = analysisDetails(dataTable);
+
+        String dateRequiredBy = requiredAnalysisValue(actionPlan, DATE_REQUIRED_BY_FIELD);
+        String action = requiredAnalysisValue(actionPlan, ACTION_FIELD);
+
+        String relatedSuspect = optionalAnalysisValue(actionPlan, RELATED_TO_SUSPECT_FIELD);
+        if (isBlank(relatedSuspect)) {
+            relatedSuspect = DEFAULT_RELATED_SUSPECT;
+        }
+
+        boolean addChaser = resolveChaserTaskOneDayBefore(actionPlan);
+
+        pages.actionPlanPage.addActionPointPlan(dateRequiredBy, action, relatedSuspect, addChaser);
+    }
+
+    private boolean resolveChaserTaskOneDayBefore(Map<String, String> actionPlan) {
+        String chaserTask = optionalAnalysisValue(actionPlan, CHASER_TASK_FIELD);
+        String chaserTaskDate = optionalAnalysisValue(actionPlan, CHASER_TASK_DATE_FIELD);
+
+        if (isBlank(chaserTask) || NO_VALUE.equalsIgnoreCase(chaserTask)) {
+            if (!isBlank(chaserTaskDate)) {
+                throw new IllegalArgumentException(CHASER_TASK_DATE_FIELD + " must be blank when "
+                        + CHASER_TASK_FIELD + " is " + NO_VALUE + ".");
+            }
+            return false;
+        }
+
+        if (!YES_VALUE.equalsIgnoreCase(chaserTask)) {
+            throw new IllegalArgumentException("Unsupported " + CHASER_TASK_FIELD + " value: " + chaserTask
+                    + ". Use " + YES_VALUE + " or " + NO_VALUE + ".");
+        }
+
+        if (!CHASER_ONE_DAY_BEFORE_VALUE.equalsIgnoreCase(chaserTaskDate)) {
+            throw new IllegalArgumentException(CHASER_TASK_DATE_FIELD + " only supports '"
+                    + CHASER_ONE_DAY_BEFORE_VALUE + "' when " + CHASER_TASK_FIELD + " is " + YES_VALUE + ".");
+        }
+
+        return true;
     }
 
     @And("I submit the charging decision as following")
@@ -287,6 +466,90 @@ public class UIDemoSteps {
         context.set(sectionName, sectionText);
     }
 
+    private void enterThresholdConditionSection(
+            Map<String, String> analysisDetails,
+            String sectionName,
+            String answerFieldName
+    ) {
+        String sectionText = resolvedAnalysisText(analysisDetails, sectionName);
+        String answer = requiredAnalysisValue(analysisDetails, answerFieldName);
+
+        if (!YES_VALUE.equalsIgnoreCase(answer)) {
+            throw new IllegalArgumentException("Unsupported " + answerFieldName + " value: " + answer
+                    + ". Only Yes is currently supported.");
+        }
+
+        pages.decisionAnalysisPage.enterThresholdConditionSection(sectionName, sectionText, answer);
+        context.set(sectionName, sectionText);
+        context.set(answerFieldName, answer);
+    }
+
+    private void enterEarlyAdviceAnalysisSection(
+            Map<String, String> analysisDetails,
+            String fieldName,
+            String sectionName,
+            String expectedNextSectionName
+    ) {
+        String sectionText = resolvedAnalysisText(analysisDetails, fieldName);
+        pages.decisionAnalysisPage.enterEarlyAdviceSectionText(
+                sectionName,
+                sectionText,
+                expectedNextSectionName
+        );
+        context.set(fieldName, sectionText);
+    }
+
+    private void skipThresholdAdditionalAnalysis(Map<String, String> analysisDetails) {
+        String additionalAnalysis = optionalAnalysisValue(analysisDetails, ADDITIONAL_ANALYSIS_FIELD);
+        if (!isBlank(additionalAnalysis)) {
+            throw new IllegalArgumentException(ADDITIONAL_ANALYSIS_FIELD
+                    + " does not have a text editor. Omit it or leave the value blank.");
+        }
+
+        pages.decisionAnalysisPage.skipThresholdAdditionalAnalysis(ADDITIONAL_ANALYSIS_FIELD);
+    }
+
+    private void completeEarlyAdvicePostPreviewDetails(Map<String, String> analysisDetails) {
+        if (!hasEarlyAdvicePostPreviewDetails(analysisDetails)) {
+            return;
+        }
+
+        pages.decisionAnalysisPage.checkPreviewEarlyAdviceAnalysis();
+
+        List<String> globalMonitoringCodes = monitoringCodes(analysisDetails, GLOBAL_MONITORING_CODES_FIELD);
+        List<String> localMonitoringCodes = monitoringCodes(analysisDetails, LOCAL_MONITORING_CODES_FIELD);
+        String relationship = requiredEarlyAdviceSuspectVictimRelationship(analysisDetails);
+        pages.decisionAnalysisPage.addSuspectVictimRelationship(relationship);
+        context.set(SUSPECT_VICTIM_RELATIONSHIP_FIELD, relationship);
+
+        pages.decisionAnalysisPage.selectEarlyAdviceMonitoringCodesAndSaveContinue(
+                globalMonitoringCodes,
+                localMonitoringCodes
+        );
+    }
+
+    private boolean hasEarlyAdvicePostPreviewDetails(Map<String, String> analysisDetails) {
+        return !isBlank(optionalAnalysisValue(analysisDetails, GLOBAL_MONITORING_CODES_FIELD))
+                || !isBlank(optionalAnalysisValue(analysisDetails, LOCAL_MONITORING_CODES_FIELD))
+                || !isBlank(optionalAnalysisValue(analysisDetails, SUSPECT_VICTIM_RELATIONSHIP_FIELD));
+    }
+
+    private String requiredEarlyAdviceSuspectVictimRelationship(Map<String, String> analysisDetails) {
+        String relationship = optionalAnalysisValue(analysisDetails, SUSPECT_VICTIM_RELATIONSHIP_FIELD);
+
+        if (isBlank(relationship)) {
+            throw new IllegalArgumentException("Early Advice post-preview details require "
+                    + SUSPECT_VICTIM_RELATIONSHIP_FIELD + ".");
+        }
+
+        if (AUTO_GENERATED_VALUE.equalsIgnoreCase(relationship)) {
+            throw new IllegalArgumentException(SUSPECT_VICTIM_RELATIONSHIP_FIELD
+                    + " must be an exact selectable relationship, not " + AUTO_GENERATED_VALUE + ".");
+        }
+
+        return relationship;
+    }
+
     private String selectedReviewType() {
         String reviewType = context.getAsString("reviewType");
         return isBlank(reviewType) ? DEFAULT_REVIEW_TYPE : reviewType;
@@ -304,6 +567,37 @@ public class UIDemoSteps {
         defaults.put(normalizedField(TRIAL_AND_SENTENCING_PREPARATION_FIELD), AUTO_GENERATED_VALUE);
         defaults.put(normalizedField(HUMAN_RIGHTS_FIELD), NOT_AT_THIS_TIME_VALUE);
         defaults.put(normalizedField(ADVOCATE_AND_OPERATIONAL_DELIVERY_INSTRUCTIONS_FIELD), AUTO_GENERATED_VALUE);
+        defaults.put(normalizedField(SUSPECT_VICTIM_RELATIONSHIP_FIELD), "");
+        defaults.put(normalizedField(GLOBAL_MONITORING_CODES_FIELD), "");
+        defaults.put(normalizedField(LOCAL_MONITORING_CODES_FIELD), "");
+        return defaults;
+    }
+
+    private Map<String, String> defaultThresholdPreChargeAnalysisDetails() {
+        Map<String, String> defaults = new LinkedHashMap<>();
+        defaults.put(normalizedField(CASE_HEADLINE_FIELD), AUTO_GENERATED_VALUE);
+        defaults.put(normalizedField(REASONABLE_GROUNDS_TO_SUSPECT_FIELD), AUTO_GENERATED_VALUE);
+        defaults.put(normalizedField(REASONABLE_GROUNDS_TO_SUSPECT_MET_FIELD), YES_VALUE);
+        defaults.put(normalizedField(FURTHER_EVIDENCE_OBTAINABLE_FIELD), AUTO_GENERATED_VALUE);
+        defaults.put(normalizedField(FURTHER_EVIDENCE_OBTAINABLE_MET_FIELD), YES_VALUE);
+        defaults.put(normalizedField(SERIOUSNESS_JUSTIFIES_IMMEDIATE_CHARGE_FIELD), AUTO_GENERATED_VALUE);
+        defaults.put(normalizedField(SERIOUSNESS_JUSTIFIES_IMMEDIATE_CHARGE_MET_FIELD), YES_VALUE);
+        defaults.put(normalizedField(GROUNDS_TO_OBJECT_BAIL_FIELD), AUTO_GENERATED_VALUE);
+        defaults.put(normalizedField(GROUNDS_TO_OBJECT_BAIL_MET_FIELD), YES_VALUE);
+        defaults.put(normalizedField(PUBLIC_INTEREST_ASSESSMENT_FIELD), AUTO_GENERATED_VALUE);
+        defaults.put(normalizedField(PUBLIC_INTEREST_ASSESSMENT_MET_FIELD), YES_VALUE);
+        defaults.put(normalizedField(ADDITIONAL_ANALYSIS_FIELD), "");
+        defaults.put(normalizedField(SUSPECT_VICTIM_RELATIONSHIP_FIELD), "");
+        defaults.put(normalizedField(GLOBAL_MONITORING_CODES_FIELD), "");
+        defaults.put(normalizedField(LOCAL_MONITORING_CODES_FIELD), "");
+        return defaults;
+    }
+
+    private Map<String, String> defaultEarlyAdvicePreChargeAnalysisDetails() {
+        Map<String, String> defaults = new LinkedHashMap<>();
+        defaults.put(normalizedField(WHAT_ADVICE_IS_SOUGHT_FIELD), AUTO_GENERATED_VALUE);
+        defaults.put(normalizedField(MATERIALS_AND_INFORMATION_CONSIDERED_FIELD), AUTO_GENERATED_VALUE);
+        defaults.put(normalizedField(YOUR_ADVICE_FIELD), AUTO_GENERATED_VALUE);
         defaults.put(normalizedField(SUSPECT_VICTIM_RELATIONSHIP_FIELD), "");
         defaults.put(normalizedField(GLOBAL_MONITORING_CODES_FIELD), "");
         defaults.put(normalizedField(LOCAL_MONITORING_CODES_FIELD), "");
@@ -362,6 +656,17 @@ public class UIDemoSteps {
 
     private String optionalAnalysisValue(Map<String, String> analysisDetails, String fieldName) {
         return analysisDetails.get(normalizedField(fieldName));
+    }
+
+    private String firstNonBlankAnalysisValue(Map<String, String> analysisDetails, String... fieldNames) {
+        for (String fieldName : fieldNames) {
+            String value = optionalAnalysisValue(analysisDetails, fieldName);
+            if (!isBlank(value)) {
+                return value;
+            }
+        }
+
+        return null;
     }
 
     private List<String> monitoringCodes(Map<String, String> analysisDetails, String fieldName) {

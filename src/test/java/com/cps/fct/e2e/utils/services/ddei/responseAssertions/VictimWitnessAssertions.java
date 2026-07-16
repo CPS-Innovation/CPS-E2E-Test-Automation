@@ -1,9 +1,11 @@
 package com.cps.fct.e2e.utils.services.ddei.responseAssertions;
 
 import com.cps.fct.e2e.model.VictimWitnessDetails;
+import com.cps.fct.e2e.utils.common.JsonUtils;
 import com.cps.fct.e2e.utils.httpClient.HttpResponseWrapper;
 import com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VcaPersonalDetails;
 import com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimContactDetails;
+import com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimLiaisonOfficerDetails;
 import com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimMeetingDetails;
 import io.restassured.response.Response;
 import org.assertj.core.api.SoftAssertions;
@@ -79,6 +81,24 @@ public class VictimWitnessAssertions {
         assertThat(expectedVictimCaseInfoGuid).isEqualTo(guid);
         assertThat(expectedLastModifiedBy).isEqualTo(inputDetails.getLastModifiedBy());
         softly.assertAll();
+    }
+
+    public static void assertVictimLiaisonOfficerDetails(String guid, VictimLiaisonOfficerDetails inputDetails,
+                                                         HttpResponseWrapper responsePayload)
+    {
+        SoftAssertions softly = new SoftAssertions();
+        String responseBody = responsePayload.getBody();
+
+        Integer expectedVictimLiaisonOfficer = readJsonPath(responseBody, "$.value.vloPartyId",Integer.class);
+        String expectedVictimCaseInfoGuid = readJsonPath(responseBody, "$.value.victimCaseInfoGuid",String.class);
+        String expectedLastModifiedBy = readJsonPath(responseBody, "$.value.lastModifiedBy",String.class);
+
+        //assertions
+        assertThat(expectedVictimLiaisonOfficer).isEqualTo(inputDetails.getVLOPartyId());
+        assertThat(expectedVictimCaseInfoGuid).isEqualTo(guid);
+        assertThat(expectedLastModifiedBy).isEqualTo(inputDetails.getLastModifiedBy());
+        softly.assertAll();
+
     }
 
     public static void assertContactTypeDetails(int contactTypeCode, VictimContactDetails inputDetails,

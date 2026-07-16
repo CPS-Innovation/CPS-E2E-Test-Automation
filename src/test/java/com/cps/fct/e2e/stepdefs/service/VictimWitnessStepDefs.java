@@ -7,10 +7,7 @@ import com.cps.fct.e2e.utils.httpClient.HttpResponseWrapper;
 import com.cps.fct.e2e.utils.services.ddei.CommonService;
 import com.cps.fct.e2e.utils.services.ddei.CaseService;
 import com.cps.fct.e2e.utils.services.ddei.WitnessService;
-import com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VcaPersonalDetails;
-import com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimContactDetails;
-import com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimMeetingDetails;
-import com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimWitnessPayloadBuilder;
+import com.cps.fct.e2e.utils.services.ddei.payloadBuilder.*;
 import com.cps.fct.e2e.utils.services.ddei.responseAssertions.VictimWitnessAssertions;
 import com.jayway.jsonpath.JsonPath;
 import io.cucumber.datatable.DataTable;
@@ -20,6 +17,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
+import org.codehaus.groovy.transform.SourceURIASTTransformation;
 import org.picocontainer.annotations.Inject;
 
 import java.util.ArrayList;
@@ -29,6 +27,7 @@ import java.util.Map;
 
 import static com.cps.fct.e2e.utils.common.JsonUtils.*;
 import static com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimWitnessPayloadBuilder.*;
+import static com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimWitnessPayloadBuilder.convertObjectToString;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -85,16 +84,18 @@ public class VictimWitnessStepDefs {
 
         Map<String, VictimWitnessCMSContact> victimWitnessCMSContactMap = new HashMap<>();
         context.set("victimWitnessCMSContactMap", victimWitnessCMSContactMap);
+
+        Map<String, VictimLiaisonOfficerDetails> victimWitnessVLODetails = new HashMap<>();
+        context.set("victimWitnessVLODetails", victimWitnessVLODetails);
+
     }
 
     @When("the {string} is onboarded to VCA")
     public void onboardedToVCA(String witnessVictimType) throws InterruptedException {
-        VcaPersonalDetails vcaPersonalDetails;
         Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
         Map<String, String> idGuidMap = context.get("idGuidMap");
 
         for (String id : witnessVictimMapIds.get(witnessVictimType)) {
-            //Onboard process - creates GUID,with service as 1-Universal, Onboard as 'false'
             String guid = witnessService.victimWitnessGuid(context.get("caseUrn"), context.get("caseId"), id);
             idGuidMap.put(id, guid);
         }
@@ -213,6 +214,7 @@ public class VictimWitnessStepDefs {
 
     @Then("the {string} personal details are update to VCA")
     public void personalDetailsAreUpdateToVCA(String witnessVictimType) throws InterruptedException {
+
         VcaPersonalDetails vcaPersonalDetails;
         Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
         Map<String, VcaPersonalDetails> victimWitnessDetailsToVCA = context.get("victimWitnessDetailsToVCA");
@@ -557,25 +559,46 @@ public class VictimWitnessStepDefs {
 
         }
 
+    }
 
-//        for (String id : witnessVictimMapIds.get(witnessVictimType)) {
-//            VictimContactDetails victimContactDetails = victimContactDetailsMap.get(contactTypeCode);
-//            Response response = witnessService.listVictimContactTypeDetails(idGuidMap.get(id));
-//            VictimWitnessAssertions.assertContactTypeDetails(contactTypeCode, victimContactDetails, response);
-//        }
+    @When("the Victim liaison officer is assigned to {string} in VCA")
+    public void victimLiaisonOfficerAssigned(String witnessVictimType) {
 
+        VictimLiaisonOfficerDetails vcaVictimLiaisonOfficerDetails;
+        Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+        Integer userPartyId = witnessService.getUserPartyId();
+        Map<String, VictimLiaisonOfficerDetails> victimWitnessVLODetails  = context.get("victimWitnessVLODetails");
 
+        for (String id : witnessVictimMapIds.get(witnessVictimType)) {
 
+            vcaVictimLiaisonOfficerDetails = addVictimLiaisonOfficer(userPartyId);
+            String requestPayload = convertObjectToString(vcaVictimLiaisonOfficerDetails);
+            witnessService.addVictimLiaisonOfficer(idGuidMap.get(id), requestPayload);
+            victimWitnessVLODetails.put(idGuidMap.get(id),vcaVictimLiaisonOfficerDetails);
 
-
-
-
-
-
+        }
+        context.set("victimWitnessVLODetails", victimWitnessVLODetails);
     }
 
 
+    @Then("assigned Victim liaison officer for {string} is verified")
+    public void assignedVloIsVerified(String witnessVictimType) throws InterruptedException {
 
+        HttpResponseWrapper response;
+        Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+        Map<String, VictimLiaisonOfficerDetails> victimWitnessVLODetails = context.get("victimWitnessVLODetails");
 
+        for (String id : witnessVictimMapIds.get(witnessVictimType)) {
+            VictimLiaisonOfficerDetails victimLiaisonOfficerDetails = victimWitnessVLODetails.get(idGuidMap.get(id));
+
+            response = witnessService.victimLiaisonOfficerFromVCA(idGuidMap.get(id));
+            VictimWitnessAssertions.assertVictimLiaisonOfficerDetails(idGuidMap.get(id),victimLiaisonOfficerDetails, response);
+            Thread.sleep(1000);
+
+        }
+
+    }
 
 }

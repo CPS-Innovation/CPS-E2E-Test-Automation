@@ -79,6 +79,16 @@ public class VictimWitnessPayloadBuilder {
                 .build();
     }
 
+    public static VictimLiaisonOfficerDetails addVictimLiaisonOfficer(Integer userPartyId) {
+        return VictimLiaisonOfficerDetails.builder()
+                .Service(1)
+                .Onboarded(Boolean.TRUE)
+                .VLOPartyId(userPartyId)
+                .LastModifiedBy("Test Automation User")
+                .build();
+    }
+
+
     public static VictimContactDetails payLoadForAddVictimContactDetails(int contactTypeCode) {
 
         if(contactTypeCode == 2){
@@ -231,10 +241,6 @@ public class VictimWitnessPayloadBuilder {
                 .CreatedBy("automationUser")
                 .build();
     }
-
-
-
-
 
 
 }

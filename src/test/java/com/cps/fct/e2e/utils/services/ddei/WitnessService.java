@@ -66,6 +66,23 @@ public class WitnessService extends BaseService {
         service.sendRequest(addWitnessVictimVCADetailsRequestParams(guid, requestBody));
     }
 
+//    public void getUserPartyId() {
+//        service.sendRequest(getUserPartyIdParams());
+//    }
+
+    public Integer getUserPartyId() {
+        HttpResponseWrapper responseWrapper = service.sendRequest(getUserPartyIdParams());
+        Integer userPartyId;
+        userPartyId = JsonPath.read(responseWrapper.getBody(), "$.partyId");
+        return userPartyId;
+    }
+
+
+    public void assignVictimLiaisonOfficer(String guid, String requestBody) {
+        service.sendRequest(assignVictimLiaisonOfficerRequestParams(guid, requestBody));
+    }
+
+
     public void addVictimContactDetailsToVCA(String guid, String requestBody) {
         service.sendRequest(addVictimContactDetailsRequestParams(guid, requestBody));
     }
@@ -86,12 +103,17 @@ public class WitnessService extends BaseService {
         service.sendRequest(addVictimMeetingDetailsRequestParams(guid, requestBody));
     }
 
+    public void addVictimLiaisonOfficer(String guid, String requestBody) {
+        service.sendRequest(assignVictimLiaisonOfficerRequestParams(guid, requestBody));
+    }
+
+    public HttpResponseWrapper victimLiaisonOfficerFromVCA(String guid) {
+        return service.sendRequest(getvictimLiaisonOfficerFromVCARequestParams(guid));
+    }
+
     public Response listVictimMeetingDetails(String guid, Integer meetingTypeCode) {
         return service.restAssuredRequest(getVictimMeetingDetailsForRequestParams(guid,meetingTypeCode ));
     }
-
-
-
 
 
     public void persistVictimWitnessDetails(HttpResponseWrapper response, ScenarioContext context) {
@@ -239,6 +261,29 @@ public class WitnessService extends BaseService {
                 .build();
     }
 
+    private HttpClientBuilder assignVictimLiaisonOfficerRequestParams(
+            String guid, String requestBody) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/victims/case-info/%s", guid))
+                .addHeaders(ddeiHeaders())
+                .method("PATCH")
+                .body(requestBody)
+                .resourceName("assignVictimLiaisonOfficer")
+                .build();
+    }
+
+
+    private HttpClientBuilder getvictimLiaisonOfficerFromVCARequestParams(String guid) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/victims/case-info/%s", guid))
+                .addHeaders(ddeiHeaders())
+                .method("GET")
+                .resourceName("witnessDetailsFromVCA")
+                .build();
+    }
+
     private HttpClientBuilder addWitnessDetailsWitnessIdRequestParams(VictimWitnessDetails victimDetails,
                                                                       String caseId, String WitnessId) {
         return new HttpClientBuilder.Builder()
@@ -329,6 +374,15 @@ public class WitnessService extends BaseService {
                 .build();
     }
 
+    private HttpClientBuilder getUserPartyIdParams() {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint("/api/users/party")
+                .addHeaders(ddeiHeaders())
+                .method("GET")
+                .resourceName("getUserPartyId")
+                .build();
+    }
 
 
 

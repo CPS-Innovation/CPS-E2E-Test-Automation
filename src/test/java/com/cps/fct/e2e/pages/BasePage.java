@@ -4,6 +4,8 @@ package com.cps.fct.e2e.pages;
 import com.cps.fct.e2e.utils.playwright.PlaywrightContext;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.PlaywrightException;
+import com.microsoft.playwright.TimeoutError;
 import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.LoadState;
 import com.microsoft.playwright.options.SelectOption;
@@ -20,9 +22,10 @@ public abstract class BasePage {
 
     private static final int DEFAULT_TIMEOUT_MILLIS = 10000;
     private static final int RICH_TEXT_EDITOR_WAIT_TIMEOUT_MILLIS = 10000;
-    private static final int RICH_TEXT_TYPING_TIMEOUT_MILLIS = 15000;
-    private static final int RICH_TEXT_TYPING_DELAY_MILLIS = 0;
     private static final int RICH_TEXT_STABLE_FOR_MILLIS = 500;
+    // Fallback settle after the editor reports ready: there is no exposed "CKEditor initialised"
+    // signal, and autosave can re-render the editable moments after it mounts.
+    private static final int RICH_TEXT_READY_SETTLE_MILLIS = 300;
 
     protected Page page;
 
@@ -247,7 +250,10 @@ public abstract class BasePage {
             try {
                 String actualText = page.locator(selector).innerText();
                 return actualText.contains(expectedText);
-            } catch (Exception e) {
+            } catch (PlaywrightException e) {
+                if (isGenuineLocatorError(e)) {
+                    throw e;
+                }
                 return false;
             }
         });
@@ -257,7 +263,10 @@ public abstract class BasePage {
             page.waitForCondition(() -> {
                 try {
                     return page.content().contains(expectedText);
-                } catch (Exception e) {
+                } catch (PlaywrightException e) {
+                    if (isGenuineLocatorError(e)) {
+                        throw e;
+                    }
                     return false;
                 }
             });
@@ -298,23 +307,57 @@ public abstract class BasePage {
     }
 
 
+    /**
+     * Tells a genuine locator/selector bug apart from an expected transient condition while polling.
+     * A strict-mode violation (selector matched multiple elements) or a malformed selector is a test
+     * bug that must surface immediately rather than being retried until timeout. Absence/slowness
+     * ({@link TimeoutError}) and other transient states are legitimately treated as "not yet".
+     */
+    protected static boolean isGenuineLocatorError(RuntimeException error) {
+        if (error instanceof TimeoutError) {
+            return false;
+        }
+        String message = error.getMessage();
+        if (message == null) {
+            return false;
+        }
+        return message.contains("strict mode violation")
+                || message.contains("Unknown engine")
+                || message.contains("Unexpected token")
+                || message.contains("Malformed selector")
+                || message.contains("Cannot parse selector");
+    }
+
     public void fillRichTextEditor(String editorSelector, String textToEnter) {
-        Locator editor = page.locator(editorSelector);
-        editor.waitFor(new Locator.WaitForOptions()
-                .setState(WaitForSelectorState.VISIBLE)
-                .setTimeout(RICH_TEXT_EDITOR_WAIT_TIMEOUT_MILLIS));
+        // Resolve to a single element so lingering editors from earlier sections can't cause a
+        // strict-mode violation (which the commit wait would otherwise swallow into a timeout).
+        Locator editor = page.locator(editorSelector).first();
+        waitForRichTextEditorReady(editor);
         editor.scrollIntoViewIfNeeded();
         editor.click();
         editor.press("Control+A");
         editor.press("Backspace");
-        editor.pressSequentially(
-                textToEnter,
-                new Locator.PressSequentiallyOptions()
-                        .setDelay(RICH_TEXT_TYPING_DELAY_MILLIS)
-                        .setTimeout(RICH_TEXT_TYPING_TIMEOUT_MILLIS)
-        );
+        // Insert the whole string in a single operation. Character-by-character typing
+        // (pressSequentially) races the editor's autosave/re-render: when autosave detaches and
+        // re-mounts the editable mid-type, the remaining keystrokes are dropped, leaving only a
+        // prefix (e.g. "...On my e"). insertText delivers one input event, so it can't be
+        // truncated that way.
+        page.keyboard().insertText(textToEnter);
 
         waitForRichTextEditorToCommit(editor, textToEnter);
+    }
+
+    private void waitForRichTextEditorReady(Locator editor) {
+        // Node present and shown.
+        editor.waitFor(new Locator.WaitForOptions()
+                .setState(WaitForSelectorState.VISIBLE)
+                .setTimeout(RICH_TEXT_EDITOR_WAIT_TIMEOUT_MILLIS));
+        // CKEditor attaches asynchronously after the node becomes visible; wait until it is actually
+        // editable so keystrokes/insertText are not lost against an un-initialised editor.
+        assertThat(editor).isEditable();
+        // Fallback: no reliable "initialised" event is exposed and autosave can re-render the
+        // editable just after mount, so give it a brief moment to settle before inserting.
+        page.waitForTimeout(RICH_TEXT_READY_SETTLE_MILLIS);
     }
 
     private void waitForRichTextEditorToCommit(Locator editor, String expectedText) {
@@ -329,7 +372,10 @@ public abstract class BasePage {
         page.waitForCondition(() -> {
             try {
                 return normalizeRichText(editor.innerText()).contains(normalizedExpectedText);
-            } catch (Exception e) {
+            } catch (PlaywrightException e) {
+                if (isGenuineLocatorError(e)) {
+                    throw e;
+                }
                 return false;
             }
         });
@@ -358,7 +404,10 @@ public abstract class BasePage {
 
                 return now - stableSince[0] >= RICH_TEXT_STABLE_FOR_MILLIS
                         && !richTextEditorHasFocus(editor);
-            } catch (Exception e) {
+            } catch (PlaywrightException e) {
+                if (isGenuineLocatorError(e)) {
+                    throw e;
+                }
                 return false;
             }
         });

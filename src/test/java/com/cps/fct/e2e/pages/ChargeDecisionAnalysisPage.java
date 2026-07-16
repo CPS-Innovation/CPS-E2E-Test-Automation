@@ -1,8 +1,10 @@
 package com.cps.fct.e2e.pages;
 
+import com.cps.fct.e2e.utils.common.FakerUtils;
 import com.cps.fct.e2e.utils.playwright.PlaywrightContext;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.assertions.LocatorAssertions;
 import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.SelectOption;
 import org.assertj.core.api.Assertions;
@@ -11,6 +13,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 public class ChargeDecisionAnalysisPage extends BasePage {
@@ -63,14 +66,30 @@ public class ChargeDecisionAnalysisPage extends BasePage {
     private static final String DECISION_TYPE_CHARGE = "Charge";
     private static final String DECISION_TYPE_NON_CONVICTION_DISPOSAL = "Non-conviction disposal";
     private static final String PRINCIPAL_OFFENCE_CATEGORY_LABEL = "Principal offence category";
+    private static final String CHARGE_CODE_DECISION_FIELD = "charge code decision";
+    private static final String AG_CONSENT_FIELD = "AG consent";
     private static final String EARLY_ADVICE_POC_DROPDOWN_SELECTOR = "#b16-b4-POC_Dropdown";
+    private static final String CHARGE_CODE_SELECTOR = "[id$='ChargeCode']";
+    private static final String CHECK_ALL_CHARGE_CODES_CHECKBOX_SELECTOR =
+            "input[type='checkbox'][id$='CheckboxIsAllChecked']";
+    private static final String CHARGE_CODE_BODY_SELECTOR = "[id$='ChargeCodeBody']";
+    private static final String CHARGE_CODE_BODY_CHECKBOX_SELECTOR =
+            CHARGE_CODE_BODY_SELECTOR + " input[type='checkbox']";
+    private static final String CHARGE_DECISION_DROPDOWN_SELECTOR = "select[id$='DecisionDropdown']";
+    private static final String CHARGE_APPLY_BUTTON_SELECTOR =
+            "button[id$='ApplyButton'], input[type='button'][id$='ApplyButton']";
+    private static final String CHARGE_DESCRIPTION_STATUS_BODY_SELECTOR = "[id$='DescriptionAndStatusBody']";
+    private static final String AG_CONSENT_TEXT_AREA_SELECTOR = "textarea[id$='TextArea_Content']";
     private static final String CASE_ACTION_PLAN_LABEL = "Case action plan";
     private static final String OFFENCE_CATEGORY_LABEL = "PCD principal offence category";
     // Charging-decision summary card on the offence-category page. Match on the stable OutSystems
     // widget-name suffixes (no numeric prefixes) so the selectors hold across case types.
     private static final String CHARGING_SUMMARY_CARD_SELECTOR = "[id$='ChargingSummaryGDS']";
+    // Row ids carry an opaque generated prefix (e.g. b10-b14-b3-l1-577_0-b4-), so match on the
+    // stable "…List_row_<name>" suffix.
     private static final String SUMMARY_ROW_DECISION_SELECTOR = "[id$='List_row_Decision']";
     private static final String SUMMARY_ROW_DECISION_CODE_SELECTOR = "[id$='List_row_DecisionCode']";
+    private static final String SUMMARY_ROW_REASON_SELECTOR = "[id$='List_row_Reason']";
     private static final String SUMMARY_ROW_FOCUS_SELECTOR = "[id$='List_row_Focus']";
     private static final String CHARGING_DECISION_HEADER_SELECTOR = "span.govuk-heading-l";
     private static final String CHARGING_DECISION_SUSPECT_COUNT_SELECTOR = "h2.govuk-heading-m";
@@ -149,7 +168,11 @@ public class ChargeDecisionAnalysisPage extends BasePage {
     }
 
     public ChargeDecisionAnalysisPage enterTextInRichEditor(String randomWords) {
-        fillRichTextEditor("role=textbox[name*='Editor editing area']", randomWords);
+        // Target the editable region by role+contenteditable rather than its accessible-name text,
+        // which varies between review types (e.g. Priority PCD Review) and editor versions.
+        // Scope to the visible editor: editors from previously-completed sections can linger in the
+        // DOM, so an unscoped selector matches multiple and trips Playwright strict mode.
+        fillRichTextEditor("[role='textbox'][contenteditable='true']:visible", randomWords);
         return this;
     }
 
@@ -179,6 +202,24 @@ public class ChargeDecisionAnalysisPage extends BasePage {
         enterSectionTextOnly(sectionName, randomWords)
                 .checkNGAPOptionAsYes()
                 .clickSaveAndContinueAndAssertSectionProgress(sectionName);
+    }
+
+    // Priority PCD reviews omit the "Has the file been submitted as NGAP?" question from the
+    // Allocation section, so only answer it when it is actually rendered. The allocation form
+    // fields render with the section (already awaited via the rich-text editor), so a plain
+    // presence check is reliable here.
+    public void enterTextInAllocationSectionAndChooseNGAPAsYesIfPresent(String sectionName, String randomWords) {
+        ChargeDecisionAnalysisPage sectionPage = enterSectionTextOnly(sectionName, randomWords);
+        if (isNgapQuestionPresent()) {
+            sectionPage.checkNGAPOptionAsYes();
+        }
+        sectionPage.clickSaveAndContinueAndAssertSectionProgress(sectionName);
+    }
+
+    private boolean isNgapQuestionPresent() {
+        return page.locator(FIELDSET_LEGEND_SELECTOR)
+                .filter(new Locator.FilterOptions().setHasText(NGAP_QUESTION_TEXT))
+                .count() > 0;
     }
 
     public void enterCaseHeadLine(String typeOfReview, String randomWords) {
@@ -507,8 +548,11 @@ public class ChargeDecisionAnalysisPage extends BasePage {
             return;
         }
 
-        label.scrollIntoViewIfNeeded();
-        label.click();
+        // Toggle the checkbox itself (by its stable id) rather than the JS-marked label: OutSystems
+        // re-renders from its own state and drops our injected marker attribute, detaching the label
+        // mid-click. Force bypasses the custom-control overlay that intercepts pointer events.
+        checkbox.scrollIntoViewIfNeeded();
+        checkbox.check(new Locator.CheckOptions().setForce(true));
         assertThat(checkbox).isChecked();
     }
 
@@ -531,6 +575,7 @@ public class ChargeDecisionAnalysisPage extends BasePage {
 
         long deadline = System.currentTimeMillis() + UI_SETTLE_TIMEOUT_MILLIS;
         while (System.currentTimeMillis() < deadline) {
+            scrollMonitoringCodeSectionIntoView(sectionHeading);
             if (markMonitoringCodeLabel(sectionHeading, monitoringCode)) {
                 Locator label = page.locator("[" + MONITORING_CODE_LABEL_MARKER + "='true']");
                 assertThat(label).isVisible();
@@ -542,6 +587,40 @@ public class ChargeDecisionAnalysisPage extends BasePage {
         throw new IllegalStateException("Monitoring code label not found within "
                 + UI_SETTLE_TIMEOUT_MILLIS + "ms: section='" + sectionHeading
                 + "', code='" + monitoringCode + "'.");
+    }
+
+    private void scrollMonitoringCodeSectionIntoView(String sectionHeading) {
+        Boolean.TRUE.equals(page.evaluate("""
+                sectionHeading => {
+                    const normalize = value => (value || '').replace(/\\s+/g, ' ').trim().toLowerCase();
+                    const targetHeading = normalize(sectionHeading);
+                    const isVisible = element => {
+                        const style = window.getComputedStyle(element);
+                        const rect = element.getBoundingClientRect();
+                        return style.display !== 'none'
+                            && style.visibility !== 'hidden'
+                            && rect.width > 0
+                            && rect.height > 0;
+                    };
+                    const textOf = element => normalize(element.innerText || element.textContent);
+                    const matchesHeading = element => {
+                        const text = textOf(element);
+                        return text === targetHeading || text.startsWith(targetHeading) || text.includes(targetHeading);
+                    };
+
+                    const heading = Array.from(document.querySelectorAll('h1, h2, h3, h4, h5, h6, legend, span, label, p, div, strong, b'))
+                        .filter(element => isVisible(element) && matchesHeading(element))
+                        .sort((a, b) => textOf(a).length - textOf(b).length)[0];
+
+                    if (!heading) {
+                        return false;
+                    }
+
+                    heading.scrollIntoView({ block: 'center', inline: 'nearest' });
+                    return true;
+                }
+                """, sectionHeading));
+        page.waitForTimeout(100);
     }
 
     private boolean markMonitoringCodeLabel(String sectionHeading, String monitoringCode) {
@@ -626,18 +705,33 @@ public class ChargeDecisionAnalysisPage extends BasePage {
                 )));
     }
 
+    // OutSystems builds widget ids as a chain of auto-generated segments before the widget's own name:
+    // container tokens (b10-b11-b3-...), list tokens (l1-) and per-row record keys (475_2-). Every one of
+    // those is transient - container tokens are reassigned on re-render, and the record key changes with
+    // the data between runs (470_2 -> 475_2). Scope to the label's checkbox row first, then match on the
+    // stable widget family (GlobalCodeCheckbox covers both GlobalCodeCheckbox and GlobalCodeCheckbox2).
+    private static final Pattern VOLATILE_ID_PREFIX = Pattern.compile("^([a-z]?\\d+(_\\d+)?-)+");
+    private static final Pattern TRAILING_WIDGET_ORDINAL = Pattern.compile("\\d+$");
+
     private Locator checkboxForMonitoringCodeLabel(Locator label) {
+        Locator checkboxItem = label.locator(
+                "xpath=ancestor::*[contains(concat(' ', normalize-space(@class), ' '), "
+                        + "' govuk-checkboxes__item ')][1]"
+        );
+        assertThat(checkboxItem).isVisible();
+
         String checkboxId = label.getAttribute("for");
         if (checkboxId != null && !checkboxId.isBlank()) {
-            Locator checkbox = page.locator("input[type='checkbox'][id=" + cssString(checkboxId) + "]");
+            String stableIdSuffix = VOLATILE_ID_PREFIX.matcher(checkboxId).replaceFirst("");
+            String stableIdFamily = TRAILING_WIDGET_ORDINAL.matcher(stableIdSuffix).replaceFirst("");
+            Locator checkbox = checkboxItem.locator("input[type='checkbox'][id*=" + cssString(stableIdFamily) + "]");
+            assertThat(checkbox).hasCount(1);
             assertThat(checkbox).isVisible();
             return checkbox;
         }
 
-        Locator checkbox = label.locator(
-                "xpath=ancestor::*[contains(concat(' ', normalize-space(@class), ' '), "
-                        + "' govuk-checkboxes__item ')][1]//input[@type='checkbox']"
-        ).first();
+        Locator checkbox = checkboxItem.locator("input[type='checkbox']");
+        assertThat(checkbox).hasCount(1);
         assertThat(checkbox).isVisible();
         return checkbox;
     }
@@ -867,9 +961,17 @@ public class ChargeDecisionAnalysisPage extends BasePage {
         }
 
         assertThat(page.locator("h1")).containsText(DG_COMPLAINT_HEADER);
-        assertThat(page.getByText(DG_COMPLAINT_SUBHEADER, new Page.GetByTextOptions().setExact(true))).isVisible();
-        checkCheckbox(RADIO_ROLE_YES);
+        // Priority PCD reviews don't require a DG file quality assessment: the page shows an
+        // informational message ("You do not need to complete a DG file quality assessment...")
+        // and only a Save and continue button, with no compliance question to answer.
+        if (isDgComplianceQuestionPresent()) {
+            checkCheckbox(RADIO_ROLE_YES);
+        }
         clickSaveAndContinue();
+    }
+
+    private boolean isDgComplianceQuestionPresent() {
+        return page.getByText(DG_COMPLAINT_SUBHEADER, new Page.GetByTextOptions().setExact(true)).count() > 0;
     }
 
     public void applyChargingDecision(Map<String, String> decisionChargingData) {
@@ -913,7 +1015,123 @@ public class ChargeDecisionAnalysisPage extends BasePage {
     }
 
     private void applyChargeDecision(Map<String, String> decisionChargingData) {
-        // TODO: implement Charge decision flow
+        String chargeCodeDecision = requiredChargingDecisionValue(decisionChargingData, CHARGE_CODE_DECISION_FIELD);
+
+        checkAllChargeCodes();
+        // TODO: Support selecting individual ChargeCodeBody rows by code when future scenarios need it.
+        assertAllChargeCodeBodyCheckboxesChecked();
+        selectChargeCodeDecision(chargeCodeDecision);
+        clickApplyChargeDecision();
+        page.waitForTimeout(DEFAULT_WAIT_TIMEOUT_MS);
+        waitUntilBusyIndicatorsAreGone();
+        assertChargeDescriptionStatus(chargeCodeDecision);
+        clickContinue();
+        assertChargeDecisionTypeSelections(decisionChargingData);
+        selectOffenceCategoryAndFinish(decisionChargingData.get("offence category"));
+        completeAgConsent(requiredChargingDecisionValue(decisionChargingData, AG_CONSENT_FIELD));
+    }
+
+    private void checkAllChargeCodes() {
+        Locator chargeCode = page.locator(CHARGE_CODE_SELECTOR);
+        assertThat(chargeCode).hasCount(1);
+        assertThat(chargeCode).isVisible();
+
+        Locator checkAllCheckbox = chargeCode.locator(CHECK_ALL_CHARGE_CODES_CHECKBOX_SELECTOR);
+        assertThat(checkAllCheckbox).hasCount(1);
+        assertThat(checkAllCheckbox).isVisible();
+        checkAllCheckbox.scrollIntoViewIfNeeded();
+        checkAllCheckbox.check(new Locator.CheckOptions().setForce(true));
+        assertThat(checkAllCheckbox).isChecked();
+    }
+
+    private void assertAllChargeCodeBodyCheckboxesChecked() {
+        Locator chargeCodeBodyCheckboxes = page.locator(CHARGE_CODE_BODY_CHECKBOX_SELECTOR);
+        page.waitForCondition(() -> chargeCodeBodyCheckboxes.count() > 0);
+        int checkboxCount = chargeCodeBodyCheckboxes.count();
+        Assertions.assertThat(checkboxCount)
+                .as("Charge code body checkbox count")
+                .isGreaterThan(0);
+
+        for (int index = 0; index < checkboxCount; index++) {
+            assertThat(chargeCodeBodyCheckboxes.nth(index)).isChecked();
+        }
+    }
+
+    private void selectChargeCodeDecision(String chargeCodeDecision) {
+        Locator decisionDropdown = page.locator(CHARGE_DECISION_DROPDOWN_SELECTOR);
+        assertThat(decisionDropdown).hasCount(1);
+        assertThat(decisionDropdown).isVisible();
+        decisionDropdown.scrollIntoViewIfNeeded();
+        selectNativeDropdownOption(decisionDropdown, chargeCodeDecision, CHARGE_CODE_DECISION_FIELD);
+    }
+
+    private void clickApplyChargeDecision() {
+        Locator applyButton = page.locator(CHARGE_APPLY_BUTTON_SELECTOR);
+        assertThat(applyButton).hasCount(1);
+        assertThat(applyButton).isVisible();
+        applyButton.scrollIntoViewIfNeeded();
+        applyButton.click();
+    }
+
+    private void assertChargeDescriptionStatus(String chargeCodeDecision) {
+        String expectedStatus = expectedChargeDescriptionStatus(chargeCodeDecision);
+        Locator descriptionStatusBodies = page.locator(CHARGE_DESCRIPTION_STATUS_BODY_SELECTOR);
+        page.waitForCondition(() -> descriptionStatusBodies.count() > 0);
+        int statusCount = descriptionStatusBodies.count();
+
+        for (int index = 0; index < statusCount; index++) {
+            assertThat(descriptionStatusBodies.nth(index)).containsText(expectedStatus);
+        }
+    }
+
+    private String expectedChargeDescriptionStatus(String chargeCodeDecision) {
+        return switch (normalizeText(chargeCodeDecision)) {
+            case "accept" -> "Accepted";
+            default -> throw new IllegalArgumentException("Unsupported charge code decision: " + chargeCodeDecision);
+        };
+    }
+
+    private void clickContinue() {
+        Locator continueButton = page.getByRole(
+                AriaRole.BUTTON,
+                new Page.GetByRoleOptions().setName(CONTINUE_BUTTON_TEXT)
+        );
+        assertThat(continueButton).isVisible();
+        continueButton.scrollIntoViewIfNeeded();
+        continueButton.click();
+    }
+
+    private void completeAgConsent(String agConsentLabelText) {
+        Locator agConsentLabel = page.locator("label")
+                .filter(new Locator.FilterOptions().setHasText(agConsentLabelText));
+        assertThat(agConsentLabel).hasCount(1);
+        assertThat(agConsentLabel).isVisible();
+        agConsentLabel.scrollIntoViewIfNeeded();
+        agConsentLabel.click();
+
+        Locator textArea = page.locator(AG_CONSENT_TEXT_AREA_SELECTOR);
+        assertThat(textArea).hasCount(1);
+        assertThat(textArea).isVisible();
+        textArea.scrollIntoViewIfNeeded();
+        textArea.fill(FakerUtils.populateSentences());
+
+        Locator saveAndContinueButton = page.getByRole(
+                AriaRole.BUTTON,
+                new Page.GetByRoleOptions().setName(SAVE_AND_CONTINUE_BUTTON_TEXT)
+        );
+        assertThat(saveAndContinueButton).isVisible();
+        saveAndContinueButton.scrollIntoViewIfNeeded();
+        saveAndContinueButton.click();
+        page.waitForTimeout(DEFAULT_WAIT_TIMEOUT_MS);
+        waitUntilBusyIndicatorsAreGone();
+    }
+
+    private String requiredChargingDecisionValue(Map<String, String> decisionChargingData, String fieldName) {
+        String value = decisionChargingData.get(fieldName);
+        if (value == null || value.isBlank()) {
+            throw new IllegalArgumentException("Charging decision data table is missing value for: " + fieldName);
+        }
+        return value.trim();
     }
 
     private void applyNonConvictionDisposalDecision(Map<String, String> decisionChargingData) {
@@ -940,15 +1158,27 @@ public class ChargeDecisionAnalysisPage extends BasePage {
 
         assertSummaryRowContains(SUMMARY_ROW_DECISION_SELECTOR, decisionChargingData.get("decision type"));
         assertSummaryRowContains(SUMMARY_ROW_DECISION_CODE_SELECTOR, decisionChargingData.get("decision code"));
-        assertSummaryRowContains(SUMMARY_ROW_DECISION_CODE_SELECTOR, decisionChargingData.get("reason"));
+        assertSummaryRowContains(SUMMARY_ROW_REASON_SELECTOR, decisionChargingData.get("reason"));
         assertSummaryRowContains(SUMMARY_ROW_FOCUS_SELECTOR, decisionChargingData.get("out come of case"));
     }
+
+    private void assertChargeDecisionTypeSelections(Map<String, String> decisionChargingData) {
+        assertThat(page.locator(CHARGING_SUMMARY_CARD_SELECTOR)).isVisible();
+
+        assertSummaryRowContains(SUMMARY_ROW_DECISION_SELECTOR, decisionChargingData.get("decision type"));
+        assertSummaryRowContains(SUMMARY_ROW_DECISION_CODE_SELECTOR, decisionChargingData.get("decision code"));
+    }
+
 
     private void assertSummaryRowContains(String rowSelector, String expectedValue) {
         if (expectedValue == null || expectedValue.isBlank()) {
             return;
         }
-        assertThat(page.locator(rowSelector)).containsText(expectedValue);
+        // The row renders values in its own display casing (e.g. "No Further Action"), which can
+        // differ from the scenario's casing ("No further action"). Match case-insensitively so
+        // display casing doesn't fail a semantically-correct selection.
+        assertThat(page.locator(rowSelector))
+                .containsText(expectedValue, new LocatorAssertions.ContainsTextOptions().setIgnoreCase(true));
     }
 
     private void applyDecisionCode(String questionHeader, String radioValue) {

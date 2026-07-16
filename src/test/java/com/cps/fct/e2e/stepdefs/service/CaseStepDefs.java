@@ -41,6 +41,19 @@ public class CaseStepDefs  {
                 decisionToBeMade);
     }
 
+    // RED (Priority) triage. The decisionToBeMade is fixed to Priority; the triage decision
+    // (e.g. NFS Compliant) is passed in and recorded in the payload's decision field, with
+    // rejectedDecision left null/null because the case is accepted rather than rejected.
+    @And("precharge the RED {string} triage case for {string} PCD review")
+    public void prechargeRedTriageCaseForPcdReview(String caseType, String triageDecision) throws JsonProcessingException {
+        service.createCmsAuthToken(context);
+        caseService.prechargeTriageCasePriority(
+                requiredContextValue("caseUrn"),
+                requiredContextValue("caseId"),
+                caseType,
+                triageDecision);
+    }
+
     private String requiredContextValue(String key) {
         String value = context.getAsString(key);
         if (value == null || value.isBlank()) {

@@ -17,9 +17,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import static com.cps.fct.e2e.utils.common.DataTableUtils.booleanValue;
-
-
 public class UIDemoSteps {
 
     private static final String CREATE_MG3_DOCUMENT_COLUMN = "Create MG3 document";
@@ -244,7 +241,7 @@ public class UIDemoSteps {
             throw new IllegalArgumentException("Unsupported " + ALLOCATION_NGAP_FIELD + " value: " + allocationNgap
                     + ". Only Yes is currently supported.");
         }
-        pages.decisionAnalysisPage.enterTextInAllocationSectionAndChooseNGAPAsYes(ALLOCATION_FIELD, allocationText);
+        pages.decisionAnalysisPage.enterTextInAllocationSectionAndChooseNGAPAsYesIfPresent(ALLOCATION_FIELD, allocationText);
         context.set(ALLOCATION_FIELD, allocationText);
 
         enterAnalysisSection(analysisDetails, VICTIM_AND_WITNESS_NEEDS_FIELD);
@@ -434,7 +431,7 @@ public class UIDemoSteps {
         Map<String, String> submitReviewData =
                 dataTable.asMaps(String.class, String.class).getFirst();
 
-        boolean createMg3Document = booleanValue(submitReviewData, CREATE_MG3_DOCUMENT_COLUMN);
+        Boolean createMg3Document = optionalBooleanValue(submitReviewData, CREATE_MG3_DOCUMENT_COLUMN);
         context.set(CREATE_MG3_DOCUMENT_CONTEXT_KEY, createMg3Document);
 
         pages.completeSubmissionPage.completeReviewSubmission(
@@ -656,6 +653,16 @@ public class UIDemoSteps {
 
     private String optionalAnalysisValue(Map<String, String> analysisDetails, String fieldName) {
         return analysisDetails.get(normalizedField(fieldName));
+    }
+
+    private Boolean optionalBooleanValue(Map<String, String> row, String columnName) {
+        return row.entrySet().stream()
+                .filter(entry -> entry.getKey() != null
+                        && normalizedField(entry.getKey()).equals(normalizedField(columnName)))
+                .map(Map.Entry::getValue)
+                .findFirst()
+                .map(value -> Boolean.parseBoolean(value.trim()))
+                .orElse(null);
     }
 
     private String firstNonBlankAnalysisValue(Map<String, String> analysisDetails, String... fieldNames) {

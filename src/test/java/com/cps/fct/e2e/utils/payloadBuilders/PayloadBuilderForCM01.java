@@ -31,6 +31,15 @@ public class PayloadBuilderForCM01 extends JsonReplacer {
             Map.entry("{{TWIF_ThirdLevel}}", jsonUtils.getMetaDataKeyValue("twif", "ThirdLevel")),
             Map.entry("{{TWIF_BottomLevel}}", jsonUtils.getMetaDataKeyValue("twif", "BottomLevel")),
 
+            Map.entry("{{TWIF_Force_Priority}}", jsonUtils.getMetaDataKeyValue("twif", "ForcePriority")),
+            Map.entry("{{TWIF_Unit_Priority}}", jsonUtils.getMetaDataKeyValue("twif", "UnitPriority")),
+            Map.entry("{{TWIF_Year_Priority}}", jsonUtils.getMetaDataKeyValue("twif", "YearPriority")),
+
+            Map.entry("{{TWIF_TopLevel_Priority}}", jsonUtils.getMetaDataKeyValue("twif", "TopLevelPriority")),
+            Map.entry("{{TWIF_SecondLevel_Priority}}", jsonUtils.getMetaDataKeyValue("twif", "SecondLevelPriority")),
+            Map.entry("{{TWIF_ThirdLevel_Priority}}", jsonUtils.getMetaDataKeyValue("twif", "ThirdLevelPriority")),
+            Map.entry("{{TWIF_BottomLevel_Priority}}", jsonUtils.getMetaDataKeyValue("twif", "BottomLevelPriority")),
+
             Map.entry("{{CM01_itemId}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_PTIURN_Number}}", fiveDigitNumber()),
             Map.entry("{{CM01_ASN_Number}}", elevenDigitNumber()),

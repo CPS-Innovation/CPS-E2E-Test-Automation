@@ -1,6 +1,7 @@
 package com.cps.fct.e2e.pages;
 
 import com.cps.fct.e2e.utils.playwright.PlaywrightContext;
+import com.microsoft.playwright.PlaywrightException;
 import org.assertj.core.api.SoftAssertions;
 
 import java.net.URI;
@@ -138,7 +139,10 @@ public class CaseIdSearchPage extends BasePage {
     private boolean isCaseNotFoundVisible() {
         try {
             return page.getByText(CASE_NOT_FOUND_TEXT).first().isVisible();
-        } catch (RuntimeException ignored) {
+        } catch (PlaywrightException e) {
+            if (isGenuineLocatorError(e)) {
+                throw e;
+            }
             return false;
         }
     }

@@ -360,7 +360,10 @@ public class LoginPage extends BasePage {
                     .setState(WaitForSelectorState.VISIBLE)
                     .setTimeout(timeoutMillis));
             return true;
-        } catch (Exception ignored) {
+        } catch (PlaywrightException e) {
+            if (isGenuineLocatorError(e)) {
+                throw e;
+            }
             return false;
         }
     }
@@ -368,7 +371,10 @@ public class LoginPage extends BasePage {
     private boolean isLocatorVisible(Locator locator) {
         try {
             return locator.isVisible();
-        } catch (PlaywrightException ignored) {
+        } catch (PlaywrightException e) {
+            if (isGenuineLocatorError(e)) {
+                throw e;
+            }
             return false;
         }
     }
@@ -376,7 +382,10 @@ public class LoginPage extends BasePage {
     private boolean isLocatorEditable(Locator locator) {
         try {
             return locator.isEditable();
-        } catch (PlaywrightException ignored) {
+        } catch (PlaywrightException e) {
+            if (isGenuineLocatorError(e)) {
+                throw e;
+            }
             return false;
         }
     }
@@ -453,7 +462,10 @@ public class LoginPage extends BasePage {
         page.waitForCondition(() -> {
             try {
                 return expectedValue.equals(field.inputValue());
-            } catch (PlaywrightException ignored) {
+            } catch (PlaywrightException e) {
+                if (isGenuineLocatorError(e)) {
+                    throw e;
+                }
                 return false;
             }
         });
@@ -473,7 +485,10 @@ public class LoginPage extends BasePage {
             try {
                 Locator button = microsoftPrimaryButton();
                 return button.isVisible() && button.isEnabled();
-            } catch (PlaywrightException ignored) {
+            } catch (PlaywrightException e) {
+                if (isGenuineLocatorError(e)) {
+                    throw e;
+                }
                 return false;
             }
         });

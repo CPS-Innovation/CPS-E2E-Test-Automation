@@ -13,8 +13,11 @@ public class CaseReviewPage extends BasePage {
         super(context);
     }
 
+    // Matches the shared "PCD Review" suffix so both numeric reviews ("5 day PCD Review",
+    // "28 day PCD Review") and word-based reviews ("Priority PCD Review") resolve. The exact
+    // review type is still verified via the innerText assertion in assertPageLoadSuccessful.
     private Locator reviewTypeText() {
-        return page.locator("text=day PCD Review");
+        return page.locator("text=PCD Review");
     }
 
     private Locator startReviewButton() {

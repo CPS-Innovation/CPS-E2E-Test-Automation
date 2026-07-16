@@ -25,6 +25,7 @@ import java.util.Optional;
 import static com.cps.fct.e2e.utils.common.JsonUtils.fromJson;
 import static com.cps.fct.e2e.utils.common.JsonUtils.fromJsonToList;
 import static com.cps.fct.e2e.utils.services.ddei.payloadBuilder.PreChargeCaseBuilder.constructPreChargeTriageAccepted;
+import static com.cps.fct.e2e.utils.services.ddei.payloadBuilder.PreChargeCaseBuilder.constructPreChargeTriagePriority;
 import static java.lang.String.format;
 
 public class CaseService extends BaseService {
@@ -77,6 +78,15 @@ public class CaseService extends BaseService {
             String caseUrn, String caseId, String caseType, String decisionToBeMade) throws JsonProcessingException {
         DataStoreForPartyAndTaskIds result = getPartyIdAndTaskId(caseUrn, caseId);
         String preChargePayload = constructPreChargeTriageAccepted(caseType, decisionToBeMade, result.partyId());
+        triagePreChargeCaseRequestParams(caseId, result.taskId(), preChargePayload);
+    }
+
+    // RED (Priority) triage. The triage outcome is recorded in the payload's decision field
+    // (e.g. NFS Compliant) and rejectedDecision stays null/null because the case is accepted.
+    public void prechargeTriageCasePriority(
+            String caseUrn, String caseId, String caseType, String triageDecision) throws JsonProcessingException {
+        DataStoreForPartyAndTaskIds result = getPartyIdAndTaskId(caseUrn, caseId);
+        String preChargePayload = constructPreChargeTriagePriority(caseType, triageDecision, result.partyId());
         triagePreChargeCaseRequestParams(caseId, result.taskId(), preChargePayload);
     }
 

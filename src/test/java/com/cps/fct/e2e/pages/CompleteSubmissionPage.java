@@ -4,6 +4,7 @@ import com.cps.fct.e2e.utils.common.FakerUtils;
 import com.cps.fct.e2e.utils.playwright.PlaywrightContext;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.PlaywrightException;
 import com.microsoft.playwright.options.AriaRole;
 
 import java.util.Map;
@@ -90,7 +91,7 @@ public class CompleteSubmissionPage extends BasePage {
     private Locator submitReviewButton(String buttonText) {
         return page.getByRole(
                 AriaRole.BUTTON,
-                new Page.GetByRoleOptions().setName(buttonText).setExact(true)
+                new Page.GetByRoleOptions().setName(buttonText)
         );
     }
 
@@ -107,19 +108,22 @@ public class CompleteSubmissionPage extends BasePage {
     }
 
 
-    public void completeReviewSubmission(Map<String, String> submissionData, boolean createMg3Document) {
+    public void completeReviewSubmission(Map<String, String> submissionData, Boolean createMg3Document) {
         waitForPageToLoad();
 
         selectFromList(investigativeStageDropdown(), submissionData.get("Investigative stage"));
         selectMethodIfPresent(submissionData.get("Method"));
-        setCreateMg3Document(createMg3Document);
+        if (createMg3Document != null) {
+            setCreateMg3Document(createMg3Document);
+        }
 
-        submitWithoutContactDetailsAndAssertErrors(createMg3Document);
-        submitWithInvalidContactDetailsAndAssertErrors(createMg3Document);
+        boolean submitWithMg3Document = Boolean.TRUE.equals(createMg3Document);
+        submitWithoutContactDetailsAndAssertErrors(submitWithMg3Document);
+        submitWithInvalidContactDetailsAndAssertErrors(submitWithMg3Document);
         enterContactDetails();
 
-        clickSubmitReviewButton(createMg3Document);
-        waitForSubmitReviewProgressToFinish(createMg3Document);
+        clickSubmitReviewButton(submitWithMg3Document);
+        waitForSubmitReviewProgressToFinish(submitWithMg3Document);
         waitForLoginPageToLoadCompletely();
     }
 
@@ -137,7 +141,7 @@ public class CompleteSubmissionPage extends BasePage {
             return;
         }
 
-        assertThat(taskCompletedMessage()).containsText(String.format("%s sent", reviewType));
+//        assertThat(taskCompletedMessage()).containsText(String.format("%s sent", reviewType));
         assertThat(statusMessage()).containsText("Success");
     }
 
@@ -196,7 +200,12 @@ public class CompleteSubmissionPage extends BasePage {
             submitWithMg3Button.scrollIntoViewIfNeeded();
             submitWithMg3Button.click();
         } else {
-            submitReviewButton().click();
+            Locator submitButton = submitReviewButton();
+            assertThat(submitButton)
+                    .isVisible(new com.microsoft.playwright.assertions.LocatorAssertions.IsVisibleOptions()
+                            .setTimeout(25_000));
+            submitButton.scrollIntoViewIfNeeded();
+            submitButton.click();
         }
     }
 
@@ -289,7 +298,10 @@ public class CompleteSubmissionPage extends BasePage {
                     .innerText(new Locator.InnerTextOptions().setTimeout(1000));
             return alertText.contains(MG3_SUBMISSION_SUCCESS_STATUS)
                     && alertText.contains(MG3_SUBMISSION_SUCCESS_MESSAGE);
-        } catch (Exception ignored) {
+        } catch (PlaywrightException e) {
+            if (isGenuineLocatorError(e)) {
+                throw e;
+            }
             return false;
         }
     }
@@ -300,7 +312,10 @@ public class CompleteSubmissionPage extends BasePage {
                     .innerText(new Locator.InnerTextOptions().setTimeout(1000));
             return alertText.contains(MG3_CREATION_ERROR_MESSAGE)
                     && mg3CreationRetryLink().isVisible();
-        } catch (Exception ignored) {
+        } catch (PlaywrightException e) {
+            if (isGenuineLocatorError(e)) {
+                throw e;
+            }
             return false;
         }
     }

@@ -46,9 +46,8 @@ public class ChargeDecisionAnalysisPage extends BasePage {
     private static final String SAVE_AND_CONTINUE_BUTTON_TEXT = "Save and continue";
     private static final String PREVIEW_HEADER = "Preview";
     private static final String CONTINUE_BUTTON_TEXT = "Continue";
-    private static final String ADD_RELATIONSHIP_LINK_SELECTOR = "[id$='Addrelationship']";
-    private static final String RELATIONSHIP_QUESTION_TEXT =
-            "What was the relationship between suspect and victims at the time of the offence?";
+    private static final String ADD_RELATIONSHIP_LINK_SELECTOR = "a[id$='Addrelationship']";
+    private static final String RELATIONSHIP_QUESTION_PREFIX = "What was the relationship between";
     private static final String PROGRESS_WIZARD_SELECTOR = "[id$='PreChargeAnalysis4']";
     private static final String PROGRESS_WIZARD_SUB_ITEM_SELECTOR = "[data-block='CPS_Component.ProgressWizardSubItem']";
     private static final String COMPLETED_SECTION_ICON_SELECTOR = ".icon.completed.fa.fa-check.fa-2x";
@@ -61,6 +60,9 @@ public class ChargeDecisionAnalysisPage extends BasePage {
     private static final String DECISION_CODE_QUESTION = "Select a decision code";
     private static final String NFA_REASON_QUESTION = "What is your reason for no further action?";
     private static final String OUTCOME_REASON_QUESTION = "Was undermining, unused material a key factor in the outcome of the case?";
+    private static final String DECISION_TYPE_FIELD = "decision type";
+    private static final String DECISION_CODE_FIELD = "decision code";
+    private static final String OFFENCE_CATEGORY_FIELD = "offence category";
     private static final String DECISION_TYPE_NO_FURTHER_ACTION = "No further action";
     private static final String DECISION_TYPE_FURTHER_EVIDENCE_REQUIRED = "Further evidence required";
     private static final String DECISION_TYPE_CHARGE = "Charge";
@@ -94,6 +96,8 @@ public class ChargeDecisionAnalysisPage extends BasePage {
     private static final String CHARGING_DECISION_HEADER_SELECTOR = "span.govuk-heading-l";
     private static final String CHARGING_DECISION_SUSPECT_COUNT_SELECTOR = "h2.govuk-heading-m";
     private static final String ONE_DEFENDANT_SELECTOR = "[id$='OneDefendant']";
+    private static final String DEFENDANTS_NO_DECISION_LIST_SELECTOR = "[id*='DefendantsNoDecisionList']";
+    private static final String DEFENDANT_NO_DECISION_ITEM_SELECTOR = ".govuk-checkboxes__item";
     private static final String PREVIEW_SCROLL_SELECTOR = ".previewScroll";
     private static final String PREVIEW_ANALYSIS_STEPS_SELECTOR =
             PREVIEW_SCROLL_SELECTOR + " [id$='AnalysisSteps']";
@@ -919,8 +923,35 @@ public class ChargeDecisionAnalysisPage extends BasePage {
     }
 
     public void addSuspectVictimRelationship(String relationshipType) {
-        Locator addRelationshipLink = addRelationshipLink();
-        addRelationshipLink.click();
+        addSuspectVictimRelationship(relationshipType, 1);
+    }
+
+    public void addSuspectVictimRelationship(String relationshipType, int expectedRelationshipCount) {
+        waitForAddRelationshipLinkCount(expectedRelationshipCount);
+
+        for (int index = 0; index < expectedRelationshipCount; index++) {
+            Locator relationshipLink = addRelationshipLink(0);
+            relationshipLink.scrollIntoViewIfNeeded();
+            relationshipLink.click();
+            completeVisibleSuspectVictimRelationship(relationshipType);
+        }
+
+        selectedSuspectVictimRelationship = relationshipType;
+    }
+
+    private void waitForAddRelationshipLinkCount(int expectedRelationshipCount) {
+        Assertions.assertThat(expectedRelationshipCount)
+                .as("Expected suspect-victim relationship add link count")
+                .isGreaterThan(0);
+
+        Locator relationshipLinks = page.locator(ADD_RELATIONSHIP_LINK_SELECTOR);
+        page.waitForCondition(() -> relationshipLinks.count() == expectedRelationshipCount);
+        Assertions.assertThat(relationshipLinks.count())
+                .as("Suspect-victim relationship add link count")
+                .isEqualTo(expectedRelationshipCount);
+    }
+
+    private void completeVisibleSuspectVictimRelationship(String relationshipType) {
         assertThat(relationshipQuestion()).isVisible();
 
         Locator relationshipCheckbox = page.getByRole(
@@ -928,13 +959,16 @@ public class ChargeDecisionAnalysisPage extends BasePage {
                 new Page.GetByRoleOptions().setName(relationshipType).setExact(true)
         );
         assertThat(relationshipCheckbox).isVisible();
+        relationshipCheckbox.scrollIntoViewIfNeeded();
         relationshipCheckbox.check();
-        selectedSuspectVictimRelationship = relationshipType;
 
-        page.getByRole(
+        Locator continueButton = page.getByRole(
                 AriaRole.BUTTON,
                 new Page.GetByRoleOptions().setName(CONTINUE_BUTTON_TEXT).setExact(true)
-        ).click();
+        );
+        assertThat(continueButton).isVisible();
+        continueButton.scrollIntoViewIfNeeded();
+        continueButton.click();
         waitUntilSpinnersAreGone(SAVING_INDICATOR_TEXT, LOADING_INDICATOR_TEXT);
         assertThat(relationshipQuestion()).not().isVisible();
     }
@@ -975,46 +1009,123 @@ public class ChargeDecisionAnalysisPage extends BasePage {
     }
 
     public void applyChargingDecision(Map<String, String> decisionChargingData) {
-        String decisionType = decisionChargingData.get("decision type");
+        Map<String, String> normalizedDecisionChargingData =
+                normalizedChargingDecisionData(decisionChargingData);
 
+        startChargingDecisionForDefendant(null);
+        completeChargingDecisionDetails(normalizedDecisionChargingData);
+        selectOffenceCategory(normalizedDecisionChargingData);
+        finishChargingDecisionAfterFinalDefendant();
+        completePostOffenceCategorySteps(normalizedDecisionChargingData);
+    }
+
+    public void applyChargingDecisions(
+            List<Map<String, String>> decisionChargingDataRows,
+            List<String> defendantNames
+    ) {
+        Assertions.assertThat(decisionChargingDataRows)
+                .as("Multi-defendant charging decision rows")
+                .isNotEmpty();
+        Assertions.assertThat(defendantNames)
+                .as("Multi-defendant charging decision names")
+                .hasSize(decisionChargingDataRows.size());
+
+        startChargingDecisionForDefendant(defendantNames.getFirst());
+
+        for (int index = 0; index < decisionChargingDataRows.size(); index++) {
+            Map<String, String> normalizedDecisionChargingData =
+                    normalizedChargingDecisionData(decisionChargingDataRows.get(index));
+
+            completeChargingDecisionDetails(normalizedDecisionChargingData);
+            selectOffenceCategory(normalizedDecisionChargingData);
+
+            if (index + 1 < decisionChargingDataRows.size()) {
+                continueChargingDecisionWithNextDefendant(defendantNames.get(index + 1));
+            } else {
+                finishChargingDecisionAfterFinalDefendant();
+                completePostOffenceCategorySteps(normalizedDecisionChargingData);
+            }
+        }
+    }
+
+    private void startChargingDecisionForDefendant(String defendantName) {
         waitForTextInLocator("h1", DECISION_HEADER);
+
+        if (defendantName != null && !defendantName.isBlank()) {
+            selectDefendantForChargingDecision(defendantName);
+        }
+
         clickSaveAndContinue();
         page.waitForTimeout(DEFAULT_WAIT_TIMEOUT_MS);
+    }
+
+    private void completeChargingDecisionDetails(Map<String, String> decisionChargingData) {
+        String decisionType = requiredChargingDecisionValue(decisionChargingData, DECISION_TYPE_FIELD);
 
         waitForTextInLocator("h1", DECISION_TYPE_QUESTION);
         checkRadioByName(decisionType);
         page.waitForTimeout(DEFAULT_WAIT_TIMEOUT_MS);
 
         waitForTextInLocator("h2", DECISION_CODE_QUESTION);
-        checkRadioByName(decisionChargingData.get("decision code"));
+        checkRadioByName(requiredChargingDecisionValue(decisionChargingData, DECISION_CODE_FIELD));
         clickSaveAndContinue();
         page.waitForTimeout(DEFAULT_WAIT_TIMEOUT_MS);
 
-        if (DECISION_TYPE_NO_FURTHER_ACTION.equalsIgnoreCase(decisionType)) {
-            applyNoFurtherActionDecision(decisionChargingData);
-        } else if (DECISION_TYPE_FURTHER_EVIDENCE_REQUIRED.equalsIgnoreCase(decisionType)) {
-            applyFurtherEvidenceRequiredDecision(decisionChargingData);
-        } else if (DECISION_TYPE_CHARGE.equalsIgnoreCase(decisionType)) {
-            applyChargeDecision(decisionChargingData);
-        } else if (DECISION_TYPE_NON_CONVICTION_DISPOSAL.equalsIgnoreCase(decisionType)) {
-            applyNonConvictionDisposalDecision(decisionChargingData);
-        } else {
-            throw new IllegalArgumentException("Unsupported decision type: " + decisionType);
+        switch (normalizeText(decisionType)) {
+            case "no further action" -> completeNoFurtherActionDecisionDetails(decisionChargingData);
+            case "further evidence required" -> completeFurtherEvidenceRequiredDecisionDetails();
+            case "charge" -> completeChargeDecisionDetails(decisionChargingData);
+            case "non-conviction disposal" -> completeNonConvictionDisposalDecisionDetails(decisionChargingData);
+            default -> throw new IllegalArgumentException("Unsupported decision type: " + decisionType);
         }
     }
 
-    private void applyNoFurtherActionDecision(Map<String, String> decisionChargingData) {
+    private void selectDefendantForChargingDecision(String defendantName) {
+        Locator defendantsNoDecisionList = page.locator(DEFENDANTS_NO_DECISION_LIST_SELECTOR);
+        assertThat(defendantsNoDecisionList).isVisible();
+
+        Locator defendantItem = defendantsNoDecisionList
+                .locator(DEFENDANT_NO_DECISION_ITEM_SELECTOR)
+                .filter(new Locator.FilterOptions().setHasText(defendantName));
+        assertThat(defendantItem).hasCount(1);
+        defendantItem.scrollIntoViewIfNeeded();
+
+        Locator checkboxSpan = defendantItem.locator("span").first();
+        assertThat(checkboxSpan).isVisible();
+        checkboxSpan.scrollIntoViewIfNeeded();
+        checkboxSpan.click();
+    }
+
+    private Map<String, String> normalizedChargingDecisionData(Map<String, String> decisionChargingData) {
+        Map<String, String> normalizedDecisionChargingData = new LinkedHashMap<>(decisionChargingData);
+        String decisionType = decisionChargingData.get(DECISION_TYPE_FIELD);
+
+        if (decisionType != null && !decisionType.isBlank()) {
+            normalizedDecisionChargingData.put(DECISION_TYPE_FIELD, canonicalDecisionType(decisionType));
+        }
+
+        return normalizedDecisionChargingData;
+    }
+
+    private String canonicalDecisionType(String decisionType) {
+        return switch (normalizeText(decisionType)) {
+            case "charge decision" -> DECISION_TYPE_CHARGE;
+            case "further evidence is required" -> DECISION_TYPE_FURTHER_EVIDENCE_REQUIRED;
+            default -> decisionType.trim();
+        };
+    }
+
+    private void completeNoFurtherActionDecisionDetails(Map<String, String> decisionChargingData) {
         applyDecisionCode(NFA_REASON_QUESTION, decisionChargingData.get("reason"));
         applyDecisionCode(OUTCOME_REASON_QUESTION, decisionChargingData.get("out come of case"));
         assertChargingDecisionSelections(decisionChargingData);
-        selectOffenceCategoryAndFinish(decisionChargingData.get("offence category"));
     }
 
-    private void applyFurtherEvidenceRequiredDecision(Map<String, String> decisionChargingData) {
-        selectOffenceCategoryAndFinish(decisionChargingData.get("offence category"));
+    private void completeFurtherEvidenceRequiredDecisionDetails() {
+        // Further evidence required has no additional decision-specific page before offence category.
     }
 
-    private void applyChargeDecision(Map<String, String> decisionChargingData) {
+    private void completeChargeDecisionDetails(Map<String, String> decisionChargingData) {
         String chargeCodeDecision = requiredChargingDecisionValue(decisionChargingData, CHARGE_CODE_DECISION_FIELD);
 
         checkAllChargeCodes();
@@ -1027,8 +1138,6 @@ public class ChargeDecisionAnalysisPage extends BasePage {
         assertChargeDescriptionStatus(chargeCodeDecision);
         clickContinue();
         assertChargeDecisionTypeSelections(decisionChargingData);
-        selectOffenceCategoryAndFinish(decisionChargingData.get("offence category"));
-        completeAgConsent(requiredChargingDecisionValue(decisionChargingData, AG_CONSENT_FIELD));
     }
 
     private void checkAllChargeCodes() {
@@ -1134,19 +1243,37 @@ public class ChargeDecisionAnalysisPage extends BasePage {
         return value.trim();
     }
 
-    private void applyNonConvictionDisposalDecision(Map<String, String> decisionChargingData) {
+    private void completeNonConvictionDisposalDecisionDetails(Map<String, String> decisionChargingData) {
         applyDecisionCode(OUTCOME_REASON_QUESTION, decisionChargingData.get("out come of case"));
         assertChargingDecisionSelections(decisionChargingData);
-        selectOffenceCategoryAndFinish(decisionChargingData.get("offence category"));
     }
 
-    private void selectOffenceCategoryAndFinish(String offenceCategory) {
+    private void selectOffenceCategory(Map<String, String> decisionChargingData) {
+        String offenceCategory = requiredChargingDecisionValue(decisionChargingData, OFFENCE_CATEGORY_FIELD);
         assertThat(page.getByText(OFFENCE_CATEGORY_LABEL)).isVisible();
         selectComboBoxByVisibleText(offenceCategory);
+    }
+
+    private void continueChargingDecisionWithNextDefendant(String defendantName) {
+        selectDefendantForChargingDecision(defendantName);
+        clickSaveAndContinue();
+        page.waitForTimeout(DEFAULT_WAIT_TIMEOUT_MS);
+        waitUntilSpinnersAreGone(SAVING_INDICATOR_TEXT, LOADING_INDICATOR_TEXT);
+    }
+
+    private void finishChargingDecisionAfterFinalDefendant() {
         clickSaveAndContinue();
         waitUntilLoadingIndicatorIsGone(LOADING_INDICATOR_TEXT);
         waitForLoginPageToLoadCompletely();
         clickSaveAndContinue();
+    }
+
+    private void completePostOffenceCategorySteps(Map<String, String> decisionChargingData) {
+        String decisionType = requiredChargingDecisionValue(decisionChargingData, DECISION_TYPE_FIELD);
+
+        if (DECISION_TYPE_CHARGE.equalsIgnoreCase(decisionType)) {
+            completeAgConsent(requiredChargingDecisionValue(decisionChargingData, AG_CONSENT_FIELD));
+        }
     }
 
     // Verifies the choices captured on the charging-decision summary card (shown on the offence
@@ -1201,15 +1328,15 @@ public class ChargeDecisionAnalysisPage extends BasePage {
                 .isNotBlank();
     }
 
-    private Locator addRelationshipLink() {
-        Locator addRelationshipLink = page.locator(ADD_RELATIONSHIP_LINK_SELECTOR).first();
+    private Locator addRelationshipLink(int index) {
+        Locator addRelationshipLink = page.locator(ADD_RELATIONSHIP_LINK_SELECTOR).nth(index);
         assertThat(addRelationshipLink).isVisible();
         addRelationshipLink.scrollIntoViewIfNeeded();
         return addRelationshipLink;
     }
 
     private Locator relationshipQuestion() {
-        return page.getByText(RELATIONSHIP_QUESTION_TEXT, new Page.GetByTextOptions().setExact(true));
+        return page.getByText(RELATIONSHIP_QUESTION_PREFIX).first();
     }
 
     private void assertSectionCompleted(String sectionName) {

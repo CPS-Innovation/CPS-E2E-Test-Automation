@@ -21,6 +21,8 @@ public class UIDemoSteps {
 
     private static final String CREATE_MG3_DOCUMENT_COLUMN = "Create MG3 document";
     private static final String CREATE_MG3_DOCUMENT_CONTEXT_KEY = "createMg3Document";
+    private static final String DEFENDANT_COUNT_CONTEXT_KEY = "defendantCount";
+    private static final String CM01_MODIFIED_VALUES_CONTEXT_KEY = "CM01ModifiedValues";
     private static final String CPS_USER_KEY = "CPS_USER";
     private static final String PASSWORD_KEY = "PASSWORD";
     private static final String AUTO_GENERATED_VALUE = "Auto-generated";
@@ -191,7 +193,7 @@ public class UIDemoSteps {
 
     @And("I add suspect victim relationship as {string}")
     public void iAddSuspectVictimRelationshipAs(String relationshipType) {
-        pages.decisionAnalysisPage.addSuspectVictimRelationship(relationshipType);
+        pages.decisionAnalysisPage.addSuspectVictimRelationship(relationshipType, expectedDefendantCount());
     }
 
     @And("I select PCD principal offence category as {string}")
@@ -259,7 +261,7 @@ public class UIDemoSteps {
 
         String relationship = optionalAnalysisValue(analysisDetails, SUSPECT_VICTIM_RELATIONSHIP_FIELD);
         if (!isBlank(relationship)) {
-            pages.decisionAnalysisPage.addSuspectVictimRelationship(relationship);
+            pages.decisionAnalysisPage.addSuspectVictimRelationship(relationship, expectedDefendantCount());
             context.set(SUSPECT_VICTIM_RELATIONSHIP_FIELD, relationship);
         }
 
@@ -311,7 +313,7 @@ public class UIDemoSteps {
 
         String relationship = optionalAnalysisValue(analysisDetails, SUSPECT_VICTIM_RELATIONSHIP_FIELD);
         if (!isBlank(relationship)) {
-            pages.decisionAnalysisPage.addSuspectVictimRelationship(relationship);
+            pages.decisionAnalysisPage.addSuspectVictimRelationship(relationship, expectedDefendantCount());
             context.set(SUSPECT_VICTIM_RELATIONSHIP_FIELD, relationship);
         }
 
@@ -371,6 +373,22 @@ public class UIDemoSteps {
         Map<String, String> decisionChargingData =
                 dataTable.asMaps(String.class, String.class).getFirst();
         pages.decisionAnalysisPage.applyChargingDecision(decisionChargingData);
+    }
+
+    @When("^I make charging decision for the multi defendants\\s+as following:$")
+    public void iMakeChargingDecisionForTheMultiDefendantsAsFollowing(DataTable dataTable) {
+        List<Map<String, String>> decisionChargingData = dataTable.asMaps(String.class, String.class);
+        int expectedDefendantCount = expectedDefendantCount();
+
+        if (decisionChargingData.size() != expectedDefendantCount) {
+            throw new IllegalArgumentException("Multi-defendant charging decision table must contain "
+                    + expectedDefendantCount + " row(s), but contained " + decisionChargingData.size() + ".");
+        }
+
+        pages.decisionAnalysisPage.applyChargingDecisions(
+                decisionChargingData,
+                multiDefendantNamesInDecisionOrder(expectedDefendantCount)
+        );
     }
 
     @And("I continue without action plan")
@@ -516,7 +534,7 @@ public class UIDemoSteps {
         List<String> globalMonitoringCodes = monitoringCodes(analysisDetails, GLOBAL_MONITORING_CODES_FIELD);
         List<String> localMonitoringCodes = monitoringCodes(analysisDetails, LOCAL_MONITORING_CODES_FIELD);
         String relationship = requiredEarlyAdviceSuspectVictimRelationship(analysisDetails);
-        pages.decisionAnalysisPage.addSuspectVictimRelationship(relationship);
+        pages.decisionAnalysisPage.addSuspectVictimRelationship(relationship, expectedDefendantCount());
         context.set(SUSPECT_VICTIM_RELATIONSHIP_FIELD, relationship);
 
         pages.decisionAnalysisPage.selectEarlyAdviceMonitoringCodesAndSaveContinue(
@@ -550,6 +568,34 @@ public class UIDemoSteps {
     private String selectedReviewType() {
         String reviewType = context.getAsString("reviewType");
         return isBlank(reviewType) ? DEFAULT_REVIEW_TYPE : reviewType;
+    }
+
+    private int expectedDefendantCount() {
+        Integer defendantCount = context.getAsInt(DEFENDANT_COUNT_CONTEXT_KEY);
+        return defendantCount == null ? 1 : defendantCount;
+    }
+
+    private List<String> multiDefendantNamesInDecisionOrder(int expectedDefendantCount) {
+        Map<String, String> cm01Values = context.getAsMap(CM01_MODIFIED_VALUES_CONTEXT_KEY);
+        if (cm01Values == null) {
+            throw new IllegalStateException("No value found in scenario context for key: "
+                    + CM01_MODIFIED_VALUES_CONTEXT_KEY);
+        }
+
+        List<String> defendantNames = new ArrayList<>();
+        for (int index = 1; index <= expectedDefendantCount; index++) {
+            String firstName = cm01Values.get("DEF_" + index + "_FirstName");
+            String surname = cm01Values.get("DEF_" + index + "_Surname");
+
+            if (isBlank(firstName) || isBlank(surname)) {
+                throw new IllegalStateException("No generated defendant name found for DEF_" + index
+                        + " in scenario context.");
+            }
+
+            defendantNames.add(surname + ", " + firstName);
+        }
+
+        return defendantNames;
     }
 
     private Map<String, String> defaultPreChargeAnalysisDetails() {

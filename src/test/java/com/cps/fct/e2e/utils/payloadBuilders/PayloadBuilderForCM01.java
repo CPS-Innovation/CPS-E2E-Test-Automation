@@ -6,10 +6,14 @@ import com.cps.fct.e2e.utils.common.ScenarioContext;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static com.cps.fct.e2e.utils.common.FakerUtils.*;
 
 public class PayloadBuilderForCM01 extends JsonReplacer {
+
+    private static final Pattern UNRESOLVED_PLACEHOLDER = Pattern.compile("\\{\\{[^}]+\\}\\}");
 
     JsonUtils jsonUtils = new JsonUtils();
     private final Map<String, String> caseWithChargeMap = Map.ofEntries(
@@ -46,9 +50,15 @@ public class PayloadBuilderForCM01 extends JsonReplacer {
             Map.entry("{{CM01_Def_PersonId}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_Def_PersonId_2}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_Def_PersonId_3}}", generateUppercaseAlphaNumeric(12)),
+            Map.entry("{{CM01_Def_PersonId_4}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_CaseOffenceId}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_CaseOffenceId_2}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_CaseOffenceId_3}}", generateUppercaseAlphaNumeric(12)),
+            Map.entry("{{CM01_CaseOffenceId_4}}", generateUppercaseAlphaNumeric(12)),
+            Map.entry("{{CM01_CaseOffenceId_5}}", generateUppercaseAlphaNumeric(12)),
+            Map.entry("{{CM01_CaseOffenceId_6}}", generateUppercaseAlphaNumeric(12)),
+            Map.entry("{{CM01_CaseOffenceId_7}}", generateUppercaseAlphaNumeric(12)),
+            Map.entry("{{CM01_CaseOffenceId_8}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_SolicitorId}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_SolicitorId_2}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_Ser_ShoulderNo}}", generateUppercaseAlphaNumeric(6)),
@@ -93,13 +103,29 @@ public class PayloadBuilderForCM01 extends JsonReplacer {
             Map.entry("{{Defender_Solicitor_Company}}", companyName()),
             Map.entry("{{DEF_FirstName}}", firstName()),
             Map.entry("{{DEF_Surname}}", lastName()),
+            Map.entry("{{DEF_1_FirstName}}", firstName()),
+            Map.entry("{{DEF_1_Surname}}", lastName()),
             Map.entry("{{DEF_2_FirstName}}", firstName()),
             Map.entry("{{DEF_2_Surname}}", lastName()),
             Map.entry("{{DEF_3_FirstName}}", firstName()),
             Map.entry("{{DEF_3_Surname}}", lastName()),
+            Map.entry("{{DEF_4_FirstName}}", firstName()),
+            Map.entry("{{DEF_4_Surname}}", lastName()),
             Map.entry("{{DEF_Building_number}}", buildingNumber()),
             Map.entry("{{DEF_Street_Address}}", streetAddress()),
             Map.entry("{{DEF_City}}", cityName()),
+            Map.entry("{{DEF_1_Street_Address}}", streetAddress()),
+            Map.entry("{{DEF_1_City}}", cityName()),
+            Map.entry("{{DEF_1_Postcode}}", ukPostCode()),
+            Map.entry("{{DEF_2_Street_Address}}", streetAddress()),
+            Map.entry("{{DEF_2_City}}", cityName()),
+            Map.entry("{{DEF_2_Postcode}}", ukPostCode()),
+            Map.entry("{{DEF_3_Street_Address}}", streetAddress()),
+            Map.entry("{{DEF_3_City}}", cityName()),
+            Map.entry("{{DEF_3_Postcode}}", ukPostCode()),
+            Map.entry("{{DEF_4_Street_Address}}", streetAddress()),
+            Map.entry("{{DEF_4_City}}", cityName()),
+            Map.entry("{{DEF_4_Postcode}}", ukPostCode()),
             Map.entry("{{DEF_Mobile}}", mobilePhone()),
             Map.entry("{{DEF_HomePhone}}", homePhone()),
             Map.entry("{{DEF_Email}}", email()),
@@ -121,7 +147,20 @@ public class PayloadBuilderForCM01 extends JsonReplacer {
 
     public String generateCM01PayloadWithValues(String payloadFileName, ScenarioContext context) throws IOException {
         String modifiedJson = applyReplacements(payloadFileName, caseWithChargeMap);
+        assertNoUnresolvedPlaceholders(modifiedJson);
         context.set("CM01ModifiedValues", removeCurlyBracesFromKeys(caseWithChargeMap));
         return modifiedJson;
+    }
+
+    private void assertNoUnresolvedPlaceholders(String modifiedJson) {
+        String unresolvedPlaceholders = UNRESOLVED_PLACEHOLDER.matcher(modifiedJson)
+                .results()
+                .map(match -> match.group())
+                .distinct()
+                .collect(Collectors.joining(", "));
+
+        if (!unresolvedPlaceholders.isBlank()) {
+            throw new IllegalStateException("CM01 payload contains unresolved placeholders: " + unresolvedPlaceholders);
+        }
     }
 }

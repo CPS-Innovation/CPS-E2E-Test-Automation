@@ -12,6 +12,7 @@ import org.assertj.core.api.SoftAssertions;
 
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.cps.fct.e2e.utils.common.JsonUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -139,6 +140,31 @@ public class VictimWitnessAssertions {
 
     }
 
+    public static void assertDeclineMeetingDetails(int meetingTypeCode, VictimMeetingDetails inputDetails,
+                                                Response responsePayload)
+    {
 
+        SoftAssertions softly = new SoftAssertions();
+        LinkedHashMap<String, Object> result = responsePayload.getBody().jsonPath().get();
+
+        Map<String, Object> value = (Map<String, Object>) result.get("value");
+
+        Integer expectedMeetingType = (Integer) value.get("meetingType");
+        Integer expectedMethodOfOffer = (Integer) value.get("methodOfOffer");
+        String expectedDateOfOffer = (String) value.get("dateOfOffer");
+        String expectedVictimResponse = (String) value.get("victimResponse");
+        Integer expectedMethodOfResponse = (Integer) value.get("methodOfResponse");
+        String expectedVictimResponseDate = (String) value.get("victimResponseDate");
+        String expectedLastModifiedBy = (String) value.get("lastModifiedBy");
+
+        assertThat(expectedMeetingType).isEqualTo(inputDetails.getMeetingType());
+        assertThat(expectedMethodOfOffer).isEqualTo(inputDetails.getMethodOfOffer());
+        assertThat(expectedDateOfOffer).isEqualTo(inputDetails.getDateOfOffer());
+        assertThat(expectedVictimResponse).isEqualTo(inputDetails.getVictimResponse());
+        assertThat(expectedMethodOfResponse).isEqualTo(inputDetails.getMethodOfResponse());
+        assertThat(expectedVictimResponseDate).isEqualTo(inputDetails.getVictimResponseDate());
+        assertThat(expectedLastModifiedBy).isEqualTo(inputDetails.getLastModifiedBy());
+
+    }
 
 }

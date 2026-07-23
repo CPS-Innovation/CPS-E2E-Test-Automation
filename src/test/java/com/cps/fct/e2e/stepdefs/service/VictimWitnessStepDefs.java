@@ -9,6 +9,7 @@ import com.cps.fct.e2e.utils.services.ddei.CaseService;
 import com.cps.fct.e2e.utils.services.ddei.WitnessService;
 import com.cps.fct.e2e.utils.services.ddei.payloadBuilder.*;
 import com.cps.fct.e2e.utils.services.ddei.responseAssertions.VictimWitnessAssertions;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.PendingException;
@@ -20,10 +21,8 @@ import io.restassured.response.Response;
 import org.codehaus.groovy.transform.SourceURIASTTransformation;
 import org.picocontainer.annotations.Inject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.sql.SQLOutput;
+import java.util.*;
 
 import static com.cps.fct.e2e.utils.common.JsonUtils.*;
 import static com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimWitnessPayloadBuilder.*;
@@ -507,60 +506,6 @@ public class VictimWitnessStepDefs {
                 .build();
     }
 
-    @And("the {string} is not offered to {string} in VCA")
-    public void meetingIsNotOffered(String meetingType, String witnessVictimType) {
-        int meetingTypeCode = 0;
-        Map<String, String> idGuidMap = context.get("idGuidMap");
-        Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
-
-        Map<Integer, VictimMeetingDetails> victimMeetingDetailsMap = new HashMap<>();
-        context.set("victimMeetingDetailsMap", victimMeetingDetailsMap);
-
-        meetingTypeCode = switch (meetingType) {
-            case "CPS pre-trial meeting" -> 1;
-            case "Inform victim about charging decision" -> 2;
-            case "Stopped or Substantially altered charge" -> 3;
-            case "Victims Right to Review" -> 4;
-            case "Victim complaint" -> 5;
-            case "Other" -> 99;
-            default -> meetingTypeCode;
-        };
-
-        for (String id : witnessVictimMapIds.get(witnessVictimType)) {
-            VictimMeetingDetails victimMeetingDetails = VictimWitnessPayloadBuilder.payLoadForAddVictimMeetingDetails(meetingTypeCode);
-            witnessService.addVictimMeetingDetailsToVCA(idGuidMap.get(id), convertObjectToString(victimMeetingDetails));
-            victimMeetingDetailsMap.put(meetingTypeCode, victimMeetingDetails);
-        }
-        context.set("victimMeetingDetailsMap", victimMeetingDetailsMap);
-
-    }
-
-    @Then("the {string} details for {string} is verified in VCA")
-    public void meetingDetailsVerified(String meetingType, String witnessVictimType) {
-        int meetingTypeCode = 0;
-        Map<String, String> idGuidMap = context.get("idGuidMap");
-        Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
-        Map<Integer, VictimMeetingDetails> victimMeetingDetailsMap = context.get("victimMeetingDetailsMap");
-
-        meetingTypeCode = switch (meetingType) {
-            case "CPS pre-trial meeting" -> 1;
-            case "Inform victim about charging decision" -> 2;
-            case "Stopped or Substantially altered charge" -> 3;
-            case "Victims Right to Review" -> 4;
-            case "Victim complaint" -> 5;
-            case "Other" -> 99;
-            default -> meetingTypeCode;
-        };
-
-        for (String id : witnessVictimMapIds.get(witnessVictimType)) {
-            VictimMeetingDetails victimMeetingDetails = victimMeetingDetailsMap.get(meetingTypeCode);
-            Response response = witnessService.listVictimMeetingDetails(idGuidMap.get(id),meetingTypeCode);
-            VictimWitnessAssertions.assertMeetingTypeDetails(meetingTypeCode, victimMeetingDetails, response);
-
-        }
-
-    }
-
     @When("the Victim liaison officer is assigned to {string} in VCA")
     public void victimLiaisonOfficerAssigned(String witnessVictimType) {
 
@@ -568,19 +513,17 @@ public class VictimWitnessStepDefs {
         Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
         Map<String, String> idGuidMap = context.get("idGuidMap");
         Integer userPartyId = witnessService.getUserPartyId();
-        Map<String, VictimLiaisonOfficerDetails> victimWitnessVLODetails  = context.get("victimWitnessVLODetails");
+        Map<String, VictimLiaisonOfficerDetails> victimWitnessVLODetails = context.get("victimWitnessVLODetails");
 
         for (String id : witnessVictimMapIds.get(witnessVictimType)) {
 
             vcaVictimLiaisonOfficerDetails = addVictimLiaisonOfficer(userPartyId);
             String requestPayload = convertObjectToString(vcaVictimLiaisonOfficerDetails);
             witnessService.addVictimLiaisonOfficer(idGuidMap.get(id), requestPayload);
-            victimWitnessVLODetails.put(idGuidMap.get(id),vcaVictimLiaisonOfficerDetails);
-
+            victimWitnessVLODetails.put(idGuidMap.get(id), vcaVictimLiaisonOfficerDetails);
         }
         context.set("victimWitnessVLODetails", victimWitnessVLODetails);
     }
-
 
     @Then("assigned Victim liaison officer for {string} is verified")
     public void assignedVloIsVerified(String witnessVictimType) throws InterruptedException {
@@ -594,11 +537,147 @@ public class VictimWitnessStepDefs {
             VictimLiaisonOfficerDetails victimLiaisonOfficerDetails = victimWitnessVLODetails.get(idGuidMap.get(id));
 
             response = witnessService.victimLiaisonOfficerFromVCA(idGuidMap.get(id));
-            VictimWitnessAssertions.assertVictimLiaisonOfficerDetails(idGuidMap.get(id),victimLiaisonOfficerDetails, response);
+            VictimWitnessAssertions.assertVictimLiaisonOfficerDetails(idGuidMap.get(id), victimLiaisonOfficerDetails, response);
             Thread.sleep(1000);
+        }
+    }
+
+    @When("the following meetings is not offered to {string} in VCA")
+    public void meetingIsNotOffered(String witnessVictimType, DataTable dataTable) {
+
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+        Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+
+        Map<Integer, VictimMeetingDetails> victimMeetingDetailsMap = new HashMap<>();
+        context.set("victimMeetingDetailsMap", victimMeetingDetailsMap);
+
+        List<Integer> meetingTypeCodeList = new ArrayList<>();
+
+        for (Map<String, String> row : rows) {
+            String meeting = row.get("meeting");
+            int meetingTypeCode = Integer.parseInt(row.get("meetingTypeCode"));
+            String reason = row.get("reason");
+            meetingTypeCodeList.add(meetingTypeCode);
+
+            for (String id : witnessVictimMapIds.get(witnessVictimType)) {
+                VictimMeetingDetails victimMeetingDetails = VictimWitnessPayloadBuilder.payLoadForAddVictimMeetingDetails(meetingTypeCode, reason);
+                witnessService.addVictimMeetingDetailsToVCA(idGuidMap.get(id), convertObjectToString(victimMeetingDetails));
+                victimMeetingDetailsMap.put(meetingTypeCode, victimMeetingDetails);
+            }
+            context.set("victimMeetingDetailsMap", victimMeetingDetailsMap);
+        }
+        context.set("meetingTypeCodeList", meetingTypeCodeList);
+    }
+
+    @Then("the offered meeting details of {string} is verified in VCA")
+    public void meetingDetailsVerified(String witnessVictimType) {
+
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+        Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
+        Map<Integer, VictimMeetingDetails> victimMeetingDetailsMap = context.get("victimMeetingDetailsMap");
+
+        List<Integer> meetingTypeCodeList = context.get("meetingTypeCodeList");
+
+        for (Integer meetingTypeCode : meetingTypeCodeList) {
+
+            for (String id : witnessVictimMapIds.get(witnessVictimType)) {
+                VictimMeetingDetails victimMeetingDetails = victimMeetingDetailsMap.get(meetingTypeCode);
+                Response response = witnessService.listVictimMeetingDetails(idGuidMap.get(id), meetingTypeCode);
+                VictimWitnessAssertions.assertMeetingTypeDetails(meetingTypeCode, victimMeetingDetails, response);
+            }
+        }
+    }
+
+    @When("the following meetings via meeting method is offered to {string} in VCA")
+    public void meetingOfferedMethod(String witnessVictimType, DataTable dataTable) {
+
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+        Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+        Map<Integer, VictimMeetingDetails> victimMeetingDetailsMap = new HashMap<>();
+        context.set("victimMeetingDetailsMap", victimMeetingDetailsMap);
+
+        List<String> meetingContextGuidList = new ArrayList<>();
+        List<Integer> meetingTypeCodeList = new ArrayList<>();
+        List<Integer> methodTypeCodeList = new ArrayList<>();
+
+        for (Map<String, String> row : rows) {
+            String meeting = row.get("meeting");
+            int meetingTypeCode = Integer.parseInt(row.get("meetingTypeCode"));
+            meetingTypeCodeList.add(meetingTypeCode);
+
+            int methodTypeCode = Integer.parseInt(row.get("methodTypeCode"));
+            methodTypeCodeList.add(methodTypeCode);
+
+            for (String id : witnessVictimMapIds.get(witnessVictimType)) {
+                VictimMeetingDetails victimMeetingDetails = VictimWitnessPayloadBuilder.payLoadForAddVictimMeetingMethodDetails(meetingTypeCode, methodTypeCode);
+                HttpResponseWrapper response = witnessService.addVictimMeetingDetailsToVCA(idGuidMap.get(id), convertObjectToString(victimMeetingDetails));
+                String responseBody = response.getBody();
+                String meetingContextGuid = JsonPath.read(responseBody, "$.value.meetingContextGuid");
+                victimMeetingDetailsMap.put(meetingTypeCode, victimMeetingDetails);
+                meetingContextGuidList.add(meetingContextGuid);
+            }
+
+        }
+        context.set("victimMeetingDetailsMap", victimMeetingDetailsMap);
+        context.set("meetingTypeCodeList", meetingTypeCodeList);
+        context.set("methodTypeCodeList", methodTypeCodeList);
+        context.set("meetingContextGuidList", meetingContextGuidList);
+
+    }
+
+    @When("offered meetings is declined by {string} in VCA")
+    public void meetingOfferedDeclined(String witnessVictimType) {
+
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+        Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
+        Map<Integer, VictimMeetingDetails> victimMeetingDetailsMap = context.get("victimMeetingDetailsMap");
+
+
+        Map<String, VictimMeetingDetails> meetingTypeContextGuidMap = context.get("meetingTypeContextGuidMap");
+
+        List<Integer> meetingTypeCodeList = context.get("meetingTypeCodeList");
+        List<Integer> methodTypeCodeList = context.get("methodTypeCodeList");
+        List<String> meetingContextGuidList = context.get("meetingContextGuidList");
+
+        for (String id : witnessVictimMapIds.get(witnessVictimType)) {
+            for (int i = 0; i < meetingTypeCodeList.size() && i < methodTypeCodeList.size() && i < meetingContextGuidList.size(); i++) {
+                Integer meetingTypeCode = meetingTypeCodeList.get(i);
+                Integer methodTypeCode = methodTypeCodeList.get(i);
+                String meetingContextGuid = meetingContextGuidList.get(i);
+                VictimMeetingDetails victimMeetingDetails = VictimWitnessPayloadBuilder.payLoadForDeclineVictimMeetingDetails(meetingTypeCode, methodTypeCode,meetingContextGuid);
+                witnessService.declineVictimMeeting(idGuidMap.get(id), convertObjectToString(victimMeetingDetails));
+                victimMeetingDetailsMap.put(meetingTypeCode, victimMeetingDetails);
+            }
+            context.set("victimMeetingDetailsMap", victimMeetingDetailsMap);
+        }
+
+    }
+
+    @Then("the declined meeting details of {string} is verified in VCA")
+    public void declinedMeetingDetailsVerified(String witnessVictimType) {
+
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+        Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
+        Map<Integer, VictimMeetingDetails> victimMeetingDetailsMap = context.get("victimMeetingDetailsMap");
+
+        List<Integer> meetingTypeCodeList = context.get("meetingTypeCodeList");
+        List<Integer> methodTypeCodeList = context.get("methodTypeCodeList");
+
+        for (String id : witnessVictimMapIds.get(witnessVictimType)) {
+            for (int i = 0; i < meetingTypeCodeList.size() && i < methodTypeCodeList.size(); i++) {
+                Integer meetingTypeCode = meetingTypeCodeList.get(i);
+                Integer methodTypeCode = methodTypeCodeList.get(i);
+                Integer meetingAttempt = 1;
+                VictimMeetingDetails victimMeetingDetails = victimMeetingDetailsMap.get(meetingTypeCode);
+                Response response = witnessService.listDelineMeetingDetails(idGuidMap.get(id), meetingTypeCode, meetingAttempt);
+                VictimWitnessAssertions.assertDeclineMeetingDetails(meetingTypeCode, victimMeetingDetails, response);
+            }
 
         }
 
     }
+
 
 }

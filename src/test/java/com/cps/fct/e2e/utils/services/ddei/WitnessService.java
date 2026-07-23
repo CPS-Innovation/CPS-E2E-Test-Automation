@@ -99,8 +99,12 @@ public class WitnessService extends BaseService {
         return service.sendRequest(getWitnessesDetailsFromVCARequestParams(guid));
     }
 
-    public void addVictimMeetingDetailsToVCA(String guid, String requestBody) {
-        service.sendRequest(addVictimMeetingDetailsRequestParams(guid, requestBody));
+    public HttpResponseWrapper addVictimMeetingDetailsToVCA(String guid, String requestBody) {
+        return service.sendRequest(addVictimMeetingDetailsRequestParams(guid, requestBody));
+    }
+
+    public HttpResponseWrapper declineVictimMeeting(String guid, String requestBody) {
+        return service.sendRequest(declineVictimMeetingRequestParams(guid, requestBody));
     }
 
     public void addVictimLiaisonOfficer(String guid, String requestBody) {
@@ -113,6 +117,10 @@ public class WitnessService extends BaseService {
 
     public Response listVictimMeetingDetails(String guid, Integer meetingTypeCode) {
         return service.restAssuredRequest(getVictimMeetingDetailsForRequestParams(guid,meetingTypeCode ));
+    }
+
+    public Response listDelineMeetingDetails(String guid, Integer meetingTypeCode, Integer meetingAttempt) {
+        return service.restAssuredRequest(getDelineMeetingDetailsForRequestParams(guid,meetingTypeCode,meetingAttempt ));
     }
 
 
@@ -138,6 +146,7 @@ public class WitnessService extends BaseService {
                 "$[?(@.isWitnessAndVictim==false && @.isIntimidated==true)].witnessId");
         List<String> witnessSpecialId = extractFromJsonToList(body,
                 "$[?(@.isWitnessAndVictim==false && @.isSpecialNeeds==true)].witnessId");
+
         List<String> victimId = extractFromJsonToList(body,
                 "$[?(@.isWitnessAndVictim==true && @.isKeyWitness=='Yes')].witnessId");
         List<String> victimChildId = extractFromJsonToList(body,
@@ -158,6 +167,13 @@ public class WitnessService extends BaseService {
                 "$[?(@.isWitnessAndVictim==true && @.isIntimidated==true)].witnessId");
         List<String> victimSpecialId = extractFromJsonToList(body,
                 "$[?(@.isWitnessAndVictim==true && @.isSpecialNeeds==true)].witnessId");
+
+        List<String> pureVictimId = extractFromJsonToList(body,
+                "$[?(@.isPureVictim==true && @.isWitnessAndVictim==false)].witnessId");
+        List<String> pureVictimVulnerableId = extractFromJsonToList(body,
+                "$[?(@.isPureVictim==true && @.isVulnerable==true)].witnessId");
+        List<String> pureVictimIntimidatedId = extractFromJsonToList(body,
+                "$[?(@.isPureVictim==true && @.isIntimidated==true)].witnessId");
 
         Map<String, List<String>> witnessVictimMapIds = new HashMap<>();
         witnessVictimMapIds.put("witnessId", witnessId);
@@ -181,6 +197,11 @@ public class WitnessService extends BaseService {
         witnessVictimMapIds.put("victimProfessionalId", victimProfessionalId);
         witnessVictimMapIds.put("victimIntimidatedId", victimIntimidatedId);
         witnessVictimMapIds.put("victimSpecialId", victimSpecialId);
+
+        witnessVictimMapIds.put("pureVictimId", pureVictimId);
+        witnessVictimMapIds.put("pureVictimVulnerableId", pureVictimVulnerableId);
+        witnessVictimMapIds.put("pureVictimIntimidatedId", pureVictimIntimidatedId);
+
         context.set("witnessVictimMapIds", witnessVictimMapIds);
     }
 
@@ -364,10 +385,31 @@ public class WitnessService extends BaseService {
                 .build();
     }
 
+    private HttpClientBuilder declineVictimMeetingRequestParams(String guid, String requestBody) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/victims/%s/meeting-offers", guid))
+                .addHeaders(ddeiHeaders())
+                .method("PATCH")
+                .body(requestBody)
+                .resourceName("declineVictimMeetingDetails")
+                .build();
+    }
+
     private HttpClientBuilder getVictimMeetingDetailsForRequestParams(String guid, Integer meetingTypeCode) {
         return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("DDEI_HOST"))
                 .endpoint(format("/api/victims/%s/meeting-offers/%s", guid,meetingTypeCode))
+                .addHeaders(ddeiHeaders())
+                .method("GET")
+                .resourceName("getVictimMeetingTypeDetails")
+                .build();
+    }
+
+    private HttpClientBuilder getDelineMeetingDetailsForRequestParams(String guid, Integer meetingTypeCode, Integer meetingAttempt) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/victims/%s/meeting-offers/%s/%s", guid,meetingTypeCode,meetingAttempt))
                 .addHeaders(ddeiHeaders())
                 .method("GET")
                 .resourceName("getVictimMeetingTypeDetails")

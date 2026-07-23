@@ -271,4 +271,26 @@ public class VictimWitnessPayloadBuilder {
                 .LastModifiedBy("automationUser")
                 .build();
     }
+
+    public static VictimMeetingDetails payLoadForNoResponseMeetingDetails(int meetingTypeCode, int methodTypeCode) {
+
+        return VictimMeetingDetails.builder()
+                .MeetingType(meetingTypeCode)
+                .MethodOfOffer(methodTypeCode)
+                .DateOfOffer(todayMinusFiveDays())
+                .MeetingOfferAttempt(1)
+                .MeetingContextGuid(FakerUtils.uuid())
+                .MeetingOffered(true)
+                .MeetingRequested(false)
+                .VictimResponse("No Response")
+                .MethodOfResponse(10)
+                .VictimResponseDate(todayMinusFourDays())
+                .LastModifiedBy("automationUser")
+                .build();
+    }
+
+
+
+
+
 }

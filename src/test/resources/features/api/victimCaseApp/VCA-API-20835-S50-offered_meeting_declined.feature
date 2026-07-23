@@ -1,8 +1,8 @@
 @regression @VCA_API_S11
 
-Feature: VCA-API-S11 - Decline of offered meetings by victims
+Feature: VCA-API-S50 - Acceptance of offered meetings by victims
   As a Victim Liaison Officer
-  I want to record the meetings declined by victim for following type and method:-
+  I want to record the meeting acceptance by victim for following type and method:-
   ----------------------------------------------------------------------
   ¦ Meeting Type                                ¦ Meeting Method       ¦
   ¦---------------------------------------------¦----------------------¦
@@ -20,7 +20,7 @@ Feature: VCA-API-S11 - Decline of offered meetings by victims
     And add "victim" using "LM04" for the case
 
   @ptmDeclined
-  Scenario: Victim decline an offered meeting for different meeting types
+  Scenario: Victim accepts an offered meeting for different meeting types
     Given witness and victim details are available
     And the "victimId" is onboarded to VCA
     And the Victim liaison officer is assigned to "victimId" in VCA

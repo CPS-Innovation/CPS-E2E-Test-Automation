@@ -633,8 +633,6 @@ public class VictimWitnessStepDefs {
         Map<String, String> idGuidMap = context.get("idGuidMap");
         Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
         Map<Integer, VictimMeetingDetails> victimMeetingDetailsMap = context.get("victimMeetingDetailsMap");
-
-
         Map<String, VictimMeetingDetails> meetingTypeContextGuidMap = context.get("meetingTypeContextGuidMap");
 
         List<Integer> meetingTypeCodeList = context.get("meetingTypeCodeList");
@@ -679,5 +677,52 @@ public class VictimWitnessStepDefs {
 
     }
 
+    @When("No response is logged when there’s no response by {string} in communication attempt")
+    public void meetingOfferedNoResponse(String witnessVictimType) {
+
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+        Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
+        Map<Integer, VictimMeetingDetails> victimMeetingDetailsMap = context.get("victimMeetingDetailsMap");
+
+        List<Integer> meetingTypeCodeList = context.get("meetingTypeCodeList");
+        List<Integer> methodTypeCodeList = context.get("methodTypeCodeList");
+
+        for (String id : witnessVictimMapIds.get(witnessVictimType)) {
+            for (int i = 0; i < meetingTypeCodeList.size() && i < methodTypeCodeList.size(); i++) {
+                Integer meetingTypeCode = meetingTypeCodeList.get(i);
+                Integer methodTypeCode = methodTypeCodeList.get(i);
+                VictimMeetingDetails victimMeetingDetails = VictimWitnessPayloadBuilder.payLoadForNoResponseMeetingDetails(meetingTypeCode, methodTypeCode);
+                witnessService.noResponseVictimMeeting(idGuidMap.get(id), convertObjectToString(victimMeetingDetails));
+                victimMeetingDetailsMap.put(meetingTypeCode, victimMeetingDetails);
+            }
+            context.set("victimMeetingDetailsMap", victimMeetingDetailsMap);
+        }
+
+    }
+
+    @Then("Logged no response to meeting details by {string} is verified in VCA")
+    public void noResponseDetailsVerified(String witnessVictimType) {
+
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+        Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
+        Map<Integer, VictimMeetingDetails> victimMeetingDetailsMap = context.get("victimMeetingDetailsMap");
+
+        List<Integer> meetingTypeCodeList = context.get("meetingTypeCodeList");
+        List<Integer> methodTypeCodeList = context.get("methodTypeCodeList");
+
+        for (String id : witnessVictimMapIds.get(witnessVictimType)) {
+            for (int i = 0; i < meetingTypeCodeList.size() && i < methodTypeCodeList.size(); i++) {
+                Integer meetingTypeCode = meetingTypeCodeList.get(i);
+                Integer methodTypeCode = methodTypeCodeList.get(i);
+                Integer meetingAttempt = 1;
+                Integer noResponseMethodCode = 10;
+                VictimMeetingDetails victimMeetingDetails = victimMeetingDetailsMap.get(meetingTypeCode);
+                Response response = witnessService.listDelineMeetingDetails(idGuidMap.get(id), meetingTypeCode, meetingAttempt);
+                VictimWitnessAssertions.assertNoResponseMeetingDetails(meetingTypeCode, victimMeetingDetails, response);
+            }
+
+        }
+
+    }
 
 }

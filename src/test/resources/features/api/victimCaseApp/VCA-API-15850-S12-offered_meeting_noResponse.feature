@@ -1,8 +1,8 @@
-@regression @VCA_API_S11
+@regression @VCA_API_S12
 
-Feature: VCA-API-S11 - Decline of offered meetings by victims
+Feature: VCA-API-S12 - Offered meetings is logged as No response when there’s no response in communication attempt for different meeting type to victims or witnesses
   As a Victim Liaison Officer
-  I want to record the meetings declined by victim for following type and method:-
+  I want to Log No response when there’s no response by victim in communication attempt for following type and method:-
   ----------------------------------------------------------------------
   ¦ Meeting Type                                ¦ Meeting Method       ¦
   ¦---------------------------------------------¦----------------------¦
@@ -13,14 +13,14 @@ Feature: VCA-API-S11 - Decline of offered meetings by victims
   ¦ 5.Victim complaint                          ¦ 5.By telephone       ¦
   ¦ 6.Other CPS meeting                         ¦                      ¦
   ----------------------------------------------------------------------
-  Verify that meeting declined details are recorded
+  Verify that meeting No response details are recorded
 
   Background: Create cases with single defendant with multi charge with victim and witness
     Given create new case using "CM01" for type "single defendant multiple offence"
     And add "victim" using "LM04" for the case
 
   @ptmDeclined
-  Scenario: Victim decline an offered meeting for different meeting types
+  Scenario: No response is logged for Offered meeting when there’s no response in communication attempt by victims or witnesses
     Given witness and victim details are available
     And the "victimId" is onboarded to VCA
     And the Victim liaison officer is assigned to "victimId" in VCA
@@ -32,5 +32,5 @@ Feature: VCA-API-S11 - Decline of offered meetings by victims
       | Victims Right to Review                 | 4               | Letter by ISVA   | 4              |
       | Victim complaint                        | 5               | By telephone     | 5              |
       | Other CPS meeting                       | 99              | Letter by email  | 5              |
-    And offered meetings is declined by "victimId" in VCA
-    Then the declined meeting details of "victimId" is verified in VCA
+    And No response is logged when there’s no response by "victimId" in communication attempt
+    Then Logged no response to meeting details by "victimId" is verified in VCA

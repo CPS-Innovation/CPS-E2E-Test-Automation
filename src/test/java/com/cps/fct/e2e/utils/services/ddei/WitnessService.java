@@ -103,8 +103,12 @@ public class WitnessService extends BaseService {
         return service.sendRequest(addVictimMeetingDetailsRequestParams(guid, requestBody));
     }
 
-    public HttpResponseWrapper declineVictimMeeting(String guid, String requestBody) {
-        return service.sendRequest(declineVictimMeetingRequestParams(guid, requestBody));
+    public void declineVictimMeeting(String guid, String requestBody) {
+        service.sendRequest(declineVictimMeetingRequestParams(guid, requestBody));
+    }
+
+    public void noResponseVictimMeeting(String guid, String requestBody) {
+         service.sendRequest(noResponseVictimMeetingRequestParams(guid, requestBody));
     }
 
     public void addVictimLiaisonOfficer(String guid, String requestBody) {
@@ -123,6 +127,9 @@ public class WitnessService extends BaseService {
         return service.restAssuredRequest(getDelineMeetingDetailsForRequestParams(guid,meetingTypeCode,meetingAttempt ));
     }
 
+//    public Response noResponseMeetingDetails(String guid, Integer meetingTypeCode, Integer meetingAttempt) {
+//        return service.restAssuredRequest(getDelineMeetingDetailsForRequestParams(guid,meetingTypeCode,meetingAttempt ));
+//    }
 
     public void persistVictimWitnessDetails(HttpResponseWrapper response, ScenarioContext context) {
         String body = response.getBody();
@@ -396,6 +403,17 @@ public class WitnessService extends BaseService {
                 .build();
     }
 
+    private HttpClientBuilder noResponseVictimMeetingRequestParams(String guid, String requestBody) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/victims/%s/meeting-offers", guid))
+                .addHeaders(ddeiHeaders())
+                .method("PATCH")
+                .body(requestBody)
+                .resourceName("noResponseVictimMeetingDetails")
+                .build();
+    }
+
     private HttpClientBuilder getVictimMeetingDetailsForRequestParams(String guid, Integer meetingTypeCode) {
         return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("DDEI_HOST"))
@@ -412,7 +430,7 @@ public class WitnessService extends BaseService {
                 .endpoint(format("/api/victims/%s/meeting-offers/%s/%s", guid,meetingTypeCode,meetingAttempt))
                 .addHeaders(ddeiHeaders())
                 .method("GET")
-                .resourceName("getVictimMeetingTypeDetails")
+                .resourceName("getMeetingTypeDetails")
                 .build();
     }
 

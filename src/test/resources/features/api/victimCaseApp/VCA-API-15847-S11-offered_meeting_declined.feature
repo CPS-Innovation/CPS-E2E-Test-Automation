@@ -32,5 +32,5 @@ Feature: VCA-API-S11 - Decline of offered meetings by victims
       | Victims Right to Review                 | 4               | Letter by ISVA   | 4              |
       | Victim complaint                        | 5               | By telephone     | 5              |
       | Other CPS meeting                       | 99              | Letter by email  | 5              |
-    And offered meetings is declined by "victimId" in VCA
-    Then the declined meeting details of "victimId" is verified in VCA
+    And offered meetings is "Declined" by "victimId" in VCA
+    Then the "Declined" meeting details of "victimId" is verified in VCA

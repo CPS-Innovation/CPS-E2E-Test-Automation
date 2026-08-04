@@ -19,7 +19,7 @@ Feature: VCA-API-S12 - Offered meetings is logged as No response when there’s 
     Given create new case using "CM01" for type "single defendant multiple offence"
     And add "victim" using "LM04" for the case
 
-  @ptmDeclined
+  @ptmNoResponse
   Scenario: No response is logged for Offered meeting when there’s no response in communication attempt by victims or witnesses
     Given witness and victim details are available
     And the "victimId" is onboarded to VCA
@@ -32,5 +32,5 @@ Feature: VCA-API-S12 - Offered meetings is logged as No response when there’s 
       | Victims Right to Review                 | 4               | Letter by ISVA   | 4              |
       | Victim complaint                        | 5               | By telephone     | 5              |
       | Other CPS meeting                       | 99              | Letter by email  | 5              |
-    And No response is logged when there’s no response by "victimId" in communication attempt
+    And No response is logged when there is no response by "victimId" in communication attempt
     Then Logged no response to meeting details by "victimId" is verified in VCA

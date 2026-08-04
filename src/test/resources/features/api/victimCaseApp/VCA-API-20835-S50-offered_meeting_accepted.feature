@@ -13,13 +13,13 @@ Feature: VCA-API-S50 - Acceptance of offered meetings by victims
   ¦ 5.Victim complaint                          ¦ 5.By telephone       ¦
   ¦ 6.Other CPS meeting                         ¦                      ¦
   ----------------------------------------------------------------------
-  Verify that meeting declined details are recorded
+  Verify that meeting acceptance details are recorded
 
   Background: Create cases with single defendant with multi charge with victim and witness
     Given create new case using "CM01" for type "single defendant multiple offence"
     And add "victim" using "LM04" for the case
 
-  @ptmDeclined
+  @ptmAccept
   Scenario: Victim accepts an offered meeting for different meeting types
     Given witness and victim details are available
     And the "victimId" is onboarded to VCA
@@ -32,5 +32,5 @@ Feature: VCA-API-S50 - Acceptance of offered meetings by victims
       | Victims Right to Review                 | 4               | Letter by ISVA   | 4              |
       | Victim complaint                        | 5               | By telephone     | 5              |
       | Other CPS meeting                       | 99              | Letter by email  | 5              |
-    And offered meetings is declined by "victimId" in VCA
-    Then the declined meeting details of "victimId" is verified in VCA
+    And offered meetings is "Accepted" by "victimId" in VCA
+    Then the "Accepted" meeting details of "victimId" is verified in VCA

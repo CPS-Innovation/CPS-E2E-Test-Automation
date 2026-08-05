@@ -1,4 +1,4 @@
-@regression @VCA_API_S49
+@regression @vca_api_regression @VCA_API_S49
 
 Feature: VCA-API-S49 - Add Victim liaison officer (VLO) to victims and witness.
   As a Victim Liaison Officer

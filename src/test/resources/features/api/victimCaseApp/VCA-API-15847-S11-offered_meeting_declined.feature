@@ -1,4 +1,4 @@
-@regression @VCA_API_S11
+@regression @vca_api_regression @VCA_API_S11
 
 Feature: VCA-API-S11 - Decline of offered meetings by victims
   As a Victim Liaison Officer

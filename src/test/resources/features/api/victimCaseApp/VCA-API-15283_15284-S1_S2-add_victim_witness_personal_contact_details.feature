@@ -1,4 +1,4 @@
-@regression @VCA_API_S1_S2
+@regression @vca_api_regression @VCA_API_S1_S2
 
 Feature: VCA-API-S1_S2 - Add personal and contact details for all category types of witness and victim and verify wm01u message
   As a Victim Liaison Officer

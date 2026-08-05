@@ -1,4 +1,4 @@
-@regression @DCF_VCA_API_S9
+@regression @vca_api_regression @DCF_VCA_API_S9
 
 Feature: VCA-API-S10 - Update category type for witness and victim and verify wm01u message
   As a Victim Liaison Officer

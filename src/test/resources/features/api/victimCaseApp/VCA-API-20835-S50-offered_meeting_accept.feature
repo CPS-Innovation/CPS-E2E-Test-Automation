@@ -1,4 +1,4 @@
-@regression @VCA_API_S11
+@regression @VCA_API_S50
 
 Feature: VCA-API-S50 - Acceptance of offered meetings by victims
   As a Victim Liaison Officer

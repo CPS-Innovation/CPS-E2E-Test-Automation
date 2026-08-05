@@ -140,7 +140,7 @@ public class VictimWitnessAssertions {
 
     }
 
-    public static void assertDeclineMeetingDetails(int meetingTypeCode, VictimMeetingDetails inputDetails,
+    public static void assertMeetingStatusDetails(int meetingTypeCode, VictimMeetingDetails inputDetails,
                                                 Response responsePayload)
     {
 

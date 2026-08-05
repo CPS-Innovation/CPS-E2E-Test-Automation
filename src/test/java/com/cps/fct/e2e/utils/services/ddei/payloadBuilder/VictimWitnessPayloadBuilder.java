@@ -255,7 +255,7 @@ public class VictimWitnessPayloadBuilder {
                 .build();
     }
 
-    public static VictimMeetingDetails payLoadForDeclineVictimMeetingDetails(int meetingTypeCode, int methodTypeCode, String meetingContextGuid) {
+    public static VictimMeetingDetails payLoadForMeetingStatusDetails(int meetingTypeCode, int methodTypeCode, String meetingStatus) {
 
         return VictimMeetingDetails.builder()
                 .MeetingType(meetingTypeCode)
@@ -265,7 +265,7 @@ public class VictimWitnessPayloadBuilder {
                 .MeetingContextGuid(FakerUtils.uuid())
                 .MeetingOffered(true)
                 .MeetingRequested(false)
-                .VictimResponse("Declined")
+                .VictimResponse(meetingStatus)
                 .MethodOfResponse(methodTypeCode)
                 .VictimResponseDate(todayMinusFourDays())
                 .LastModifiedBy("automationUser")

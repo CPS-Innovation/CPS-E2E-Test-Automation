@@ -103,8 +103,8 @@ public class WitnessService extends BaseService {
         return service.sendRequest(addVictimMeetingDetailsRequestParams(guid, requestBody));
     }
 
-    public void declineVictimMeeting(String guid, String requestBody) {
-        service.sendRequest(declineVictimMeetingRequestParams(guid, requestBody));
+    public void victimMeetingStatus(String guid, String requestBody) {
+        service.sendRequest(victimMeetingStatusRequestParams(guid, requestBody));
     }
 
     public void noResponseVictimMeeting(String guid, String requestBody) {
@@ -123,13 +123,10 @@ public class WitnessService extends BaseService {
         return service.restAssuredRequest(getVictimMeetingDetailsForRequestParams(guid,meetingTypeCode ));
     }
 
-    public Response listDelineMeetingDetails(String guid, Integer meetingTypeCode, Integer meetingAttempt) {
-        return service.restAssuredRequest(getDelineMeetingDetailsForRequestParams(guid,meetingTypeCode,meetingAttempt ));
+    public Response listMeetingStatusDetails(String guid, Integer meetingTypeCode, Integer meetingAttempt) {
+        return service.restAssuredRequest(getMeetingStatusDetailsForRequestParams(guid,meetingTypeCode,meetingAttempt ));
     }
 
-//    public Response noResponseMeetingDetails(String guid, Integer meetingTypeCode, Integer meetingAttempt) {
-//        return service.restAssuredRequest(getDelineMeetingDetailsForRequestParams(guid,meetingTypeCode,meetingAttempt ));
-//    }
 
     public void persistVictimWitnessDetails(HttpResponseWrapper response, ScenarioContext context) {
         String body = response.getBody();
@@ -392,14 +389,14 @@ public class WitnessService extends BaseService {
                 .build();
     }
 
-    private HttpClientBuilder declineVictimMeetingRequestParams(String guid, String requestBody) {
+    private HttpClientBuilder victimMeetingStatusRequestParams(String guid, String requestBody) {
         return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("DDEI_HOST"))
                 .endpoint(format("/api/victims/%s/meeting-offers", guid))
                 .addHeaders(ddeiHeaders())
                 .method("PATCH")
                 .body(requestBody)
-                .resourceName("declineVictimMeetingDetails")
+                .resourceName("victimMeetingStatusDetails")
                 .build();
     }
 
@@ -424,13 +421,13 @@ public class WitnessService extends BaseService {
                 .build();
     }
 
-    private HttpClientBuilder getDelineMeetingDetailsForRequestParams(String guid, Integer meetingTypeCode, Integer meetingAttempt) {
+    private HttpClientBuilder getMeetingStatusDetailsForRequestParams(String guid, Integer meetingTypeCode, Integer meetingAttempt) {
         return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("DDEI_HOST"))
                 .endpoint(format("/api/victims/%s/meeting-offers/%s/%s", guid,meetingTypeCode,meetingAttempt))
                 .addHeaders(ddeiHeaders())
                 .method("GET")
-                .resourceName("getMeetingTypeDetails")
+                .resourceName("getMeetingStatusDetails")
                 .build();
     }
 

@@ -46,25 +46,3 @@ Feature: VCA-API-S51 - Arrange the accepted meeting offer by victim with details
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    Then the arranged meeting details of "victimId" is verified in VCA

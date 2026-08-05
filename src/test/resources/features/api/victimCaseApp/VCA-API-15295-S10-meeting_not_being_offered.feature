@@ -1,4 +1,4 @@
-@regression @VCA_API_S10
+@regression @vca_api_regression @VCA_API_S10
 
 Feature: VCA-API-S10 - Meetings are not offered to victims for different meeting types with a reason
   As a Victim Liaison Officer

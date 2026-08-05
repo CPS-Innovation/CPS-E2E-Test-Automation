@@ -1,4 +1,4 @@
-@regression @VCA_API_S12
+@regression @vca_api_regression @VCA_API_S12
 
 Feature: VCA-API-S12 - Offered meetings is logged as No response when there’s no response in communication attempt for different meeting type to victims or witnesses
   As a Victim Liaison Officer

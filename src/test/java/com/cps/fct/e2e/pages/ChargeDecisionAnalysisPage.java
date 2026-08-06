@@ -4,6 +4,7 @@ import com.cps.fct.e2e.utils.common.FakerUtils;
 import com.cps.fct.e2e.utils.playwright.PlaywrightContext;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.PlaywrightException;
 import com.microsoft.playwright.assertions.LocatorAssertions;
 import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.SelectOption;
@@ -70,20 +71,19 @@ public class ChargeDecisionAnalysisPage extends BasePage {
     private static final String PRINCIPAL_OFFENCE_CATEGORY_LABEL = "Principal offence category";
     private static final String CHARGE_CODE_DECISION_FIELD = "charge code decision";
     private static final String AG_CONSENT_FIELD = "AG consent";
-    private static final String EARLY_ADVICE_POC_DROPDOWN_SELECTOR = "#b16-b4-POC_Dropdown";
+    private static final String EARLY_ADVICE_POC_DROPDOWN_SELECTOR = "[id$='POC_Dropdown']";
     private static final String CHARGE_CODE_SELECTOR = "[id$='ChargeCode']";
     private static final String CHECK_ALL_CHARGE_CODES_CHECKBOX_SELECTOR =
             "input[type='checkbox'][id$='CheckboxIsAllChecked']";
     private static final String CHARGE_CODE_BODY_SELECTOR = "[id$='ChargeCodeBody']";
     private static final String CHARGE_CODE_BODY_CHECKBOX_SELECTOR =
             CHARGE_CODE_BODY_SELECTOR + " input[type='checkbox']";
-    private static final String CHARGE_DECISION_DROPDOWN_SELECTOR = "select[id$='DecisionDropdown']";
+    private static final String CHARGE_DECISION_DROPDOWN_SELECTOR = "select[id*='DecisionDropdown']";
     private static final String CHARGE_APPLY_BUTTON_SELECTOR =
-            "button[id$='ApplyButton'], input[type='button'][id$='ApplyButton']";
+            "button[id*='ApplyButton']";
     private static final String CHARGE_DESCRIPTION_STATUS_BODY_SELECTOR = "[id$='DescriptionAndStatusBody']";
     private static final String AG_CONSENT_TEXT_AREA_SELECTOR = "textarea[id$='TextArea_Content']";
     private static final String CASE_ACTION_PLAN_LABEL = "Case action plan";
-    private static final String OFFENCE_CATEGORY_LABEL = "PCD principal offence category";
     // Charging-decision summary card on the offence-category page. Match on the stable OutSystems
     // widget-name suffixes (no numeric prefixes) so the selectors hold across case types.
     private static final String CHARGING_SUMMARY_CARD_SELECTOR = "[id$='ChargingSummaryGDS']";
@@ -96,7 +96,7 @@ public class ChargeDecisionAnalysisPage extends BasePage {
     private static final String CHARGING_DECISION_HEADER_SELECTOR = "span.govuk-heading-l";
     private static final String CHARGING_DECISION_SUSPECT_COUNT_SELECTOR = "h2.govuk-heading-m";
     private static final String ONE_DEFENDANT_SELECTOR = "[id$='OneDefendant']";
-    private static final String DEFENDANTS_NO_DECISION_LIST_SELECTOR = "[id*='DefendantsNoDecisionList']";
+    private static final String DEFENDANTS_SELECTION_LIST_SELECTOR = "[id*='DefendantsNoDecisionList']:visible";
     private static final String DEFENDANT_NO_DECISION_ITEM_SELECTOR = ".govuk-checkboxes__item";
     private static final String PREVIEW_SCROLL_SELECTOR = ".previewScroll";
     private static final String PREVIEW_ANALYSIS_STEPS_SELECTOR =
@@ -106,7 +106,9 @@ public class ChargeDecisionAnalysisPage extends BasePage {
     private static final String NONE_SELECTED_TEXT = "None selected";
     private static final String SUSPECT_AWAITING_CHARGING_DECISION_TEXT = "There is 1 suspect awaiting a charging decision.";
     private static final int DEFAULT_WAIT_TIMEOUT_MS = 200;
+    private static final int OFFENCE_CATEGORY_WAIT_TIMEOUT_MS = 700;
     private static final int UI_SETTLE_TIMEOUT_MILLIS = 30_000;
+    private static final int ADD_RELATIONSHIP_CLICK_ATTEMPTS = 5;
     private static final String SAVING_INDICATOR_TEXT = "Saving...";
     private static final String LOADING_INDICATOR_TEXT = "Loading...";
     private static final Map<String, String> NEXT_SECTION_BY_SECTION = Map.ofEntries(
@@ -930,13 +932,33 @@ public class ChargeDecisionAnalysisPage extends BasePage {
         waitForAddRelationshipLinkCount(expectedRelationshipCount);
 
         for (int index = 0; index < expectedRelationshipCount; index++) {
-            Locator relationshipLink = addRelationshipLink(0);
-            relationshipLink.scrollIntoViewIfNeeded();
-            relationshipLink.click();
+            waitForAddRelationshipLinkCount(expectedRelationshipCount - index);
+            clickNextAddRelationshipLink();
             completeVisibleSuspectVictimRelationship(relationshipType);
         }
 
         selectedSuspectVictimRelationship = relationshipType;
+    }
+
+    private void clickNextAddRelationshipLink() {
+        for (int attempt = 1; attempt <= ADD_RELATIONSHIP_CLICK_ATTEMPTS; attempt++) {
+            try {
+                Locator relationshipLink = page.locator(ADD_RELATIONSHIP_LINK_SELECTOR).first();
+                assertThat(relationshipLink).isVisible();
+                relationshipLink.click();
+                return;
+            } catch (PlaywrightException exception) {
+                if (!isDetachedFromDomError(exception) || attempt == ADD_RELATIONSHIP_CLICK_ATTEMPTS) {
+                    throw exception;
+                }
+                page.waitForTimeout(DEFAULT_WAIT_TIMEOUT_MS);
+            }
+        }
+    }
+
+    private boolean isDetachedFromDomError(PlaywrightException exception) {
+        String message = exception.getMessage();
+        return message != null && message.contains("Element is not attached to the DOM");
     }
 
     private void waitForAddRelationshipLinkCount(int expectedRelationshipCount) {
@@ -1009,6 +1031,10 @@ public class ChargeDecisionAnalysisPage extends BasePage {
     }
 
     public void applyChargingDecision(Map<String, String> decisionChargingData) {
+        applyChargingDecision(decisionChargingData, false);
+    }
+
+    public void applyChargingDecision(Map<String, String> decisionChargingData, boolean requiresConsent) {
         Map<String, String> normalizedDecisionChargingData =
                 normalizedChargingDecisionData(decisionChargingData);
 
@@ -1016,12 +1042,20 @@ public class ChargeDecisionAnalysisPage extends BasePage {
         completeChargingDecisionDetails(normalizedDecisionChargingData);
         selectOffenceCategory(normalizedDecisionChargingData);
         finishChargingDecisionAfterFinalDefendant();
-        completePostOffenceCategorySteps(normalizedDecisionChargingData);
+        completeConsentIfRequired(normalizedDecisionChargingData, requiresConsent);
     }
 
     public void applyChargingDecisions(
             List<Map<String, String>> decisionChargingDataRows,
             List<String> defendantNames
+    ) {
+        applyChargingDecisions(decisionChargingDataRows, defendantNames, false);
+    }
+
+    public void applyChargingDecisions(
+            List<Map<String, String>> decisionChargingDataRows,
+            List<String> defendantNames,
+            boolean requiresConsent
     ) {
         Assertions.assertThat(decisionChargingDataRows)
                 .as("Multi-defendant charging decision rows")
@@ -1037,14 +1071,13 @@ public class ChargeDecisionAnalysisPage extends BasePage {
                     normalizedChargingDecisionData(decisionChargingDataRows.get(index));
 
             completeChargingDecisionDetails(normalizedDecisionChargingData);
-            selectOffenceCategory(normalizedDecisionChargingData);
-
-            if (index + 1 < decisionChargingDataRows.size()) {
-                continueChargingDecisionWithNextDefendant(defendantNames.get(index + 1));
-            } else {
-                finishChargingDecisionAfterFinalDefendant();
-                completePostOffenceCategorySteps(normalizedDecisionChargingData);
-            }
+            selectOffenceCategory(normalizedDecisionChargingData, index);
+            continueWithNextDefendantOrFinish(
+                    defendantNames,
+                    index,
+                    normalizedDecisionChargingData,
+                    requiresConsent
+            );
         }
     }
 
@@ -1062,7 +1095,7 @@ public class ChargeDecisionAnalysisPage extends BasePage {
     private void completeChargingDecisionDetails(Map<String, String> decisionChargingData) {
         String decisionType = requiredChargingDecisionValue(decisionChargingData, DECISION_TYPE_FIELD);
 
-        waitForTextInLocator("h1", DECISION_TYPE_QUESTION);
+        waitForDecisionTypeQuestion();
         checkRadioByName(decisionType);
         page.waitForTimeout(DEFAULT_WAIT_TIMEOUT_MS);
 
@@ -1080,9 +1113,14 @@ public class ChargeDecisionAnalysisPage extends BasePage {
         }
     }
 
+    private void waitForDecisionTypeQuestion() {
+        waitUntilBusyIndicatorsAreGone();
+        waitForTextInLocator("h1", DECISION_TYPE_QUESTION);
+    }
+
     private void selectDefendantForChargingDecision(String defendantName) {
-        Locator defendantsNoDecisionList = page.locator(DEFENDANTS_NO_DECISION_LIST_SELECTOR);
-        assertThat(defendantsNoDecisionList).isVisible();
+        Locator defendantsNoDecisionList = page.locator(DEFENDANTS_SELECTION_LIST_SELECTOR);
+        page.waitForCondition(() -> defendantsNoDecisionList.count() > 0);
 
         Locator defendantItem = defendantsNoDecisionList
                 .locator(DEFENDANT_NO_DECISION_ITEM_SELECTOR)
@@ -1249,9 +1287,99 @@ public class ChargeDecisionAnalysisPage extends BasePage {
     }
 
     private void selectOffenceCategory(Map<String, String> decisionChargingData) {
+        selectOffenceCategory(decisionChargingData, 0);
+    }
+
+    private void selectOffenceCategory(Map<String, String> decisionChargingData, int dropdownIndex) {
         String offenceCategory = requiredChargingDecisionValue(decisionChargingData, OFFENCE_CATEGORY_FIELD);
-        assertThat(page.getByText(OFFENCE_CATEGORY_LABEL)).isVisible();
-        selectComboBoxByVisibleText(offenceCategory);
+        waitUntilBusyIndicatorsAreGone();
+        page.waitForTimeout(OFFENCE_CATEGORY_WAIT_TIMEOUT_MS);
+        Locator offenceCategoryDropdown = offenceCategoryDropdown(offenceCategory, dropdownIndex);
+        offenceCategoryDropdown.scrollIntoViewIfNeeded();
+        selectNativeDropdownOption(offenceCategoryDropdown, offenceCategory, OFFENCE_CATEGORY_FIELD);
+        assertNativeDropdownOptionSelected(offenceCategoryDropdown, offenceCategory, OFFENCE_CATEGORY_FIELD);
+        commitNativeDropdownSelection(offenceCategoryDropdown);
+        assertNativeDropdownOptionSelected(offenceCategoryDropdown, offenceCategory, OFFENCE_CATEGORY_FIELD);
+    }
+
+    private Locator offenceCategoryDropdown(String offenceCategory, int dropdownIndex) {
+        Assertions.assertThat(dropdownIndex)
+                .as("Offence category dropdown index")
+                .isGreaterThanOrEqualTo(0);
+
+        long deadline = System.currentTimeMillis() + UI_SETTLE_TIMEOUT_MILLIS;
+        int lastMatchingDropdownCount = 0;
+
+        while (System.currentTimeMillis() < deadline) {
+            Locator comboBoxes = page.getByRole(AriaRole.COMBOBOX);
+            int comboBoxCount = comboBoxes.count();
+            int matchingDropdownIndex = 0;
+
+            for (int index = 0; index < comboBoxCount; index++) {
+                Locator comboBox = comboBoxes.nth(index);
+                if (isVisibleComboBoxWithOption(comboBox, offenceCategory)) {
+                    if (matchingDropdownIndex == dropdownIndex) {
+                        return comboBox;
+                    }
+                    matchingDropdownIndex++;
+                }
+            }
+
+            lastMatchingDropdownCount = matchingDropdownIndex;
+            page.waitForTimeout(DEFAULT_WAIT_TIMEOUT_MS);
+        }
+
+        throw new IllegalStateException("Offence category dropdown at index " + dropdownIndex
+                + " was not found with option: " + offenceCategory
+                + ". Matching dropdown count: " + lastMatchingDropdownCount);
+    }
+
+    private boolean isVisibleComboBoxWithOption(Locator comboBox, String optionText) {
+        try {
+            if (!comboBox.isVisible()) {
+                return false;
+            }
+
+            Locator options = comboBox.locator("option");
+            for (int optionIndex = 0; optionIndex < options.count(); optionIndex++) {
+                if (optionMatches(options.nth(optionIndex).innerText(), optionText)) {
+                    return true;
+                }
+            }
+
+            return false;
+        } catch (PlaywrightException exception) {
+            if (isGenuineLocatorError(exception)) {
+                throw exception;
+            }
+            return false;
+        }
+    }
+
+    private void assertNativeDropdownOptionSelected(Locator dropdown, String expectedOptionText, String fieldName) {
+        String selectedOptionText = String.valueOf(dropdown.evaluate("""
+                select => {
+                    const option = select.options[select.selectedIndex];
+                    return option ? option.textContent : '';
+                }
+                """)).trim();
+
+        Assertions.assertThat(optionMatches(selectedOptionText, expectedOptionText))
+                .as(fieldName + " selected option. Expected: " + expectedOptionText
+                + ", actual: " + selectedOptionText)
+                .isTrue();
+    }
+
+    private void commitNativeDropdownSelection(Locator dropdown) {
+        dropdown.evaluate("""
+                select => {
+                    select.dispatchEvent(new Event('input', { bubbles: true }));
+                    select.dispatchEvent(new Event('change', { bubbles: true }));
+                    select.blur();
+                }
+                """);
+        page.waitForTimeout(OFFENCE_CATEGORY_WAIT_TIMEOUT_MS);
+        waitUntilBusyIndicatorsAreGone();
     }
 
     private void continueChargingDecisionWithNextDefendant(String defendantName) {
@@ -1259,16 +1387,63 @@ public class ChargeDecisionAnalysisPage extends BasePage {
         clickSaveAndContinue();
         page.waitForTimeout(DEFAULT_WAIT_TIMEOUT_MS);
         waitUntilSpinnersAreGone(SAVING_INDICATOR_TEXT, LOADING_INDICATOR_TEXT);
+        waitForDecisionTypeQuestion();
+    }
+
+    private void continueWithNextDefendantOrFinish(
+            List<String> defendantNames,
+            int currentDefendantIndex,
+            Map<String, String> decisionChargingData,
+            boolean requiresConsent
+    ) {
+        if (isFinalDefendant(defendantNames, currentDefendantIndex)) {
+            finishChargingDecisionAfterFinalDefendant();
+            completeConsentIfRequired(decisionChargingData, requiresConsent);
+            return;
+        }
+
+        if (hasOneRemainingDefendant(defendantNames, currentDefendantIndex)) {
+            continueChargingDecisionWithOnlyRemainingDefendant();
+            return;
+        }
+
+        if (hasNextDefendant(defendantNames, currentDefendantIndex)) {
+            continueChargingDecisionWithNextDefendant(defendantNames.get(currentDefendantIndex + 1));
+            return;
+        }
+    }
+
+    private boolean hasNextDefendant(List<String> defendantNames, int currentDefendantIndex) {
+        return currentDefendantIndex + 1 < defendantNames.size();
+    }
+
+    private boolean hasOneRemainingDefendant(List<String> defendantNames, int currentDefendantIndex) {
+        return defendantNames.size() - currentDefendantIndex - 1 == 1;
+    }
+
+    private boolean isFinalDefendant(List<String> defendantNames, int currentDefendantIndex) {
+        return currentDefendantIndex + 1 == defendantNames.size();
+    }
+
+    private void continueChargingDecisionWithOnlyRemainingDefendant() {
+        clickSaveAndContinue();
+        page.waitForTimeout(DEFAULT_WAIT_TIMEOUT_MS);
+        waitUntilSpinnersAreGone(SAVING_INDICATOR_TEXT, LOADING_INDICATOR_TEXT);
+        waitForDecisionTypeQuestion();
     }
 
     private void finishChargingDecisionAfterFinalDefendant() {
         clickSaveAndContinue();
         waitUntilLoadingIndicatorIsGone(LOADING_INDICATOR_TEXT);
         waitForLoginPageToLoadCompletely();
-        clickSaveAndContinue();
+//        clickSaveAndContinue();
     }
 
-    private void completePostOffenceCategorySteps(Map<String, String> decisionChargingData) {
+    private void completeConsentIfRequired(Map<String, String> decisionChargingData, boolean requiresConsent) {
+        if (!requiresConsent) {
+            return;
+        }
+
         String decisionType = requiredChargingDecisionValue(decisionChargingData, DECISION_TYPE_FIELD);
 
         if (DECISION_TYPE_CHARGE.equalsIgnoreCase(decisionType)) {
@@ -1281,30 +1456,38 @@ public class ChargeDecisionAnalysisPage extends BasePage {
     // summary row; reason/outcome are only shown for some decision types, so they are asserted
     // only when supplied.
     private void assertChargingDecisionSelections(Map<String, String> decisionChargingData) {
-        assertThat(page.locator(CHARGING_SUMMARY_CARD_SELECTOR)).isVisible();
+        Locator summaryCard = latestChargingSummaryCard();
 
-        assertSummaryRowContains(SUMMARY_ROW_DECISION_SELECTOR, decisionChargingData.get("decision type"));
-        assertSummaryRowContains(SUMMARY_ROW_DECISION_CODE_SELECTOR, decisionChargingData.get("decision code"));
-        assertSummaryRowContains(SUMMARY_ROW_REASON_SELECTOR, decisionChargingData.get("reason"));
-        assertSummaryRowContains(SUMMARY_ROW_FOCUS_SELECTOR, decisionChargingData.get("out come of case"));
+        assertSummaryRowContains(summaryCard, SUMMARY_ROW_DECISION_SELECTOR, decisionChargingData.get("decision type"));
+        assertSummaryRowContains(summaryCard, SUMMARY_ROW_DECISION_CODE_SELECTOR, decisionChargingData.get("decision code"));
+        assertSummaryRowContains(summaryCard, SUMMARY_ROW_REASON_SELECTOR, decisionChargingData.get("reason"));
+        assertSummaryRowContains(summaryCard, SUMMARY_ROW_FOCUS_SELECTOR, decisionChargingData.get("out come of case"));
     }
 
     private void assertChargeDecisionTypeSelections(Map<String, String> decisionChargingData) {
-        assertThat(page.locator(CHARGING_SUMMARY_CARD_SELECTOR)).isVisible();
+        Locator summaryCard = latestChargingSummaryCard();
 
-        assertSummaryRowContains(SUMMARY_ROW_DECISION_SELECTOR, decisionChargingData.get("decision type"));
-        assertSummaryRowContains(SUMMARY_ROW_DECISION_CODE_SELECTOR, decisionChargingData.get("decision code"));
+        assertSummaryRowContains(summaryCard, SUMMARY_ROW_DECISION_SELECTOR, decisionChargingData.get("decision type"));
+        assertSummaryRowContains(summaryCard, SUMMARY_ROW_DECISION_CODE_SELECTOR, decisionChargingData.get("decision code"));
     }
 
+    private Locator latestChargingSummaryCard() {
+        Locator summaryCards = page.locator(CHARGING_SUMMARY_CARD_SELECTOR);
+        page.waitForCondition(() -> summaryCards.count() > 0);
 
-    private void assertSummaryRowContains(String rowSelector, String expectedValue) {
+        Locator latestSummaryCard = summaryCards.last();
+        assertThat(latestSummaryCard).isVisible();
+        return latestSummaryCard;
+    }
+
+    private void assertSummaryRowContains(Locator summaryCard, String rowSelector, String expectedValue) {
         if (expectedValue == null || expectedValue.isBlank()) {
             return;
         }
         // The row renders values in its own display casing (e.g. "No Further Action"), which can
         // differ from the scenario's casing ("No further action"). Match case-insensitively so
         // display casing doesn't fail a semantically-correct selection.
-        assertThat(page.locator(rowSelector))
+        assertThat(summaryCard.locator(rowSelector))
                 .containsText(expectedValue, new LocatorAssertions.ContainsTextOptions().setIgnoreCase(true));
     }
 

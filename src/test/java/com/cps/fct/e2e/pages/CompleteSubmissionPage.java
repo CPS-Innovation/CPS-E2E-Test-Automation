@@ -7,6 +7,7 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.PlaywrightException;
 import com.microsoft.playwright.options.AriaRole;
 
+import java.util.List;
 import java.util.Map;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
@@ -24,6 +25,8 @@ public class CompleteSubmissionPage extends BasePage {
     private static final String MG3_CREATION_ERROR_MESSAGE = "We could not create the MG3 document.";
     private static final String MG3_CREATION_RETRY_LINK_TEXT = "You can try again now";
     private static final String MG3_SUBMISSION_TEXT = "Submit review with MG3 document";
+    private static final String FULL_CODE_TEST_REVIEW_TYPE = "Full Code Test";
+    private static final String DECISION_TYPE_CHARGE = "Charge";
     private static final int MG3_CREATION_RETRY_ATTEMPTS = 3;
     private static final int MG3_CREATION_RETRY_DELAY_MILLIS = 20_000;
     private static final int MG3_SUBMISSION_SUCCESS_TIMEOUT_MILLIS = 65_000;
@@ -108,16 +111,23 @@ public class CompleteSubmissionPage extends BasePage {
     }
 
 
-    public void completeReviewSubmission(Map<String, String> submissionData, Boolean createMg3Document) {
+    public boolean completeReviewSubmission(
+            Map<String, String> submissionData,
+            Boolean createMg3Document,
+            String reviewType,
+            List<String> decisionTypes
+    ) {
         waitForPageToLoad();
 
         selectFromList(investigativeStageDropdown(), submissionData.get("Investigative stage"));
         selectMethodIfPresent(submissionData.get("Method"));
+        Boolean effectiveCreateMg3Document = createMg3Document;
         if (createMg3Document != null) {
+            assertCreateMg3DocumentCanBeSet(createMg3Document, reviewType, decisionTypes);
             setCreateMg3Document(createMg3Document);
         }
 
-        boolean submitWithMg3Document = Boolean.TRUE.equals(createMg3Document);
+        boolean submitWithMg3Document = Boolean.TRUE.equals(effectiveCreateMg3Document);
         submitWithoutContactDetailsAndAssertErrors(submitWithMg3Document);
         submitWithInvalidContactDetailsAndAssertErrors(submitWithMg3Document);
         enterContactDetails();
@@ -125,6 +135,7 @@ public class CompleteSubmissionPage extends BasePage {
         clickSubmitReviewButton(submitWithMg3Document);
         waitForSubmitReviewProgressToFinish(submitWithMg3Document);
         waitForLoginPageToLoadCompletely();
+        return submitWithMg3Document;
     }
 
     public void verifyReviewSubmission(String reviewType, boolean createMg3Document) {
@@ -334,6 +345,30 @@ public class CompleteSubmissionPage extends BasePage {
         } else if (!createMg3Document && checkbox.isChecked()) {
             checkbox.uncheck(new Locator.UncheckOptions().setForce(true));
         }
+    }
+
+    private void assertCreateMg3DocumentCanBeSet(
+            boolean createMg3Document,
+            String reviewType,
+            List<String> decisionTypes
+    ) {
+        if (createMg3Document && isFullCodeChargeDecision(reviewType, decisionTypes)) {
+            throw new IllegalStateException("Create MG3 document cannot be true for "
+                    + FULL_CODE_TEST_REVIEW_TYPE + " when any charging decision type is "
+                    + DECISION_TYPE_CHARGE + ". The MG3 checkbox is not shown in the UI for this flow.");
+        }
+    }
+
+    private boolean isFullCodeChargeDecision(String reviewType, List<String> decisionTypes) {
+        return FULL_CODE_TEST_REVIEW_TYPE.equalsIgnoreCase(normalizeText(reviewType))
+                && decisionTypes != null
+                && decisionTypes.stream()
+                .map(this::normalizeText)
+                .anyMatch(DECISION_TYPE_CHARGE::equalsIgnoreCase);
+    }
+
+    private String normalizeText(String value) {
+        return value == null ? "" : value.replaceAll("\\s+", " ").trim();
     }
 
     private boolean isBlank(String value) {

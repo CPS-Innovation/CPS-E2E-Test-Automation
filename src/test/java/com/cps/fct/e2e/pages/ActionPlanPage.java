@@ -30,14 +30,16 @@ public class ActionPlanPage extends BasePage {
     private static final String CHASER_TASK_SHORTCUT_TEXT = "1 day before date required";
     private static final String RELATED_TO_SUSPECTS_DROPDOWN_SELECTOR = "[data-e2e-related-suspect-dropdown='true']";
     private static final String ACTION_DESCRIPTION_TEXTAREA_SELECTOR = "[data-e2e-action-description='true']";
-    private static final String ACTION_POINT_PREVIEW_SELECTOR = "[data-block='ActionPlanTWIF.ActionPointPreview']";
-    private static final String SAVE_AND_CONTINUE_BUTTON_SELECTOR = ".btn.govuk-button";
+    private static final String ACTION_POINT_PREVIEW_SELECTOR = "[data-block$='.ActionPointPreview']";
+//    private static final String ACTION_POINT_PREVIEW_SELECTOR = "[data-block='ActionPlanTWIF.ActionPointPreview']";
+    private static final String GOVUK_BUTTON_SELECTOR = "button.govuk-button[type='button']";
     private static final String SAVE_AND_CONTINUE_BUTTON_TEXT = "Save and continue";
     private static final String SAVE_DRAFT_BUTTON_TEXT = "Save draft";
     private static final String DEFAULT_RELATED_SUSPECT = "All";
     private static final String LOADING_INDICATOR_TEXT = "Loading...";
     private static final String SAVING_INDICATOR_TEXT = "Saving...";
     private static final Pattern DAYS_PATTERN = Pattern.compile("(\\d+)");
+    private static final int ACTION_POINT_PREVIEW_TIMEOUT_MILLIS = 20_000;
     // Some action point options are shown by an abbreviation in the preview (e.g. ROTI),
     // rather than the full checkbox label. Map the checkbox label (lower-cased) to the
     // text rendered in the action point preview; anything not listed falls back to the
@@ -101,7 +103,7 @@ public class ActionPlanPage extends BasePage {
     }
 
     private void clickContinueWithoutActionPlan() {
-        Locator continueWithoutActionPlanButton = page.locator(SAVE_AND_CONTINUE_BUTTON_SELECTOR)
+        Locator continueWithoutActionPlanButton = page.locator(GOVUK_BUTTON_SELECTOR)
                 .filter(new Locator.FilterOptions().setHasText(CONTINUE_WITHOUT_ACTION_PLAN_BUTTON))
                 .first();
         assertThat(continueWithoutActionPlanButton).isVisible();
@@ -627,7 +629,8 @@ public class ActionPlanPage extends BasePage {
                 .filter(new Locator.FilterOptions().setHasText(actionPointDetails))
                 .last();
 
-        assertThat(actionPoint).isVisible();
+        assertThat(actionPoint).isVisible(new LocatorAssertions.IsVisibleOptions()
+                .setTimeout(ACTION_POINT_PREVIEW_TIMEOUT_MILLIS));
         assertThat(actionPoint).containsText(expectedDate);
         assertThat(actionPoint).containsText(
                 previewLabelFor(actionPointOption),
@@ -641,7 +644,7 @@ public class ActionPlanPage extends BasePage {
     }
 
     private void clickSaveAndContinue() {
-        Locator saveAndContinueButton = page.locator(SAVE_AND_CONTINUE_BUTTON_SELECTOR)
+        Locator saveAndContinueButton = page.locator(GOVUK_BUTTON_SELECTOR)
                 .filter(new Locator.FilterOptions().setHasText(SAVE_AND_CONTINUE_BUTTON_TEXT))
                 .first();
         assertThat(saveAndContinueButton).isVisible();

@@ -22,7 +22,10 @@ public class UIDemoSteps {
     private static final String CREATE_MG3_DOCUMENT_COLUMN = "Create MG3 document";
     private static final String CREATE_MG3_DOCUMENT_CONTEXT_KEY = "createMg3Document";
     private static final String DEFENDANT_COUNT_CONTEXT_KEY = "defendantCount";
+    private static final String CASE_DATA_FILE_NAME_CONTEXT_KEY = "caseDataFileName";
     private static final String CM01_MODIFIED_VALUES_CONTEXT_KEY = "CM01ModifiedValues";
+    private static final String CHARGING_DECISION_TYPES_CONTEXT_KEY = "chargingDecisionTypes";
+    private static final String DECISION_TYPE_FIELD = "decision type";
     private static final String CPS_USER_KEY = "CPS_USER";
     private static final String PASSWORD_KEY = "PASSWORD";
     private static final String AUTO_GENERATED_VALUE = "Auto-generated";
@@ -123,6 +126,7 @@ public class UIDemoSteps {
                 throw new IllegalArgumentException("Unsupported case search type: " + searchType
                         + ". Use URN or caseId.");
         }
+
     }
 
     @And("Search the case urn {string}")
@@ -372,13 +376,19 @@ public class UIDemoSteps {
     public void iMakeChargingDecisionAsFollowing(DataTable dataTable) {
         Map<String, String> decisionChargingData =
                 dataTable.asMaps(String.class, String.class).getFirst();
-        pages.decisionAnalysisPage.applyChargingDecision(decisionChargingData);
+        context.set(CHARGING_DECISION_TYPES_CONTEXT_KEY, List.of(
+                tableColumnValue(decisionChargingData, DECISION_TYPE_FIELD)
+        ));
+        pages.decisionAnalysisPage.applyChargingDecision(decisionChargingData, selectedCaseRequiresConsent());
     }
 
     @When("^I make charging decision for the multi defendants\\s+as following:$")
     public void iMakeChargingDecisionForTheMultiDefendantsAsFollowing(DataTable dataTable) {
         List<Map<String, String>> decisionChargingData = dataTable.asMaps(String.class, String.class);
         int expectedDefendantCount = expectedDefendantCount();
+        context.set(CHARGING_DECISION_TYPES_CONTEXT_KEY, decisionChargingData.stream()
+                .map(row -> tableColumnValue(row, DECISION_TYPE_FIELD))
+                .toList());
 
         if (decisionChargingData.size() != expectedDefendantCount) {
             throw new IllegalArgumentException("Multi-defendant charging decision table must contain "
@@ -387,7 +397,8 @@ public class UIDemoSteps {
 
         pages.decisionAnalysisPage.applyChargingDecisions(
                 decisionChargingData,
-                multiDefendantNamesInDecisionOrder(expectedDefendantCount)
+                multiDefendantNamesInDecisionOrder(expectedDefendantCount),
+                selectedCaseRequiresConsent()
         );
     }
 
@@ -450,12 +461,13 @@ public class UIDemoSteps {
                 dataTable.asMaps(String.class, String.class).getFirst();
 
         Boolean createMg3Document = optionalBooleanValue(submitReviewData, CREATE_MG3_DOCUMENT_COLUMN);
-        context.set(CREATE_MG3_DOCUMENT_CONTEXT_KEY, createMg3Document);
-
-        pages.completeSubmissionPage.completeReviewSubmission(
+        boolean effectiveCreateMg3Document = pages.completeSubmissionPage.completeReviewSubmission(
                 submitReviewData,
-                createMg3Document
+                createMg3Document,
+                selectedReviewType(),
+                selectedChargingDecisionTypes()
         );
+        context.set(CREATE_MG3_DOCUMENT_CONTEXT_KEY, effectiveCreateMg3Document);
 
     }
 
@@ -568,6 +580,27 @@ public class UIDemoSteps {
     private String selectedReviewType() {
         String reviewType = context.getAsString("reviewType");
         return isBlank(reviewType) ? DEFAULT_REVIEW_TYPE : reviewType;
+    }
+
+    private List<String> selectedChargingDecisionTypes() {
+        List<String> decisionTypes = context.get(CHARGING_DECISION_TYPES_CONTEXT_KEY);
+        return decisionTypes == null ? List.of() : decisionTypes;
+    }
+
+    private boolean selectedCaseRequiresConsent() {
+        String caseDataFileName = context.getAsString(CASE_DATA_FILE_NAME_CONTEXT_KEY);
+        if (isBlank(caseDataFileName)) {
+            return false;
+        }
+
+        String normalizedFileName = caseDataFileName
+                .replace('_', ' ')
+                .replace('-', ' ')
+                .toUpperCase(Locale.ROOT);
+
+        return normalizedFileName.contains("AGO")
+                || normalizedFileName.contains("DPP")
+                || normalizedFileName.contains("COMBINED CONSENT");
     }
 
     private int expectedDefendantCount() {

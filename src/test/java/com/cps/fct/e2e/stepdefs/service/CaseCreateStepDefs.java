@@ -21,6 +21,7 @@ import static com.cps.fct.e2e.utils.services.messagaingApi.assertions.TWIFAssert
 public class CaseCreateStepDefs {
 
     private static final String DEFENDANT_COUNT_CONTEXT_KEY = "defendantCount";
+    private static final String CASE_DATA_FILE_NAME_CONTEXT_KEY = "caseDataFileName";
 
     @Inject
     private CaseService caseService;
@@ -35,6 +36,7 @@ public class CaseCreateStepDefs {
     public void createCaseForType(String messageType, String caseDataType) throws IOException, InterruptedException
     {
         File caseDataFile = FileUtils.getValidatedFile( context.get("caseType"), messageType, caseDataType);
+        context.set(CASE_DATA_FILE_NAME_CONTEXT_KEY, caseDataFile.getName());
         context.set(DEFENDANT_COUNT_CONTEXT_KEY, defendantCount(caseDataFile));
         HttpResponseWrapper responseWrapper = messageService.cm01WithCaseDetails(caseDataFile, messageType, context);
         messageService.getCM01RequestId(responseWrapper, context);

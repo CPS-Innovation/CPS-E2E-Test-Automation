@@ -2,16 +2,16 @@
   "PreChargeDecisionRequest": {
     "ItemId": "{{CM01_itemId}}",
     "PTIURN": {
-      "Force": "{{TWIF_Force}}",
-      "Unit": "{{TWIF_Unit}}",
+      "Force": "{{TWIF_Force_Priority}}",
+      "Unit": "{{TWIF_Unit_Priority}}",
       "Number": "{{CM01_PTIURN_Number}}",
-      "Year": "{{TWIF_Year}}"
+      "Year": "{{TWIF_Year_Priority}}"
     },
     "CPSUnit": {
-      "TopLevel": "{{TWIF_TopLevel}}",
-      "SecondLevel": "{{TWIF_SecondLevel}}",
-      "ThirdLevel": "{{TWIF_ThirdLevel}}",
-      "BottomLevel": "{{TWIF_BottomLevel}}"
+      "TopLevel": "{{TWIF_TopLevel_Priority}}",
+      "SecondLevel": "{{TWIF_SecondLevel_Priority}}",
+      "ThirdLevel": "{{TWIF_ThirdLevel_Priority}}",
+      "BottomLevel": "{{TWIF_BottomLevel_Priority}}"
     },
     "OperationName": "TWIF Case Operator",
     "CaseClassification": [
@@ -51,14 +51,14 @@
             "ClassificationType": "StatusInformation",
             "ClassificationCode": "SuspectDecisionPriority",
             "ClassificationValue": {
-              "ClassificationValueText": "G"
+              "ClassificationValueText": "R"
             }
           }
         ],
         "ASN": {
-          "Year": "{{TWIF_Year}}",
-          "Force": "{{TWIF_Force}}",
-          "Unit": "{{TWIF_Unit}}",
+          "Year": "{{TWIF_Year_Priority}}",
+          "Force": "{{TWIF_Force_Priority}}",
+          "Unit": "{{TWIF_Unit_Priority}}",
           "System": "00",
           "Number": "{{CM01_ASN_Number}}",
           "CheckCharacter": "W"
@@ -104,7 +104,7 @@
                 "Reason": "096"
               }
             },
-            "Description": "Single Defendant Crime Text",
+            "Description": "AGO Prime Crime",
             "Category": "Summary Only",
             "FromDate": "2001-10-01",
             "Particulars": {
@@ -123,13 +123,13 @@
             "CJSCode": {
               "Code": {
                 "Alternative": {
-                  "ActOrSource": "OF",
-                  "Year": "61"
+                  "ActOrSource": "OS",
+                  "Year": "11"
                 },
-                "Reason": "016"
+                "Reason": "009"
               }
             },
-            "Description": "Single Defendant Crime Text",
+            "Description": "AGO Prime Second Crime",
             "Category": "Summary Only",
             "FromDate": "2001-10-01",
             "Particulars": {

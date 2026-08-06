@@ -104,7 +104,7 @@
                 "Reason": "096"
               }
             },
-            "Description": "Single Defendant Crime Text",
+            "Description": "Crime Text",
             "Category": "Summary Only",
             "FromDate": "2001-10-01",
             "Particulars": {
@@ -123,13 +123,13 @@
             "CJSCode": {
               "Code": {
                 "Alternative": {
-                  "ActOrSource": "OF",
-                  "Year": "61"
+                  "ActOrSource": "OS",
+                  "Year": "11"
                 },
-                "Reason": "016"
+                "Reason": "009"
               }
             },
-            "Description": "Single Defendant Crime Text",
+            "Description": "Crime Text",
             "Category": "Summary Only",
             "FromDate": "2001-10-01",
             "Particulars": {

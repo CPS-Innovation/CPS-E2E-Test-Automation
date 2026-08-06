@@ -2,16 +2,16 @@
   "PreChargeDecisionRequest": {
     "ItemId": "{{CM01_itemId}}",
     "PTIURN": {
-      "Force": "{{TWIF_Force}}",
-      "Unit": "{{TWIF_Unit}}",
+      "Force": "{{TWIF_Force_Priority}}",
+      "Unit": "{{TWIF_Unit_Priority}}",
       "Number": "{{CM01_PTIURN_Number}}",
-      "Year": "{{TWIF_Year}}"
+      "Year": "{{TWIF_Year_Priority}}"
     },
     "CPSUnit": {
-      "TopLevel": "{{TWIF_TopLevel}}",
-      "SecondLevel": "{{TWIF_SecondLevel}}",
-      "ThirdLevel": "{{TWIF_ThirdLevel}}",
-      "BottomLevel": "{{TWIF_BottomLevel}}"
+      "TopLevel": "{{TWIF_TopLevel_Priority}}",
+      "SecondLevel": "{{TWIF_SecondLevel_Priority}}",
+      "ThirdLevel": "{{TWIF_ThirdLevel_Priority}}",
+      "BottomLevel": "{{TWIF_BottomLevel_Priority}}"
     },
     "OperationName": "TWIF Case Operator",
     "CaseClassification": [
@@ -51,14 +51,14 @@
             "ClassificationType": "StatusInformation",
             "ClassificationCode": "SuspectDecisionPriority",
             "ClassificationValue": {
-              "ClassificationValueText": "G"
+              "ClassificationValueText": "R"
             }
           }
         ],
         "ASN": {
-          "Year": "{{TWIF_Year}}",
-          "Force": "{{TWIF_Force}}",
-          "Unit": "{{TWIF_Unit}}",
+          "Year": "{{TWIF_Year_Priority}}",
+          "Force": "{{TWIF_Force_Priority}}",
+          "Unit": "{{TWIF_Unit_Priority}}",
           "System": "00",
           "Number": "{{CM01_ASN_Number}}",
           "CheckCharacter": "W"
@@ -98,13 +98,13 @@
             "CJSCode": {
               "Code": {
                 "Alternative": {
-                  "ActOrSource": "OS",
-                  "Year": "89"
+                  "ActOrSource": "CE",
+                  "Year": "23"
                 },
-                "Reason": "096"
+                "Reason": "010"
               }
             },
-            "Description": "Single Defendant Crime Text",
+            "Description": "Priority single defendant Offence",
             "Category": "Summary Only",
             "FromDate": "2001-10-01",
             "Particulars": {
@@ -113,32 +113,7 @@
                   "{{DEF_Street_Address}}",
                   "{{DEF_City}}"
                 ],
-                "Postcode": "NE1 1BB",
-                "Country": "UK"
-              }
-            }
-          },
-          {
-            "UniqueID": "{{CM01_CaseOffenceId_2}}",
-            "CJSCode": {
-              "Code": {
-                "Alternative": {
-                  "ActOrSource": "OF",
-                  "Year": "61"
-                },
-                "Reason": "016"
-              }
-            },
-            "Description": "Single Defendant Crime Text",
-            "Category": "Summary Only",
-            "FromDate": "2001-10-01",
-            "Particulars": {
-              "Address": {
-                "AddressLine": [
-                  "{{DEF_Street_Address}}",
-                  "{{DEF_City}}"
-                ],
-                "Postcode": "NE1 1BB",
+                "Postcode": "EN1 1BB",
                 "Country": "UK"
               }
             }

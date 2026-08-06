@@ -98,13 +98,13 @@
             "CJSCode": {
               "Code": {
                 "Alternative": {
-                  "ActOrSource": "OS",
-                  "Year": "89"
+                  "ActOrSource": "CJ",
+                  "Year": "93"
                 },
-                "Reason": "096"
+                "Reason": "001"
               }
             },
-            "Description": "Single Defendant Crime Text",
+            "Description": "Combined Consent Crime",
             "Category": "Summary Only",
             "FromDate": "2001-10-01",
             "Particulars": {
@@ -123,13 +123,13 @@
             "CJSCode": {
               "Code": {
                 "Alternative": {
-                  "ActOrSource": "OF",
-                  "Year": "61"
+                  "ActOrSource": "CE",
+                  "Year": "79"
                 },
-                "Reason": "016"
+                "Reason": "287"
               }
             },
-            "Description": "Single Defendant Crime Text",
+            "Description": "Combined Consent Second Crime",
             "Category": "Summary Only",
             "FromDate": "2001-10-01",
             "Particulars": {

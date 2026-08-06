@@ -98,13 +98,13 @@
             "CJSCode": {
               "Code": {
                 "Alternative": {
-                  "ActOrSource": "OS",
-                  "Year": "89"
+                  "ActOrSource": "CE",
+                  "Year": "23"
                 },
-                "Reason": "096"
+                "Reason": "010"
               }
             },
-            "Description": "Crime Text",
+            "Description": "Priority single defendant",
             "Category": "Summary Only",
             "FromDate": "2001-10-01",
             "Particulars": {
@@ -113,7 +113,7 @@
                   "{{DEF_Street_Address}}",
                   "{{DEF_City}}"
                 ],
-                "Postcode": "NE1 1BB",
+                "Postcode": "EN1 1BB",
                 "Country": "UK"
               }
             }
@@ -129,7 +129,7 @@
                 "Reason": "016"
               }
             },
-            "Description": "Crime Text",
+            "Description": "Priority single defendant Second Crime",
             "Category": "Summary Only",
             "FromDate": "2001-10-01",
             "Particulars": {
@@ -138,7 +138,7 @@
                   "{{DEF_Street_Address}}",
                   "{{DEF_City}}"
                 ],
-                "Postcode": "NE1 1BB",
+                "Postcode": "EN1 1BB",
                 "Country": "UK"
               }
             }

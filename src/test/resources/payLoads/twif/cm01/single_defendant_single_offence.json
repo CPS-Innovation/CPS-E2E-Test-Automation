@@ -104,32 +104,7 @@
                 "Reason": "096"
               }
             },
-            "Description": "Single Defendant Crime Text",
-            "Category": "Summary Only",
-            "FromDate": "2001-10-01",
-            "Particulars": {
-              "Address": {
-                "AddressLine": [
-                  "{{DEF_Street_Address}}",
-                  "{{DEF_City}}"
-                ],
-                "Postcode": "NE1 1BB",
-                "Country": "UK"
-              }
-            }
-          },
-          {
-            "UniqueID": "{{CM01_CaseOffenceId_2}}",
-            "CJSCode": {
-              "Code": {
-                "Alternative": {
-                  "ActOrSource": "OF",
-                  "Year": "61"
-                },
-                "Reason": "016"
-              }
-            },
-            "Description": "Single Defendant Crime Text",
+            "Description": "Single Defendant Single Crime",
             "Category": "Summary Only",
             "FromDate": "2001-10-01",
             "Particulars": {

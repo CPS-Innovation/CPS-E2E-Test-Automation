@@ -98,13 +98,13 @@
             "CJSCode": {
               "Code": {
                 "Alternative": {
-                  "ActOrSource": "OS",
-                  "Year": "89"
+                  "ActOrSource": "IS",
+                  "Year": "86"
                 },
-                "Reason": "096"
+                "Reason": "035"
               }
             },
-            "Description": "Single Defendant Crime Text",
+            "Description": "DPP Crime",
             "Category": "Summary Only",
             "FromDate": "2001-10-01",
             "Particulars": {
@@ -123,13 +123,13 @@
             "CJSCode": {
               "Code": {
                 "Alternative": {
-                  "ActOrSource": "OF",
-                  "Year": "61"
+                  "ActOrSource": "FS",
+                  "Year": "23"
                 },
-                "Reason": "016"
+                "Reason": "003"
               }
             },
-            "Description": "Single Defendant Crime Text",
+            "Description": "DPP Second Crime",
             "Category": "Summary Only",
             "FromDate": "2001-10-01",
             "Particulars": {

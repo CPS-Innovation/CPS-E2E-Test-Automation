@@ -1,16 +1,16 @@
-@regression @CR_UI_S1_S7_S13_S19 @caseReview
-Feature: CR-UI-S1_S7_S13_S19 - MC Initial PCD Review
+@regression @caseReview @ui
+Feature: CR-UI-S1_S7_S13 - MC Initial PCD Review
   As a prosecutor lawyer,
   I want to complete MC initial 28 day PCD reviews for Full Code, Threshold Test and Early Advice
   So that I can submit the review with the correct analysis, monitoring codes, action plan outcome and MG3 document.
 
   Background: Case Creation
-    Given create new case using "CM01" for type "single defendant multi offence"
+    Given create new case using "CM01" for type "single suspect single offence"
     And precharge the "MC" triage case for "28Day" PCD review
 
 
   @ui @CR_UI_16400 @CR_UI_S13 @fullCodeWith28DaysActionPlan
-  Scenario: 28 days PCD review of test type full code with 28 days action plan
+  Scenario: 28 days PCD review of test type full test code with 28 days action plan
     Given I login to case review app
     And Search the case "URN"
     When I start "28 day PCD Review"
@@ -32,6 +32,7 @@ Feature: CR-UI-S1_S7_S13_S19 - MC Initial PCD Review
       | Bail for charging decision | Area   | true                |
 
     Then review is submitted successfully
+
 
   @ui @CR_UI_16277 @CR_UI_S7 @thresholdWithActionPlan
   Scenario: 28 days PCD review of test type Threshold with 28 days action plan

@@ -1,15 +1,15 @@
-@regression @CR_UIS23 @caseReview
-Feature: CR-UI-S23 - MC Initial PCD Review
+@regression @caseReview @ui
+Feature: CR-UI-S23 - MC Initial PCD Review for Priority NFS Complaint
   As a prosecutor lawyer,
-  I want to complete CCU initial 28 day PCD reviews for Full Code test
+  I want to complete MC initial 28 day PCD reviews for Full Code test
   So that I can submit the review with the correct analysis, monitoring codes, action plan outcome and MG3 document.
 
   Background: Case Creation
-    Given create new case using "CM01" for type "priority multi defendant single offence"
+    Given create new case using "CM01" for type "priority multi suspect single offence"
     And precharge the RED "MC" triage case for "NFS Compliant" PCD review
 
 
-  @ui @CR_UI_16555 @CR_UI_S23 @fullTestCodeWithoutActionPlan
+  @CR_UI_16555 @CR_UI_S23 @fullTestCodeWithoutActionPlan
   Scenario: 28 days PCD review of case type MC and test type Full Code without action plan
     Given I login to case review app
     And Search the case "URN"

@@ -1,7 +1,7 @@
-@regression @CR_UI_S17 @caseReview
-Feature: CR-UI-S17 - MC Initial PCD Review for Priority NFS
+@regression @caseReview @ui
+Feature: CR-UI-S17 - MC Initial PCD Review for Priority NFS Compliant
   As a prosecutor lawyer,
-  I want to complete CC initial NFS Compliant day PCD reviews for Full Code, Threshold Test and Early Advice
+  I want to complete CC initial NFS Compliant day PCD reviews for Full Code, Threshold
   So that I can submit the review with the correct analysis, monitoring codes, action plan outcome and MG3 document.
 
   Background: Case Creation
@@ -9,7 +9,7 @@ Feature: CR-UI-S17 - MC Initial PCD Review for Priority NFS
     And precharge the RED "MC" triage case for "NFS Compliant" PCD review
 
 
-  @ui @CR_UI_16404 @CR_UI_S17 @fullCodeWithoutActionPlan
+  @CR_UI_16404 @CR_UI_S17 @fullCodeWithoutActionPlan
   Scenario: Priority NFS Compliant PCD review of test type full code without action plan
     Given I login to case review app
     And Search the case "URN"
@@ -33,7 +33,7 @@ Feature: CR-UI-S17 - MC Initial PCD Review for Priority NFS
 
     Then review is submitted successfully
 
-#  @ui @CR_UI_16281 @CR_UI_S11 @thresholdWith7daysActionPlan
+#  @CR_UI_16281 @CR_UI_S11 @thresholdWith7daysActionPlan
 #  Scenario: Priority PCD review of test type Threshold with 7 day action plan
 #    Given I login to case review app
 #    And Search the case "URN"

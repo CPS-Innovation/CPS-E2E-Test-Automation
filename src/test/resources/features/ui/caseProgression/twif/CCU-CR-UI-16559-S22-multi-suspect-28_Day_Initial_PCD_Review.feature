@@ -1,16 +1,16 @@
-@regression @CR_UIS22 @caseReview
+@regression @caseReview @ui
 Feature: CR-UI-S22 - CCU Initial PCD Review
   As a prosecutor lawyer,
-  I want to complete CCU initial 28 day PCD reviews for Early Advice
+  I want to complete CCU initial 28 day PCD reviews for Full Test Code
   So that I can submit the review with the correct analysis, monitoring codes, action plan outcome and MG3 document.
 
   Background: Case Creation
-    Given create new case using "CM01" for type "multi defendant multi offence"
+    Given create new case using "CM01" for type "multi suspect multi offence"
     And precharge the "CCU" triage case for "28Day" PCD review
 
 
-  @ui @CR_UI_16559 @CR_UI_S22 @fullTestCodeWith1DaysActionPlan
-  Scenario: 28 days PCD review of case type CCU and test type Early Advice with 1 days action plan
+  @CR_UI_16559 @CR_UI_S22 @fullTestCodeWith1DaysActionPlan
+  Scenario: 28 days PCD review of case type CCU and test type Full Test Code with 1 days action plan
     Given I login to case review app
     And Search the case "URN"
     When I start "28 day PCD Review"

@@ -1,11 +1,11 @@
-@regression @CR_UI_S21 @caseReview
+@regression @caseReview @ui
 Feature: CR-UI-S15_S3_S9 - RASSO Initial PCD Review
   As a prosecutor lawyer,
   I want to complete RASSO initial 5 day PCD reviews for Threshold Test
   So that I can submit the review with the correct analysis, monitoring codes, action plan outcome and MG3 document.
 
   Background: Case Creation
-    Given create new case using "CM01" for type "single defendant multi offence"
+    Given create new case using "CM01" for type "multi suspect multi offence"
     And precharge the "RASSO" triage case for "5Day" PCD review
 
 

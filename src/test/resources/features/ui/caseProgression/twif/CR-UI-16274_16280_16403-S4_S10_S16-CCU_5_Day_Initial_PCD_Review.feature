@@ -1,11 +1,11 @@
-@regression @CR_UI_S4_S10_S16_S22
+@regression @CR_UI_S4_S10_S16_S22 @caseReview
 Feature: CR-UI-S4_S10_S16_S22 - CCU Initial PCD Review
   As a prosecutor lawyer,
   I want to complete CCU initial 5 day PCD reviews for Full Code, Threshold Test and Early Advice
   So that I can submit the review with the correct analysis, monitoring codes, action plan outcome and MG3 document.
 
   Background: Case Creation
-    Given create new case using "CM01" for type "single defendant multiple offence"
+    Given create new case using "CM01" for type "single defendant multi offence"
     And precharge the "CCU" triage case for "5Day" PCD review
 
 

@@ -5,7 +5,7 @@ Feature: Review TWIF Case and Apply Charges
   So that I can update the case progression and apply relevant charges.
 
   Background: Case Creation
-    Given create new case using "CM01" for type "single defendant multiple offence"
+    Given create new case using "CM01" for type "single defendant multi offence"
     And precharge the "MC" triage case for "28Day" PCD review
 
   @ui

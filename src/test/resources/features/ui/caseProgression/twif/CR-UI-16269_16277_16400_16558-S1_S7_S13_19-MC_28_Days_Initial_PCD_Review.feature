@@ -1,11 +1,11 @@
-@regression @CR_UI_S1_S7_S13_S19
+@regression @CR_UI_S1_S7_S13_S19 @caseReview
 Feature: CR-UI-S1_S7_S13_S19 - MC Initial PCD Review
   As a prosecutor lawyer,
   I want to complete MC initial 28 day PCD reviews for Full Code, Threshold Test and Early Advice
   So that I can submit the review with the correct analysis, monitoring codes, action plan outcome and MG3 document.
 
   Background: Case Creation
-    Given create new case using "CM01" for type "single defendant multiple offence"
+    Given create new case using "CM01" for type "single defendant multi offence"
     And precharge the "MC" triage case for "28Day" PCD review
 
 

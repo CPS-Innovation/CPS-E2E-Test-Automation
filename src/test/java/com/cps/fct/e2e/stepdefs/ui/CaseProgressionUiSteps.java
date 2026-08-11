@@ -4,6 +4,7 @@ import com.cps.fct.e2e.utils.common.EnvConfig;
 import com.cps.fct.e2e.utils.common.FakerUtils;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
 import com.cps.fct.e2e.utils.common.SecurePassCode;
+import com.jayway.jsonpath.JsonPath;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -17,13 +18,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class UIDemoSteps {
+public class CaseProgressionUiSteps {
 
     private static final String CREATE_MG3_DOCUMENT_COLUMN = "Create MG3 document";
     private static final String CREATE_MG3_DOCUMENT_CONTEXT_KEY = "createMg3Document";
     private static final String DEFENDANT_COUNT_CONTEXT_KEY = "defendantCount";
     private static final String CASE_DATA_FILE_NAME_CONTEXT_KEY = "caseDataFileName";
-    private static final String CM01_MODIFIED_VALUES_CONTEXT_KEY = "CM01ModifiedValues";
+    private static final String MODIFIED_CM01_REQUEST_PAYLOAD_CONTEXT_KEY = "modifiedCM01RequestPayload";
     private static final String CHARGING_DECISION_TYPES_CONTEXT_KEY = "chargingDecisionTypes";
     private static final String DECISION_TYPE_FIELD = "decision type";
     private static final String CPS_USER_KEY = "CPS_USER";
@@ -80,7 +81,7 @@ public class UIDemoSteps {
 
     @Inject ScenarioContext context;
 
-    public UIDemoSteps() {
+    public CaseProgressionUiSteps() {
     }
 
     @Given("I login to case review app")
@@ -202,7 +203,10 @@ public class UIDemoSteps {
 
     @And("I select PCD principal offence category as {string}")
     public void iSelectPcdPrincipalOffenceCategoryAs(String offenceCategory) {
-        pages.decisionAnalysisPage.selectEarlyAdvicePrincipalOffenceCategoryAndContinue(offenceCategory);
+        pages.decisionAnalysisPage.selectEarlyAdvicePrincipalOffenceCategoryAndContinue(
+                offenceCategory,
+                expectedDefendantCount()
+        );
         context.set(PRINCIPAL_OFFENCE_CATEGORY_FIELD, offenceCategory);
     }
 
@@ -609,26 +613,46 @@ public class UIDemoSteps {
     }
 
     private List<String> multiDefendantNamesInDecisionOrder(int expectedDefendantCount) {
-        Map<String, String> cm01Values = context.getAsMap(CM01_MODIFIED_VALUES_CONTEXT_KEY);
-        if (cm01Values == null) {
+        String modifiedCm01Payload = context.getAsString(MODIFIED_CM01_REQUEST_PAYLOAD_CONTEXT_KEY);
+        if (isBlank(modifiedCm01Payload)) {
             throw new IllegalStateException("No value found in scenario context for key: "
-                    + CM01_MODIFIED_VALUES_CONTEXT_KEY);
+                    + MODIFIED_CM01_REQUEST_PAYLOAD_CONTEXT_KEY);
+        }
+
+        List<String> givenNames = JsonPath.read(
+                modifiedCm01Payload,
+                "$.PreChargeDecisionRequest.Suspect[*].AccusedPerson.Name.GivenName"
+        );
+        List<String> familyNames = JsonPath.read(
+                modifiedCm01Payload,
+                "$.PreChargeDecisionRequest.Suspect[*].AccusedPerson.Name.FamilyName"
+        );
+
+        if (givenNames.size() != expectedDefendantCount || familyNames.size() != expectedDefendantCount) {
+            throw new IllegalStateException("Expected " + expectedDefendantCount
+                    + " defendant name(s) in modified CM01 payload but found given names="
+                    + givenNames.size() + ", family names=" + familyNames.size() + ".");
         }
 
         List<String> defendantNames = new ArrayList<>();
-        for (int index = 1; index <= expectedDefendantCount; index++) {
-            String firstName = cm01Values.get("DEF_" + index + "_FirstName");
-            String surname = cm01Values.get("DEF_" + index + "_Surname");
+        for (int index = 0; index < expectedDefendantCount; index++) {
+            String givenName = givenNames.get(index);
+            String familyName = familyNames.get(index);
 
-            if (isBlank(firstName) || isBlank(surname)) {
-                throw new IllegalStateException("No generated defendant name found for DEF_" + index
-                        + " in scenario context.");
+            if (isBlank(givenName) || isBlank(familyName)) {
+                throw new IllegalStateException("Blank defendant name found in modified CM01 payload at index "
+                        + index + ".");
             }
 
-            defendantNames.add(surname + ", " + firstName);
+            defendantNames.add(defendantDisplayName(familyName, givenName));
         }
 
+        System.out.println("Defendant names from modified CM01 payload: " + defendantNames);
         return defendantNames;
+    }
+
+    private String defendantDisplayName(String familyName, String givenName) {
+        return familyName.trim().toUpperCase(Locale.ROOT) + ", " + givenName.trim();
     }
 
     private Map<String, String> defaultPreChargeAnalysisDetails() {

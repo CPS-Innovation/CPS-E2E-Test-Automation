@@ -72,6 +72,9 @@ public class ChargeDecisionAnalysisPage extends BasePage {
     private static final String CHARGE_CODE_DECISION_FIELD = "charge code decision";
     private static final String AG_CONSENT_FIELD = "AG consent";
     private static final String EARLY_ADVICE_POC_DROPDOWN_SELECTOR = "[id$='POC_Dropdown']";
+    private static final String APPLY_TO_ALL_SUSPECTS_BUTTON_TEXT = "Apply to all suspects";
+    private static final String APPLY_TO_ALL_SUSPECTS_BUTTON_SELECTOR =
+            "button.btn.govuk-button.govuk-button--secondary:visible";
     private static final String CHARGE_CODE_SELECTOR = "[id$='ChargeCode']";
     private static final String CHECK_ALL_CHARGE_CODES_CHECKBOX_SELECTOR =
             "input[type='checkbox'][id$='CheckboxIsAllChecked']";
@@ -96,7 +99,7 @@ public class ChargeDecisionAnalysisPage extends BasePage {
     private static final String CHARGING_DECISION_HEADER_SELECTOR = "span.govuk-heading-l";
     private static final String CHARGING_DECISION_SUSPECT_COUNT_SELECTOR = "h2.govuk-heading-m";
     private static final String ONE_DEFENDANT_SELECTOR = "[id$='OneDefendant']";
-    private static final String DEFENDANTS_SELECTION_LIST_SELECTOR = "[id*='DefendantsNoDecisionList']:visible";
+    private static final String DEFENDANTS_SELECTION_LIST_SELECTOR = "div.list-group[id*='DefendantsNoDecisionList']";
     private static final String DEFENDANT_NO_DECISION_ITEM_SELECTOR = ".govuk-checkboxes__item";
     private static final String PREVIEW_SCROLL_SELECTOR = ".previewScroll";
     private static final String PREVIEW_ANALYSIS_STEPS_SELECTOR =
@@ -325,29 +328,52 @@ public class ChargeDecisionAnalysisPage extends BasePage {
     }
 
     public void selectPrincipalOffenceCategory(String offenceCategory) {
+        selectPrincipalOffenceCategory(offenceCategory, 1);
+    }
+
+    public void selectPrincipalOffenceCategory(String offenceCategory, int defendantCount) {
         assertPageHeaderContains(PRINCIPAL_OFFENCE_CATEGORY_LABEL);
-        selectEarlyAdvicePocDropdownOption(offenceCategory);
+        selectEarlyAdvicePocDropdownOption(offenceCategory, defendantCount);
         clickSaveAndContinue();
     }
 
     public void selectEarlyAdvicePrincipalOffenceCategoryAndContinue(String offenceCategory) {
+        selectEarlyAdvicePrincipalOffenceCategoryAndContinue(offenceCategory, 1);
+    }
+
+    public void selectEarlyAdvicePrincipalOffenceCategoryAndContinue(String offenceCategory, int defendantCount) {
         assertPageHeaderContains(PRINCIPAL_OFFENCE_CATEGORY_LABEL);
-        selectEarlyAdvicePocDropdownOption(offenceCategory);
+        selectEarlyAdvicePocDropdownOption(offenceCategory, defendantCount);
         clickSaveAndContinue();
         assertPageHeaderContains(CASE_ACTION_PLAN_LABEL);
     }
 
-    private void selectEarlyAdvicePocDropdownOption(String optionText) {
-        Locator dropdown = page.locator(EARLY_ADVICE_POC_DROPDOWN_SELECTOR);
+    private void selectEarlyAdvicePocDropdownOption(String optionText, int defendantCount) {
+        Locator dropdown = page.locator(EARLY_ADVICE_POC_DROPDOWN_SELECTOR).first();
         assertThat(dropdown).isVisible();
         dropdown.scrollIntoViewIfNeeded();
 
         if (isNativeSelect(dropdown)) {
             selectNativeDropdownOption(dropdown, optionText, PRINCIPAL_OFFENCE_CATEGORY_LABEL);
+        } else {
+            selectTypeAheadDropdownOption(dropdown, optionText);
+        }
+
+        applyPrincipalOffenceCategoryToAllSuspectsIfNeeded(defendantCount);
+    }
+
+    private void applyPrincipalOffenceCategoryToAllSuspectsIfNeeded(int defendantCount) {
+        if (defendantCount <= 1) {
             return;
         }
 
-        selectTypeAheadDropdownOption(dropdown, optionText, PRINCIPAL_OFFENCE_CATEGORY_LABEL);
+        Locator applyToAllSuspectsButton = page.locator(APPLY_TO_ALL_SUSPECTS_BUTTON_SELECTOR)
+                .filter(new Locator.FilterOptions().setHasText(APPLY_TO_ALL_SUSPECTS_BUTTON_TEXT));
+
+        assertThat(applyToAllSuspectsButton).isVisible();
+        applyToAllSuspectsButton.scrollIntoViewIfNeeded();
+        applyToAllSuspectsButton.click();
+        waitUntilBusyIndicatorsAreGone();
     }
 
     private boolean isNativeSelect(Locator locator) {
@@ -367,7 +393,7 @@ public class ChargeDecisionAnalysisPage extends BasePage {
         throw new IllegalArgumentException(fieldName + " option was not found: " + optionText);
     }
 
-    private void selectTypeAheadDropdownOption(Locator dropdown, String optionText, String fieldName) {
+    private void selectTypeAheadDropdownOption(Locator dropdown, String optionText) {
         dropdown.click();
         Locator textInput = dropdown.locator("input").first();
         if (textInput.count() == 0) {
@@ -384,7 +410,7 @@ public class ChargeDecisionAnalysisPage extends BasePage {
             return;
         }
 
-        throw new IllegalArgumentException(fieldName + " option was not found: " + optionText);
+        throw new IllegalArgumentException(ChargeDecisionAnalysisPage.PRINCIPAL_OFFENCE_CATEGORY_LABEL + " option was not found: " + optionText);
     }
 
     private boolean selectVisibleTypeAheadOption(String optionText) {
@@ -1122,6 +1148,9 @@ public class ChargeDecisionAnalysisPage extends BasePage {
         Locator defendantsNoDecisionList = page.locator(DEFENDANTS_SELECTION_LIST_SELECTOR);
         page.waitForCondition(() -> defendantsNoDecisionList.count() > 0);
 
+        System.out.println("Selecting defendant for charging decision: " + defendantName);
+        System.out.println("Visible defendants awaiting charging decision: " + visibleDefendantNames(defendantsNoDecisionList));
+
         Locator defendantItem = defendantsNoDecisionList
                 .locator(DEFENDANT_NO_DECISION_ITEM_SELECTOR)
                 .filter(new Locator.FilterOptions().setHasText(defendantName));
@@ -1132,6 +1161,20 @@ public class ChargeDecisionAnalysisPage extends BasePage {
         assertThat(checkboxSpan).isVisible();
         checkboxSpan.scrollIntoViewIfNeeded();
         checkboxSpan.click();
+    }
+
+    private List<String> visibleDefendantNames(Locator defendantsNoDecisionList) {
+        Locator defendantItems = defendantsNoDecisionList.locator(DEFENDANT_NO_DECISION_ITEM_SELECTOR);
+        List<String> defendantNames = new ArrayList<>();
+
+        for (int index = 0; index < defendantItems.count(); index++) {
+            Locator defendantItem = defendantItems.nth(index);
+            if (defendantItem.isVisible()) {
+                defendantNames.add(defendantItem.innerText().replaceAll("\\s+", " ").trim());
+            }
+        }
+
+        return defendantNames;
     }
 
     private Map<String, String> normalizedChargingDecisionData(Map<String, String> decisionChargingData) {

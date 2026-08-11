@@ -1,7 +1,9 @@
 package com.cps.fct.e2e.pages;
 
 import com.cps.fct.e2e.utils.playwright.PlaywrightContext;
+import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.PlaywrightException;
+import com.microsoft.playwright.options.WaitForSelectorState;
 import org.assertj.core.api.SoftAssertions;
 
 import java.net.URI;
@@ -9,6 +11,8 @@ import java.net.URI;
 public class CaseIdSearchPage extends BasePage {
 
     private static final int LANDING_PAGE_TIMEOUT_MILLIS = 30_000;
+    private static final int SEARCH_PAGE_READY_TIMEOUT_MILLIS = 20_000;
+    private static final int MAX_SEARCH_PAGE_READY_ATTEMPTS = 3;
     private static final int SEARCH_POLL_INTERVAL_MILLIS = 250;
     private static final int MAX_SEARCH_ATTEMPTS = 5;
     private static final int CASE_NOT_FOUND_BACKOFF_MILLIS = 3_000;
@@ -24,23 +28,48 @@ public class CaseIdSearchPage extends BasePage {
         super(context);
     }
 
-    public CaseIdSearchPage assertPageLoadSuccessful() {
+    public void assertPageLoadSuccessful() {
         SoftAssertions softly = new SoftAssertions();
         softly.assertThat(page.getByText("View a Case").isVisible()).isTrue();
         softly.assertAll();
-        return this;
     }
 
     private CaseIdSearchPage inputCaseId(String caseId) {
-        selectSearchType(CASE_ID_RADIO_SELECTOR);
-        page.locator(CASE_ID_INPUT_SELECTOR).fill(caseId);
+        selectSearchTypeAndWaitForInput(CASE_ID_RADIO_SELECTOR, CASE_ID_INPUT_SELECTOR);
+        page.locator(CASE_ID_INPUT_SELECTOR).fill(caseId,
+                new Locator.FillOptions().setTimeout(SEARCH_PAGE_READY_TIMEOUT_MILLIS));
         return this;
     }
 
     private CaseIdSearchPage inputUrn(String urn) {
-        selectSearchType(URN_RADIO_SELECTOR);
-        page.locator(URN_INPUT_SELECTOR).fill(urn);
+        selectSearchTypeAndWaitForInput(URN_RADIO_SELECTOR, URN_INPUT_SELECTOR);
+        page.locator(URN_INPUT_SELECTOR).fill(urn,
+                new Locator.FillOptions().setTimeout(SEARCH_PAGE_READY_TIMEOUT_MILLIS));
         return this;
+    }
+
+    private void selectSearchTypeAndWaitForInput(String radioSelector, String inputSelector) {
+        for (int attempt = 1; attempt <= MAX_SEARCH_PAGE_READY_ATTEMPTS; attempt++) {
+            try {
+                waitForSearchPageControl(radioSelector);
+                selectSearchType(radioSelector);
+                waitForSearchPageControl(inputSelector);
+                return;
+            } catch (PlaywrightException e) {
+                if (isGenuineLocatorError(e) || attempt == MAX_SEARCH_PAGE_READY_ATTEMPTS) {
+                    throw e;
+                }
+                page.reload();
+                waitForLoginPageToLoadCompletely();
+                waitUntilLoadingIndicatorIsGone();
+            }
+        }
+    }
+
+    private void waitForSearchPageControl(String selector) {
+        page.locator(selector).waitFor(new Locator.WaitForOptions()
+                .setState(WaitForSelectorState.VISIBLE)
+                .setTimeout(SEARCH_PAGE_READY_TIMEOUT_MILLIS));
     }
 
     private void selectSearchType(String radioSelector) {
@@ -75,9 +104,8 @@ public class CaseIdSearchPage extends BasePage {
     }
 
 
-    private CaseIdSearchPage clickOnViewCaseButton() {
+    private void clickOnViewCaseButton() {
         clickButton("View Case");
-        return this;
     }
 
     public void searchCase(String caseId) {

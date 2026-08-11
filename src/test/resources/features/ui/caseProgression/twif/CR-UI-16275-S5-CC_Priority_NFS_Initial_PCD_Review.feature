@@ -1,4 +1,4 @@
-@regression @CR_UI_S5
+@regression @CR_UI_S5 @caseReview
 Feature: CR-UI-S5 - MC Initial PCD Review for Priority NFS
   As a prosecutor lawyer,
   I want to complete CC initial NFS Compliant day PCD reviews for Early advise

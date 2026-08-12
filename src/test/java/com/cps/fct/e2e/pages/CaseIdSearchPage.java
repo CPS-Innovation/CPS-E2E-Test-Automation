@@ -35,6 +35,17 @@ public class CaseIdSearchPage extends BasePage {
                  .waitUntilLoadingIndicatorIsGone();
     }
 
+    public void searchCaseUrn(String urn) {
+        waitForLoginPageToLoadCompletely()
+                .assertPageLoadSuccessful()
+                .inputCaseId(urn)
+                .clickOnViewCaseButton()
+                .waitUntilLoadingIndicatorIsGone();
+    }
+
+
+
+
     @Override
     public void waitUntilLoadingIndicatorIsGone() {
         waitUntilLoadingIndicatorIsGone("Searching for Case...");

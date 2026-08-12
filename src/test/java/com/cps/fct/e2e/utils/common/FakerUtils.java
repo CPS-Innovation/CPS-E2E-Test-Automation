@@ -5,6 +5,7 @@ import com.github.javafaker.Faker;
 import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
@@ -110,12 +111,8 @@ public class FakerUtils {
         return String.valueOf(random.nextInt(90000) + 10000);
     }
 
-    public static String generateFiveDigitNumber() {
-        return String.valueOf(10000 + random.nextInt(90000));
-    }
-
-    public static String generateTenDigitNumber() {
-        return String.valueOf(1000000000L + (long) (random.nextDouble() * 9000000000L));
+    public static String elevenDigitNumber() {
+        return String.valueOf(10000000000L + (long) (random.nextDouble() * 90000000000L));
     }
 
     public static String generateUppercaseAlphaNumeric(int length) {
@@ -127,6 +124,26 @@ public class FakerUtils {
                 .toString();
     }
 
+    public static String defaultDate() {
+        return "1900-01-01";
+    }
+
+    public static String todayDate() {
+        return LocalDate.now()
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
+
+    public static String todayMinusFiveDays() {
+        return LocalDate.now()
+                .minusDays(5)
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
+
+    public static String todayMinusFourDays() {
+        return LocalDate.now()
+                .minusDays(4)
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
 
     public static String uniqueId() {
         String pattern = "??-#-??-#";

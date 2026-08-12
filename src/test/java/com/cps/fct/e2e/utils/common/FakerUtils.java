@@ -5,6 +5,7 @@ import com.github.javafaker.Faker;
 import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
@@ -139,6 +140,22 @@ public class FakerUtils {
         return "1900-01-01";
     }
 
+    public static String todayDate() {
+        return LocalDate.now()
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
+
+    public static String todayMinusFiveDays() {
+        return LocalDate.now()
+                .minusDays(5)
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
+
+    public static String todayMinusFourDays() {
+        return LocalDate.now()
+                .minusDays(4)
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
 
     public static String uniqueId() {
         String pattern = "??-#-??-#";

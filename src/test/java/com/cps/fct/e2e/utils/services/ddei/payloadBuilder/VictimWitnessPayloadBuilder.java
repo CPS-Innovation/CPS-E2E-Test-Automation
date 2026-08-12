@@ -50,7 +50,7 @@ public class VictimWitnessPayloadBuilder {
                 .registerTypeAdapter(PreferredMethodOfContact.class, new PreferredMethodOfContactAdapter())
                 .setPrettyPrinting()
                 .create();
-        return gson.toJson(object) ;
+        return gson.toJson(object);
     }
 
     public static VcaPersonalDetails addVcaPersonalDetails() {
@@ -79,9 +79,19 @@ public class VictimWitnessPayloadBuilder {
                 .build();
     }
 
+    public static VictimLiaisonOfficerDetails addVictimLiaisonOfficer(Integer userPartyId) {
+        return VictimLiaisonOfficerDetails.builder()
+                .Service(1)
+                .Onboarded(Boolean.TRUE)
+                .VLOPartyId(userPartyId)
+                .LastModifiedBy("Test Automation User")
+                .build();
+    }
+
+
     public static VictimContactDetails payLoadForAddVictimContactDetails(int contactTypeCode) {
 
-        if(contactTypeCode == 2){
+        if (contactTypeCode == 2) {
             return VictimContactDetails.builder()
                     .ContactName(FakerUtils.fullName())
                     .ContactTelephone(FakerUtils.homePhone())
@@ -113,7 +123,7 @@ public class VictimWitnessPayloadBuilder {
 
     public static VictimContactDetails payLoadForUpdateVictimContactDetails(int contactTypeCode) {
 
-        if(contactTypeCode == 2){
+        if (contactTypeCode == 2) {
             return VictimContactDetails.builder()
                     .ContactName("NEWSURENAME Update")
                     .ContactTelephone("07777777777")
@@ -149,11 +159,11 @@ public class VictimWitnessPayloadBuilder {
         payload.put("Urn", caseUrn);
         payload.put("CreatedBy", "Onboard CPS user");
         payload.put("Service", 1);
-        payload.put("Onboarded",false);
+        payload.put("Onboarded", false);
         return toJsonString(payload);
     }
 
-    public static String payLoadForAddWitnessDetailsWitnessId(VictimWitnessDetails victimDetails ) {
+    public static String payLoadForAddWitnessDetailsWitnessId(VictimWitnessDetails victimDetails) {
         UpdateWitnessDetailsWitnessIdJsonBuilder builder = new UpdateWitnessDetailsWitnessIdJsonBuilder();
         List<Map<String, Object>> patchPayload = builder
                 .add("/contactDetails/title", victimDetails.getTitle())
@@ -177,17 +187,17 @@ public class VictimWitnessPayloadBuilder {
 
         //TODO : existing defect on address line
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        return  gson.toJson(patchPayload);
+        return gson.toJson(patchPayload);
     }
 
-    public static String payLoadForUpdateWitnessDetailsWitnessId(VictimWitnessDetails victimDetails ) {
+    public static String payLoadForUpdateWitnessDetailsWitnessId(VictimWitnessDetails victimDetails) {
         UpdateWitnessDetailsWitnessIdJsonBuilder builder = new UpdateWitnessDetailsWitnessIdJsonBuilder();
         List<Map<String, Object>> patchPayload = builder
                 .replace("/contactDetails/title", "Dr")
                 .replace("/contactDetails/gender", "Unknown")
                 .replace("/dateOfBirth", "1990-02-01")
                 .replace("/contactDetails/ethnicity", "British")
-                .replace("/contactDetails/disability","Yes")
+                .replace("/contactDetails/disability", "Yes")
                 .replace("/previousConvictions", "True")
                 .replace("/contactDetails/phoneNumber", victimDetails.getContactDetailsPhoneNumber())
                 .replace("/contactDetails/mobileNumber", victimDetails.getContactDetailsMobileNumber())
@@ -204,10 +214,10 @@ public class VictimWitnessPayloadBuilder {
 
         //TODO : existing defect on address line
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        return  gson.toJson(patchPayload);
+        return gson.toJson(patchPayload);
     }
 
-    public static String payLoadForAddOrUpdateCategory(VictimWitnessDetails victimDetails ) {
+    public static String payLoadForAddOrUpdateCategory(VictimWitnessDetails victimDetails) {
         UpdateWitnessDetailsWitnessIdJsonBuilder builder = new UpdateWitnessDetailsWitnessIdJsonBuilder();
         List<Map<String, Object>> patchPayload = builder
                 .replace("/types", victimDetails.getCategory())
@@ -215,10 +225,10 @@ public class VictimWitnessPayloadBuilder {
                 .build();
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        return  gson.toJson(patchPayload);
+        return gson.toJson(patchPayload);
     }
 
-    public static VictimMeetingDetails payLoadForAddVictimMeetingDetails(int meetingTypeCode) {
+    public static VictimMeetingDetails payLoadForAddVictimMeetingDetails(int meetingTypeCode, String reason) {
 
         return VictimMeetingDetails.builder()
                 .MeetingType(meetingTypeCode)
@@ -227,11 +237,57 @@ public class VictimWitnessPayloadBuilder {
                 .MeetingRequested(false)
                 .MethodOfOffer(10)
                 .DateOfOffer(defaultDate())
-                .ReasonForNoOffer("API Test Automation")
+                .ReasonForNoOffer(reason)
                 .CreatedBy("automationUser")
                 .build();
     }
 
+    public static VictimMeetingDetails payLoadForAddVictimMeetingMethodDetails(int meetingTypeCode, int methodTypeCode) {
+
+        return VictimMeetingDetails.builder()
+                .MeetingType(meetingTypeCode)
+                .MeetingContextGuid(FakerUtils.uuid())
+                .MeetingOffered(true)
+                .MeetingRequested(false)
+                .MethodOfOffer(methodTypeCode)
+                .DateOfOffer(todayMinusFiveDays())
+                .CreatedBy("automationUser")
+                .build();
+    }
+
+    public static VictimMeetingDetails payLoadForMeetingStatusDetails(int meetingTypeCode, int methodTypeCode, String meetingStatus) {
+
+        return VictimMeetingDetails.builder()
+                .MeetingType(meetingTypeCode)
+                .MethodOfOffer(methodTypeCode)
+                .DateOfOffer(todayMinusFiveDays())
+                .MeetingOfferAttempt(1)
+                .MeetingContextGuid(FakerUtils.uuid())
+                .MeetingOffered(true)
+                .MeetingRequested(false)
+                .VictimResponse(meetingStatus)
+                .MethodOfResponse(methodTypeCode)
+                .VictimResponseDate(todayMinusFourDays())
+                .LastModifiedBy("automationUser")
+                .build();
+    }
+
+    public static VictimMeetingDetails payLoadForNoResponseMeetingDetails(int meetingTypeCode, int methodTypeCode) {
+
+        return VictimMeetingDetails.builder()
+                .MeetingType(meetingTypeCode)
+                .MethodOfOffer(methodTypeCode)
+                .DateOfOffer(todayMinusFiveDays())
+                .MeetingOfferAttempt(1)
+                .MeetingContextGuid(FakerUtils.uuid())
+                .MeetingOffered(true)
+                .MeetingRequested(false)
+                .VictimResponse("No Response")
+                .MethodOfResponse(10)
+                .VictimResponseDate(todayMinusFourDays())
+                .LastModifiedBy("automationUser")
+                .build();
+    }
 
 
 

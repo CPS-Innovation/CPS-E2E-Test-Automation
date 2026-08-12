@@ -109,6 +109,8 @@ public class Hooks {
         context.set("envSuffix", suffix);
     }
 
+//    This was used if CASE_TYPE is missing, get("CASE_TYPE") may return null, then .toUpperCase()
+//    causes a less helpful NullPointerException. Very solid solution and helps with debugging
     public void setSuffixBasedOnCaseTypeInEnv(Scenario scenario) {
         String caseTypeValue = requireEnvValue(CASE_TYPE_KEY).toUpperCase();
         String suffix = suffixForCaseType(caseTypeValue);

@@ -1,4 +1,4 @@
-@regression @VCA_API_S1_S2
+@regression @vca_api_regression @VCA_API_S1_S2
 
 Feature: VCA-API-S1_S2 - Add personal and contact details for all category types of witness and victim and verify wm01u message
   As a Victim Liaison Officer
@@ -10,9 +10,13 @@ Feature: VCA-API-S1_S2 - Add personal and contact details for all category types
   with empty personal and contact details.
 
     Given create new case using "CM01" for type "single defendant multiple offence"
-    And add "witness" using "LM04" for the case
+#    And add "witness" using "LM04" for the case
+#
+#    And add "victim" using "LM04" for the case
 
-    And add "victim" using "LM04" for the case
+#    And add "victim pure" using "LM04" for the case
+    And add "victim pure vulnerable" using "LM04" for the case
+    And add "victim pure intimidated" using "LM04" for the case
 
 #    And add "witness child" using "LM04" for the case
 #    And add "witness police" using "LM04" for the case
@@ -39,8 +43,9 @@ Feature: VCA-API-S1_S2 - Add personal and contact details for all category types
   Scenario: Add witness title, preferred name, date of birth, gender, ethnicity, disability or access needs and previous convictions details
   and verify that newly added details are sent in wm01u message.
     Given witness and victim details are available
-    And the "witnessId" is onboarded to VCA
-    And the "victimId" is onboarded to VCA
+#    And the "witnessId" is onboarded to VCA
+#    And the "victimId" is onboarded to VCA
+#    And the "pureVictimId" is onboarded to VCA
 
 #    And the "witnessChildId" is onboarded to VCA
 #    And the "witnessExpertId" is onboarded to VCA
@@ -64,6 +69,7 @@ Feature: VCA-API-S1_S2 - Add personal and contact details for all category types
 
     When the "witnessId" personal details are added to CMS
     And the "victimId" personal details are added to CMS
+    And the "pureVictimId" personal details are added to CMS
 
 #    And the "witnessChildId" personal details are added to CMS
 #    And the "witnessExpertId" personal details are added to CMS
@@ -85,8 +91,9 @@ Feature: VCA-API-S1_S2 - Add personal and contact details for all category types
 #    And the "victimIntimidatedId" personal details are added to CMS
 #    And the "victimSpecialId" personal details are added to CMS
 
-    When the "witnessId" personal details are added to VCA
-    And the "victimId" personal details are added to VCA
+#    When the "witnessId" personal details are added to VCA
+#    And the "victimId" personal details are added to VCA
+#    And the "pureVictimId" personal details are added to VCA
 
 #    And the "witnessChildId" personal details are added to VCA
 #    And the "witnessExpertId" personal details are added to VCA
@@ -108,8 +115,9 @@ Feature: VCA-API-S1_S2 - Add personal and contact details for all category types
 #    And the "victimIntimidatedId" personal details are added to VCA
 #    And the "victimSpecialId" personal details are added to VCA
 
-    Then the "witnessId" personal details are verified in CMS and VCA
-    And the "victimId" personal details are verified in CMS and VCA
+#    Then the "witnessId" personal details are verified in CMS and VCA
+#    And the "victimId" personal details are verified in CMS and VCA
+#    And the "PureVictimId" personal details are verified in CMS and VCA
 
 #    And the "witnessChildId" personal details are verified in CMS and VCA
 #    And the "witnessExpertId" personal details are verified in CMS and VCA

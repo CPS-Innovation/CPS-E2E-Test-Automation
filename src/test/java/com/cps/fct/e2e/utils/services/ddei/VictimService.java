@@ -121,40 +121,27 @@ public class VictimService extends BaseService {
         
     }
 
-    public String caseVictimGuid(String caseUrn, String caseId, String victimId ){
+    public String caseVictimGuid(String caseUrn, String caseId, String victimId, String requestBody ){
         HttpResponseWrapper responseWrapper = service.sendRequest(
-                addCaseVictimToVCARequestParams(caseUrn, caseId, victimId));
-        String victimCaseInfoGuid = JsonPath.read(responseWrapper.getBody(), "$.value.CaseInfoGuid");
+                addCaseVictimToVCARequestParams(caseUrn, caseId, victimId,requestBody));
+        String victimCaseInfoGuid = JsonPath.read(responseWrapper.getBody(), "$.value.victimCaseInfoGuid");
         assertThat(victimCaseInfoGuid)
                 .withFailMessage("CaseInfoGuid was not returned from the API response")
                 .isNotNull();
         return victimCaseInfoGuid;
     }
 
-    private HttpClientBuilder addCaseVictimToVCARequestParams(String caseUrn, String caseId, String victimId) {
+    private HttpClientBuilder addCaseVictimToVCARequestParams(String caseUrn, String caseId, String victimId, String requestBody) {
         return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("DDEI_HOST"))
                 .endpoint(format("/api/victims/urns/%s/cases/%s/parties/%s", caseUrn, caseId, victimId))
                 .addHeaders(ddeiHeaders())
                 .method("POST")
-                .body(postCaseVictimGuid(caseUrn))
+                .body(requestBody)
                 .resourceName("addVictimWitnessToVCA")
                 .build();
     }
 
-
-
-
-//    public String victimWitnessGuid(String caseUrn, String caseId, String WitnessVictimId) {
-//        HttpResponseWrapper responseWrapper = service.sendRequest(
-//                addVictimOrWitnessRequestParams(caseUrn, caseId, WitnessVictimId));
-//        String victimCaseInfoGuid = JsonPath.read(responseWrapper.getBody(), "$.value.victimCaseInfoGuid");
-//        assertThat(victimCaseInfoGuid)
-//                .withFailMessage("victimCaseInfoGuid")
-//                .isNotNull();
-//        return victimCaseInfoGuid;
-//    }
-//
 
 
 

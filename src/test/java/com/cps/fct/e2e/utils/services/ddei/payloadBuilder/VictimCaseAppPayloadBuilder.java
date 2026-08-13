@@ -16,7 +16,7 @@ import static com.cps.fct.e2e.utils.common.JsonUtils.toJsonString;
 
 public class VictimCaseAppPayloadBuilder {
 
-    public static VictimCaseInfo postCaseVictimGuid(String caseUrn){
+    public static VictimCaseInfo addVictimInVCA(String caseUrn){
         return VictimCaseInfo.builder()
                 .Urn(caseUrn)
                 .CreatedBy("Automation User")

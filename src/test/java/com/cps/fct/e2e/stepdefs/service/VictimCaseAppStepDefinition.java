@@ -43,7 +43,7 @@ public class VictimCaseAppStepDefinition {
     public void victimDetailsInVCA() {
         service.createCmsAuthToken(context);
 
-       Map<String, String> idGuidMap = new HashMap<>();
+        Map<String, String> idGuidMap = new HashMap<>();
         context.set("idGuidMap", idGuidMap);
 
         Map<String, List<String>> victimMapIds = context.get("victimMapIds");
@@ -83,29 +83,21 @@ public class VictimCaseAppStepDefinition {
     @When("the {string} is onboarded as {string} service lead to VCA")
     public void victimOnboardForService(String victimType, String service) {
 
-        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
+        VictimCaseInfo victimCaseInfo;
 
+        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
         Map<String, String> idGuidMap = new HashMap<>();
         context.set("idGuidMap", idGuidMap);
 
+        for (String id : victimMapIds.get(victimType)) {
+            victimCaseInfo = addVictimInVCA(context.get("caseUrn"));
+            String caseVictimGuid = victimService.caseVictimGuid(context.get("caseUrn"), context.get("caseId"), id, convertObjectToString(victimCaseInfo));
+            idGuidMap.put(id, caseVictimGuid);
 
-                for (String id : victimMapIds.get(victimType)) {
-                    String caseVictimGuid = victimService.caseVictimGuid(context.get("caseUrn"), context.get("caseId"), id);
-                    System.out.println(caseVictimGuid);
 
-//            String guid = witnessService.victimWitnessGuid(context.get("caseUrn"), context.get("caseId"), id, serviceTypeCode.getValue());
-//            idGuidMap.put(id, guid);
+
         }
-
-
-//
-//        VictimOnboardService serviceTypeCode = VictimOnboardService.fromString(service);
-//
-//        for (String id : witnessVictimMapIds.get(witnessVictimType)) {
-//            String guid = witnessService.victimWitnessGuid(context.get("caseUrn"), context.get("caseId"), id, serviceTypeCode.getValue());
-//            idGuidMap.put(id, guid);
-//        }
-//        context.set("idGuidMap", idGuidMap);
+        context.set("idGuidMap", idGuidMap);
     }
 
     @When("the {string} is onboarded to VCA")
@@ -672,7 +664,7 @@ public class VictimCaseAppStepDefinition {
     }
 
     @Then("the {string} meeting details of {string} is verified in VCA")
-    public void meetingStatusDetailsVerified(String meetingStatus,String witnessVictimType) {
+    public void meetingStatusDetailsVerified(String meetingStatus, String witnessVictimType) {
         HttpResponseWrapper response;
         Map<String, String> idGuidMap = context.get("idGuidMap");
         Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");

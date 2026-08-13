@@ -11,8 +11,4 @@ public class VictimCaseInfo {
     private String Urn;
     private String CreatedBy;
 
-
-
-
-
 }

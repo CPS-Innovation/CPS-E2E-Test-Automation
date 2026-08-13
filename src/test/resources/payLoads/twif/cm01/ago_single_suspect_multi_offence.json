@@ -1,0 +1,233 @@
+{
+  "PreChargeDecisionRequest": {
+    "ItemId": "{{CM01_itemId}}",
+    "PTIURN": {
+      "Force": "{{TWIF_Force}}",
+      "Unit": "{{TWIF_Unit}}",
+      "Number": "{{CM01_PTIURN_Number}}",
+      "Year": "{{TWIF_Year}}"
+    },
+    "CPSUnit": {
+      "TopLevel": "{{TWIF_TopLevel}}",
+      "SecondLevel": "{{TWIF_SecondLevel}}",
+      "ThirdLevel": "{{TWIF_ThirdLevel}}",
+      "BottomLevel": "{{TWIF_BottomLevel}}"
+    },
+    "OperationName": "TWIF Case Operator",
+    "CaseClassification": [
+      {
+        "ClassificationType": "CaseMonitoring",
+        "ClassificationCode": "HonourCrime",
+        "ClassificationValue": {
+          "ClassificationValueFlag": "true"
+        }
+      }
+    ],
+    "AdviceDetails": {
+      "AdviceRequiredByDate": "2026-01-21",
+      "Paragraphs": null
+    },
+    "Suspect": [
+      {
+        "AccusedPerson": {
+          "UniqueId": "{{CM01_Def_PersonId}}",
+          "Name": {
+            "GivenName": "{{DEF_FirstName}}",
+            "FamilyName": "{{DEF_Surname}}"
+          },
+          "DateOfBirth": "1992-09-08",
+          "Address": {
+            "AddressLine": [
+              "{{DEF_Street_Address}}",
+              "{{DEF_City}}"
+            ],
+            "Postcode": "NE1 1BB",
+            "Country": "UK"
+          },
+          "PoliceRemandStatus": "Custody"
+        },
+        "PersonClassification": [
+          {
+            "ClassificationType": "StatusInformation",
+            "ClassificationCode": "SuspectDecisionPriority",
+            "ClassificationValue": {
+              "ClassificationValueText": "G"
+            }
+          }
+        ],
+        "ASN": {
+          "Year": "{{TWIF_Year}}",
+          "Force": "{{TWIF_Force}}",
+          "Unit": "{{TWIF_Unit}}",
+          "System": "00",
+          "Number": "{{CM01_ASN_Number}}",
+          "CheckCharacter": "W"
+        },
+        "DefenceSolicitor": {
+          "Firm": "{{Defender_Solicitor_Company}}",
+          "UniqueId": "{{CM01_SolicitorId}}",
+          "Name": {
+            "Title": "Mr",
+            "GivenName": "{{Solicitor_FirstName}}",
+            "FamilyName": "{{Solicitor_lastName}}"
+          },
+          "ContactDetails": {
+            "Address": {
+              "AddressLine": [
+                "{{Soli_Building_number}}",
+                "{{Soli_Street_Address}}",
+                "{{Soli_City}}"
+              ],
+              "Postcode": "AA1 1BB",
+              "Country": "UK"
+            },
+            "ContactNumber": [
+              {
+                "Number": {
+                  "TelNationalNumber": "{{Soli_HomePhone}}"
+                },
+                "TypeOfNumber": "work"
+              }
+            ],
+            "Email": "{{Solicitor_email}}"
+          }
+        },
+        "ProposedCharge": [
+          {
+            "UniqueID": "{{CM01_CaseOffenceId}}",
+            "CJSCode": {
+              "Code": {
+                "Alternative": {
+                  "ActOrSource": "OS",
+                  "Year": "89"
+                },
+                "Reason": "096"
+              }
+            },
+            "Description": "Crime Text",
+            "Category": "Summary Only",
+            "FromDate": "2001-10-01",
+            "Particulars": {
+              "Address": {
+                "AddressLine": [
+                  "{{DEF_Street_Address}}",
+                  "{{DEF_City}}"
+                ],
+                "Postcode": "NE1 1BB",
+                "Country": "UK"
+              }
+            }
+          },
+          {
+            "UniqueID": "{{CM01_CaseOffenceId_2}}",
+            "CJSCode": {
+              "Code": {
+                "Alternative": {
+                  "ActOrSource": "OS",
+                  "Year": "11"
+                },
+                "Reason": "009"
+              }
+            },
+            "Description": "Crime Text",
+            "Category": "Summary Only",
+            "FromDate": "2001-10-01",
+            "Particulars": {
+              "Address": {
+                "AddressLine": [
+                  "{{DEF_Street_Address}}",
+                  "{{DEF_City}}"
+                ],
+                "Postcode": "NE1 1BB",
+                "Country": "UK"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "CaseOutlineItem": {
+      "CaseOutlineHeading": {
+        "ClassificationType": "CaseOutline",
+        "ClassificationCode": "Heading",
+        "ClassificationValue": {
+          "ClassificationValueText": "KEVD"
+        }
+      },
+      "CaseOutlineText": "Text."
+    },
+    "PCDPoliceContactDetails": {
+      "OfficerCompleting": {
+        "UniqueId": "{{CM01_Ser_PersonId}}",
+        "Name": {
+          "GivenName": "{{PoliceOfficer_GivenName}}",
+          "FamilyName": "{{PoliceOfficer_SurName}}"
+        },
+        "ContactDetails": {
+          "Address": {
+            "AddressLine": [
+              "{{Police_Building_number}}",
+              "{{Police_Street_Address}}",
+              "{{Police_City}}"
+            ],
+            "Postcode": "NE1 1AB",
+            "Country": "UK"
+          },
+          "ContactNumber": [
+            {
+              "Number": {
+                "TelNationalNumber": "{{Police_HomePhone}}"
+              },
+              "TypeOfNumber": "work"
+            }
+          ],
+          "Email": "police.constable@police-station.uk",
+          "ContactPreferences": {
+            "PreferredMethod": "Work Tel"
+          }
+        },
+        "Rank": "PC",
+        "Station": "Surrey",
+        "ShoulderNumber": "{{CM01_Ser_ShoulderNo}}"
+      },
+      "OfficerSupervising": {
+
+        "UniqueId": "{{CM01_Con_PersonId}}",
+        "Name": {
+          "GivenName": "{{PoliceOfficer2_GivenName}}",
+          "FamilyName": "{{PoliceOfficer2_Surname}}"
+        },
+        "ContactDetails": {
+          "Address": {
+            "AddressLine": [
+              "{{Police_Building_number}}",
+              "{{Police_Street_Address}}",
+              "{{Police_City}}"
+            ],
+            "Postcode": "NE1 1AB",
+            "Country": "UK"
+          },
+          "ContactNumber": [
+            {
+              "Number": {
+                "TelNationalNumber": "{{Police_HomePhone}}"
+              },
+              "TypeOfNumber": "work"
+            }
+          ],
+          "Email": "police.constable@police-station.uk",
+          "ContactPreferences": {
+            "PreferredMethod": "Work Tel"
+          }
+        },
+        "Rank": "PC",
+        "Station": "Surrey",
+        "ShoulderNumber": "{{CM01_Con_ShoulderNo}}",
+        "Narrative": "Comments by Police"
+      }
+    },
+    "PCDRequestDate": "2025-01-01",
+    "PCDDecisionRequiredByDate": "2026-10-30",
+    "Contact": "Telephone"
+  }
+}

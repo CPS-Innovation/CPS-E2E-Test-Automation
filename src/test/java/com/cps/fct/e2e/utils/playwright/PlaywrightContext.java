@@ -7,6 +7,7 @@ import lombok.Setter;
 
 public class PlaywrightContext {
     private Page page;
+    private final WebAuthnVirtualAuthenticator webAuthnVirtualAuthenticator = new WebAuthnVirtualAuthenticator();
 
     @Setter
     private BrowserContext browserContext;
@@ -22,7 +23,16 @@ public class PlaywrightContext {
         return page;
     }
 
+    public void attachVirtualWebAuthnAuthenticator(Page page) {
+        webAuthnVirtualAuthenticator.attach(page);
+    }
+
+    public void detachVirtualWebAuthnAuthenticator() {
+        webAuthnVirtualAuthenticator.detach();
+    }
+
     public void close() {
+        detachVirtualWebAuthnAuthenticator();
         if (browserContext != null) browserContext.close();
     }
 }

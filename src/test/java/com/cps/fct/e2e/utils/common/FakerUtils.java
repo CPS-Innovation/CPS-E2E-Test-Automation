@@ -78,6 +78,18 @@ public class FakerUtils {
         return faker.internet().emailAddress();
     }
 
+    public static String cpsEmail() {
+        String firstName = faker.name().firstName().replaceAll("[^A-Za-z]", "").toLowerCase(Locale.ROOT);
+        String lastName = faker.name().lastName().replaceAll("[^A-Za-z]", "").toLowerCase(Locale.ROOT);
+        if (firstName.isBlank()) {
+            firstName = "firstname";
+        }
+        if (lastName.isBlank()) {
+            lastName = "lastname";
+        }
+        return firstName + "." + lastName + "@cps.gov.uk";
+    }
+
     public static String homePhone() {
         return "01" + faker.numerify("#########");
     }

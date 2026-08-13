@@ -32,8 +32,11 @@ public class EnvConfig {
 
     public static String getEnv(String key) {
         String value = dotenv.get(key);
-        if (value == null) {
+        if (value == null || value.isBlank()) {
             value = System.getProperty(key);
+        }
+        if (value == null || value.isBlank()) {
+            value = System.getenv(key);
         }
         return value;
     }

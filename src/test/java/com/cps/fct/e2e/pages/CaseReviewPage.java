@@ -13,12 +13,19 @@ public class CaseReviewPage extends BasePage {
         super(context);
     }
 
+    // Matches the shared "PCD Review" suffix so both numeric reviews ("5 day PCD Review",
+    // "28 day PCD Review") and word-based reviews ("Priority PCD Review") resolve. The exact
+    // review type is still verified via the innerText assertion in assertPageLoadSuccessful.
     private Locator reviewTypeText() {
-        return page.locator("text=day PCD Review");
+        return page.locator("text=PCD Review");
     }
 
     private Locator startReviewButton() {
         return page.locator("button:has-text('Start review')");
+    }
+
+    private Locator resumeReviewButton() {
+        return page.locator("button:has-text('Resume')");
     }
 
 
@@ -41,10 +48,22 @@ public class CaseReviewPage extends BasePage {
         return this;
     }
 
+    public CaseReviewPage clickResumeButton() {
+        resumeReviewButton().click();
+        return this;
+    }
+
     public void startReview(String caseId, String typeOfReview) {
         waitForLoginPageToLoadCompletely().
                 assertPageLoadSuccessful(caseId, typeOfReview)
                 .clickReviewButton()
+                .waitUntilLoadingIndicatorIsGone();
+    }
+
+    public void resumeReview(String caseId, String typeOfReview) {
+        waitForLoginPageToLoadCompletely().
+                assertPageLoadSuccessful(caseId, typeOfReview)
+                .clickResumeButton()
                 .waitUntilLoadingIndicatorIsGone();
     }
 

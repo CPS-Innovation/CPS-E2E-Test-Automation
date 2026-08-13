@@ -4,43 +4,72 @@ Feature: Review TWIF Case and Apply Charges
   I want to review a case in the Case review
   So that I can update the case progression and apply relevant charges.
 
- @ui
-  Scenario: Demo test for 28 days PCD review of test type full code
-  Given login to case review app using "mgovindachar.CIN3" and "Pass!"
-  And Search the case urn "05AQ6221426"
-  When I start "28 day PCD Review"
-  And select test as "Full Code Test"
-  And the case headline is entered
-  And the evidential analysis is entered
-#  And I write the "Public interest assessment"
-#  And I write the "Disclosure management"
-#  And I write the "Allocation" and choose NGAP option has Yes
-#  And I write the "Victim and witness needs"
-#  And I write the "Trial and sentencing preparation"
-#  And I choose "Not at this time" in Human Rights
-#  And I write the "Advocate and operational delivery instructions"
-#  And I choose Global monitoring codes as
-#    |Asset Recovery  |
-#    |DA specialist court  |
-#  And I preview pre charge analysis
-#  And I choose DG compliant as Yes
-#  When I make charging decision as following:
-#    | decision type| decision code| reason | out come of case| offence category |
-#    |No further action|K - No prosecution - Evidential |D81 |D80| Robbery|
-#  And I continue without action plan
-#  And I submit the charging decision as following
-#    | Investigative stage        | Method |
-#    | Bail for charging decision | Area   |
-#  Then review is submitted successfully
+  Background: Case Creation
+    Given create new case using "CM01" for type "single defendant multi offence"
+    And precharge the "MC" triage case for "28Day" PCD review
+
+  @ui
+#  Scenario: 28 days PCD review of test type full code with 28 days action plan
+#    Given I login to case review app
+#    And Search the case "URN"
+#    When I start "28 day PCD Review"
+#    And select test as "Full Code Test"
+#    And I complete the pre-charge analysis details with:
+#      | field                       | value                              |
+#      | Suspect-victim relationship | Partner                            |
+#      | Global monitoring codes     | Asset Recovery; DA specialist court |
 #
+#    And I preview pre charge analysis
+#    And I choose DG compliant as Yes
+#    When I make charging decision as following:
+#      | decision type     | decision code                   | reason | out come of case | offence category |
+#      | No further action | K - No prosecution - Evidential | D81    | D80              | Robbery          |
 #
+#    And I add an action point plan for "28 days" and "Key Witness Details"
+#    And I submit the charging decision as following
+#      | Investigative stage        | Method | Create MG3 document |
+#      | Bail for charging decision | Area   | true                |
 #
+#    Then review is submitted successfully
+
+#  Scenario: 28 days PCD review of test type Threshold with 28 days action plan
+#    Given I login to case review app
+#    And Search the case "URN"
+#    When I start "28 day PCD Review"
+#    And select test as "Threshold Test"
+#    And I complete the Threshold Test pre-charge analysis details with:
+#      | field                       | value                              |
+#      | Suspect-victim relationship | Partner                            |
+#      | Global monitoring codes     | Asset Recovery; DA specialist court |
+#
+#    And I preview pre charge analysis
+#    When I make charging decision as following:
+#      | decision type     | decision code                   | reason | out come of case | offence category |
+#      | No further action | K - No prosecution - Evidential | D81    | D80              | Robbery          |
+#
+#    And I add an action point plan for "28 days" and "Key Witness Details"
+#    And I submit the charging decision as following
+#      | Investigative stage        | Method | Create MG3 document |
+#      | Bail for charging decision | Area   | true                |
+#
+#    Then review is submitted successfully
 
 
+  Scenario: 28 days PCD review of test type Early Advice with 28 days action plan
+    Given I login to case review app
+    And Search the case "URN"
+    When I start "28 day PCD Review"
+    And select test as "Early Advice"
+    And I complete the Early Advice pre-charge analysis details with:
+      | field                       | value                              |
+      | Suspect-victim relationship | Partner                            |
+      | Global monitoring codes     | Asset Recovery; DA specialist court |
 
+    And I select PCD principal offence category as "Robbery"
+    And I continue without action plan
+    And I submit the charging decision as following
+      | Investigative stage        | Create MG3 document |
+      | Bail for charging decision | true                |
 
-
-
-
-
+    Then review is submitted successfully
 

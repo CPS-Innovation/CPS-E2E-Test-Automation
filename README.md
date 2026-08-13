@@ -79,7 +79,18 @@ all the tests should be tagged with @ui, else browser instance won't get created
 New page is created, newly created page reference needs to added in Pages.class
 TWIF cases uses messaging up, for now run locally instructions are found Link https://dev.azure.com/CPSDTS/Information%20Management/_git/Cps-Police-Message-Simulator-Api?path=/README.md
 
-``` 
+```
+
+#### UI tests with Microsoft AD login
+
+If Microsoft AD redirects appear during login, configure the Microsoft AD credentials separately from the Case Review credentials:
+
+```
+AAD_USER=
+AAD_PASSWORD=
+```
+
+Both values are required. `AAD_USER` should be the Microsoft AD email address. `AAD_PASSWORD` can be a plain pipeline secret or use the same encoded password format as `PASSWORD`.
 
 #### How to record UI tests using playwright java
 

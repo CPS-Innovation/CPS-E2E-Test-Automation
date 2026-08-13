@@ -19,6 +19,9 @@ import static java.lang.String.format;
 
 public class CaseCreateService extends BaseService{
 
+    private static final int TRANSIENT_REQUEST_RETRIES = 2;
+    private static final int TRANSIENT_REQUEST_RETRY_DELAY_MILLIS = 10_000;
+
     @Inject
     PayloadBuilderForCM01 CM01;
 
@@ -43,6 +46,8 @@ public class CaseCreateService extends BaseService{
                 .addHeaders(caseCreateHeaders())
                 .body(payloadInString)
                 .method("POST")
+                .retry(TRANSIENT_REQUEST_RETRIES)
+                .retryDelay(TRANSIENT_REQUEST_RETRY_DELAY_MILLIS)
                 .resourceName(messageType)
                 .build();
     }
@@ -97,6 +102,8 @@ public class CaseCreateService extends BaseService{
                 .addHeaders(caseCreateHeaders())
                 .body(payloadInString)
                 .method("POST")
+                .retry(TRANSIENT_REQUEST_RETRIES)
+                .retryDelay(TRANSIENT_REQUEST_RETRY_DELAY_MILLIS)
                 .resourceName(messageType)
                 .build();
     }

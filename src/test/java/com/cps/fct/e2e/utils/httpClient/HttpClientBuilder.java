@@ -114,7 +114,7 @@ public class HttpClientBuilder {
         private String body;
         private int retryCount = 0;
         private String resourceName;
-        private int retryDelayMillis; // default to 10 seconds
+        private int retryDelayMillis = 10_000; // default to 10 seconds
 
         public Builder baseUri(String baseUri) {
             this.baseUri = baseUri;

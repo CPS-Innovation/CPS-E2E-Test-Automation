@@ -4,6 +4,8 @@ package com.cps.fct.e2e.pages;
 import com.cps.fct.e2e.utils.playwright.PlaywrightContext;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.PlaywrightException;
+import com.microsoft.playwright.TimeoutError;
 import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.LoadState;
 import com.microsoft.playwright.options.SelectOption;
@@ -19,6 +21,11 @@ public abstract class BasePage {
 
 
     private static final int DEFAULT_TIMEOUT_MILLIS = 10000;
+    private static final int RICH_TEXT_EDITOR_WAIT_TIMEOUT_MILLIS = 10000;
+    private static final int RICH_TEXT_STABLE_FOR_MILLIS = 500;
+    // Fallback settle after the editor reports ready: there is no exposed "CKEditor initialised"
+    // signal, and autosave can re-render the editable moments after it mounts.
+    private static final int RICH_TEXT_READY_SETTLE_MILLIS = 300;
 
     protected Page page;
 
@@ -243,7 +250,10 @@ public abstract class BasePage {
             try {
                 String actualText = page.locator(selector).innerText();
                 return actualText.contains(expectedText);
-            } catch (Exception e) {
+            } catch (PlaywrightException e) {
+                if (isGenuineLocatorError(e)) {
+                    throw e;
+                }
                 return false;
             }
         });
@@ -253,7 +263,10 @@ public abstract class BasePage {
             page.waitForCondition(() -> {
                 try {
                     return page.content().contains(expectedText);
-                } catch (Exception e) {
+                } catch (PlaywrightException e) {
+                    if (isGenuineLocatorError(e)) {
+                        throw e;
+                    }
                     return false;
                 }
             });
@@ -294,16 +307,139 @@ public abstract class BasePage {
     }
 
 
+    /**
+     * Tells a genuine locator/selector bug apart from an expected transient condition while polling.
+     * A strict-mode violation (selector matched multiple elements) or a malformed selector is a test
+     * bug that must surface immediately rather than being retried until timeout. Absence/slowness
+     * ({@link TimeoutError}) and other transient states are legitimately treated as "not yet".
+     */
+    protected static boolean isGenuineLocatorError(RuntimeException error) {
+        if (error instanceof TimeoutError) {
+            return false;
+        }
+        String message = error.getMessage();
+        if (message == null) {
+            return false;
+        }
+        return message.contains("strict mode violation")
+                || message.contains("Unknown engine")
+                || message.contains("Unexpected token")
+                || message.contains("Malformed selector")
+                || message.contains("Cannot parse selector");
+    }
+
     public void fillRichTextEditor(String editorSelector, String textToEnter) {
-        Locator editor = page.locator(editorSelector);
-        editor.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
-
-        // Click to focus
+        // Resolve to a single element so lingering editors from earlier sections can't cause a
+        // strict-mode violation (which the commit wait would otherwise swallow into a timeout).
+        Locator editor = page.locator(editorSelector).first();
+        waitForRichTextEditorReady(editor);
+        editor.scrollIntoViewIfNeeded();
         editor.click();
+        editor.press("Control+A");
+        editor.press("Backspace");
+        // Insert the whole string in a single operation. Character-by-character typing
+        // (pressSequentially) races the editor's autosave/re-render: when autosave detaches and
+        // re-mounts the editable mid-type, the remaining keystrokes are dropped, leaving only a
+        // prefix (e.g. "...On my e"). insertText delivers one input event, so it can't be
+        // truncated that way.
+        page.keyboard().insertText(textToEnter);
 
-        // Fill or type the text
-        editor.type(textToEnter, new Locator.TypeOptions().setDelay(5));
+        waitForRichTextEditorToCommit(editor, textToEnter);
+    }
 
+    private void waitForRichTextEditorReady(Locator editor) {
+        // Node present and shown.
+        editor.waitFor(new Locator.WaitForOptions()
+                .setState(WaitForSelectorState.VISIBLE)
+                .setTimeout(RICH_TEXT_EDITOR_WAIT_TIMEOUT_MILLIS));
+        // CKEditor attaches asynchronously after the node becomes visible; wait until it is actually
+        // editable so keystrokes/insertText are not lost against an un-initialised editor.
+        assertThat(editor).isEditable();
+        // Fallback: no reliable "initialised" event is exposed and autosave can re-render the
+        // editable just after mount, so give it a brief moment to settle before inserting.
+        page.waitForTimeout(RICH_TEXT_READY_SETTLE_MILLIS);
+    }
+
+    private void waitForRichTextEditorToCommit(Locator editor, String expectedText) {
+        waitForRichTextEditorToContain(editor, expectedText);
+        editor.press("Tab");
+        dispatchRichTextEditorCommitEvents(editor);
+        waitForRichTextEditorTextToSettle(editor, expectedText);
+    }
+
+    private void waitForRichTextEditorToContain(Locator editor, String expectedText) {
+        String normalizedExpectedText = normalizeRichText(expectedText);
+        page.waitForCondition(() -> {
+            try {
+                return normalizeRichText(editor.innerText()).contains(normalizedExpectedText);
+            } catch (PlaywrightException e) {
+                if (isGenuineLocatorError(e)) {
+                    throw e;
+                }
+                return false;
+            }
+        });
+    }
+
+    private void waitForRichTextEditorTextToSettle(Locator editor, String expectedText) {
+        String[] lastEditorText = {null};
+        long[] stableSince = {0};
+        String normalizedExpectedText = normalizeRichText(expectedText);
+
+        page.waitForCondition(() -> {
+            try {
+                String currentEditorText = editor.innerText();
+                if (!normalizeRichText(currentEditorText).contains(normalizedExpectedText)) {
+                    stableSince[0] = 0;
+                    lastEditorText[0] = currentEditorText;
+                    return false;
+                }
+
+                long now = System.currentTimeMillis();
+                if (!currentEditorText.equals(lastEditorText[0])) {
+                    stableSince[0] = now;
+                    lastEditorText[0] = currentEditorText;
+                    return false;
+                }
+
+                return now - stableSince[0] >= RICH_TEXT_STABLE_FOR_MILLIS
+                        && !richTextEditorHasFocus(editor);
+            } catch (PlaywrightException e) {
+                if (isGenuineLocatorError(e)) {
+                    throw e;
+                }
+                return false;
+            }
+        });
+    }
+
+    private String normalizeRichText(String text) {
+        return text
+                .replace("\u00A0", " ")
+                .replace("\u2026", "...")
+                .replace("\u2018", "'")
+                .replace("\u2019", "'")
+                .replace("\u201C", "\"")
+                .replace("\u201D", "\"")
+                .replaceAll("\\s+", " ")
+                .trim();
+    }
+
+    private void dispatchRichTextEditorCommitEvents(Locator editor) {
+        editor.evaluate("""
+                element => {
+                    element.dispatchEvent(new InputEvent('input', { bubbles: true, inputType: 'insertText' }));
+                    element.dispatchEvent(new Event('change', { bubbles: true }));
+                    element.dispatchEvent(new FocusEvent('blur', { bubbles: true }));
+                    element.dispatchEvent(new FocusEvent('focusout', { bubbles: true }));
+                    element.blur();
+                }
+                """);
+    }
+
+    private boolean richTextEditorHasFocus(Locator editor) {
+        Object hasFocus = editor.evaluate("element => element === document.activeElement || element.contains(document.activeElement)");
+        return Boolean.TRUE.equals(hasFocus);
     }
 
 

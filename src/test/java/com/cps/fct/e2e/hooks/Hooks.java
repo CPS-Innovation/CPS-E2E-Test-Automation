@@ -18,7 +18,6 @@ import org.picocontainer.annotations.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static com.cps.fct.e2e.utils.common.EnvConfig.get;
 import static com.cps.fct.e2e.utils.common.EnvConfig.getEnv;
 
 
@@ -34,6 +33,7 @@ public class Hooks {
 
     private static final String CIN3_SUFFIX = ".CIN3";
     private static final String CIN5_SUFFIX = ".CIN5";
+    private static final String CASE_TYPE_KEY = "CASE_TYPE";
 
 
     @Getter
@@ -109,20 +109,34 @@ public class Hooks {
         context.set("envSuffix", suffix);
     }
 
+//    This was used if CASE_TYPE is missing, get("CASE_TYPE") may return null, then .toUpperCase()
+//    causes a less helpful NullPointerException. Very solid solution and helps with debugging
     public void setSuffixBasedOnCaseTypeInEnv(Scenario scenario) {
-        String suffix = "";
+        String caseTypeValue = requireEnvValue(CASE_TYPE_KEY).toUpperCase();
+        String suffix = suffixForCaseType(caseTypeValue);
 
-        String caseTypeEnv = get("CASE_TYPE");
-        String caseTypeValue = caseTypeEnv.toUpperCase();
+        context.set("caseType", caseTypeValue);
+        context.set("envSuffix", suffix);
+    }
 
-            if (caseTypeValue.contains("DCF")) {
-                suffix = CIN5_SUFFIX;
-            } else if (caseTypeValue.contains("TWIF")) {
-                suffix = CIN3_SUFFIX;
-            }
-            context.set("caseType", caseTypeValue);
-            context.set("envSuffix", suffix);
+    private String suffixForCaseType(String caseType) {
+        if (caseType.contains("DCF")) {
+            return CIN5_SUFFIX;
         }
+        if (caseType.contains("TWIF")) {
+            return CIN3_SUFFIX;
+        }
+        throw new IllegalArgumentException("Unsupported CASE_TYPE value: " + caseType
+                + ". Expected DCF or TWIF.");
+    }
+
+    private String requireEnvValue(String key) {
+        String value = getEnv(key);
+        if (value == null || value.isBlank()) {
+            throw new IllegalStateException("No value found in environment for key: " + key);
+        }
+        return value;
+    }
 
 }
 

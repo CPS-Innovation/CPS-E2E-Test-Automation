@@ -24,7 +24,7 @@ public class SelectTestPage extends BasePage {
 
     private SelectTestPage clickSaveAndContinue()
     {
-      click("button[title='Save and Continue']");
+      click("button[type='button']:has-text('Save and continue')");
       return this;
     }
 

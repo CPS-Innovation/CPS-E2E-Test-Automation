@@ -1,4 +1,4 @@
-package com.cps.fct.e2e.model;
+package com.cps.fct.e2e.model.victimCaseApp;
 
 import java.util.List;
 

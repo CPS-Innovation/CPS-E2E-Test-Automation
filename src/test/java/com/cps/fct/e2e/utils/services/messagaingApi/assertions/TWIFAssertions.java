@@ -1,6 +1,6 @@
 package com.cps.fct.e2e.utils.services.messagaingApi.assertions;
 
-import com.cps.fct.e2e.model.TWIFMessageResponse;
+import com.cps.fct.e2e.model.apiSimulatorTwif.TWIFMessageResponse;
 import com.cps.fct.e2e.utils.httpClient.HttpResponseWrapper;
 import com.cps.fct.e2e.utils.httpClient.ResourceResponseStore;
 //import io.cucumber.messages.ndjson.internal.com.fasterxml.jackson.core.JsonProcessingException;

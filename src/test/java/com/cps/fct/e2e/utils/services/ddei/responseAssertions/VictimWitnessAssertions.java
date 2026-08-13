@@ -1,12 +1,11 @@
 package com.cps.fct.e2e.utils.services.ddei.responseAssertions;
 
-import com.cps.fct.e2e.model.VictimWitnessDetails;
-import com.cps.fct.e2e.utils.common.JsonUtils;
+import com.cps.fct.e2e.model.victimCaseApp.VictimCmsDetails;
 import com.cps.fct.e2e.utils.httpClient.HttpResponseWrapper;
-import com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VcaPersonalDetails;
-import com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimContactDetails;
-import com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimLiaisonOfficerDetails;
-import com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimMeetingDetails;
+import com.cps.fct.e2e.model.victimCaseApp.VictimVcaDetails;
+import com.cps.fct.e2e.model.victimCaseApp.VictimContacts;
+import com.cps.fct.e2e.model.victimCaseApp.VictimLiaisonOfficerDetails;
+import com.cps.fct.e2e.model.victimCaseApp.VictimMeetings;
 import io.restassured.response.Response;
 import org.assertj.core.api.SoftAssertions;
 
@@ -19,8 +18,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class VictimWitnessAssertions {
 
-    public static void assertCMSPersonalDetails(String id,VictimWitnessDetails inputDetails,
-                                                 HttpResponseWrapper responsePayload)
+    public static void assertCMSPersonalDetails(String id, VictimCmsDetails inputDetails,
+                                                HttpResponseWrapper responsePayload)
     {
         SoftAssertions softly = new SoftAssertions();
         String responseBody = responsePayload.getBody();
@@ -42,8 +41,8 @@ public class VictimWitnessAssertions {
         softly.assertAll();
     }
 
-    public static void assertCategoryDetails(String id,VictimWitnessDetails inputDetails,
-                                                HttpResponseWrapper responsePayload)
+    public static void assertCategoryDetails(String id, VictimCmsDetails inputDetails,
+                                             HttpResponseWrapper responsePayload)
     {
         SoftAssertions softly = new SoftAssertions();
         String responseBody = responsePayload.getBody();
@@ -59,7 +58,7 @@ public class VictimWitnessAssertions {
         softly.assertAll();
     }
 
-    public static void assertVCAPersonalDetails(String guid,VcaPersonalDetails inputDetails,
+    public static void assertVCAPersonalDetails(String guid, VictimVcaDetails inputDetails,
                                                 HttpResponseWrapper responsePayload)
     {
         SoftAssertions softly = new SoftAssertions();
@@ -102,7 +101,7 @@ public class VictimWitnessAssertions {
 
     }
 
-    public static void assertContactTypeDetails(int contactTypeCode, VictimContactDetails inputDetails,
+    public static void assertContactTypeDetails(int contactTypeCode, VictimContacts inputDetails,
                                                 Response responsePayload)
     {
         SoftAssertions softly = new SoftAssertions();
@@ -124,7 +123,7 @@ public class VictimWitnessAssertions {
         softly.assertAll();
     }
 
-    public static void assertMeetingTypeDetails(int meetingTypeCode, VictimMeetingDetails inputDetails,
+    public static void assertMeetingTypeDetails(int meetingTypeCode, VictimMeetings inputDetails,
                                                 Response responsePayload)
     {
 //        SoftAssertions softly = new SoftAssertions();
@@ -140,7 +139,7 @@ public class VictimWitnessAssertions {
 
     }
 
-    public static void assertMeetingStatusDetails(int meetingTypeCode, VictimMeetingDetails inputDetails,
+    public static void assertMeetingStatusDetails(int meetingTypeCode, VictimMeetings inputDetails,
                                                 Response responsePayload)
     {
 
@@ -167,7 +166,7 @@ public class VictimWitnessAssertions {
 
     }
 
-    public static void assertNoResponseMeetingDetails(int meetingTypeCode, VictimMeetingDetails inputDetails,
+    public static void assertNoResponseMeetingDetails(int meetingTypeCode, VictimMeetings inputDetails,
                                                    Response responsePayload)
     {
 

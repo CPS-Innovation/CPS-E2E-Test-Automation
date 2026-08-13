@@ -1,6 +1,6 @@
-package com.cps.fct.e2e.utils.services.messagaingApi;
+package com.cps.fct.e2e.utils.services.caseCreation;
 
-import com.cps.fct.e2e.model.CaseResponse;
+import com.cps.fct.e2e.model.caseCreation.CaseResponse;
 import com.cps.fct.e2e.utils.common.EnvConfig;
 import com.cps.fct.e2e.utils.common.JsonUtils;
 import com.cps.fct.e2e.utils.common.ScenarioContext;

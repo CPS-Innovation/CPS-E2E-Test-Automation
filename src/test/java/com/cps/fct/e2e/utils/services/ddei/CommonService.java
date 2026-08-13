@@ -28,7 +28,6 @@ public class CommonService extends BaseService {
         context.set("Cms-Auth-Values", responseWrapper.getBody());
     }
 
-
     private HttpClientBuilder caseCreateAuthRequest(ScenarioContext context) {
         return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("CASE_CREATE_AUTH_URL"))

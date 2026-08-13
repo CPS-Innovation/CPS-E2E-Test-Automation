@@ -1,4 +1,4 @@
-package com.cps.fct.e2e.model;
+package com.cps.fct.e2e.model.caseCreation;
 
 import lombok.Getter;
 import lombok.Setter;

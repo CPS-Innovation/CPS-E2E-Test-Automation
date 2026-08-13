@@ -1,4 +1,4 @@
-package com.cps.fct.e2e.utils.services.ddei.payloadBuilder;
+package com.cps.fct.e2e.model.victimCaseApp;
 
 import com.cps.fct.e2e.enums.PreferredMethodOfContact;
 import com.google.gson.TypeAdapter;

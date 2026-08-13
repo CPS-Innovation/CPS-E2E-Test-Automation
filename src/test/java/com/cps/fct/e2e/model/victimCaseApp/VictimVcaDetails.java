@@ -1,4 +1,4 @@
-package com.cps.fct.e2e.utils.services.ddei.payloadBuilder;
+package com.cps.fct.e2e.model.victimCaseApp;
 
 import com.cps.fct.e2e.enums.PreferredMethodOfContact;
 import lombok.Builder;
@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class VcaPersonalDetails {
+public class VictimVcaDetails {
     private String PreferredName;
     private boolean IsYouth;
     private PreferredMethodOfContact preferredMethodOfContact;

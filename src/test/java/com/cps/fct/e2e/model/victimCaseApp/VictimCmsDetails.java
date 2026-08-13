@@ -1,11 +1,11 @@
-package com.cps.fct.e2e.model;
+package com.cps.fct.e2e.model.victimCaseApp;
 
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-public class VictimWitnessDetails {
+public class VictimCmsDetails {
     private String title;
     private String firstName;
     private String surname;

@@ -1,7 +1,7 @@
 package com.cps.fct.e2e.utils.services.ddei.payloadBuilder;
 
 import com.cps.fct.e2e.enums.PreferredMethodOfContact;
-import com.cps.fct.e2e.model.VictimWitnessDetails;
+import com.cps.fct.e2e.model.victimCaseApp.*;
 import com.cps.fct.e2e.utils.common.FakerUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -16,8 +16,8 @@ import static com.cps.fct.e2e.utils.common.JsonUtils.toJsonString;
 
 public class VictimWitnessPayloadBuilder {
 
-    public static VictimWitnessDetails getVictimWitnessDetails() {
-        return VictimWitnessDetails.builder()
+    public static VictimCmsDetails getVictimWitnessDetails() {
+        return VictimCmsDetails.builder()
 //                .title(FakerUtils.title())
                 .title("Mr")
                 .firstName(FakerUtils.firstName())
@@ -38,8 +38,8 @@ public class VictimWitnessPayloadBuilder {
                 .build();
     }
 
-    public static VictimWitnessDetails getVictimWitnessCategory(String categoryCode) {
-        return VictimWitnessDetails.builder()
+    public static VictimCmsDetails getVictimWitnessCategory(String categoryCode) {
+        return VictimCmsDetails.builder()
                 .category(categoryCode)
                 .justification("JUSTIFICATION TEXT")
                 .build();
@@ -53,8 +53,8 @@ public class VictimWitnessPayloadBuilder {
         return gson.toJson(object);
     }
 
-    public static VcaPersonalDetails addVcaPersonalDetails() {
-        return VcaPersonalDetails.builder()
+    public static VictimVcaDetails addVcaPersonalDetails() {
+        return VictimVcaDetails.builder()
                 .PreferredName("Add E2E Automation")
                 .preferredMethodOfContact(PreferredMethodOfContact.EMAIL)
                 .IsYouth(Boolean.FALSE)
@@ -66,8 +66,8 @@ public class VictimWitnessPayloadBuilder {
                 .build();
     }
 
-    public static VcaPersonalDetails updateVcaPersonalDetails() {
-        return VcaPersonalDetails.builder()
+    public static VictimVcaDetails updateVcaPersonalDetails() {
+        return VictimVcaDetails.builder()
                 .PreferredName("Update E2E Automation")
                 .preferredMethodOfContact(PreferredMethodOfContact.HOME_PHONE)
                 .IsYouth(Boolean.TRUE)
@@ -89,10 +89,10 @@ public class VictimWitnessPayloadBuilder {
     }
 
 
-    public static VictimContactDetails payLoadForAddVictimContactDetails(int contactTypeCode) {
+    public static VictimContacts payLoadForAddVictimContactDetails(int contactTypeCode) {
 
         if (contactTypeCode == 2) {
-            return VictimContactDetails.builder()
+            return VictimContacts.builder()
                     .ContactName(FakerUtils.fullName())
                     .ContactTelephone(FakerUtils.homePhone())
                     .ContactEmail(FakerUtils.email())
@@ -101,7 +101,7 @@ public class VictimWitnessPayloadBuilder {
                     .Address(Address.builder().build())
                     .build();
         } else {
-            return VictimContactDetails.builder()
+            return VictimContacts.builder()
                     .ContactName(FakerUtils.fullName())
                     .ContactTelephone(FakerUtils.homePhone())
                     .ContactEmail(FakerUtils.email())
@@ -121,10 +121,10 @@ public class VictimWitnessPayloadBuilder {
         }
     }
 
-    public static VictimContactDetails payLoadForUpdateVictimContactDetails(int contactTypeCode) {
+    public static VictimContacts payLoadForUpdateVictimContactDetails(int contactTypeCode) {
 
         if (contactTypeCode == 2) {
-            return VictimContactDetails.builder()
+            return VictimContacts.builder()
                     .ContactName("NEWSURENAME Update")
                     .ContactTelephone("07777777777")
                     .ContactEmail("new_email_address@gov.gov")
@@ -133,7 +133,7 @@ public class VictimWitnessPayloadBuilder {
                     .Address(Address.builder().build())
                     .build();
         } else {
-            return VictimContactDetails.builder()
+            return VictimContacts.builder()
                     .ContactName("NEWSURENAME Update")
                     .ContactTelephone("07777777777")
                     .ContactEmail("new_email_address@gov.gov")
@@ -163,7 +163,7 @@ public class VictimWitnessPayloadBuilder {
         return toJsonString(payload);
     }
 
-    public static String payLoadForAddWitnessDetailsWitnessId(VictimWitnessDetails victimDetails) {
+    public static String payLoadForAddWitnessDetailsWitnessId(VictimCmsDetails victimDetails) {
         UpdateWitnessDetailsWitnessIdJsonBuilder builder = new UpdateWitnessDetailsWitnessIdJsonBuilder();
         List<Map<String, Object>> patchPayload = builder
                 .add("/contactDetails/title", victimDetails.getTitle())
@@ -190,7 +190,7 @@ public class VictimWitnessPayloadBuilder {
         return gson.toJson(patchPayload);
     }
 
-    public static String payLoadForUpdateWitnessDetailsWitnessId(VictimWitnessDetails victimDetails) {
+    public static String payLoadForUpdateWitnessDetailsWitnessId(VictimCmsDetails victimDetails) {
         UpdateWitnessDetailsWitnessIdJsonBuilder builder = new UpdateWitnessDetailsWitnessIdJsonBuilder();
         List<Map<String, Object>> patchPayload = builder
                 .replace("/contactDetails/title", "Dr")
@@ -217,7 +217,7 @@ public class VictimWitnessPayloadBuilder {
         return gson.toJson(patchPayload);
     }
 
-    public static String payLoadForAddOrUpdateCategory(VictimWitnessDetails victimDetails) {
+    public static String payLoadForAddOrUpdateCategory(VictimCmsDetails victimDetails) {
         UpdateWitnessDetailsWitnessIdJsonBuilder builder = new UpdateWitnessDetailsWitnessIdJsonBuilder();
         List<Map<String, Object>> patchPayload = builder
                 .replace("/types", victimDetails.getCategory())
@@ -228,9 +228,9 @@ public class VictimWitnessPayloadBuilder {
         return gson.toJson(patchPayload);
     }
 
-    public static VictimMeetingDetails payLoadForAddVictimMeetingDetails(int meetingTypeCode, String reason) {
+    public static VictimMeetings payLoadForAddVictimMeetingDetails(int meetingTypeCode, String reason) {
 
-        return VictimMeetingDetails.builder()
+        return VictimMeetings.builder()
                 .MeetingType(meetingTypeCode)
                 .MeetingContextGuid(FakerUtils.uuid())
                 .MeetingOffered(false)
@@ -242,9 +242,9 @@ public class VictimWitnessPayloadBuilder {
                 .build();
     }
 
-    public static VictimMeetingDetails payLoadForAddVictimMeetingMethodDetails(int meetingTypeCode, int methodTypeCode) {
+    public static VictimMeetings payLoadForAddVictimMeetingMethodDetails(int meetingTypeCode, int methodTypeCode) {
 
-        return VictimMeetingDetails.builder()
+        return VictimMeetings.builder()
                 .MeetingType(meetingTypeCode)
                 .MeetingContextGuid(FakerUtils.uuid())
                 .MeetingOffered(true)
@@ -255,9 +255,9 @@ public class VictimWitnessPayloadBuilder {
                 .build();
     }
 
-    public static VictimMeetingDetails payLoadForMeetingStatusDetails(int meetingTypeCode, int methodTypeCode, String meetingStatus) {
+    public static VictimMeetings payLoadForMeetingStatusDetails(int meetingTypeCode, int methodTypeCode, String meetingStatus) {
 
-        return VictimMeetingDetails.builder()
+        return VictimMeetings.builder()
                 .MeetingType(meetingTypeCode)
                 .MethodOfOffer(methodTypeCode)
                 .DateOfOffer(todayMinusFiveDays())
@@ -272,9 +272,9 @@ public class VictimWitnessPayloadBuilder {
                 .build();
     }
 
-    public static VictimMeetingDetails payLoadForNoResponseMeetingDetails(int meetingTypeCode, int methodTypeCode) {
+    public static VictimMeetings payLoadForNoResponseMeetingDetails(int meetingTypeCode, int methodTypeCode) {
 
-        return VictimMeetingDetails.builder()
+        return VictimMeetings.builder()
                 .MeetingType(meetingTypeCode)
                 .MethodOfOffer(methodTypeCode)
                 .DateOfOffer(todayMinusFiveDays())

@@ -18,8 +18,8 @@ import org.picocontainer.annotations.Inject;
 
 import java.util.*;
 
-import static com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimWitnessPayloadBuilder.*;
-import static com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimWitnessPayloadBuilder.convertObjectToString;
+import static com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimCaseAppPayloadBuilder.*;
+import static com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimCaseAppPayloadBuilder.convertObjectToString;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -308,7 +308,7 @@ public class VictimCaseAppStepDefinition {
         };
 
         for (String id : witnessVictimMapIds.get(witnessVictimType)) {
-            VictimContacts victimContacts = VictimWitnessPayloadBuilder.payLoadForAddVictimContactDetails(contactTypeCode);
+            VictimContacts victimContacts = VictimCaseAppPayloadBuilder.payLoadForAddVictimContactDetails(contactTypeCode);
             victimService.addVictimContactDetailsToVCA(idGuidMap.get(id), convertObjectToString(victimContacts));
             victimContactDetailsMap.put(contactTypeCode, victimContacts);
         }
@@ -354,7 +354,7 @@ public class VictimCaseAppStepDefinition {
         };
 
         for (String id : witnessVictimMapIds.get(witnessVictimType)) {
-            VictimContacts victimContacts = VictimWitnessPayloadBuilder.payLoadForUpdateVictimContactDetails(contactTypeCode);
+            VictimContacts victimContacts = VictimCaseAppPayloadBuilder.payLoadForUpdateVictimContactDetails(contactTypeCode);
             victimService.updateVictimContactDetailsToVCA(idGuidMap.get(id), convertObjectToString(victimContacts));
             victimContactDetailsMap.put(contactTypeCode, victimContacts);
         }
@@ -582,7 +582,7 @@ public class VictimCaseAppStepDefinition {
             meetingTypeCodeList.add(meetingTypeCode);
 
             for (String id : witnessVictimMapIds.get(witnessVictimType)) {
-                VictimMeetings victimMeetings = VictimWitnessPayloadBuilder.payLoadForAddVictimMeetingDetails(meetingTypeCode, reason);
+                VictimMeetings victimMeetings = VictimCaseAppPayloadBuilder.payLoadForAddVictimMeetingDetails(meetingTypeCode, reason);
                 victimService.addVictimMeetingDetailsToVCA(idGuidMap.get(id), convertObjectToString(victimMeetings));
                 victimMeetingDetailsMap.put(meetingTypeCode, victimMeetings);
             }
@@ -632,7 +632,7 @@ public class VictimCaseAppStepDefinition {
             methodTypeCodeList.add(methodTypeCode);
 
             for (String id : witnessVictimMapIds.get(witnessVictimType)) {
-                VictimMeetings victimMeetings = VictimWitnessPayloadBuilder.payLoadForAddVictimMeetingMethodDetails(meetingTypeCode, methodTypeCode);
+                VictimMeetings victimMeetings = VictimCaseAppPayloadBuilder.payLoadForAddVictimMeetingMethodDetails(meetingTypeCode, methodTypeCode);
                 HttpResponseWrapper response = victimService.addVictimMeetingDetailsToVCA(idGuidMap.get(id), convertObjectToString(victimMeetings));
 //                String responseBody = response.getBody();
 //                String meetingContextGuid = JsonPath.read(responseBody, "$.value.meetingContextGuid");
@@ -662,7 +662,7 @@ public class VictimCaseAppStepDefinition {
             for (int i = 0; i < meetingTypeCodeList.size() && i < methodTypeCodeList.size(); i++) {
                 Integer meetingTypeCode = meetingTypeCodeList.get(i);
                 Integer methodTypeCode = methodTypeCodeList.get(i);
-                VictimMeetings victimMeetings = VictimWitnessPayloadBuilder.payLoadForMeetingStatusDetails(meetingTypeCode, methodTypeCode, meetingStatus);
+                VictimMeetings victimMeetings = VictimCaseAppPayloadBuilder.payLoadForMeetingStatusDetails(meetingTypeCode, methodTypeCode, meetingStatus);
                 victimService.victimMeetingStatus(idGuidMap.get(id), convertObjectToString(victimMeetings));
                 victimMeetingDetailsMap.put(meetingTypeCode, victimMeetings);
             }
@@ -709,7 +709,7 @@ public class VictimCaseAppStepDefinition {
             for (int i = 0; i < meetingTypeCodeList.size() && i < methodTypeCodeList.size(); i++) {
                 Integer meetingTypeCode = meetingTypeCodeList.get(i);
                 Integer methodTypeCode = methodTypeCodeList.get(i);
-                VictimMeetings victimMeetings = VictimWitnessPayloadBuilder.payLoadForNoResponseMeetingDetails(meetingTypeCode, methodTypeCode);
+                VictimMeetings victimMeetings = VictimCaseAppPayloadBuilder.payLoadForNoResponseMeetingDetails(meetingTypeCode, methodTypeCode);
                 victimService.noResponseVictimMeeting(idGuidMap.get(id), convertObjectToString(victimMeetings));
                 victimMeetingDetailsMap.put(meetingTypeCode, victimMeetings);
             }

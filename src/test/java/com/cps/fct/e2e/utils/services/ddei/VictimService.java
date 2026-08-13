@@ -1,11 +1,13 @@
 package com.cps.fct.e2e.utils.services.ddei;
 
+import com.cps.fct.e2e.model.victimCaseApp.VictimCaseInfo;
 import com.cps.fct.e2e.model.victimCaseApp.VictimCmsDetails;
 import com.cps.fct.e2e.utils.common.EnvConfig;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
 import com.cps.fct.e2e.utils.httpClient.HttpClientBuilder;
 import com.cps.fct.e2e.utils.httpClient.HttpResponseWrapper;
 import com.cps.fct.e2e.utils.services.BaseService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 
 import java.util.HashMap;
@@ -16,6 +18,7 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 
 import static com.cps.fct.e2e.utils.common.JsonUtils.extractFromJsonToList;
+import static com.cps.fct.e2e.utils.common.JsonUtils.toJsonString;
 import static com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimWitnessPayloadBuilder.*;
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -120,6 +123,45 @@ public class VictimService extends BaseService {
         context.set("witnessMapIds", witnessMapIds);
         
     }
+
+    public String caseVictimGuid(String caseUrn, String caseId, String victimId ){
+        HttpResponseWrapper responseWrapper = service.sendRequest(
+                addCaseVictimToVCARequestParams(caseUrn, caseId, victimId));
+        String victimCaseInfoGuid = JsonPath.read(responseWrapper.getBody(), "$.value.CaseInfoGuid");
+        assertThat(victimCaseInfoGuid)
+                .withFailMessage("CaseInfoGuid was not returned from the API response")
+                .isNotNull();
+        return victimCaseInfoGuid;
+    }
+
+    private HttpClientBuilder addCaseVictimToVCARequestParams(String caseUrn, String caseId, String victimId) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/victims/urns/%s/cases/%s/parties/%s", caseUrn, caseId, victimId))
+                .addHeaders(ddeiHeaders())
+                .method("POST")
+                .body(postCaseVictimGuid(caseUrn))
+                .resourceName("addVictimWitnessToVCA")
+                .build();
+    }
+
+
+
+
+//    public String victimWitnessGuid(String caseUrn, String caseId, String WitnessVictimId) {
+//        HttpResponseWrapper responseWrapper = service.sendRequest(
+//                addVictimOrWitnessRequestParams(caseUrn, caseId, WitnessVictimId));
+//        String victimCaseInfoGuid = JsonPath.read(responseWrapper.getBody(), "$.value.victimCaseInfoGuid");
+//        assertThat(victimCaseInfoGuid)
+//                .withFailMessage("victimCaseInfoGuid")
+//                .isNotNull();
+//        return victimCaseInfoGuid;
+//    }
+//
+
+
+
+
 
 
 

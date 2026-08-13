@@ -16,6 +16,18 @@ import static com.cps.fct.e2e.utils.common.JsonUtils.toJsonString;
 
 public class VictimWitnessPayloadBuilder {
 
+    public static VictimCaseInfo postCaseVictimGuid(String caseUrn){
+        return VictimCaseInfo.builder()
+                .urn(caseUrn)
+                .createdBy("Automation User")
+                .build();
+    }
+
+
+
+
+
+
     public static VictimCmsDetails getVictimWitnessDetails() {
         return VictimCmsDetails.builder()
 //                .title(FakerUtils.title())

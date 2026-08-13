@@ -42,8 +42,17 @@ public class VictimCaseAppStepDefinition {
     @Given("victim details are available in VCA")
     public void victimDetailsInVCA() {
         service.createCmsAuthToken(context);
-        HttpResponseWrapper response = victimService.victimWitnessList(context.get("caseId"));
-        victimService.victimWitnessIds(response, context);
+
+       Map<String, String> idGuidMap = new HashMap<>();
+        context.set("idGuidMap", idGuidMap);
+
+        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
+
+        HttpResponseWrapper responseVictimWitnessIds = victimService.victimWitnessList(context.get("caseId"));
+        victimService.victimWitnessIds(responseVictimWitnessIds, context);
+
+
+//        HttpResponseWrapper responseCaseInfoGuid = victimService.victimCaseGuid(context.get("caseUrn"), context.get("caseId"), id);
 
 //        Map<String, VictimCmsDetails> victimDetailsToCMS = new HashMap<>();
 //        context.set("victimDetailsToCMS", victimDetailsToCMS);
@@ -72,10 +81,23 @@ public class VictimCaseAppStepDefinition {
     }
 
     @When("the {string} is onboarded as {string} service lead to VCA")
-    public void victimOnboardForService(String witnessVictimType, String service) {
+    public void victimOnboardForService(String victimType, String service) {
 
-//        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
-//        Map<String, String> idGuidMap = context.get("idGuidMap");
+        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
+
+        Map<String, String> idGuidMap = new HashMap<>();
+        context.set("idGuidMap", idGuidMap);
+
+
+                for (String id : victimMapIds.get(victimType)) {
+                    String caseVictimGuid = victimService.caseVictimGuid(context.get("caseUrn"), context.get("caseId"), id);
+                    System.out.println(caseVictimGuid);
+
+//            String guid = witnessService.victimWitnessGuid(context.get("caseUrn"), context.get("caseId"), id, serviceTypeCode.getValue());
+//            idGuidMap.put(id, guid);
+        }
+
+
 //
 //        VictimOnboardService serviceTypeCode = VictimOnboardService.fromString(service);
 //

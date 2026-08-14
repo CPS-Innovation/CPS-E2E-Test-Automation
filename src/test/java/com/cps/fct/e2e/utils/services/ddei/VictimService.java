@@ -177,8 +177,7 @@ public class VictimService extends BaseService {
         service.sendRequest(assignVictimLiaisonOfficerRequestParams(guid, requestBody));
     }
 
-    private HttpClientBuilder assignVictimLiaisonOfficerRequestParams(
-            String guid, String requestBody) {
+    private HttpClientBuilder assignVictimLiaisonOfficerRequestParams( String guid, String requestBody) {
         return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("DDEI_HOST"))
                 .endpoint(format("/api/victims/case-info/%s", guid))
@@ -209,8 +208,7 @@ public class VictimService extends BaseService {
         service.sendRequest(addVictimPersonalDetailsToVCARequestParams(guid, requestBody));
     }
 
-    private HttpClientBuilder addVictimPersonalDetailsToVCARequestParams(
-            String guid, String requestBody) {
+    private HttpClientBuilder addVictimPersonalDetailsToVCARequestParams(String guid, String requestBody) {
         return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("DDEI_HOST"))
                 .endpoint(format("/api/victims/case-info/%s", guid))
@@ -249,6 +247,50 @@ public class VictimService extends BaseService {
                 .resourceName("getVictimPersonalDetailsFromVca")
                 .build();
     }
+
+    public void updateVictimPersonalDetailsToCMS(VictimCmsDetails details, String caseId, String victimId) {
+        service.sendRequest(updateVictimPersonalDetailsToCMSRequestParams(details, caseId, victimId));
+    }
+
+    private HttpClientBuilder updateVictimPersonalDetailsToCMSRequestParams(VictimCmsDetails victimDetails,
+                                                                         String caseId, String victimId) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/cases/%s/witnesses/%s", caseId, victimId))
+                .addHeaders(ddeiHeaders())
+                .method("PATCH")
+                .body(payLoadUpdateVictimPersonalDetailsToCMS(victimDetails))
+                .resourceName("updateVictimPersonalDetailsToCms")
+                .build();
+    }
+
+    public void updateVictimPersonalDetailsInVCA(String guid, String requestBody) {
+        service.sendRequest(updateVictimDetailsInVCARequestParams(guid, requestBody));
+    }
+
+    private HttpClientBuilder updateVictimDetailsInVCARequestParams(
+            String guid, String requestBody) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/victims/case-info/%s", guid))
+                .addHeaders(ddeiHeaders())
+                .method("PATCH")
+                .body(requestBody)
+                .resourceName("addVictimWitnessPersonalDetails")
+                .build();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -396,9 +438,6 @@ public class VictimService extends BaseService {
         service.sendRequest(updateVictimContactDetailsRequestParams(guid, requestBody));
     }
 
-    public void updateWitnessVictimDetailsToVCA(String guid, String requestBody) {
-        service.sendRequest(updateWitnessVictimVCADetailsRequestParams(guid, requestBody));
-    }
 
 
 
@@ -466,17 +505,7 @@ public class VictimService extends BaseService {
 
 
 
-    private HttpClientBuilder updateWitnessVictimVCADetailsRequestParams(
-            String guid, String requestBody) {
-        return new HttpClientBuilder.Builder()
-                .baseUri(EnvConfig.get("DDEI_HOST"))
-                .endpoint(format("/api/victims/case-info/%s", guid))
-                .addHeaders(ddeiHeaders())
-                .method("PATCH")
-                .body(requestBody)
-                .resourceName("addVictimWitnessPersonalDetails")
-                .build();
-    }
+
 
 
 

@@ -43,7 +43,7 @@ Feature: VCA-API-S1_S2 - Add personal and contact details for all category types
 #    "witness prisoner"
 #    "witness interpreter"
 
-  @addPersonalAndContactDetailsForAllWitnessAndVictimType
+  @addPersonalAndContactDetailsForVictim
   Scenario: Add victim title, preferred name, date of birth, gender, ethnicity, disability or access needs and previous convictions details
   and verify that newly added details are sent in wm01u message.
     Given victim details are available in VCA

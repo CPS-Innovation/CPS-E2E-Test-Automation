@@ -20,6 +20,7 @@ import org.picocontainer.annotations.Inject;
 import java.util.*;
 
 import static com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimCaseAppPayloadBuilder.*;
+import static com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimCaseAppPayloadBuilder.addVictimPersonalDetailsToCMS;
 import static com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimCaseAppPayloadBuilder.addVictimServiceLead;
 import static com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimCaseAppPayloadBuilder.convertObjectToString;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -51,10 +52,11 @@ public class VictimCaseAppStepDefinition {
         HttpResponseWrapper responseVictimWitnessIds = victimService.victimWitnessList(context.get("caseId"));
         victimService.victimWitnessIds(responseVictimWitnessIds, context);
 
+        Map<String, VictimCmsDetails> victimDetailsToCmsMap = new HashMap<>();
+        context.set("victimDetailsToCmsMap", victimDetailsToCmsMap);
 
-//        HttpResponseWrapper responseCaseInfoGuid = victimService.victimCaseGuid(context.get("caseUrn"), context.get("caseId"), id);
-
-
+        Map<String, VictimVcaDetails> victimDetailsToVcaMap = new HashMap<>();
+        context.set("victimDetailsToVcaMap", victimDetailsToVcaMap);
 //
 //        Map<String, VictimVcaDetails> victimWitnessDetailsToVCA = new HashMap<>();
 //        context.set("victimWitnessDetailsToVCA", victimWitnessDetailsToVCA);
@@ -86,10 +88,9 @@ public class VictimCaseAppStepDefinition {
         VictimVcaDetails victimVcaDetails;
 
         VictimOnboardService serviceTypeCode = VictimOnboardService.fromString(service);
-
+        Map<String, String> idGuidMap = context.get("idGuidMap");
         Map<String, List<String>> victimMapIds = context.get("victimMapIds");
-        Map<String, String> idGuidMap = new HashMap<>();
-        context.set("idGuidMap", idGuidMap);
+
 
         for (String id : victimMapIds.get(victimType)) {
             victimCaseInfo = onboardVictim(context.get("caseUrn"));
@@ -119,15 +120,13 @@ public class VictimCaseAppStepDefinition {
     @When("the {string} personal details are added to CMS")
     public void victimPersonalDetailsToCMS(String victimType) throws InterruptedException {
         VictimCmsDetails victimCmsDetails;
-        String caseId = context.get("caseId");
-        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
 
-        Map<String, VictimCmsDetails> victimDetailsToCmsMap = new HashMap<>();
-        context.set("victimDetailsToCmsMap", victimDetailsToCmsMap);
+        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
+        Map<String, VictimCmsDetails> victimDetailsToCmsMap = context.get("victimDetailsToCmsMap");
 
         for (String id : victimMapIds.get(victimType)) {
             victimCmsDetails = addVictimPersonalDetailsToCMS();
-            victimService.addVictimPersonalDetailsToCMS(victimCmsDetails, caseId, id);
+            victimService.addVictimPersonalDetailsToCMS(victimCmsDetails, context.get("caseId"), id);
             victimDetailsToCmsMap.put(id, victimCmsDetails);
             Thread.sleep(2000);
         }
@@ -140,9 +139,7 @@ public class VictimCaseAppStepDefinition {
 
         Map<String, List<String>> victimMapIds = context.get("victimMapIds");
         Map<String, String> idGuidMap = context.get("idGuidMap");
-
-        Map<String, VictimVcaDetails> victimDetailsToVcaMap = new HashMap<>();
-        context.set("victimDetailsToVcaMap", victimDetailsToVcaMap);
+        Map<String, VictimVcaDetails> victimDetailsToVcaMap = context.get("victimDetailsToVcaMap");
 
         for (String id : victimMapIds.get(victimType)) {
             victimVcaDetails = addVictimPersonalDetailsToVCA();
@@ -179,113 +176,98 @@ public class VictimCaseAppStepDefinition {
         }
     }
 
-
-
-
-
-
-
-
-
-
-//    @Then("the {string} personal details are verified in CMS and VCA")
-//    public void personalDetailsAreVerifiedInCMSAndVCA(String victimType) throws InterruptedException {
-////        HttpResponseWrapper response;
-////        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
-////        Map<String, VictimCmsDetails> victimWitnessDetailsToCMS = context.get("victimWitnessDetailsToCMS");
-////        Map<String, VictimVcaDetails> victimWitnessDetailsToVCA = context.get("victimWitnessDetailsToVCA");
-////        Map<String, String> idGuidMap = context.get("idGuidMap");
-////
-////        for (String id : victimMapIds.get(victimType)) {
-////            //Step1: Validate CMS data -Get input details from the Post request to CMS
-////            VictimCmsDetails victimCmsDetails = victimWitnessDetailsToCMS.get(id);
-////            // Get output details from the Get request from CMS
-////            response = victimService.listWitnessVictimDetails(context.get("caseId"));
-////            VictimWitnessAssertions.assertCMSPersonalDetails(id, victimCmsDetails, response);
-////            Thread.sleep(2000);
-////
-////            //Step2: Validate VCA data -Get input details from the Post request to VCA
-////            VictimVcaDetails victimVcaDetails = victimWitnessDetailsToVCA.get(idGuidMap.get(id));
-////            // Get output details from the Get request from VCA
-////            response = victimService.witnessesDetailsFromVCA(idGuidMap.get(id));
-////            VictimWitnessAssertions.assertVCAPersonalDetails(idGuidMap.get(id), victimVcaDetails, response);
-////            Thread.sleep(2000);
-////        }
-//    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    @When("the {string} is onboarded to VCA")
-    public void onboardedToVCA(String victimType) throws InterruptedException {
-        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
-        Map<String, String> idGuidMap = context.get("idGuidMap");
-
-        for (String id : victimMapIds.get(victimType)) {
-            String guid = victimService.victimWitnessGuid(context.get("caseUrn"), context.get("caseId"), id);
-            idGuidMap.put(id, guid);
-        }
-        context.set("idGuidMap", idGuidMap);
-    }
-
-
     @When("the {string} personal details are updated to CMS")
-    public void thePersonalDetailsAreUpdatedToCMS(String victimType) throws InterruptedException {
+    public void updateVictimPersonalDetailToCMS(String victimType) throws InterruptedException {
         VictimCmsDetails victimCmsDetails;
-        String caseId = context.get("caseId");
+
         Map<String, List<String>> victimMapIds = context.get("victimMapIds");
-        Map<String, VictimCmsDetails> victimWitnessDetailsToCMS = context.get("victimWitnessDetailsToCMS");
+        Map<String, VictimCmsDetails> victimDetailsToCmsMap = context.get("victimDetailsToCmsMap");
 
         for (String id : victimMapIds.get(victimType)) {
-//            victimCmsDetails = UpdateVictimPersonalDetailsToCMS();
-//            victimService.updateVictimWitnessCMSPersonalDetails(victimCmsDetails, caseId, id);
-//            victimWitnessDetailsToCMS.put(id, victimCmsDetails);
+            victimCmsDetails = updateVictimPersonalDetailsToCMS();
+            victimService.updateVictimPersonalDetailsToCMS(victimCmsDetails, context.get("caseId"), id);
+            victimDetailsToCmsMap.put(id, victimCmsDetails);
             Thread.sleep(2000);
         }
-        context.set("victimWitnessDetailsToCMS", victimWitnessDetailsToCMS);
+        context.set("victimDetailsToCmsMap", victimDetailsToCmsMap);
     }
+
+    @Then("the {string} personal details are update to VCA")
+    public void updatePersonalDetailsToVCA(String victimType) {
+
+        VictimVcaDetails victimVcaDetails;
+        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+        Map<String, VictimVcaDetails> victimDetailsToVcaMap = context.get("victimDetailsToVcaMap");
+
+        for (String id : victimMapIds.get(victimType)) {
+            victimVcaDetails = updateVictimPersonalDetailsInVca();
+            victimService.updateVictimPersonalDetailsInVCA(idGuidMap.get(id), convertObjectToString(victimVcaDetails));
+            victimDetailsToVcaMap.put(idGuidMap.get(id), victimVcaDetails);
+        }
+        context.set("victimDetailsToVcaMap", victimDetailsToVcaMap);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     @When("the category {string} is added to {string} in VCA")
     public void addCategoryToVictimAndWitness(String category, String victimType) throws InterruptedException {
@@ -351,22 +333,27 @@ public class VictimCaseAppStepDefinition {
 
 
 
-    @Then("the {string} personal details are update to VCA")
-    public void personalDetailsAreUpdateToVCA(String victimType) throws InterruptedException {
 
-        VictimVcaDetails victimVcaDetails;
-        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
-        Map<String, VictimVcaDetails> victimWitnessDetailsToVCA = context.get("victimWitnessDetailsToVCA");
-        Map<String, String> idGuidMap = context.get("idGuidMap");
 
-        for (String id : victimMapIds.get(victimType)) {
-            victimVcaDetails = updateVcaPersonalDetails();
-            String requestPayload = convertObjectToString(victimVcaDetails);
-            victimService.updateWitnessVictimDetailsToVCA(idGuidMap.get(id), requestPayload);
-            victimWitnessDetailsToVCA.put(idGuidMap.get(id), victimVcaDetails);
-        }
-        context.set("victimWitnessDetailsToVCA", victimWitnessDetailsToVCA);
-    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

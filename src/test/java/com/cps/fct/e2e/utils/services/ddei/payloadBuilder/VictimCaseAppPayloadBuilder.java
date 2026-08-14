@@ -12,18 +12,19 @@ import java.util.List;
 import java.util.Map;
 
 import static com.cps.fct.e2e.utils.common.FakerUtils.*;
+import static com.cps.fct.e2e.utils.common.FakerUtils.streetAddress;
 import static com.cps.fct.e2e.utils.common.JsonUtils.toJsonString;
 
 public class VictimCaseAppPayloadBuilder {
 
-    public static VictimCaseInfo onboardVictim(String caseUrn){
+    public static VictimCaseInfo onboardVictim(String caseUrn) {
         return VictimCaseInfo.builder()
                 .Urn(caseUrn)
                 .CreatedBy("Automation User")
                 .build();
     }
 
-    public static VictimVcaDetails addVictimServiceLead (Integer serviceTypeCode ){
+    public static VictimVcaDetails addVictimServiceLead(Integer serviceTypeCode) {
         return VictimVcaDetails.builder()
                 .PreferredName("")
                 .IsYouth(Boolean.FALSE)
@@ -48,7 +49,7 @@ public class VictimCaseAppPayloadBuilder {
                 .title("Mr")
                 .firstName(FakerUtils.firstName())
                 .surname(FakerUtils.lastName())
-                .dateOfBirth(FakerUtils.dateOfBirth().toString())
+                .dateOfBirth(FakerUtils.dateOfBirthAdult().toString())
                 .gender(FakerUtils.gender())
                 .contactDetailsEmail(email())
                 .contactDetailsMobileNumber(mobilePhone())
@@ -88,7 +89,6 @@ public class VictimCaseAppPayloadBuilder {
 
         //TODO : existing defect on address line
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        System.out.println(gson.toJson(patchPayload));
         return gson.toJson(patchPayload);
     }
 
@@ -102,6 +102,65 @@ public class VictimCaseAppPayloadBuilder {
                 .LastModifiedBy("Add Victim Details To VCA")
                 .build();
     }
+
+    public static VictimCmsDetails updateVictimPersonalDetailsToCMS() {
+        return VictimCmsDetails.builder()
+                .title("Mrs")
+                .firstName(FakerUtils.firstName())
+                .surname(FakerUtils.lastName())
+                .dateOfBirth(FakerUtils.dateOfBirthAdult().toString())
+                .gender(FakerUtils.gender())
+                .contactDetailsEmail(email())
+                .contactDetailsMobileNumber(mobilePhone())
+                .contactDetailsPhoneNumber(homePhone())
+                .contactDetailsWorkPhoneNumber(homePhone())
+                .contactDetailsPostalAddressAddressLine1(streetName())
+                .contactDetailsPostalAddressAddressLine2(streetName())
+                .contactDetailsPostalAddressAddressLine3(streetAddress())
+                .contactDetailsPostalAddressAddressLine4(streetAddress())
+                .contactDetailsPostalAddressAddressLine5(cityName())
+                .contactDetailsPostalAddressPostcode(ukPostCode())
+                .justification("UPDATE DETAILS TEXT")
+                .build();
+    }
+
+    public static String payLoadUpdateVictimPersonalDetailsToCMS(VictimCmsDetails victimDetails) {
+        UpdateWitnessDetailsWitnessIdJsonBuilder builder = new UpdateWitnessDetailsWitnessIdJsonBuilder();
+        List<Map<String, Object>> patchPayload = builder
+                .replace("/contactDetails/title", victimDetails.getTitle())
+                .replace("/contactDetails/gender", victimDetails.getGender())
+                .replace("/dateOfBirth", victimDetails.getDateOfBirth())
+                .replace("/contactDetails/phoneNumber", victimDetails.getContactDetailsPhoneNumber())
+                .replace("/contactDetails/mobileNumber", victimDetails.getContactDetailsMobileNumber())
+                .replace("/contactDetails/workPhoneNumber", victimDetails.getContactDetailsWorkPhoneNumber())
+                .replace("/contactDetails/postalAddress/addressLine1", victimDetails.getContactDetailsPostalAddressAddressLine1())
+                .replace("/contactDetails/postalAddress/addressLine2", victimDetails.getContactDetailsPostalAddressAddressLine2())
+                .replace("/contactDetails/postalAddress/addressLine3", victimDetails.getContactDetailsPostalAddressAddressLine3())
+                .replace("/contactDetails/postalAddress/addressLine4", victimDetails.getContactDetailsPostalAddressAddressLine4())
+                .replace("/contactDetails/postalAddress/addressLine5", victimDetails.getContactDetailsPostalAddressAddressLine5())
+                .replace("/contactDetails/postalAddress/postcode", victimDetails.getContactDetailsPostalAddressPostcode())
+                .replace("/contactDetails/email", victimDetails.getContactDetailsEmail())
+                .add("/justification", victimDetails.getJustification())
+                .build();
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        return gson.toJson(patchPayload);
+    }
+
+    public static VictimVcaDetails updateVictimPersonalDetailsInVca() {
+        return VictimVcaDetails.builder()
+                .PreferredName("Update E2E Automation")
+                .preferredMethodOfContact(PreferredMethodOfContact.HOME_PHONE)
+                .IsYouth(Boolean.TRUE)
+                .SuitableContactTimes("Updated New times only")
+                .SpecialConsiderationNeeds("Not Needed anymore")
+                .LastModifiedBy("Update Personal Details in VCA")
+                .build();
+    }
+
+
+
+
 
 
 
@@ -154,21 +213,6 @@ public class VictimCaseAppPayloadBuilder {
                 .setPrettyPrinting()
                 .create();
         return gson.toJson(object);
-    }
-
-
-
-    public static VictimVcaDetails updateVcaPersonalDetails() {
-        return VictimVcaDetails.builder()
-                .PreferredName("Update E2E Automation")
-                .preferredMethodOfContact(PreferredMethodOfContact.HOME_PHONE)
-                .IsYouth(Boolean.TRUE)
-                .SuitableContactTimes("Evening times only")
-                .SpecialConsiderationNeeds("Chair Support")
-                .Service(1)
-                .Onboarded(Boolean.TRUE)
-                .LastModifiedBy("Update CPS user")
-                .build();
     }
 
 
@@ -247,7 +291,6 @@ public class VictimCaseAppPayloadBuilder {
         payload.put("Onboarded", false);
         return toJsonString(payload);
     }
-
 
 
     public static String payLoadForUpdateWitnessDetailsWitnessId(VictimCmsDetails victimDetails) {
@@ -348,9 +391,6 @@ public class VictimCaseAppPayloadBuilder {
                 .LastModifiedBy("automationUser")
                 .build();
     }
-
-
-
 
 
 }

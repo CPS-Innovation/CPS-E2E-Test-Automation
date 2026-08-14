@@ -69,9 +69,20 @@ public class FakerUtils {
         return faker.address().fullAddress();
     }
 
-    public static LocalDate dateOfBirth() {
+    public static LocalDate dateOfBirthAdult() {
         Date dob = faker.date().birthday();
         return dob.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    }
+
+    public static LocalDate childDateOfBirth() {
+        LocalDate today = LocalDate.now();
+        LocalDate latestDob = today.minusYears(8).minusDays(1);
+        LocalDate earliestDob = today.minusYears(16);
+
+        long minDay = earliestDob.toEpochDay();
+        long maxDay = latestDob.toEpochDay();
+        long randomDay = faker.number().numberBetween(minDay, maxDay);
+        return LocalDate.ofEpochDay(randomDay);
     }
 
     public static String email() {

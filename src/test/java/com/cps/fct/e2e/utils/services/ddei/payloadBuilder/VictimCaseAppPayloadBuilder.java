@@ -158,7 +158,36 @@ public class VictimCaseAppPayloadBuilder {
                 .build();
     }
 
-
+    public static VictimContacts addVictimContacts(int contactTypeCode) {
+        if (contactTypeCode == 2) {
+            return VictimContacts.builder()
+                    .ContactName(FakerUtils.fullName())
+                    .ContactTelephone(FakerUtils.homePhone())
+                    .ContactEmail(FakerUtils.email())
+                    .ContactType(contactTypeCode)
+                    .CreatedBy("E2E TestAutomation")
+                    .Address(Address.builder().build())
+                    .build();
+        } else {
+            return VictimContacts.builder()
+                    .ContactName(FakerUtils.fullName())
+                    .ContactTelephone(FakerUtils.homePhone())
+                    .ContactEmail(FakerUtils.email())
+                    .ContactType(contactTypeCode)
+                    .CreatedBy("E2E TestAutomation")
+                    .Address(Address.builder()
+                            .AddressLine1(FakerUtils.buildingNumber())
+                            .AddressLine2(FakerUtils.streetName())
+                            .AddressLine3(FakerUtils.streetName())
+                            .AddressLine4(FakerUtils.streetName())
+                            .AddressLine5(FakerUtils.streetAddress())
+                            .Postcode(FakerUtils.ukPostCode())
+                            .City(FakerUtils.cityName())
+                            .Country(FakerUtils.countyName())
+                            .build())
+                    .build();
+        }
+    }
 
 
 

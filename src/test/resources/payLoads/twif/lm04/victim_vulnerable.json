@@ -35,7 +35,7 @@
             "TypeOfNumber": "home"
           }
         ],
-        "Email": "victim_test@email.co.gov.uk"
+        "Email": "victim_pure_vul@email.co.gov.uk"
       },
       "PersonClassification": [
         {
@@ -46,14 +46,12 @@
           }
         }
       ],
-      "TypeOfPerson": "VictimWitness",
-      "DateOfBirth": "1970-08-03",
-      "WitnessAndVictim": {
-        "Witness": {
-          "Occupation": "Civillian"
-        },
-        "Victim": {
-          "dummy": "Head"
+      "TypeOfPerson": "Victim",
+      "DateOfBirth": "1970-08-04",
+      "Victim": {
+        "VPSStatus": {
+          "ResponseToVPSOffer": "Accepted",
+          "SchemeExplained": "false"
         }
       }
     }

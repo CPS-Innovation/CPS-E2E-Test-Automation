@@ -16,14 +16,33 @@ import static com.cps.fct.e2e.utils.common.JsonUtils.toJsonString;
 
 public class VictimCaseAppPayloadBuilder {
 
-    public static VictimCaseInfo addVictimInVCA(String caseUrn){
+    public static VictimCaseInfo onboardVictim(String caseUrn){
         return VictimCaseInfo.builder()
                 .Urn(caseUrn)
                 .CreatedBy("Automation User")
                 .build();
     }
 
-    public static VictimCmsDetails getVictimWitnessDetails() {
+    public static VictimVcaDetails addVictimServiceLead (Integer serviceTypeCode ){
+        return VictimVcaDetails.builder()
+                .PreferredName("")
+                .IsYouth(Boolean.FALSE)
+                .preferredMethodOfContact(PreferredMethodOfContact.Default)
+                .SuitableContactTimes("")
+                .SpecialConsiderationNeeds("")
+                .Service(serviceTypeCode)
+                .LastModifiedBy("Onboard Victim User")
+                .build();
+    }
+
+    public static VictimLiaisonOfficer assignVictimLiaisonOfficer(Integer userPartyId) {
+        return VictimLiaisonOfficer.builder()
+                .VLOPartyId(userPartyId)
+                .LastModifiedBy("Assign VLO")
+                .build();
+    }
+
+    public static VictimCmsDetails addVictimPersonalDetailsToCMS() {
         return VictimCmsDetails.builder()
 //                .title(FakerUtils.title())
                 .title("Mr")
@@ -45,6 +64,83 @@ public class VictimCaseAppPayloadBuilder {
                 .build();
     }
 
+    public static String payLoadAddVictimPersonalDetailsToCMS(VictimCmsDetails victimDetails) {
+        UpdateWitnessDetailsWitnessIdJsonBuilder builder = new UpdateWitnessDetailsWitnessIdJsonBuilder();
+        List<Map<String, Object>> patchPayload = builder
+                .add("/contactDetails/title", victimDetails.getTitle())
+                .add("/contactDetails/gender", victimDetails.getGender())
+                .add("/dateOfBirth", victimDetails.getDateOfBirth())
+//                .add("/contactDetails/ethnicity", victimDetails.getEthnicity())
+//                .add("/contactDetails/disability", victimDetails.getDisability())
+//                .add("/previousConvictions", victimDetails.getPreviousConvictions())
+                .add("/contactDetails/phoneNumber", victimDetails.getContactDetailsPhoneNumber())
+                .add("/contactDetails/mobileNumber", victimDetails.getContactDetailsMobileNumber())
+                .add("/contactDetails/workPhoneNumber", victimDetails.getContactDetailsWorkPhoneNumber())
+                .add("/contactDetails/email", victimDetails.getContactDetailsEmail())
+//                .add("/contactDetails/postalAddress/addressLine1", victimDetails.getContactDetailsPostalAddressAddressLine1())
+//                .add("/contactDetails/postalAddress/addressLine2", victimDetails.getContactDetailsPostalAddressAddressLine2())
+//                .add("/contactDetails/postalAddress/addressLine3", victimDetails.getContactDetailsPostalAddressAddressLine3())
+//                .add("/contactDetails/postalAddress/addressLine4", victimDetails.getContactDetailsPostalAddressAddressLine4())
+//                .add("/contactDetails/postalAddress/addressLine5", victimDetails.getContactDetailsPostalAddressAddressLine5())
+//                .add("/contactDetails/postalAddress/postcode", victimDetails.getContactDetailsPostalAddressPostcode())
+                .add("/justification", victimDetails.getJustification())
+                .build();
+
+        //TODO : existing defect on address line
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        System.out.println(gson.toJson(patchPayload));
+        return gson.toJson(patchPayload);
+    }
+
+    public static VictimVcaDetails addVictimPersonalDetailsToVCA() {
+        return VictimVcaDetails.builder()
+                .PreferredName("Add E2E Automation")
+                .preferredMethodOfContact(PreferredMethodOfContact.EMAIL)
+                .IsYouth(Boolean.FALSE)
+                .SuitableContactTimes("anytime between 9am to 6pm weekdays")
+                .SpecialConsiderationNeeds("")
+                .LastModifiedBy("Add Victim Details To VCA")
+                .build();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public static VictimCmsDetails getVictimWitnessCategory(String categoryCode) {
         return VictimCmsDetails.builder()
                 .category(categoryCode)
@@ -60,18 +156,7 @@ public class VictimCaseAppPayloadBuilder {
         return gson.toJson(object);
     }
 
-    public static VictimVcaDetails addVcaPersonalDetails() {
-        return VictimVcaDetails.builder()
-                .PreferredName("Add E2E Automation")
-                .preferredMethodOfContact(PreferredMethodOfContact.EMAIL)
-                .IsYouth(Boolean.FALSE)
-                .SuitableContactTimes("anytime between 9am to 6pm weekdays")
-                .SpecialConsiderationNeeds("Wheelchair access")
-                .Service(1)
-                .Onboarded(Boolean.TRUE)
-                .LastModifiedBy("Add CPS user")
-                .build();
-    }
+
 
     public static VictimVcaDetails updateVcaPersonalDetails() {
         return VictimVcaDetails.builder()
@@ -86,14 +171,7 @@ public class VictimCaseAppPayloadBuilder {
                 .build();
     }
 
-    public static VictimLiaisonOfficerDetails addVictimLiaisonOfficer(Integer userPartyId) {
-        return VictimLiaisonOfficerDetails.builder()
-                .Service(1)
-                .Onboarded(Boolean.TRUE)
-                .VLOPartyId(userPartyId)
-                .LastModifiedBy("Test Automation User")
-                .build();
-    }
+
 
 
     public static VictimContacts payLoadForAddVictimContactDetails(int contactTypeCode) {
@@ -170,32 +248,7 @@ public class VictimCaseAppPayloadBuilder {
         return toJsonString(payload);
     }
 
-    public static String payLoadForAddWitnessDetailsWitnessId(VictimCmsDetails victimDetails) {
-        UpdateWitnessDetailsWitnessIdJsonBuilder builder = new UpdateWitnessDetailsWitnessIdJsonBuilder();
-        List<Map<String, Object>> patchPayload = builder
-                .add("/contactDetails/title", victimDetails.getTitle())
-                .add("/contactDetails/gender", victimDetails.getGender())
-                .add("/dateOfBirth", victimDetails.getDateOfBirth())
-//                .add("/contactDetails/ethnicity", victimDetails.getEthnicity())
-//                .add("/contactDetails/disability", victimDetails.getDisability())
-//                .add("/previousConvictions", victimDetails.getPreviousConvictions())
-                .add("/contactDetails/phoneNumber", victimDetails.getContactDetailsPhoneNumber())
-                .add("/contactDetails/mobileNumber", victimDetails.getContactDetailsMobileNumber())
-                .add("/contactDetails/workPhoneNumber", victimDetails.getContactDetailsWorkPhoneNumber())
-                .add("/contactDetails/email", victimDetails.getContactDetailsEmail())
-//                .add("/contactDetails/postalAddress/addressLine1", victimDetails.getContactDetailsPostalAddressAddressLine1())
-//                .add("/contactDetails/postalAddress/addressLine2", victimDetails.getContactDetailsPostalAddressAddressLine2())
-//                .add("/contactDetails/postalAddress/addressLine3", victimDetails.getContactDetailsPostalAddressAddressLine3())
-//                .add("/contactDetails/postalAddress/addressLine4", victimDetails.getContactDetailsPostalAddressAddressLine4())
-//                .add("/contactDetails/postalAddress/addressLine5", victimDetails.getContactDetailsPostalAddressAddressLine5())
-//                .add("/contactDetails/postalAddress/postcode", victimDetails.getContactDetailsPostalAddressPostcode())
-                .add("/justification", victimDetails.getJustification())
-                .build();
 
-        //TODO : existing defect on address line
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        return gson.toJson(patchPayload);
-    }
 
     public static String payLoadForUpdateWitnessDetailsWitnessId(VictimCmsDetails victimDetails) {
         UpdateWitnessDetailsWitnessIdJsonBuilder builder = new UpdateWitnessDetailsWitnessIdJsonBuilder();

@@ -4,7 +4,7 @@ import com.cps.fct.e2e.model.victimCaseApp.VictimCmsDetails;
 import com.cps.fct.e2e.utils.httpClient.HttpResponseWrapper;
 import com.cps.fct.e2e.model.victimCaseApp.VictimVcaDetails;
 import com.cps.fct.e2e.model.victimCaseApp.VictimContacts;
-import com.cps.fct.e2e.model.victimCaseApp.VictimLiaisonOfficerDetails;
+import com.cps.fct.e2e.model.victimCaseApp.VictimLiaisonOfficer;
 import com.cps.fct.e2e.model.victimCaseApp.VictimMeetings;
 import io.restassured.response.Response;
 import org.assertj.core.api.SoftAssertions;
@@ -16,30 +16,91 @@ import java.util.Map;
 import static com.cps.fct.e2e.utils.common.JsonUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class VictimWitnessAssertions {
+public class VictimCaseAppAssertions {
 
     public static void assertCMSPersonalDetails(String id, VictimCmsDetails inputDetails,
                                                 HttpResponseWrapper responsePayload)
     {
         SoftAssertions softly = new SoftAssertions();
         String responseBody = responsePayload.getBody();
-        List<String> expectedEmail = extractFromJsonToList(responseBody, "$[?(@.witnessId=="+id+")].contactDetails.email");
-        List<String> expectedMobileNumber = extractFromJsonToList(responseBody, "$[?(@.witnessId=="+id+")].contactDetails.mobileNumber");
-        List<String> expectedPhoneNumber = extractFromJsonToList(responseBody, "$[?(@.witnessId=="+id+")].contactDetails.phoneNumber");
-        List<String> expectedWorkPhoneNumber = extractFromJsonToList(responseBody, "$[?(@.witnessId=="+id+")].contactDetails.workPhoneNumber");
+        List<String> email = extractFromJsonToList(responseBody, "$[?(@.witnessId=="+id+")].contactDetails.email");
+        List<String> mobileNumber = extractFromJsonToList(responseBody, "$[?(@.witnessId=="+id+")].contactDetails.mobileNumber");
+        List<String> phoneNumber = extractFromJsonToList(responseBody, "$[?(@.witnessId=="+id+")].contactDetails.phoneNumber");
+        List<String> workPhoneNumber = extractFromJsonToList(responseBody, "$[?(@.witnessId=="+id+")].contactDetails.workPhoneNumber");
 
         //assertions
-        assertThat(expectedEmail.getFirst()).isEqualTo(inputDetails.getContactDetailsEmail());
-        assertThat(expectedMobileNumber.getFirst()).isEqualTo(inputDetails.getContactDetailsMobileNumber());
-        assertThat(expectedPhoneNumber.getFirst()).isEqualTo(inputDetails.getContactDetailsPhoneNumber());
-        assertThat(expectedWorkPhoneNumber.getFirst()).isEqualTo(inputDetails.getContactDetailsWorkPhoneNumber());
-
-        assertThat(expectedEmail.getFirst()).isEqualTo(inputDetails.getContactDetailsEmail());
-        assertThat(expectedMobileNumber.getFirst()).isEqualTo(inputDetails.getContactDetailsMobileNumber());
-        assertThat(expectedPhoneNumber.getFirst()).isEqualTo(inputDetails.getContactDetailsPhoneNumber());
-        assertThat(expectedWorkPhoneNumber.getFirst()).isEqualTo(inputDetails.getContactDetailsWorkPhoneNumber());
+        assertThat(email.getFirst()).isEqualTo(inputDetails.getContactDetailsEmail());
+        assertThat(mobileNumber.getFirst()).isEqualTo(inputDetails.getContactDetailsMobileNumber());
+        assertThat(phoneNumber.getFirst()).isEqualTo(inputDetails.getContactDetailsPhoneNumber());
+        assertThat(workPhoneNumber.getFirst()).isEqualTo(inputDetails.getContactDetailsWorkPhoneNumber());
         softly.assertAll();
     }
+
+    public static void assertVCAPersonalDetails(String guid, VictimVcaDetails inputDetails,
+                                                HttpResponseWrapper responsePayload)
+    {
+        SoftAssertions softly = new SoftAssertions();
+        String responseBody = responsePayload.getBody();
+
+        String preferredName = readJsonPath(responseBody, "$.value.preferredName", String.class);
+        Boolean iSYouth = readJsonPath(responseBody, "$.value.isYouth", Boolean.class);
+//        String expectedPreferredMethodOfContact = readJsonPath(responseBody, "$.value.preferredMethodOfContact");
+        String suitableContactTime = readJsonPath(responseBody, "$.value.suitableContactTimes",String.class);
+        String specialConsiderationNeeds = readJsonPath(responseBody, "$.value.specialConsiderationNeeds",String.class);
+        String victimCaseInfoGuid = readJsonPath(responseBody, "$.value.victimCaseInfoGuid",String.class);
+        String lastModifiedBy = readJsonPath(responseBody, "$.value.lastModifiedBy",String.class);
+
+        //assertions
+        assertThat(preferredName).isEqualTo(inputDetails.getPreferredName());
+        assertThat(iSYouth).isEqualTo(inputDetails.isIsYouth());
+//        assertThat(expectedPreferredMethodOfContact).isEqualTo(Integer.parseInt(inputDetails.getPreferredMethodOfContact().getValue()));
+        assertThat(suitableContactTime).isEqualTo(inputDetails.getSuitableContactTimes());
+        assertThat(specialConsiderationNeeds).isEqualTo(inputDetails.getSpecialConsiderationNeeds());
+        assertThat(victimCaseInfoGuid).isEqualTo(guid);
+        assertThat(lastModifiedBy).isEqualTo(inputDetails.getLastModifiedBy());
+        softly.assertAll();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public static void assertCategoryDetails(String id, VictimCmsDetails inputDetails,
                                              HttpResponseWrapper responsePayload)
@@ -58,32 +119,8 @@ public class VictimWitnessAssertions {
         softly.assertAll();
     }
 
-    public static void assertVCAPersonalDetails(String guid, VictimVcaDetails inputDetails,
-                                                HttpResponseWrapper responsePayload)
-    {
-        SoftAssertions softly = new SoftAssertions();
-        String responseBody = responsePayload.getBody();
 
-        String expectedPreferredName = readJsonPath(responseBody, "$.value.preferredName", String.class);
-        Boolean expectedIsYouth = readJsonPath(responseBody, "$.value.isYouth", Boolean.class);
-//        String expectedPreferredMethodOfContact = readJsonPath(responseBody, "$.value.preferredMethodOfContact");
-        String expectedSuitableContactTime = readJsonPath(responseBody, "$.value.suitableContactTimes",String.class);
-        String expectedSpecialConsiderationNeeds = readJsonPath(responseBody, "$.value.specialConsiderationNeeds",String.class);
-        String expectedVictimCaseInfoGuid = readJsonPath(responseBody, "$.value.victimCaseInfoGuid",String.class);
-        String expectedLastModifiedBy = readJsonPath(responseBody, "$.value.lastModifiedBy",String.class);
-
-        //assertions
-        assertThat(expectedPreferredName).isEqualTo(inputDetails.getPreferredName());
-        assertThat(expectedIsYouth).isEqualTo(inputDetails.isIsYouth());
-//        assertThat(expectedPreferredMethodOfContact).isEqualTo(Integer.parseInt(inputDetails.getPreferredMethodOfContact().getValue()));
-        assertThat(expectedSuitableContactTime).isEqualTo(inputDetails.getSuitableContactTimes());
-        assertThat(expectedSpecialConsiderationNeeds).isEqualTo(inputDetails.getSpecialConsiderationNeeds());
-        assertThat(expectedVictimCaseInfoGuid).isEqualTo(guid);
-        assertThat(expectedLastModifiedBy).isEqualTo(inputDetails.getLastModifiedBy());
-        softly.assertAll();
-    }
-
-    public static void assertVictimLiaisonOfficerDetails(String guid, VictimLiaisonOfficerDetails inputDetails,
+    public static void assertVictimLiaisonOfficerDetails(String guid, VictimLiaisonOfficer inputDetails,
                                                          HttpResponseWrapper responsePayload)
     {
         SoftAssertions softly = new SoftAssertions();

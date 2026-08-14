@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
+
 public class VictimCmsDetails {
     private String title;
     private String firstName;

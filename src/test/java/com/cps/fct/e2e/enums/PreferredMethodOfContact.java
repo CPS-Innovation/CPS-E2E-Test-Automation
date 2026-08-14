@@ -9,7 +9,8 @@ public enum PreferredMethodOfContact {
     EMAIL(3),
     POST(4),
     VIA_POLICE(5),
-    ISVA(6);
+    ISVA(6),
+    Default(0);
 
     private final int value;
 

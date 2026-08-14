@@ -24,7 +24,15 @@ public enum PreferredMethodOfContact {
                 return method;
             }
         }
-        throw new IllegalArgumentException("Incorrect contact method value : " + value);
+        throw new IllegalArgumentException("Incorrect Preferred Method of Contact: " + value);
     }
+
+
+
+
+
+
+
+
 
 }

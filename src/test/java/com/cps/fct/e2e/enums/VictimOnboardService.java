@@ -15,14 +15,14 @@ public enum VictimOnboardService {
         this.value = value;
     }
 
-    public static VictimOnboardService fromValue(int value) {
-        for (VictimOnboardService method : VictimOnboardService.values()) {
-            if (method.getValue()==value) {
-                return method;
-            }
-        }
-        throw new IllegalArgumentException("Incorrect Victim Meeting type : " + value);
-    }
+//    public static VictimOnboardService fromValue(int value) {
+//        for (VictimOnboardService method : VictimOnboardService.values()) {
+//            if (method.getValue()==value) {
+//                return method;
+//            }
+//        }
+//        throw new IllegalArgumentException("Incorrect Victim Meeting type : " + value);
+//    }
 
     public static VictimOnboardService fromString(String value) {
         return switch (value.trim().toLowerCase()) {
@@ -30,9 +30,7 @@ public enum VictimOnboardService {
             case "enhanced" -> ENHANCED;
             case "rasso" -> RASSO;
             case "not aligned" -> NO_SERVICE;
-            default -> throw new IllegalArgumentException(
-                    "Unknown Service type: " + value
-            );
+            default -> throw new IllegalArgumentException( "Unknown Service type: " + value );
         };
     }
 

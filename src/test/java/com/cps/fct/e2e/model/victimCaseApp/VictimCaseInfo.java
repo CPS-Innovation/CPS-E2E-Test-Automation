@@ -9,6 +9,9 @@ import lombok.Data;
 public class VictimCaseInfo {
 
     private String Urn;
+    private int Service;
+    private boolean Onboarded;
     private String CreatedBy;
+
 
 }

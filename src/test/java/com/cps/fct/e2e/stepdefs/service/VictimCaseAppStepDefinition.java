@@ -11,6 +11,7 @@ import com.cps.fct.e2e.utils.services.ddei.payloadBuilder.*;
 import com.cps.fct.e2e.utils.services.ddei.responseAssertions.VictimCaseAppAssertions;
 import com.jayway.jsonpath.JsonPath;
 import io.cucumber.datatable.DataTable;
+import io.cucumber.java.PendingException;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -57,19 +58,18 @@ public class VictimCaseAppStepDefinition {
 
         Map<String, VictimVcaDetails> victimDetailsToVcaMap = new HashMap<>();
         context.set("victimDetailsToVcaMap", victimDetailsToVcaMap);
-//
-//        Map<String, VictimVcaDetails> victimWitnessDetailsToVCA = new HashMap<>();
-//        context.set("victimWitnessDetailsToVCA", victimWitnessDetailsToVCA);
-//
-//        Map<String, String> idGuidMap = new HashMap<>();
-//        context.set("idGuidMap", idGuidMap);
+
+        Map<Integer, VictimContacts> victimContactDetailsMap = new HashMap<>();
+        context.set("victimContactDetailsMap", victimContactDetailsMap);
+
+
+
+
 //
 //        Map<String, String> categoryMap = new HashMap<>();
 //        context.set("categoryMap", categoryMap);
 //
-//        Map<Integer, VictimContacts> victimContactDetailsMap = new HashMap<>();
-//        context.set("victimContactDetailsMap", victimContactDetailsMap);
-//
+
 //        Map<String, Integer> victimContactTypeMap = new HashMap<>();
 //        context.set("victimContactTypeMap", victimContactTypeMap);
 //
@@ -208,12 +208,44 @@ public class VictimCaseAppStepDefinition {
         context.set("victimDetailsToVcaMap", victimDetailsToVcaMap);
     }
 
+    @When("the following contacts are added to {string} in VCA")
+    public void theFollowingVictimContactsAreToInVCA(String victimType, DataTable dataTable) {
+        VictimContacts victimContacts;
+
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
+        Map<Integer, VictimContacts> victimContactDetailsMap = context.get("victimContactDetailsMap");
 
 
 
 
+    }
 
 
+
+//
+//    @When("the {string} is added to {string} in VCA")
+//    public void theVictimContactIsAddedInVCA(String contactType, String victimType) {
+//        int contactTypeCode = 0;
+//        Map<String, String> idGuidMap = context.get("idGuidMap");
+//        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
+//        Map<Integer, VictimContacts> victimContactDetailsMap = context.get("victimContactDetailsMap");
+//
+//        contactTypeCode = switch (contactType) {
+//            case "Victim Liaison Officer" -> 1;
+//            case "Family Liaison Officer" -> 2;
+//            case "Independent Sexual Violence Adviser" -> 3;
+//            case "Independent Domestic Violence Adviser" -> 4;
+//            default -> contactTypeCode;
+//        };
+//
+//        for (String id : victimMapIds.get(victimType)) {
+//            VictimContacts victimContacts = VictimCaseAppPayloadBuilder.payLoadForAddVictimContactDetails(contactTypeCode);
+//            victimService.addVictimContactDetailsToVCA(idGuidMap.get(id), convertObjectToString(victimContacts));
+//            victimContactDetailsMap.put(contactTypeCode, victimContacts);
+//        }
+//        context.set("victimContactDetailsMap", victimContactDetailsMap);
+//    }
 
 
 
@@ -330,32 +362,6 @@ public class VictimCaseAppStepDefinition {
         context.set("victimWitnessDetailsToCMS", victimWitnessDetailsToCMS);
         context.set("categoryMap", categoryMap);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     @Then("the {string} and {string} category is verified in CMS")
     public void categoryVerifiedInCMS(String witnessType, String victimType) throws InterruptedException {
@@ -810,5 +816,9 @@ public class VictimCaseAppStepDefinition {
         }
 
     }
+
+
+
+
 
 }

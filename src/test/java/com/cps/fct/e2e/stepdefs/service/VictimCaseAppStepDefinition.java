@@ -342,11 +342,14 @@ public class VictimCaseAppStepDefinition {
         context.set("meetingOfferMap", meetingOfferMap);
 
         for (String id : victimMapIds.get(victimType)) {
-
             for (Map<String, String> row : rows) {
                 String meetingType = row.get("meeting");
                 String reason = row.get("notOfferedReason");
                 MeetingType meetingTypeCode = MeetingType.fromString(meetingType);
+
+                Meetings meetingNotOffered = meetingNotOffered(meetingTypeCode.getValue(), reason);
+                victimService.addMeetingsNotOffered(idGuidMap.get(id), convertObjectToString(meetingNotOffered));
+
 
 //                Meetings meetingsOffer = victimService.addMeetingNotOfferedToVCA(idGuidMap,meetingTypeCode.getValue(), reason );
 

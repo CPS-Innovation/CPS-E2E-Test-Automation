@@ -16,14 +16,6 @@ public enum MeetingType {
         this.value = value;
     }
 
-//    public static MeetingType fromValue(int value) {
-//        for (MeetingType method : MeetingType.values()) {
-//            if (method.getValue()==value) {
-//                return method;
-//            }
-//        }
-//        throw new IllegalArgumentException("Incorrect Victim Meeting type : " + value);
-//    }
 
     public static MeetingType fromString(String value) {
         return switch (value.trim().toLowerCase()) {
@@ -33,9 +25,7 @@ public enum MeetingType {
             case "victims right to review" -> VRR;
             case "victim complaint" -> COMPLAINTS;
             case "other cps meeting" -> OTHERS;
-            default -> throw new IllegalArgumentException(
-                    "Unknown Meeting type: " + value
-            );
+            default -> throw new IllegalArgumentException( "Unknown Meeting type: " + value );
         };
     }
 

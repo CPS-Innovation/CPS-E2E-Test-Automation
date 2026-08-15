@@ -17,8 +17,8 @@ import static com.cps.fct.e2e.utils.common.JsonUtils.toJsonString;
 
 public class VictimCaseAppPayloadBuilder {
 
-    public static VictimCaseInfo onboardVictim(String caseUrn) {
-        return VictimCaseInfo.builder()
+    public static CaseInfo onboardVictim(String caseUrn) {
+        return CaseInfo.builder()
                 .Urn(caseUrn)
                 .CreatedBy("Automation User")
                 .build();
@@ -66,7 +66,7 @@ public class VictimCaseAppPayloadBuilder {
     }
 
     public static String payLoadAddVictimPersonalDetailsToCMS(VictimCmsDetails victimDetails) {
-        UpdateWitnessDetailsWitnessIdJsonBuilder builder = new UpdateWitnessDetailsWitnessIdJsonBuilder();
+        AddUpdateVictimDetails builder = new AddUpdateVictimDetails();
         List<Map<String, Object>> patchPayload = builder
                 .add("/contactDetails/title", victimDetails.getTitle())
                 .add("/contactDetails/gender", victimDetails.getGender())
@@ -125,7 +125,7 @@ public class VictimCaseAppPayloadBuilder {
     }
 
     public static String payLoadUpdateVictimPersonalDetailsToCMS(VictimCmsDetails victimDetails) {
-        UpdateWitnessDetailsWitnessIdJsonBuilder builder = new UpdateWitnessDetailsWitnessIdJsonBuilder();
+        AddUpdateVictimDetails builder = new AddUpdateVictimDetails();
         List<Map<String, Object>> patchPayload = builder
                 .replace("/contactDetails/title", victimDetails.getTitle())
                 .replace("/contactDetails/gender", victimDetails.getGender())
@@ -158,23 +158,23 @@ public class VictimCaseAppPayloadBuilder {
                 .build();
     }
 
-    public static VictimContacts addVictimContacts(int contactTypeCode) {
+    public static CpsContacts addCpsContact(int contactTypeCode) {
         if (contactTypeCode == 2) {
-            return VictimContacts.builder()
+            return CpsContacts.builder()
                     .ContactName(FakerUtils.fullName())
                     .ContactTelephone(FakerUtils.homePhone())
                     .ContactEmail(FakerUtils.email())
                     .ContactType(contactTypeCode)
-                    .CreatedBy("E2E TestAutomation")
+                    .CreatedBy("Add CPS Contact")
                     .Address(Address.builder().build())
                     .build();
         } else {
-            return VictimContacts.builder()
+            return CpsContacts.builder()
                     .ContactName(FakerUtils.fullName())
                     .ContactTelephone(FakerUtils.homePhone())
                     .ContactEmail(FakerUtils.email())
                     .ContactType(contactTypeCode)
-                    .CreatedBy("E2E TestAutomation")
+                    .CreatedBy("Add CPS Contact")
                     .Address(Address.builder()
                             .AddressLine1(FakerUtils.buildingNumber())
                             .AddressLine2(FakerUtils.streetName())
@@ -189,52 +189,89 @@ public class VictimCaseAppPayloadBuilder {
         }
     }
 
+    public static CpsContacts updateCpsContact(int contactTypeCode) {
+        if (contactTypeCode == 2) {
+            return CpsContacts.builder()
+                    .ContactName(FakerUtils.fullName())
+                    .ContactTelephone(FakerUtils.homePhone())
+                    .ContactEmail(FakerUtils.email())
+                    .ContactType(contactTypeCode)
+                    .LastModifiedBy("Update CPS Contact")
+                    .Address(Address.builder().build())
+                    .build();
+        } else {
+            return CpsContacts.builder()
+                    .ContactName(FakerUtils.fullName())
+                    .ContactTelephone(FakerUtils.homePhone())
+                    .ContactEmail(FakerUtils.email())
+                    .ContactType(contactTypeCode)
+                    .LastModifiedBy("Update CPS Contact")
+                    .Address(Address.builder()
+                            .AddressLine1(FakerUtils.buildingNumber())
+                            .AddressLine2(FakerUtils.streetName())
+                            .AddressLine3(FakerUtils.streetName())
+                            .AddressLine4(FakerUtils.streetName())
+                            .AddressLine5(FakerUtils.streetAddress())
+                            .Postcode(FakerUtils.ukPostCode())
+                            .City(FakerUtils.cityName())
+                            .Country(FakerUtils.countyName())
+                            .build())
+                    .build();
+        }
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public static VictimCmsDetails getVictimWitnessCategory(String categoryCode) {
+    public static VictimCmsDetails addCategoryToVictimInVca(String categoryCode) {
         return VictimCmsDetails.builder()
                 .category(categoryCode)
-                .justification("JUSTIFICATION TEXT")
+                .justification("Added Category")
                 .build();
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//    public static VictimCmsDetails getVictimWitnessCategory(String categoryCode) {
+//        return VictimCmsDetails.builder()
+//                .category(categoryCode)
+//                .justification("JUSTIFICATION TEXT")
+//                .build();
+//    }
 
     public static String convertObjectToString(Object object) {
         Gson gson = new GsonBuilder()
@@ -247,10 +284,10 @@ public class VictimCaseAppPayloadBuilder {
 
 
 
-    public static VictimContacts payLoadForAddVictimContactDetails(int contactTypeCode) {
+    public static CpsContacts payLoadForAddVictimContactDetails(int contactTypeCode) {
 
         if (contactTypeCode == 2) {
-            return VictimContacts.builder()
+            return CpsContacts.builder()
                     .ContactName(FakerUtils.fullName())
                     .ContactTelephone(FakerUtils.homePhone())
                     .ContactEmail(FakerUtils.email())
@@ -259,7 +296,7 @@ public class VictimCaseAppPayloadBuilder {
                     .Address(Address.builder().build())
                     .build();
         } else {
-            return VictimContacts.builder()
+            return CpsContacts.builder()
                     .ContactName(FakerUtils.fullName())
                     .ContactTelephone(FakerUtils.homePhone())
                     .ContactEmail(FakerUtils.email())
@@ -279,10 +316,10 @@ public class VictimCaseAppPayloadBuilder {
         }
     }
 
-    public static VictimContacts payLoadForUpdateVictimContactDetails(int contactTypeCode) {
+    public static CpsContacts payLoadForUpdateVictimContactDetails(int contactTypeCode) {
 
         if (contactTypeCode == 2) {
-            return VictimContacts.builder()
+            return CpsContacts.builder()
                     .ContactName("NEWSURENAME Update")
                     .ContactTelephone("07777777777")
                     .ContactEmail("new_email_address@gov.gov")
@@ -291,7 +328,7 @@ public class VictimCaseAppPayloadBuilder {
                     .Address(Address.builder().build())
                     .build();
         } else {
-            return VictimContacts.builder()
+            return CpsContacts.builder()
                     .ContactName("NEWSURENAME Update")
                     .ContactTelephone("07777777777")
                     .ContactEmail("new_email_address@gov.gov")
@@ -323,7 +360,7 @@ public class VictimCaseAppPayloadBuilder {
 
 
     public static String payLoadForUpdateWitnessDetailsWitnessId(VictimCmsDetails victimDetails) {
-        UpdateWitnessDetailsWitnessIdJsonBuilder builder = new UpdateWitnessDetailsWitnessIdJsonBuilder();
+        AddUpdateVictimDetails builder = new AddUpdateVictimDetails();
         List<Map<String, Object>> patchPayload = builder
                 .replace("/contactDetails/title", "Dr")
                 .replace("/contactDetails/gender", "Unknown")
@@ -350,7 +387,7 @@ public class VictimCaseAppPayloadBuilder {
     }
 
     public static String payLoadForAddOrUpdateCategory(VictimCmsDetails victimDetails) {
-        UpdateWitnessDetailsWitnessIdJsonBuilder builder = new UpdateWitnessDetailsWitnessIdJsonBuilder();
+        AddUpdateVictimDetails builder = new AddUpdateVictimDetails();
         List<Map<String, Object>> patchPayload = builder
                 .replace("/types", victimDetails.getCategory())
                 .add("/justification", victimDetails.getJustification())
@@ -360,9 +397,9 @@ public class VictimCaseAppPayloadBuilder {
         return gson.toJson(patchPayload);
     }
 
-    public static VictimMeetings payLoadForAddVictimMeetingDetails(int meetingTypeCode, String reason) {
+    public static Meetings payLoadForAddVictimMeetingDetails(int meetingTypeCode, String reason) {
 
-        return VictimMeetings.builder()
+        return Meetings.builder()
                 .MeetingType(meetingTypeCode)
                 .MeetingContextGuid(FakerUtils.uuid())
                 .MeetingOffered(false)
@@ -374,9 +411,9 @@ public class VictimCaseAppPayloadBuilder {
                 .build();
     }
 
-    public static VictimMeetings payLoadForAddVictimMeetingMethodDetails(int meetingTypeCode, int methodTypeCode) {
+    public static Meetings payLoadForAddVictimMeetingMethodDetails(int meetingTypeCode, int methodTypeCode) {
 
-        return VictimMeetings.builder()
+        return Meetings.builder()
                 .MeetingType(meetingTypeCode)
                 .MeetingContextGuid(FakerUtils.uuid())
                 .MeetingOffered(true)
@@ -387,9 +424,9 @@ public class VictimCaseAppPayloadBuilder {
                 .build();
     }
 
-    public static VictimMeetings payLoadForMeetingStatusDetails(int meetingTypeCode, int methodTypeCode, String meetingStatus) {
+    public static Meetings payLoadForMeetingStatusDetails(int meetingTypeCode, int methodTypeCode, String meetingStatus) {
 
-        return VictimMeetings.builder()
+        return Meetings.builder()
                 .MeetingType(meetingTypeCode)
                 .MethodOfOffer(methodTypeCode)
                 .DateOfOffer(todayMinusFiveDays())
@@ -404,9 +441,9 @@ public class VictimCaseAppPayloadBuilder {
                 .build();
     }
 
-    public static VictimMeetings payLoadForNoResponseMeetingDetails(int meetingTypeCode, int methodTypeCode) {
+    public static Meetings payLoadForNoResponseMeetingDetails(int meetingTypeCode, int methodTypeCode) {
 
-        return VictimMeetings.builder()
+        return Meetings.builder()
                 .MeetingType(meetingTypeCode)
                 .MethodOfOffer(methodTypeCode)
                 .DateOfOffer(todayMinusFiveDays())

@@ -11,11 +11,10 @@ Feature: VCA-API-S1_S2 - Add personal and contact details for all category types
 
     Given create new case using "CM01" for type "single defendant multiple offence"
     And add "victim" using "LM04" for the case
-#    And add "victim vulnerable" using "LM04" for the case
-#    And add "victim intimidated" using "LM04" for the case
-#    And add "victim witness" using "LM04" for the case
-#    And add "victim witness child" using "LM04" for the case  
-                                          
+    And add "victim vulnerable" using "LM04" for the case
+    And add "victim intimidated" using "LM04" for the case
+    And add "victim witness" using "LM04" for the case
+
 #---------------Victim Person----------------------#
 #  victim
 #  victim vulnerable
@@ -49,33 +48,25 @@ Feature: VCA-API-S1_S2 - Add personal and contact details for all category types
     Given victim details are available in VCA
    #Service Types - #Universal #Enhanced #Rasso #Not aligned
     And the "victim" is onboarded as "Universal" service lead in VCA
+    And the "victimVulnerable" is onboarded as "Enhanced" service lead in VCA
+    And the "victimIntimidated" is onboarded as "Rasso" service lead in VCA
+    And the "victimWitness" is onboarded as "Not aligned" service lead in VCA
     And the Victim liaison officer is assigned to "victim" in VCA
-    
-#    And the "victimVulnerable" is onboarded as "Enhanced" service lead in VCA
-#    And the Victim liaison officer is assigned to "victimVulnerable" in VCA
-#    And the "victimIntimidated" is onboarded as "Rasso" service lead in VCA
-#    And the Victim liaison officer is assigned to "victimIntimidated" in VCA
-#    And the "victimWitness" is onboarded as "Not aligned" service lead in VCA
-#    And the Victim liaison officer is assigned to "victimWitness" in VCA
-#    And the "victimWitnessChild" is onboarded as "Universal" service lead in VCA
-#    And the Victim liaison officer is assigned to "victimWitnessChild" in VCA
-
+    And the Victim liaison officer is assigned to "victimVulnerable" in VCA
+    And the Victim liaison officer is assigned to "victimIntimidated" in VCA
+    And the Victim liaison officer is assigned to "victimWitness" in VCA
     When the "victim" personal details are added to CMS
     When the "victim" personal details are added to VCA
-#    When the "victimVulnerable" personal details are added to CMS
-#    When the "victimVulnerable" personal details are added to VCA
-#    When the "victimIntimidated" personal details are added to CMS
-#    When the "victimIntimidated" personal details are added to VCA
-#    When the "victimWitness" personal details are added to CMS
-#    When the "victimWitness" personal details are added to VCA
-#    When the "victimWitnessChild" personal details are added to CMS
-#    When the "victimWitnessChild" personal details are added to VCA
-
+    When the "victimVulnerable" personal details are added to CMS
+    When the "victimVulnerable" personal details are added to VCA
+    When the "victimIntimidated" personal details are added to CMS
+    When the "victimIntimidated" personal details are added to VCA
+    When the "victimWitness" personal details are added to CMS
+    When the "victimWitness" personal details are added to VCA
     Then the "victim" personal details are verified in CMS and VCA
-#    Then the "victimVulnerable" personal details are verified in CMS and VCA
-#    Then the "victimIntimidated" personal details are verified in CMS and VCA
-#    Then the "victimWitness" personal details are verified in CMS and VCA
-#    Then the "victimWitnessChild" personal details are verified in CMS and VCA
+    Then the "victimVulnerable" personal details are verified in CMS and VCA
+    Then the "victimIntimidated" personal details are verified in CMS and VCA
+    Then the "victimWitness" personal details are verified in CMS and VCA
 
 #---------------Victim Person----------------------#
 #  "victim"

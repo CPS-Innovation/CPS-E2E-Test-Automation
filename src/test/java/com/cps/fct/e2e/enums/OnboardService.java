@@ -3,7 +3,7 @@ package com.cps.fct.e2e.enums;
 import lombok.Getter;
 
 @Getter
-public enum VictimOnboardService {
+public enum OnboardService {
     UNIVERSAL(1),
     ENHANCED(2),
     RASSO(3),
@@ -11,7 +11,7 @@ public enum VictimOnboardService {
 
     private final int value;
 
-    VictimOnboardService(int value) {
+    OnboardService(int value) {
         this.value = value;
     }
 
@@ -24,7 +24,7 @@ public enum VictimOnboardService {
 //        throw new IllegalArgumentException("Incorrect Victim Meeting type : " + value);
 //    }
 
-    public static VictimOnboardService fromString(String value) {
+    public static OnboardService fromString(String value) {
         return switch (value.trim().toLowerCase()) {
             case "universal" -> UNIVERSAL;
             case "enhanced" -> ENHANCED;

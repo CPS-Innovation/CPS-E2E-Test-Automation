@@ -7,7 +7,7 @@ import lombok.Getter;
 @Data
 @Getter
 @Builder
-public class VictimContacts {
+public class CpsContacts {
     private String ContactName;
     private String ContactTelephone;
     private String ContactEmail;

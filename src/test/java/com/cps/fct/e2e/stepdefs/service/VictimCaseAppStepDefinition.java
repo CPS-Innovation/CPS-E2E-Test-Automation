@@ -1,18 +1,17 @@
 package com.cps.fct.e2e.stepdefs.service;
 
-import com.cps.fct.e2e.enums.VictimContactsType;
-import com.cps.fct.e2e.enums.VictimOnboardService;
+import com.cps.fct.e2e.enums.CpsContactsType;
+import com.cps.fct.e2e.enums.OnboardService;
+import com.cps.fct.e2e.enums.CategoryType;
 import com.cps.fct.e2e.model.victimCaseApp.*;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
 import com.cps.fct.e2e.utils.httpClient.HttpResponseWrapper;
 import com.cps.fct.e2e.utils.services.ddei.CommonService;
 import com.cps.fct.e2e.utils.services.ddei.CaseService;
 import com.cps.fct.e2e.utils.services.ddei.VictimService;
-import com.cps.fct.e2e.utils.services.ddei.payloadBuilder.*;
 import com.cps.fct.e2e.utils.services.ddei.responseAssertions.VictimCaseAppAssertions;
 import com.jayway.jsonpath.JsonPath;
 import io.cucumber.datatable.DataTable;
-import io.cucumber.java.PendingException;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -22,9 +21,6 @@ import org.picocontainer.annotations.Inject;
 import java.util.*;
 
 import static com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimCaseAppPayloadBuilder.*;
-import static com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimCaseAppPayloadBuilder.addVictimPersonalDetailsToCMS;
-import static com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimCaseAppPayloadBuilder.addVictimServiceLead;
-import static com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimCaseAppPayloadBuilder.convertObjectToString;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -60,9 +56,6 @@ public class VictimCaseAppStepDefinition {
         Map<String, VictimVcaDetails> victimDetailsToVcaMap = new HashMap<>();
         context.set("victimDetailsToVcaMap", victimDetailsToVcaMap);
 
-        Map<Integer, VictimContacts> victimContactMap = new HashMap<>();
-        context.set("victimContactMap", victimContactMap);
-
 
 //
 //        Map<String, String> categoryMap = new HashMap<>();
@@ -83,10 +76,10 @@ public class VictimCaseAppStepDefinition {
     @When("the {string} is onboarded as {string} service lead in VCA")
     public void victimOnboardForService(String victimType, String service) {
 
-        VictimCaseInfo victimCaseInfo;
+        CaseInfo victimCaseInfo;
         VictimVcaDetails victimVcaDetails;
 
-        VictimOnboardService serviceTypeCode = VictimOnboardService.fromString(service);
+        OnboardService serviceTypeCode = OnboardService.fromString(service);
         Map<String, String> idGuidMap = context.get("idGuidMap");
         Map<String, List<String>> victimMapIds = context.get("victimMapIds");
 
@@ -207,129 +200,175 @@ public class VictimCaseAppStepDefinition {
         context.set("victimDetailsToVcaMap", victimDetailsToVcaMap);
     }
 
-    @When("the following contacts are added to {string} in VCA")
-    public void theFollowingVictimContactsAreToInVCA(String victimType, DataTable dataTable) {
-        VictimContacts victimContacts;
+    @When("the following cps-contacts are added to {string} in VCA")
+    public void addCpsContacts(String victimType, DataTable dataTable) {
+        CpsContacts cpsContacts;
 
         Map<String, String> idGuidMap = context.get("idGuidMap");
         Map<String, List<String>> victimMapIds = context.get("victimMapIds");
-        Map<Integer, VictimContacts> victimContactMap = context.get("victimContactMap");
+
+        Map<Integer, CpsContacts> cpsContactMap = new HashMap<>();
+        context.set("cpsContactMap", cpsContactMap);
 
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
 
         for (String id : victimMapIds.get(victimType)) {
-
             for (Map<String, String> row : rows) {
-
-//                VictimOnboardService serviceTypeCode = VictimOnboardService.fromString(service);
-//                victimVcaDetails = addVictimServiceLead(serviceTypeCode.getValue());
-//                victimService.addVictimServiceLead(caseVictimGuid, convertObjectToString(victimVcaDetails));
-
-
-                VictimContactsType victimContactsTypeCode = VictimContactsType.fromString(row.get("contactType"));
-
-//                victimContacts = addVictimContacts(victimContactsTypeCode.getValue());
-
-
+                CpsContactsType cpsContactTypeCode = CpsContactsType.fromString(row.get("cpsContactType"));
+                cpsContacts = addCpsContact(cpsContactTypeCode.getValue());
+                String requestBody = convertObjectToString(cpsContacts);
+                victimService.addCpsContacts(idGuidMap.get(id), requestBody);
+                cpsContactMap.put(cpsContactTypeCode.getValue(), cpsContacts);
             }
-
-
-//            VictimContacts victimContacts = VictimCaseAppPayloadBuilder.payLoadForAddVictimContactDetails(contactTypeCode);
-//            victimService.addVictimContactDetailsToVCA(idGuidMap.get(id), convertObjectToString(victimContacts));
-//            victimContactDetailsMap.put(contactTypeCode, victimContacts);
+            context.set("cpsContactMap", cpsContactMap);
         }
-//        context.set("victimContactDetailsMap", victimContactDetailsMap);
-
-
     }
 
-
-//
-//    @When("the {string} is added to {string} in VCA")
-//    public void theVictimContactIsAddedInVCA(String contactType, String victimType) {
-//        int contactTypeCode = 0;
-//        Map<String, String> idGuidMap = context.get("idGuidMap");
-//        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
-//        Map<Integer, VictimContacts> victimContactDetailsMap = context.get("victimContactDetailsMap");
-//
-//        contactTypeCode = switch (contactType) {
-//            case "Victim Liaison Officer" -> 1;
-//            case "Family Liaison Officer" -> 2;
-//            case "Independent Sexual Violence Adviser" -> 3;
-//            case "Independent Domestic Violence Adviser" -> 4;
-//            default -> contactTypeCode;
-//        };
-//
-//        for (String id : victimMapIds.get(victimType)) {
-//            VictimContacts victimContacts = VictimCaseAppPayloadBuilder.payLoadForAddVictimContactDetails(contactTypeCode);
-//            victimService.addVictimContactDetailsToVCA(idGuidMap.get(id), convertObjectToString(victimContacts));
-//            victimContactDetailsMap.put(contactTypeCode, victimContacts);
-//        }
-//        context.set("victimContactDetailsMap", victimContactDetailsMap);
-//    }
-
-
-    @When("the category {string} is added to {string} in VCA")
-    public void addCategoryToVictimAndWitness(String category, String victimType) throws InterruptedException {
-        String categoryCode = null;
-        VictimCmsDetails victimCmsDetails;
-        String caseId = context.get("caseId");
+    @Then("the added cps-contacts for {string} are verified")
+    public void verifyAddedCpsContact(String victimType) {
+        HttpResponseWrapper response;
+        Map<String, String> idGuidMap = context.get("idGuidMap");
         Map<String, List<String>> victimMapIds = context.get("victimMapIds");
-        Map<String, VictimCmsDetails> victimWitnessDetailsToCMS = context.get("victimWitnessDetailsToCMS");
-        Map<String, String> categoryMap = context.get("categoryMap");
-
-        categoryCode = switch (category) {
-            case "Victim" -> "V";
-            case "PoliceOfficer" -> "P";
-            case "Child" -> "C";
-            case "Professional" -> "F";
-            case "Expert" -> "X";
-            case "Vulnerable" -> "L";
-            case "Intimidated" -> "T";
-            case "ServingPrisoner" -> "H";
-            case "Interpreter" -> "I";
-            default -> categoryCode;
-        };
+        Map<Integer, CpsContacts> cpsContactMap = context.get("cpsContactMap");
 
         for (String id : victimMapIds.get(victimType)) {
-            victimCmsDetails = getVictimWitnessCategory(categoryCode);
-            victimService.addVictimWitnessCategoryDetails(victimCmsDetails, caseId, id);
-            victimWitnessDetailsToCMS.put(id, victimCmsDetails);
-            categoryMap.put(id, categoryCode);
+
+            for (Integer key : cpsContactMap.keySet()) {
+                CpsContacts cpsContacts = cpsContactMap.get(key);
+                response = victimService.listCpsContactDetails(idGuidMap.get(id));
+                VictimCaseAppAssertions.assertCpsContacts(key, cpsContacts, response);
+            }
         }
-        context.set("victimWitnessDetailsToCMS", victimWitnessDetailsToCMS);
-        context.set("categoryMap", categoryMap);
     }
 
-    @When("the category {string} is update to {string} in VCA")
-    public void updateCategoryToVictimAndWitness(String category, String victimType) throws InterruptedException {
-        String categoryCode = null;
-        VictimCmsDetails victimCmsDetails;
-        String caseId = context.get("caseId");
-        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
-        Map<String, VictimCmsDetails> victimWitnessDetailsToCMS = context.get("victimWitnessDetailsToCMS");
-        Map<String, String> categoryMap = context.get("categoryMap");
+    @When("the following cps-contacts are updated to {string} in VCA")
+    public void updateCpsContacts(String victimType, DataTable dataTable) {
+        CpsContacts cpsContacts;
 
-        categoryCode = switch (category) {
-            case "PoliceOfficer" -> "P,V";
-            case "Child" -> "C,V";
-            case "Professional" -> "F,V";
-            case "Vulnerable" -> "L,V";
-            case "Intimidated" -> "T,V,";
-            case "ServingPrisoner" -> "H,V";
-            default -> categoryCode;
-        };
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
+
+        Map<Integer, CpsContacts> cpsContactUpdateMap = new HashMap<>();
+        context.set("cpsContactUpdateMap", cpsContactUpdateMap);
+
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
 
         for (String id : victimMapIds.get(victimType)) {
-            categoryMap.put(id, categoryCode);
-            victimCmsDetails = getVictimWitnessCategory(categoryCode);
-            victimService.updateVictimWitnessCategoryDetails(victimCmsDetails, caseId, id);
-            victimWitnessDetailsToCMS.put(id, victimCmsDetails);
+            for (Map<String, String> row : rows) {
+                CpsContactsType cpsContactsTypeCode = CpsContactsType.fromString(row.get("cpsContactType"));
+                cpsContacts = updateCpsContact(cpsContactsTypeCode.getValue());
+                String requestBody = convertObjectToString(cpsContacts);
+//                victimService.addVictimContacts(idGuidMap.get(id), requestBody);
+                victimService.updateVictimContacts(idGuidMap.get(id), requestBody);
+                cpsContactUpdateMap.put(cpsContactsTypeCode.getValue(), cpsContacts);
+            }
+            context.set("cpsContactUpdateMap", cpsContactUpdateMap);
+        }
+    }
+
+    @Then("the updated cps-contacts for {string} are verified")
+    public void verifyUpdatedCpsContact(String victimType) {
+        HttpResponseWrapper response;
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
+        Map<Integer, CpsContacts> cpsContactUpdateMap = context.get("cpsContactUpdateMap");
+
+        for (String id : victimMapIds.get(victimType)) {
+
+            for (Integer key : cpsContactUpdateMap.keySet()) {
+                CpsContacts victimCpsContacts = cpsContactUpdateMap.get(key);
+                response = victimService.listCpsContactDetails(idGuidMap.get(id));
+                VictimCaseAppAssertions.assertCpsContacts(key, victimCpsContacts, response);
+            }
+        }
+    }
+
+    @Then("the case cms contact is verified in VCA")
+    public void verifyCaseCmsContactsInVCA() {
+        HttpResponseWrapper response;
+
+        String caseId = context.get("caseId");
+        response = victimService.caseCmsContactList(caseId);
+        String cm01RequestPayload = context.get("modifiedCM01RequestPayload");
+        VictimCaseAppAssertions.assertCaseCmsContact(cm01RequestPayload, response);
+    }
+
+    @When("the following category type is added to {string} in VCA")
+    public void addCategoryToVictim(String victimType, DataTable dataTable) {
+        VictimCmsDetails victimCmsDetails;
+        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
+        Map<String, VictimCmsDetails> victimDetailsToCmsMap = context.get("victimDetailsToCmsMap");
+
+        Set<String> categoryValues = new LinkedHashSet<>();
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+
+        for (Map<String, String> row : rows) {
+            CategoryType categoryTypeCode = CategoryType.fromString(row.get("categoryType"));
+            categoryValues.addAll(Arrays.asList(categoryTypeCode.getValue().split(",")));
+        }
+        String allCategoryValues = String.join(",", categoryValues);
+        System.out.println(allCategoryValues);
+        for (String id : victimMapIds.get(victimType)) {
+
+                victimCmsDetails = addCategoryToVictimInVca(allCategoryValues);
+                victimService.addVictimCategoryInVca(victimCmsDetails, context.get("caseId"), id);
+                victimDetailsToCmsMap.put(id, victimCmsDetails);
+        }
+        context.set("victimDetailsToCmsMap", victimDetailsToCmsMap);
+    }
+
+    @Then("the added categories to {string} are verified")
+    public void categoryAreVerified(String victimType) {
+        HttpResponseWrapper response;
+        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
+        Map<String, VictimCmsDetails> victimDetailsToCmsMap = context.get("victimDetailsToCmsMap");
+        for (String id : victimMapIds.get(victimType)) {
+            //Get input details from the cms mapping
+            VictimCmsDetails victimCmsDetails = victimDetailsToCmsMap.get(id);
+            //Get details from Cms
+            response = victimService.getVictimDetailsFromCMS(context.get("caseId"));
+            //assert for input = output
+            VictimCaseAppAssertions.assertCategoryList(id, victimCmsDetails, response);
         }
 
-        context.set("victimWitnessDetailsToCMS", victimWitnessDetailsToCMS);
-        context.set("categoryMap", categoryMap);
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     @Then("the {string} and {string} category is verified in CMS")
     public void categoryVerifiedInCMS(String witnessType, String victimType) throws InterruptedException {
@@ -351,191 +390,99 @@ public class VictimCaseAppStepDefinition {
 //        }
     }
 
-    @When("the {string} is added to {string} in VCA")
-    public void theVictimContactIsAddedInVCA(String contactType, String victimType) {
-        int contactTypeCode = 0;
-        Map<String, String> idGuidMap = context.get("idGuidMap");
-        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
-        Map<Integer, VictimContacts> victimContactDetailsMap = context.get("victimContactDetailsMap");
 
-        contactTypeCode = switch (contactType) {
-            case "Victim Liaison Officer" -> 1;
-            case "Family Liaison Officer" -> 2;
-            case "Independent Sexual Violence Adviser" -> 3;
-            case "Independent Domestic Violence Adviser" -> 4;
-            default -> contactTypeCode;
-        };
+//    @Then("the cms case details should be equal as in cms classic")
+//    public void assertCaseContactDetailsInVCA() {
+//        String caseId = context.get("caseId");
+//        String modifiedRequestJson = context.get("modifiedCM01RequestPayload");
 
-        for (String id : victimMapIds.get(victimType)) {
-            VictimContacts victimContacts = payLoadForAddVictimContactDetails(contactTypeCode);
-            victimService.addVictimContactDetailsToVCA(idGuidMap.get(id), convertObjectToString(victimContacts));
-            victimContactDetailsMap.put(contactTypeCode, victimContacts);
-        }
-        context.set("victimContactDetailsMap", victimContactDetailsMap);
-    }
-
-    @Then("the {string} for {string} is verified in VCA")
-    public void addDetailsIsVerifiedInVCA(String contactType, String victimType) {
-        HttpResponseWrapper response;
-        int contactTypeCode = 0;
-        Map<String, String> idGuidMap = context.get("idGuidMap");
-        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
-        Map<Integer, VictimContacts> victimContactDetailsMap = context.get("victimContactDetailsMap");
-
-        contactTypeCode = switch (contactType) {
-            case "Victim Liaison Officer" -> 1;
-            case "Family Liaison Officer" -> 2;
-            case "Independent Sexual Violence Adviser" -> 3;
-            case "Independent Domestic Violence Adviser" -> 4;
-            default -> contactTypeCode;
-        };
-
-        for (String id : victimMapIds.get(victimType)) {
-            VictimContacts victimContacts = victimContactDetailsMap.get(contactTypeCode);
-            response = victimService.listVictimContactTypeDetails(idGuidMap.get(id));
-            VictimCaseAppAssertions.assertContactTypeDetails(contactTypeCode, victimContacts, (Response) response);
-        }
-    }
-
-    @When("the {string} details are changed for {string} in VCA")
-    public void theVictimContactIsUpdatedInVCA(String contactType, String victimType) {
-        int contactTypeCode = 0;
-        Map<String, String> idGuidMap = context.get("idGuidMap");
-        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
-        Map<Integer, VictimContacts> victimContactDetailsMap = context.get("victimContactDetailsMap");
-
-        contactTypeCode = switch (contactType) {
-            case "Victim Liaison Officer" -> 1;
-            case "Family Liaison Officer" -> 2;
-            case "Independent Sexual Violence Adviser" -> 3;
-            case "Independent Domestic Violence Adviser" -> 4;
-            default -> contactTypeCode;
-        };
-
-        for (String id : victimMapIds.get(victimType)) {
-            VictimContacts victimContacts = payLoadForUpdateVictimContactDetails(contactTypeCode);
-            victimService.updateVictimContactDetailsToVCA(idGuidMap.get(id), convertObjectToString(victimContacts));
-            victimContactDetailsMap.put(contactTypeCode, victimContacts);
-        }
-        context.set("victimContactDetailsMap", victimContactDetailsMap);
-    }
-
-    @Then("the {string} changes for {string} are verified in VCA")
-    public void updateDetailsAreVerifiedInVCA(String contactType, String victimType) {
-        HttpResponseWrapper response;
-        int contactTypeCode = 0;
-        Map<String, String> idGuidMap = context.get("idGuidMap");
-        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
-        Map<Integer, VictimContacts> victimContactDetailsMap = context.get("victimContactDetailsMap");
-
-        contactTypeCode = switch (contactType) {
-            case "Victim Liaison Officer" -> 1;
-            case "Family Liaison Officer" -> 2;
-            case "Independent Sexual Violence Adviser" -> 3;
-            case "Independent Domestic Violence Adviser" -> 4;
-            default -> contactTypeCode;
-        };
-
-        for (String id : victimMapIds.get(victimType)) {
-            VictimContacts victimContacts = victimContactDetailsMap.get(contactTypeCode);
-            response = victimService.listVictimContactTypeDetails(idGuidMap.get(id));
-            VictimCaseAppAssertions.assertContactTypeDetails(contactTypeCode, victimContacts, (Response) response);
-        }
-    }
-
-
-    @Then("the cms case details should be equal as in cms classic")
-    public void assertCaseContactDetailsInVCA() {
-        String caseId = context.get("caseId");
-        String modifiedRequestJson = context.get("modifiedCM01RequestPayload");
-//        System.out.println(modifiedRequestJson);
-        HttpResponseWrapper response = victimService.listVictimWitnessCMSContact(caseId);
-
-        VictimWitnessCMSContact expectedOfficerInCaseContact =
-                buildExpectedOfficerInCaseContact(modifiedRequestJson);
-        context.set("expectedOfficerInCaseContact", expectedOfficerInCaseContact);
-
-        VictimWitnessCMSContact expectedDefenceFirmContact =
-                buildExpectedDefenceFirmContact(modifiedRequestJson);
-        context.set("expectedDefenceFirmContact", expectedDefenceFirmContact);
-
-        VictimWitnessCMSContact expectedDefenceSolicitorContact =
-                buildExpectedDefenceSolicitorContact(modifiedRequestJson);
-        context.set("expectedDefenceSolicitorContact", expectedDefenceSolicitorContact);
-
-        //OFFICER_IN_CASE
-        List<Map<String, Object>> officerInCaseList = JsonPath.read(
-                response.getBody(),
-                "$[?(@.contactType=='OFFICER_IN_CASE')]"
-        );
-        assertThat(officerInCaseList)
-                .as("OFFICER_IN_CASE contact should exist in CMS contacts response")
-                .isNotEmpty();
-        Map<String, Object> officerInCase = officerInCaseList.getFirst();
-
-        VictimWitnessCMSContact actualOfficerInCaseContact = VictimWitnessCMSContact.builder()
-                .contactType((String) officerInCase.get("contactType"))
-                .name((String) officerInCase.get("name"))
-                .phone((String) officerInCase.get("phone"))
-                .email((String) officerInCase.get("email"))
-                .build();
-        assertThat(actualOfficerInCaseContact.getContactType())
-                .isEqualTo(expectedOfficerInCaseContact.getContactType());
-        assertThat(actualOfficerInCaseContact.getName())
-                .isEqualTo(expectedOfficerInCaseContact.getName());
-        assertThat(actualOfficerInCaseContact.getPhone())
-                .isEqualTo(expectedOfficerInCaseContact.getPhone());
-        assertThat(actualOfficerInCaseContact.getEmail())
-                .isEqualTo(expectedOfficerInCaseContact.getEmail());
-
-        //DEFENCE_FIRM
-        List<Map<String, Object>> defenceFirmList = JsonPath.read(
-                response.getBody(),
-                "$[?(@.contactType=='DEFENCE_FIRM')]"
-        );
-        assertThat(defenceFirmList)
-                .as("DEFENCE_FIRM contact should exist in CMS contacts response")
-                .isNotEmpty();
-        Map<String, Object> defenceFirm = defenceFirmList.getFirst();
-
-        VictimWitnessCMSContact actualDefenceFirmContact = VictimWitnessCMSContact.builder()
-                .contactType((String) defenceFirm.get("contactType"))
-                .name((String) defenceFirm.get("name"))
-                .phone((String) defenceFirm.get("phone"))
-                .email((String) defenceFirm.get("email"))
-                .build();
-
-        assertThat(actualDefenceFirmContact.getContactType())
-                .isEqualTo(expectedDefenceFirmContact.getContactType());
-        assertThat(actualDefenceFirmContact.getName())
-                .isEqualTo(expectedDefenceFirmContact.getName());
-        assertThat(actualDefenceFirmContact.getPhone())
-                .isEqualTo(expectedDefenceFirmContact.getPhone());
-        assertThat(actualDefenceFirmContact.getEmail())
-                .isEqualTo(expectedDefenceFirmContact.getEmail());
-
-        //DEFENCE_SOLICITOR
-        List<Map<String, Object>> defenceSolicitormList = JsonPath.read(
-                response.getBody(),
-                "$[?(@.contactType=='DEFENCE_SOLICITOR')]"
-        );
-        assertThat(defenceSolicitormList)
-                .as("DEFENCE_SOLICITOR contact should exist in CMS contacts response")
-                .isNotEmpty();
-        Map<String, Object> defenceSolicitor = defenceSolicitormList.getFirst();
-
-        VictimWitnessCMSContact actualDefenceSolicitorContact = VictimWitnessCMSContact.builder()
-                .contactType((String) defenceSolicitor.get("contactType"))
-                .name((String) defenceSolicitor.get("name"))
-                .build();
-
-        assertThat(actualDefenceSolicitorContact.getContactType())
-                .isEqualTo(expectedDefenceSolicitorContact.getContactType());
-        assertThat(actualDefenceSolicitorContact.getName())
-                .isEqualTo(expectedDefenceSolicitorContact.getName());
-    }
-
-    private VictimWitnessCMSContact buildExpectedOfficerInCaseContact(String requestJson) {
+    /// /        System.out.println(modifiedRequestJson);
+//        HttpResponseWrapper response = victimService.listVictimWitnessCMSContact(caseId);
+//
+//        VictimCMSContact expectedOfficerInCaseContact =
+//                buildExpectedOfficerInCaseContact(modifiedRequestJson);
+//        context.set("expectedOfficerInCaseContact", expectedOfficerInCaseContact);
+//
+//        VictimCMSContact expectedDefenceFirmContact =
+//                buildExpectedDefenceFirmContact(modifiedRequestJson);
+//        context.set("expectedDefenceFirmContact", expectedDefenceFirmContact);
+//
+//        VictimCMSContact expectedDefenceSolicitorContact =
+//                buildExpectedDefenceSolicitorContact(modifiedRequestJson);
+//        context.set("expectedDefenceSolicitorContact", expectedDefenceSolicitorContact);
+//
+//        //OFFICER_IN_CASE
+//        List<Map<String, Object>> officerInCaseList = JsonPath.read(
+//                response.getBody(),
+//                "$[?(@.contactType=='OFFICER_IN_CASE')]"
+//        );
+//        assertThat(officerInCaseList)
+//                .as("OFFICER_IN_CASE contact should exist in CMS contacts response")
+//                .isNotEmpty();
+//        Map<String, Object> officerInCase = officerInCaseList.getFirst();
+//
+//        VictimCMSContact actualOfficerInCaseContact = VictimCMSContact.builder()
+//                .contactType((String) officerInCase.get("contactType"))
+//                .name((String) officerInCase.get("name"))
+//                .phone((String) officerInCase.get("phone"))
+//                .email((String) officerInCase.get("email"))
+//                .build();
+//        assertThat(actualOfficerInCaseContact.getContactType())
+//                .isEqualTo(expectedOfficerInCaseContact.getContactType());
+//        assertThat(actualOfficerInCaseContact.getName())
+//                .isEqualTo(expectedOfficerInCaseContact.getName());
+//        assertThat(actualOfficerInCaseContact.getPhone())
+//                .isEqualTo(expectedOfficerInCaseContact.getPhone());
+//        assertThat(actualOfficerInCaseContact.getEmail())
+//                .isEqualTo(expectedOfficerInCaseContact.getEmail());
+//
+//        //DEFENCE_FIRM
+//        List<Map<String, Object>> defenceFirmList = JsonPath.read(
+//                response.getBody(),
+//                "$[?(@.contactType=='DEFENCE_FIRM')]"
+//        );
+//        assertThat(defenceFirmList)
+//                .as("DEFENCE_FIRM contact should exist in CMS contacts response")
+//                .isNotEmpty();
+//        Map<String, Object> defenceFirm = defenceFirmList.getFirst();
+//
+//        VictimCMSContact actualDefenceFirmContact = VictimCMSContact.builder()
+//                .contactType((String) defenceFirm.get("contactType"))
+//                .name((String) defenceFirm.get("name"))
+//                .phone((String) defenceFirm.get("phone"))
+//                .email((String) defenceFirm.get("email"))
+//                .build();
+//
+//        assertThat(actualDefenceFirmContact.getContactType())
+//                .isEqualTo(expectedDefenceFirmContact.getContactType());
+//        assertThat(actualDefenceFirmContact.getName())
+//                .isEqualTo(expectedDefenceFirmContact.getName());
+//        assertThat(actualDefenceFirmContact.getPhone())
+//                .isEqualTo(expectedDefenceFirmContact.getPhone());
+//        assertThat(actualDefenceFirmContact.getEmail())
+//                .isEqualTo(expectedDefenceFirmContact.getEmail());
+//
+//        //DEFENCE_SOLICITOR
+//        List<Map<String, Object>> defenceSolicitormList = JsonPath.read(
+//                response.getBody(),
+//                "$[?(@.contactType=='DEFENCE_SOLICITOR')]"
+//        );
+//        assertThat(defenceSolicitormList)
+//                .as("DEFENCE_SOLICITOR contact should exist in CMS contacts response")
+//                .isNotEmpty();
+//        Map<String, Object> defenceSolicitor = defenceSolicitormList.getFirst();
+//
+//        VictimCMSContact actualDefenceSolicitorContact = VictimCMSContact.builder()
+//                .contactType((String) defenceSolicitor.get("contactType"))
+//                .name((String) defenceSolicitor.get("name"))
+//                .build();
+//
+//        assertThat(actualDefenceSolicitorContact.getContactType())
+//                .isEqualTo(expectedDefenceSolicitorContact.getContactType());
+//        assertThat(actualDefenceSolicitorContact.getName())
+//                .isEqualTo(expectedDefenceSolicitorContact.getName());
+//    }
+    private CaseCMSContact buildExpectedOfficerInCaseContact(String requestJson) {
         List<String> givenName = JsonPath.read(requestJson,
                 "$.PreChargeDecisionRequest.PCDPoliceContactDetails.OfficerCompleting.Name.GivenName");
 
@@ -548,7 +495,7 @@ public class VictimCaseAppStepDefinition {
         List<String> email = JsonPath.read(requestJson,
                 "$.PreChargeDecisionRequest.PCDPoliceContactDetails.OfficerCompleting.ContactDetails.Email");
 
-        return VictimWitnessCMSContact.builder()
+        return CaseCMSContact.builder()
                 .contactType("OFFICER_IN_CASE")
                 .name(familyName.getFirst() + ", " + givenName.getFirst())
                 .phone(phone.getFirst())
@@ -556,7 +503,7 @@ public class VictimCaseAppStepDefinition {
                 .build();
     }
 
-    private VictimWitnessCMSContact buildExpectedDefenceFirmContact(String requestJson) {
+    private CaseCMSContact buildExpectedDefenceFirmContact(String requestJson) {
         String firmName = JsonPath.read(requestJson,
                 "$.PreChargeDecisionRequest.Suspect[0].DefenceSolicitor.Firm");
 
@@ -566,7 +513,7 @@ public class VictimCaseAppStepDefinition {
         String phone = JsonPath.read(requestJson,
                 "$.PreChargeDecisionRequest.Suspect[0].DefenceSolicitor.ContactDetails.ContactNumber[0].Number.TelNationalNumber");
 
-        return VictimWitnessCMSContact.builder()
+        return CaseCMSContact.builder()
                 .contactType("DEFENCE_FIRM")
                 .name(firmName)
                 .phone(phone)
@@ -574,13 +521,13 @@ public class VictimCaseAppStepDefinition {
                 .build();
     }
 
-    private VictimWitnessCMSContact buildExpectedDefenceSolicitorContact(String requestJson) {
+    private CaseCMSContact buildExpectedDefenceSolicitorContact(String requestJson) {
         String givenName = JsonPath.read(requestJson,
                 "$.PreChargeDecisionRequest.Suspect[0].DefenceSolicitor.Name.GivenName");
 
         String familyName = JsonPath.read(requestJson,
                 "$.PreChargeDecisionRequest.Suspect[0].DefenceSolicitor.Name.FamilyName");
-        return VictimWitnessCMSContact.builder()
+        return CaseCMSContact.builder()
                 .contactType("DEFENCE_SOLICITOR")
                 .name(familyName + ", " + givenName)
                 .build();
@@ -611,7 +558,7 @@ public class VictimCaseAppStepDefinition {
         Map<String, List<String>> victimMapIds = context.get("victimMapIds");
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
 
-        Map<Integer, VictimMeetings> victimMeetingDetailsMap = new HashMap<>();
+        Map<Integer, Meetings> victimMeetingDetailsMap = new HashMap<>();
         context.set("victimMeetingDetailsMap", victimMeetingDetailsMap);
 
         List<Integer> meetingTypeCodeList = new ArrayList<>();
@@ -623,9 +570,9 @@ public class VictimCaseAppStepDefinition {
             meetingTypeCodeList.add(meetingTypeCode);
 
             for (String id : victimMapIds.get(victimType)) {
-                VictimMeetings victimMeetings = payLoadForAddVictimMeetingDetails(meetingTypeCode, reason);
-                victimService.addVictimMeetingDetailsToVCA(idGuidMap.get(id), convertObjectToString(victimMeetings));
-                victimMeetingDetailsMap.put(meetingTypeCode, victimMeetings);
+                Meetings meetings = payLoadForAddVictimMeetingDetails(meetingTypeCode, reason);
+                victimService.addVictimMeetingDetailsToVCA(idGuidMap.get(id), convertObjectToString(meetings));
+                victimMeetingDetailsMap.put(meetingTypeCode, meetings);
             }
             context.set("victimMeetingDetailsMap", victimMeetingDetailsMap);
         }
@@ -637,16 +584,16 @@ public class VictimCaseAppStepDefinition {
         HttpResponseWrapper response;
         Map<String, String> idGuidMap = context.get("idGuidMap");
         Map<String, List<String>> victimMapIds = context.get("victimMapIds");
-        Map<Integer, VictimMeetings> victimMeetingDetailsMap = context.get("victimMeetingDetailsMap");
+        Map<Integer, Meetings> victimMeetingDetailsMap = context.get("victimMeetingDetailsMap");
 
         List<Integer> meetingTypeCodeList = context.get("meetingTypeCodeList");
 
         for (Integer meetingTypeCode : meetingTypeCodeList) {
 
             for (String id : victimMapIds.get(victimType)) {
-                VictimMeetings victimMeetings = victimMeetingDetailsMap.get(meetingTypeCode);
+                Meetings meetings = victimMeetingDetailsMap.get(meetingTypeCode);
                 response = victimService.listVictimMeetingDetails(idGuidMap.get(id), meetingTypeCode);
-                VictimCaseAppAssertions.assertMeetingTypeDetails(meetingTypeCode, victimMeetings, (Response) response);
+                VictimCaseAppAssertions.assertMeetingTypeDetails(meetingTypeCode, meetings, (Response) response);
             }
         }
     }
@@ -657,7 +604,7 @@ public class VictimCaseAppStepDefinition {
         Map<String, String> idGuidMap = context.get("idGuidMap");
         Map<String, List<String>> victimMapIds = context.get("victimMapIds");
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
-        Map<Integer, VictimMeetings> victimMeetingDetailsMap = new HashMap<>();
+        Map<Integer, Meetings> victimMeetingDetailsMap = new HashMap<>();
         context.set("victimMeetingDetailsMap", victimMeetingDetailsMap);
 
         List<String> meetingContextGuidList = new ArrayList<>();
@@ -673,11 +620,11 @@ public class VictimCaseAppStepDefinition {
             methodTypeCodeList.add(methodTypeCode);
 
             for (String id : victimMapIds.get(victimType)) {
-                VictimMeetings victimMeetings = payLoadForAddVictimMeetingMethodDetails(meetingTypeCode, methodTypeCode);
-                HttpResponseWrapper response = victimService.addVictimMeetingDetailsToVCA(idGuidMap.get(id), convertObjectToString(victimMeetings));
+                Meetings meetings = payLoadForAddVictimMeetingMethodDetails(meetingTypeCode, methodTypeCode);
+                HttpResponseWrapper response = victimService.addVictimMeetingDetailsToVCA(idGuidMap.get(id), convertObjectToString(meetings));
 //                String responseBody = response.getBody();
 //                String meetingContextGuid = JsonPath.read(responseBody, "$.value.meetingContextGuid");
-                victimMeetingDetailsMap.put(meetingTypeCode, victimMeetings);
+                victimMeetingDetailsMap.put(meetingTypeCode, meetings);
 //                meetingContextGuidList.add(meetingContextGuid);
             }
 
@@ -694,7 +641,7 @@ public class VictimCaseAppStepDefinition {
 
         Map<String, String> idGuidMap = context.get("idGuidMap");
         Map<String, List<String>> victimMapIds = context.get("victimMapIds");
-        Map<Integer, VictimMeetings> victimMeetingDetailsMap = context.get("victimMeetingDetailsMap");
+        Map<Integer, Meetings> victimMeetingDetailsMap = context.get("victimMeetingDetailsMap");
 
         List<Integer> meetingTypeCodeList = context.get("meetingTypeCodeList");
         List<Integer> methodTypeCodeList = context.get("methodTypeCodeList");
@@ -703,9 +650,9 @@ public class VictimCaseAppStepDefinition {
             for (int i = 0; i < meetingTypeCodeList.size() && i < methodTypeCodeList.size(); i++) {
                 Integer meetingTypeCode = meetingTypeCodeList.get(i);
                 Integer methodTypeCode = methodTypeCodeList.get(i);
-                VictimMeetings victimMeetings = payLoadForMeetingStatusDetails(meetingTypeCode, methodTypeCode, meetingStatus);
-                victimService.victimMeetingStatus(idGuidMap.get(id), convertObjectToString(victimMeetings));
-                victimMeetingDetailsMap.put(meetingTypeCode, victimMeetings);
+                Meetings meetings = payLoadForMeetingStatusDetails(meetingTypeCode, methodTypeCode, meetingStatus);
+                victimService.victimMeetingStatus(idGuidMap.get(id), convertObjectToString(meetings));
+                victimMeetingDetailsMap.put(meetingTypeCode, meetings);
             }
             context.set("victimMeetingDetailsMap", victimMeetingDetailsMap);
         }
@@ -717,7 +664,7 @@ public class VictimCaseAppStepDefinition {
         HttpResponseWrapper response;
         Map<String, String> idGuidMap = context.get("idGuidMap");
         Map<String, List<String>> victimMapIds = context.get("victimMapIds");
-        Map<Integer, VictimMeetings> victimMeetingDetailsMap = context.get("victimMeetingDetailsMap");
+        Map<Integer, Meetings> victimMeetingDetailsMap = context.get("victimMeetingDetailsMap");
 
         List<Integer> meetingTypeCodeList = context.get("meetingTypeCodeList");
         List<Integer> methodTypeCodeList = context.get("methodTypeCodeList");
@@ -727,9 +674,9 @@ public class VictimCaseAppStepDefinition {
                 Integer meetingTypeCode = meetingTypeCodeList.get(i);
                 Integer methodTypeCode = methodTypeCodeList.get(i);
                 Integer meetingAttempt = 1;
-                VictimMeetings victimMeetings = victimMeetingDetailsMap.get(meetingTypeCode);
+                Meetings meetings = victimMeetingDetailsMap.get(meetingTypeCode);
                 response = victimService.listMeetingStatusDetails(idGuidMap.get(id), meetingTypeCode, meetingAttempt);
-                VictimCaseAppAssertions.assertMeetingStatusDetails(meetingTypeCode, victimMeetings, (Response) response);
+                VictimCaseAppAssertions.assertMeetingStatusDetails(meetingTypeCode, meetings, (Response) response);
             }
 
         }
@@ -741,7 +688,7 @@ public class VictimCaseAppStepDefinition {
 
         Map<String, String> idGuidMap = context.get("idGuidMap");
         Map<String, List<String>> victimMapIds = context.get("victimMapIds");
-        Map<Integer, VictimMeetings> victimMeetingDetailsMap = context.get("victimMeetingDetailsMap");
+        Map<Integer, Meetings> victimMeetingDetailsMap = context.get("victimMeetingDetailsMap");
 
         List<Integer> meetingTypeCodeList = context.get("meetingTypeCodeList");
         List<Integer> methodTypeCodeList = context.get("methodTypeCodeList");
@@ -750,9 +697,9 @@ public class VictimCaseAppStepDefinition {
             for (int i = 0; i < meetingTypeCodeList.size() && i < methodTypeCodeList.size(); i++) {
                 Integer meetingTypeCode = meetingTypeCodeList.get(i);
                 Integer methodTypeCode = methodTypeCodeList.get(i);
-                VictimMeetings victimMeetings = payLoadForNoResponseMeetingDetails(meetingTypeCode, methodTypeCode);
-                victimService.noResponseVictimMeeting(idGuidMap.get(id), convertObjectToString(victimMeetings));
-                victimMeetingDetailsMap.put(meetingTypeCode, victimMeetings);
+                Meetings meetings = payLoadForNoResponseMeetingDetails(meetingTypeCode, methodTypeCode);
+                victimService.noResponseVictimMeeting(idGuidMap.get(id), convertObjectToString(meetings));
+                victimMeetingDetailsMap.put(meetingTypeCode, meetings);
             }
             context.set("victimMeetingDetailsMap", victimMeetingDetailsMap);
         }
@@ -764,7 +711,7 @@ public class VictimCaseAppStepDefinition {
         HttpResponseWrapper response;
         Map<String, String> idGuidMap = context.get("idGuidMap");
         Map<String, List<String>> victimMapIds = context.get("victimMapIds");
-        Map<Integer, VictimMeetings> victimMeetingDetailsMap = context.get("victimMeetingDetailsMap");
+        Map<Integer, Meetings> victimMeetingDetailsMap = context.get("victimMeetingDetailsMap");
 
         List<Integer> meetingTypeCodeList = context.get("meetingTypeCodeList");
         List<Integer> methodTypeCodeList = context.get("methodTypeCodeList");
@@ -775,9 +722,9 @@ public class VictimCaseAppStepDefinition {
                 Integer methodTypeCode = methodTypeCodeList.get(i);
                 Integer meetingAttempt = 1;
                 Integer noResponseMethodCode = 10;
-                VictimMeetings victimMeetings = victimMeetingDetailsMap.get(meetingTypeCode);
+                Meetings meetings = victimMeetingDetailsMap.get(meetingTypeCode);
                 response = victimService.listMeetingStatusDetails(idGuidMap.get(id), meetingTypeCode, meetingAttempt);
-                VictimCaseAppAssertions.assertNoResponseMeetingDetails(meetingTypeCode, victimMeetings, (Response) response);
+                VictimCaseAppAssertions.assertNoResponseMeetingDetails(meetingTypeCode, meetings, (Response) response);
             }
 
         }

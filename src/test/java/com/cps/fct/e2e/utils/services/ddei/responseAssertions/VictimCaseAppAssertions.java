@@ -1,13 +1,12 @@
 package com.cps.fct.e2e.utils.services.ddei.responseAssertions;
 
-import com.cps.fct.e2e.model.victimCaseApp.VictimCmsDetails;
+import com.cps.fct.e2e.model.victimCaseApp.*;
+import com.cps.fct.e2e.utils.common.ScenarioContext;
 import com.cps.fct.e2e.utils.httpClient.HttpResponseWrapper;
-import com.cps.fct.e2e.model.victimCaseApp.VictimVcaDetails;
-import com.cps.fct.e2e.model.victimCaseApp.VictimContacts;
-import com.cps.fct.e2e.model.victimCaseApp.VictimLiaisonOfficer;
-import com.cps.fct.e2e.model.victimCaseApp.VictimMeetings;
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.assertj.core.api.SoftAssertions;
+import com.google.gson.JsonArray;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -15,6 +14,7 @@ import java.util.Map;
 
 import static com.cps.fct.e2e.utils.common.JsonUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
+
 
 public class VictimCaseAppAssertions {
 
@@ -61,9 +61,75 @@ public class VictimCaseAppAssertions {
         softly.assertAll();
     }
 
+    public static void assertCpsContacts(Integer contactTypeCode, CpsContacts inputDetails,
+                                               HttpResponseWrapper responsePayload)
+    {
+        SoftAssertions softly = new SoftAssertions();
+        String filter = "value.find {it.contactType=="+ contactTypeCode +"}";
 
+        LinkedHashMap<String, Object> result = new JsonPath(responsePayload.getBody()).get(filter);
 
+        assertThat(result.get("name")).isEqualTo(inputDetails.getContactName());
+        assertThat(result.get("email")).isEqualTo(inputDetails.getContactEmail());
+        assertThat(result.get("telephone")).isEqualTo(inputDetails.getContactTelephone());
+        assertThat(result.get("contactType")).isEqualTo(inputDetails.getContactType());
+        if(contactTypeCode != 2){
+            assertThat((String) ((LinkedHashMap<?, ?>) result.get("addressFields")).get("addressLine1")).isEqualTo(inputDetails.getAddress().getAddressLine1());
+            assertThat((String) ((LinkedHashMap<?, ?>) result.get("addressFields")).get("addressLine2")).isEqualTo(inputDetails.getAddress().getAddressLine2());
+            assertThat((String) ((LinkedHashMap<?, ?>) result.get("addressFields")).get("city")).isEqualTo(inputDetails.getAddress().getCity());
+            assertThat((String) ((LinkedHashMap<?, ?>) result.get("addressFields")).get("postcode")).isEqualTo(inputDetails.getAddress().getPostcode());
+        }
+        softly.assertAll();
+    }
 
+    public static void assertCaseCmsContact(String cm01RequestPayload, HttpResponseWrapper responsePayload ){
+        CaseCMSContact caseCMSContact;
+        SoftAssertions softly = new SoftAssertions();
+        JsonArray context;
+
+        List<Map<String, Object>> officerInCaseList =
+                new JsonPath(responsePayload.getBody())
+                        .get("find { it.contactType == 'OFFICER_IN_CASE' }");
+        List<Map<String, Object>> defenceFirmResult =
+                new JsonPath(responsePayload.getBody())
+                        .get("find { it.contactType == 'OFFICER_IN_CASE' }");
+
+        List<Map<String, Object>> defenceSolicitorResult =
+                new JsonPath(responsePayload.getBody())
+                        .get("find { it.contactType == 'OFFICER_IN_CASE' }");
+
+        assertThat(officerInCaseList)
+                .as("OFFICER_IN_CASE should exist in response")
+                .isNotEmpty();
+        Map<String, Object> officerInCase = officerInCaseList.getFirst();
+                CaseCMSContact actualOfficerInCaseContact = CaseCMSContact.builder()
+                .contactType((String) officerInCase.get("contactType"))
+                .name((String) officerInCase.get("name"))
+                .phone((String) officerInCase.get("phone"))
+                .email((String) officerInCase.get("email"))
+                .build();
+//        assertThat(actualOfficerInCaseContact.getContactType())
+//                .isEqualTo(.getContactType());
+//        assertThat(actualOfficerInCaseContact.getName())
+//                .isEqualTo(expectedOfficerInCaseContact.getName());
+//        assertThat(actualOfficerInCaseContact.getPhone())
+//                .isEqualTo(expectedOfficerInCaseContact.getPhone());
+//        assertThat(actualOfficerInCaseContact.getEmail())
+//                .isEqualTo(expectedOfficerInCaseContact.getEmail());
+
+    }
+
+    public static void assertCategoryList(String id, VictimCmsDetails inputDetails,
+                                                HttpResponseWrapper responsePayload)
+    {
+        SoftAssertions softly = new SoftAssertions();
+        String responseBody = responsePayload.getBody();
+        List<String> categoryList = extractFromJsonToList(responseBody, "$?(@.isWitnessAndVictim==true).types");
+        System.out.println("All Cats--->"+categoryList);
+        //assertions
+//        assertThat(categoryList.getFirst()).isEqualTo(inputDetails.getCategory());
+        softly.assertAll();
+    }
 
 
 
@@ -138,29 +204,9 @@ public class VictimCaseAppAssertions {
 
     }
 
-    public static void assertContactTypeDetails(int contactTypeCode, VictimContacts inputDetails,
-                                                Response responsePayload)
-    {
-        SoftAssertions softly = new SoftAssertions();
-        //"value.find {it.contactType==1}"
-        String filter = "value.find {it.contactType=="+ contactTypeCode +"}";
-        LinkedHashMap<String, Object> result = responsePayload.getBody().jsonPath().get(filter);
-        System.out.println(result.get("contactType").toString());
 
-        assertThat(result.get("name")).isEqualTo(inputDetails.getContactName());
-        assertThat(result.get("email")).isEqualTo(inputDetails.getContactEmail());
-        assertThat(result.get("telephone")).isEqualTo(inputDetails.getContactTelephone());
-        assertThat(result.get("contactType")).isEqualTo(inputDetails.getContactType());
-        if(contactTypeCode != 2){
-            assertThat((String) ((LinkedHashMap<?, ?>) result.get("addressFields")).get("addressLine1")).isEqualTo(inputDetails.getAddress().getAddressLine1());
-            assertThat((String) ((LinkedHashMap<?, ?>) result.get("addressFields")).get("addressLine2")).isEqualTo(inputDetails.getAddress().getAddressLine2());
-            assertThat((String) ((LinkedHashMap<?, ?>) result.get("addressFields")).get("city")).isEqualTo(inputDetails.getAddress().getCity());
-            assertThat((String) ((LinkedHashMap<?, ?>) result.get("addressFields")).get("postcode")).isEqualTo(inputDetails.getAddress().getPostcode());
-        }
-        softly.assertAll();
-    }
 
-    public static void assertMeetingTypeDetails(int meetingTypeCode, VictimMeetings inputDetails,
+    public static void assertMeetingTypeDetails(int meetingTypeCode, Meetings inputDetails,
                                                 Response responsePayload)
     {
 //        SoftAssertions softly = new SoftAssertions();
@@ -176,7 +222,7 @@ public class VictimCaseAppAssertions {
 
     }
 
-    public static void assertMeetingStatusDetails(int meetingTypeCode, VictimMeetings inputDetails,
+    public static void assertMeetingStatusDetails(int meetingTypeCode, Meetings inputDetails,
                                                 Response responsePayload)
     {
 
@@ -203,7 +249,7 @@ public class VictimCaseAppAssertions {
 
     }
 
-    public static void assertNoResponseMeetingDetails(int meetingTypeCode, VictimMeetings inputDetails,
+    public static void assertNoResponseMeetingDetails(int meetingTypeCode, Meetings inputDetails,
                                                    Response responsePayload)
     {
 

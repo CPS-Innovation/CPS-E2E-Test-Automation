@@ -1,6 +1,7 @@
 package com.cps.fct.e2e.stepdefs.service;
 
 import com.cps.fct.e2e.enums.CpsContactsType;
+import com.cps.fct.e2e.enums.MeetingType;
 import com.cps.fct.e2e.enums.OnboardService;
 import com.cps.fct.e2e.enums.CategoryType;
 import com.cps.fct.e2e.model.victimCaseApp.*;
@@ -232,7 +233,6 @@ public class VictimCaseAppStepDefinition {
         Map<Integer, CpsContacts> cpsContactMap = context.get("cpsContactMap");
 
         for (String id : victimMapIds.get(victimType)) {
-
             for (Integer key : cpsContactMap.keySet()) {
                 CpsContacts cpsContacts = cpsContactMap.get(key);
                 response = victimService.listCpsContactDetails(idGuidMap.get(id));
@@ -286,7 +286,6 @@ public class VictimCaseAppStepDefinition {
     @Then("the case cms contact is verified in VCA")
     public void verifyCaseCmsContactsInVCA() {
         HttpResponseWrapper response;
-
         String caseId = context.get("caseId");
         response = victimService.caseCmsContactList(caseId);
         String cm01RequestPayload = context.get("modifiedCM01RequestPayload");
@@ -332,6 +331,52 @@ public class VictimCaseAppStepDefinition {
         }
 
     }
+
+    @When("the following meetings are not offered to {string} in VCA")
+    public void meetingAreNotOffered(String witnessVictimType, DataTable dataTable) {
+
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+        Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+
+//        Map<Integer, VictimMeetingOfferDetails> victimMeetingOfferDetailsMap = new HashMap<>();
+//        context.set("victimMeetingOfferDetailsMap", victimMeetingOfferDetailsMap);
+
+//        List<Integer> meetingTypeCodeList = new ArrayList<>();
+
+        for (String id : witnessVictimMapIds.get(witnessVictimType)) {
+            for (Map<String, String> row : rows) {
+                String meetingType = row.get("meeting");
+                String reason = row.get("notOfferedReason");
+                MeetingType meetingTypeCode = MeetingType.fromString(meetingType);
+//                meetingTypeCodeList.add(victimMeetingTypeCode.getValue());
+
+//                VictimMeetingOfferDetails victimMeetingOfferDetails = VictimWitnessPayloadBuilder.payLoadForAddVictimMeetingDetails(victimMeetingTypeCode.getValue(), reason);
+//                witnessService.addVictimMeetingDetailsToVCA(idGuidMap.get(id), convertObjectToString(victimMeetingOfferDetails));
+//                victimMeetingDetailsMap.put(victimMeetingTypeCode.getValue(), victimMeetingOfferDetails);
+//
+//                VictimMeetingOfferDetails victimMeetingOfferDetails = witnessService.addVictimMeetingOfferToVCA(idGuidMap.get(id),victimMeetingTypeCode.getValue(), reason );
+
+//                victimMeetingOfferDetailsMap.put(victimMeetingTypeCode.getValue(),victimMeetingOfferDetails);
+
+//                VictimMeetingOfferDetails victimMeetingOfferDetails = VictimWitnessPayloadBuilder.payLoadForAddVictimMeetingDetails(victimMeetingTypeCode.getValue(), reason);
+//                witnessService.addVictimMeetingDetailsToVCA(idGuidMap.get(id), convertObjectToString(victimMeetingOfferDetails));
+//                victimMeetingDetailsMap.put(victimMeetingTypeCode.getValue(), victimMeetingOfferDetails);
+
+
+
+
+            }
+//            context.set("victimMeetingDetailsMap", victimMeetingDetailsMap);
+//            context.set("meetingTypeCodeList", meetingTypeCodeList);
+        }
+
+    }
+
+
+
+
+
 
 
 

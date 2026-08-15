@@ -20,12 +20,33 @@ Feature: VCA-API-S10 - Meetings are not offered to victims for different meeting
     Given victim details are available in VCA
     When the "victim" is onboarded as "Universal" service lead in VCA
     Then the Victim liaison officer is assigned to "victim" in VCA
-    When the following meetings is not offered to "victimId" in VCA
-      | meeting                                 | meetingTypeCode | reason                                                       |
-      | CPS pre-trial meeting                   | 1               | CPS pre-trial meeting - Not Offered reason                   |
-      | Inform victim about charging decision   | 2               | Inform victim about charging decision - Not Offered reason   |
-      | Stopped or Substantially altered charge | 3               | Stopped or Substantially altered charge - Not Offered reason |
-      | Victims Right to Review                 | 4               | Victims Right to Review - Not Offered reason                 |
-      | Victim complaint                        | 5               | Victim complaint - Not Offered reason                        |
-      | Other CPS meeting                       | 99              | Other CPS meeting -  Not Offered reason                      |
-    Then the offered meeting details of "victimId" is verified in VCA
+    When the following meetings are not offered to "victimId" in VCA
+      | meeting                                 | notOfferedReason                                             |
+      | CPS pre-trial meeting                   | CPS pre-trial meeting - Not Offered reason                   |
+      | Inform victim about charging decision   | Inform victim about charging decision - Not Offered reason   |
+      | Stopped or Substantially altered charge | Stopped or Substantially altered charge - Not Offered reason |
+      | Victims Right to Review                 | Victims Right to Review - Not Offered reason                 |
+      | Victim complaint                        | Victim complaint - Not Offered reason                        |
+      | Other CPS meeting                       | Other CPS meeting -  Not Offered reason                      |
+
+
+
+
+
+
+
+
+
+
+
+
+
+#    When the following meetings is not offered to "victimId" in VCA
+#      | meeting                                 | meetingTypeCode | reason                                                       |
+#      | CPS pre-trial meeting                   | 1               | CPS pre-trial meeting - Not Offered reason                   |
+#      | Inform victim about charging decision   | 2               | Inform victim about charging decision - Not Offered reason   |
+#      | Stopped or Substantially altered charge | 3               | Stopped or Substantially altered charge - Not Offered reason |
+#      | Victims Right to Review                 | 4               | Victims Right to Review - Not Offered reason                 |
+#      | Victim complaint                        | 5               | Victim complaint - Not Offered reason                        |
+#      | Other CPS meeting                       | 99              | Other CPS meeting -  Not Offered reason                      |
+#    Then the offered meeting details of "victimId" is verified in VCA

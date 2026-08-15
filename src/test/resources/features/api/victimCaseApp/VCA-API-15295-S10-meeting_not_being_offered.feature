@@ -28,6 +28,7 @@ Feature: VCA-API-S10 - Meetings are not offered to victims for different meeting
       | Victims Right to Review                 | Victims Right to Review - Not Offered reason                 |
       | Victim complaint                        | Victim complaint - Not Offered reason                        |
       | Other CPS meeting                       | Other CPS meeting -  Not Offered reason                      |
+  Then meetings not offered to "victim" are verified
 
 
 

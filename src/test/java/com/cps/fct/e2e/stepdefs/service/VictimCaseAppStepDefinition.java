@@ -309,9 +309,9 @@ public class VictimCaseAppStepDefinition {
         System.out.println(allCategoryValues);
         for (String id : victimMapIds.get(victimType)) {
 
-                victimCmsDetails = addCategoryToVictimInVca(allCategoryValues);
-                victimService.addVictimCategoryInVca(victimCmsDetails, context.get("caseId"), id);
-                victimDetailsToCmsMap.put(id, victimCmsDetails);
+            victimCmsDetails = addCategoryToVictimInVca(allCategoryValues);
+            victimService.addVictimCategoryInVca(victimCmsDetails, context.get("caseId"), id);
+            victimDetailsToCmsMap.put(id, victimCmsDetails);
         }
         context.set("victimDetailsToCmsMap", victimDetailsToCmsMap);
     }
@@ -343,33 +343,85 @@ public class VictimCaseAppStepDefinition {
 
         for (String id : victimMapIds.get(victimType)) {
             for (Map<String, String> row : rows) {
-                String meetingType = row.get("meeting");
+                String meetingType = row.get("meetingType");
                 String reason = row.get("notOfferedReason");
-                MeetingType meetingTypeCode = MeetingType.fromString(meetingType);
+                MeetingType meetingTypeCode = MeetingType.fromString(meetingType);//Enum
 
-                Meetings meetingNotOffered = meetingNotOffered(meetingTypeCode.getValue(), reason);
+                Meetings meetingNotOffered = meetingNotOffered(meetingTypeCode.getValue(), reason);//Class
                 victimService.addMeetingsNotOffered(idGuidMap.get(id), convertObjectToString(meetingNotOffered));
-
-
-//                Meetings meetingsOffer = victimService.addMeetingNotOfferedToVCA(idGuidMap,meetingTypeCode.getValue(), reason );
-
-//                VictimMeetingOfferDetails victimMeetingOfferDetails = witnessService.addVictimMeetingOfferToVCA(idGuidMap.get(id),victimMeetingTypeCode.getValue(), reason );
-
-
-
-
-
-
-
-
-
-
-
+                meetingOfferMap.put(meetingTypeCode.getValue(), meetingNotOffered);
             }
+            context.set("meetingOfferMap", meetingOfferMap);
+        }
+    }
+
+
+    @Then("meetings not offered to {string} are verified")
+    public void meetingNotOfferedVerified(String victimType) {
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+        Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
+        Map<Integer, Meetings> meetingOfferMap = context.get("meetingOfferMap");
+
+        for (String id : witnessVictimMapIds.get(victimType)) {
+
+
 
         }
 
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

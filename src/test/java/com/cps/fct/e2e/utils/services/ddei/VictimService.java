@@ -361,13 +361,25 @@ public class VictimService extends BaseService {
     private HttpClientBuilder addMeetingsNotOfferedRequestParams(String guid, String requestBody) {
         return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("DDEI_HOST"))
-                .endpoint(format("/api/victims/%s/cps-contacts", guid))
+                .endpoint(format("/api/victims/%s/meeting-offers", guid))
                 .addHeaders(ddeiHeaders())
                 .method("POST")
                 .body(requestBody)
-                .resourceName("addCpsContactDetails")
+                .resourceName("addVictimMeetingDetails")
                 .build();
     }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

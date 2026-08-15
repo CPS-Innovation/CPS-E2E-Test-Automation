@@ -238,7 +238,6 @@ public class VictimCaseAppPayloadBuilder {
                 .ReasonForNoOffer(reason)
                 .CreatedBy("meetingNotOffered")
                 .build();
-
     }
 
 

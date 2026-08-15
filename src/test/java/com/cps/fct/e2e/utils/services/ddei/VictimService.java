@@ -354,25 +354,51 @@ public class VictimService extends BaseService {
                 .build();
     }
 
+    public void addMeetingNotOfferedToVCA(String guid, String requestBody) {
+        service.sendRequest(addMeetingNotOfferedToVCARequestParams(guid, requestBody));
+    }
+
+    private HttpClientBuilder addMeetingNotOfferedToVCARequestParams(String guid, String requestBody) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/victims/%s/cps-contacts", guid))
+                .addHeaders(ddeiHeaders())
+                .method("POST")
+                .body(requestBody)
+                .resourceName("addCpsContactDetails")
+                .build();
+    }
 
 
 
 
-//    public void updateVictimCategoryToCMS(String requestBody, String caseId, String victimId) {
-//        service.sendRequest(updateVictimCategoryToCMSRequestParams(requestBody, caseId, victimId));
-//    }
-//
-//    private HttpClientBuilder updateVictimCategoryToCMSRequestParams(String requestBody, String caseId, String victimId) {
-//        return new HttpClientBuilder.Builder()
-//                .baseUri(EnvConfig.get("DDEI_HOST"))
-//                .endpoint(format("/api/cases/%s/witnesses/%s", caseId, victimId))
-//                .addHeaders(ddeiHeaders())
-//                .method("PATCH")
-//                .body(payLoadUpdateVictimPersonalDetailsToCMS(victimDetails))
-//                .body(payLoadUpdateVictimPersonalDetailsToCMS(victimDetails))
-//                .resourceName("updateVictimPersonalDetailsToCms")
-//                .build();
-//    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

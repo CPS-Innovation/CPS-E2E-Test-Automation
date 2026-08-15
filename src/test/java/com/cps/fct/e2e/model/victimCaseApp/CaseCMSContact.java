@@ -5,9 +5,11 @@ import lombok.Data;
 
 @Data
 @Builder
-public class VictimWitnessCMSContact {
+public class CaseCMSContact {
+
     private String contactType;
     private String email;
     private String name;
     private String phone;
+
 }

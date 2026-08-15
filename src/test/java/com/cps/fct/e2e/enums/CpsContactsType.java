@@ -1,14 +1,16 @@
 package com.cps.fct.e2e.enums;
 
+import lombok.Getter;
 
-public enum VictimContactsType {
+@Getter
+public enum CpsContactsType {
     FLO(2),
     ISVA(3),
     IDVA(4);
 
     public final int value;
 
-    VictimContactsType(int value){
+    CpsContactsType(int value){
         this.value = value;
     }
 
@@ -22,7 +24,7 @@ public enum VictimContactsType {
 //    }
 
 
-    public static VictimContactsType fromString(String value) {
+    public static CpsContactsType fromString(String value) {
         return switch (value.trim().toLowerCase()) {
             case "family liaison officer" -> FLO;
             case "independent sexual violence adviser" -> ISVA;

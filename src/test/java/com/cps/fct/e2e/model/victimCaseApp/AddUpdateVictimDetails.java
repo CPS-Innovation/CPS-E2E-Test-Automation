@@ -6,15 +6,15 @@ import java.util.List;
 import java.util.Map;
 
 
-public class UpdateWitnessDetailsWitnessIdJsonBuilder {
+public class AddUpdateVictimDetails {
 
     private final List<Map<String, Object>> operations;
 
-    public UpdateWitnessDetailsWitnessIdJsonBuilder() {
+    public AddUpdateVictimDetails() {
         this.operations = new ArrayList<>();
     }
 
-    public UpdateWitnessDetailsWitnessIdJsonBuilder replace(String path, Object value) {
+    public AddUpdateVictimDetails replace(String path, Object value) {
         Map<String, Object> operation = new HashMap<>();
         operation.put("op", "replace");
         operation.put("path", path);
@@ -23,7 +23,7 @@ public class UpdateWitnessDetailsWitnessIdJsonBuilder {
         return this;
     }
 
-    public UpdateWitnessDetailsWitnessIdJsonBuilder add(String path, Object value) {
+    public AddUpdateVictimDetails add(String path, Object value) {
         Map<String, Object> operation = new HashMap<>();
         operation.put("op", "add");
         operation.put("path", path);

@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 
-public class VictimCaseInfo {
+public class CaseInfo {
 
     private String Urn;
     private int Service;

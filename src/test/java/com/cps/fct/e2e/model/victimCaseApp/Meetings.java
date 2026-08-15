@@ -8,7 +8,7 @@ import lombok.Getter;
 @Getter
 @Builder
 
-public class VictimMeetings {
+public class Meetings {
 
     private int MeetingType;
     private int MethodOfOffer;

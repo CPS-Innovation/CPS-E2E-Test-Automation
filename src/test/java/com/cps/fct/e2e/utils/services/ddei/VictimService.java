@@ -280,6 +280,109 @@ public class VictimService extends BaseService {
                 .build();
     }
 
+    public void addCpsContacts(String guid, String requestBody) {
+        service.sendRequest(addCpsContactsRequestParams(guid, requestBody));
+    }
+
+    private HttpClientBuilder addCpsContactsRequestParams(String guid, String requestBody) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/victims/%s/cps-contacts", guid))
+                .addHeaders(ddeiHeaders())
+                .method("POST")
+                .body(requestBody)
+                .resourceName("addCpsContactDetails")
+                .build();
+    }
+
+    public HttpResponseWrapper listCpsContactDetails(String guid) {
+        return service.sendRequest(listCpsContactRequestParams(guid));
+    }
+
+    private HttpClientBuilder listCpsContactRequestParams(String guid) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/victims/%s/cps-contacts", guid))
+                .addHeaders(ddeiHeaders())
+                .method("GET")
+                .resourceName("getCpsContactDetails")
+                .build();
+    }
+
+    public void updateVictimContacts(String guid, String requestBody) {
+        service.sendRequest(updateVictimContactsRequestParams(guid, requestBody));
+    }
+
+    private HttpClientBuilder updateVictimContactsRequestParams(String guid, String requestBody) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/victims/%s/cps-contacts", guid))
+                .addHeaders(ddeiHeaders())
+                .method("PATCH")
+                .body(requestBody)
+                .resourceName("updateCpsContactDetails")
+                .build();
+    }
+
+    public HttpResponseWrapper caseCmsContactList(String caseId) {
+        return service.sendRequest(getCaseCmsContactList(caseId));
+    }
+
+    private HttpClientBuilder getCaseCmsContactList(String caseId) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/cases/%s/contacts", caseId))
+                .addHeaders(ddeiHeaders())
+                .method("GET")
+                .resourceName("getCaseCmsContactList")
+                .build();
+    }
+
+    public void addVictimCategoryInVca(VictimCmsDetails details, String caseId, String victimId) {
+        service.sendRequest(addVictimCategoryInVcaRequestParams(details, caseId, victimId));
+    }
+
+    private HttpClientBuilder addVictimCategoryInVcaRequestParams(VictimCmsDetails victimDetails,
+                                                                String caseId, String victimId) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/cases/%s/witnesses/%s", caseId, victimId))
+                .addHeaders(ddeiHeaders())
+                .method("PATCH")
+                .body(payLoadForAddOrUpdateCategory(victimDetails))
+                .resourceName("addWitnessCategoryDetails")
+                .build();
+    }
+
+
+
+
+
+//    public void updateVictimCategoryToCMS(String requestBody, String caseId, String victimId) {
+//        service.sendRequest(updateVictimCategoryToCMSRequestParams(requestBody, caseId, victimId));
+//    }
+//
+//    private HttpClientBuilder updateVictimCategoryToCMSRequestParams(String requestBody, String caseId, String victimId) {
+//        return new HttpClientBuilder.Builder()
+//                .baseUri(EnvConfig.get("DDEI_HOST"))
+//                .endpoint(format("/api/cases/%s/witnesses/%s", caseId, victimId))
+//                .addHeaders(ddeiHeaders())
+//                .method("PATCH")
+//                .body(payLoadUpdateVictimPersonalDetailsToCMS(victimDetails))
+//                .body(payLoadUpdateVictimPersonalDetailsToCMS(victimDetails))
+//                .resourceName("updateVictimPersonalDetailsToCms")
+//                .build();
+//    }
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -403,9 +506,19 @@ public class VictimService extends BaseService {
         service.sendRequest(updateWitnessDetailsWitnessIdRequestParams(details, caseId, witnessId));
     }
 
-    public void addVictimWitnessCategoryDetails(VictimCmsDetails details, String caseId, String witnessId) {
-        service.sendRequest(addCategoryWitnessIdRequestParams(details, caseId, witnessId));
-    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public void updateVictimWitnessCategoryDetails(VictimCmsDetails details, String caseId, String witnessId) {
         service.sendRequest(updateCategoryVictimIdRequestParams(details, caseId, witnessId));
@@ -421,18 +534,11 @@ public class VictimService extends BaseService {
         return victimCaseInfoGuid;
     }
 
-    public HttpResponseWrapper listVictimWitnessCMSContact(String caseId) {
-        return service.sendRequest(getListVictimWitnessCMSContact(caseId));
-    }
-
-    public HttpResponseWrapper listVictimContactTypeDetails(String guid) {
-        return service.sendRequest(getVictimContactTypeDetailsForRequestParams(guid));
-    }
 
 
-    public void addVictimContactDetailsToVCA(String guid, String requestBody) {
-        service.sendRequest(addVictimContactDetailsRequestParams(guid, requestBody));
-    }
+
+
+
 
     public void updateVictimContactDetailsToVCA(String guid, String requestBody) {
         service.sendRequest(updateVictimContactDetailsRequestParams(guid, requestBody));
@@ -468,27 +574,11 @@ public class VictimService extends BaseService {
     }
 
 
-    private HttpClientBuilder getListVictimWitnessCMSContact(String caseId) {
-        return new HttpClientBuilder.Builder()
-                .baseUri(EnvConfig.get("DDEI_HOST"))
-                .endpoint(format("/api/cases/%s/contacts", caseId))
-                .addHeaders(ddeiHeaders())
-                .method("GET")
-                .resourceName("victimWitnessCMSContact")
-                .build();
-    }
 
 
 
-    private HttpClientBuilder getVictimContactTypeDetailsForRequestParams(String guid) {
-        return new HttpClientBuilder.Builder()
-                .baseUri(EnvConfig.get("DDEI_HOST"))
-                .endpoint(format("/api/victims/%s/cps-contacts", guid))
-                .addHeaders(ddeiHeaders())
-                .method("GET")
-                .resourceName("getVictimContactTypeDetails")
-                .build();
-    }
+
+
 
     private HttpClientBuilder addVictimOrWitnessRequestParams(
             String caseUrn, String caseId, String WitnessVictimId) {
@@ -534,17 +624,7 @@ public class VictimService extends BaseService {
                 .build();
     }
 
-    private HttpClientBuilder addCategoryWitnessIdRequestParams(VictimCmsDetails victimDetails,
-                                                                String caseId, String WitnessId) {
-        return new HttpClientBuilder.Builder()
-                .baseUri(EnvConfig.get("DDEI_HOST"))
-                .endpoint(format("/api/cases/%s/witnesses/%s", caseId, WitnessId))
-                .addHeaders(ddeiHeaders())
-                .method("PATCH")
-                .body(payLoadForAddOrUpdateCategory(victimDetails))
-                .resourceName("addWitnessCategoryDetails")
-                .build();
-    }
+
 
     private HttpClientBuilder updateCategoryVictimIdRequestParams(VictimCmsDetails victimDetails,
                                                                   String caseId, String WitnessId) {
@@ -558,16 +638,6 @@ public class VictimService extends BaseService {
                 .build();
     }
 
-    private HttpClientBuilder addVictimContactDetailsRequestParams(String guid, String requestBody) {
-        return new HttpClientBuilder.Builder()
-                .baseUri(EnvConfig.get("DDEI_HOST"))
-                .endpoint(format("/api/victims/%s/cps-contacts", guid))
-                .addHeaders(ddeiHeaders())
-                .method("POST")
-                .body(requestBody)
-                .resourceName("addVictimContactDetails")
-                .build();
-    }
 
     private HttpClientBuilder updateVictimContactDetailsRequestParams(String guid, String requestBody) {
         return new HttpClientBuilder.Builder()

@@ -227,43 +227,19 @@ public class VictimCaseAppPayloadBuilder {
                 .build();
     }
 
+    public static Meetings meetingNotOffered(int meetingTypeCode, String reason) {
+        return Meetings.builder()
+                .MeetingType(meetingTypeCode)
+                .MeetingContextGuid(FakerUtils.uuid())
+                .MeetingOffered(false)
+                .MeetingRequested(false)
+                .MethodOfOffer(10)
+                .DateOfOffer(defaultDate())
+                .ReasonForNoOffer(reason)
+                .CreatedBy("meetingNotOffered")
+                .build();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    }
 
 
 //    public static VictimCmsDetails getVictimWitnessCategory(String categoryCode) {
@@ -280,8 +256,6 @@ public class VictimCaseAppPayloadBuilder {
                 .create();
         return gson.toJson(object);
     }
-
-
 
 
     public static CpsContacts payLoadForAddVictimContactDetails(int contactTypeCode) {

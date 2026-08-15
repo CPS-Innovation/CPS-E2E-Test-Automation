@@ -21,7 +21,7 @@ Feature: VCA-API-S10 - Meetings are not offered to victims for different meeting
     When the "victim" is onboarded as "Universal" service lead in VCA
     Then the Victim liaison officer is assigned to "victim" in VCA
     When the following meetings are not offered to "victim" in VCA
-      | meetingType                                 | notOfferedReason                                             |
+      | meetingType                             | notOfferedReason                                             |
       | CPS pre-trial meeting                   | CPS pre-trial meeting - Not Offered reason                   |
       | Inform victim about charging decision   | Inform victim about charging decision - Not Offered reason   |
       | Stopped or Substantially altered charge | Stopped or Substantially altered charge - Not Offered reason |

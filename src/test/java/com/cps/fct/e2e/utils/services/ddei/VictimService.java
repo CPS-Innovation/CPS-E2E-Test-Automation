@@ -354,11 +354,11 @@ public class VictimService extends BaseService {
                 .build();
     }
 
-    public void addMeetingNotOfferedToVCA(String guid, String requestBody) {
-        service.sendRequest(addMeetingNotOfferedToVCARequestParams(guid, requestBody));
+    public void addMeetingsNotOffered(String guid, String requestBody) {
+        service.sendRequest(addMeetingsNotOfferedRequestParams(guid, requestBody));
     }
 
-    private HttpClientBuilder addMeetingNotOfferedToVCARequestParams(String guid, String requestBody) {
+    private HttpClientBuilder addMeetingsNotOfferedRequestParams(String guid, String requestBody) {
         return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("DDEI_HOST"))
                 .endpoint(format("/api/victims/%s/cps-contacts", guid))

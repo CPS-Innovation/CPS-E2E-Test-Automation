@@ -17,9 +17,9 @@ Feature: VCA-API-S10 - Meetings are not offered to victims for different meeting
 
   @ptmNotOffered
   Scenario: Meetings are not offered to victims for different meeting types with a reason
-    Given witness and victim details are available
-    And the "victimId" is onboarded to VCA
-    And the Victim liaison officer is assigned to "victimId" in VCA
+    Given victim details are available in VCA
+    When the "victim" is onboarded as "Universal" service lead in VCA
+    Then the Victim liaison officer is assigned to "victim" in VCA
     When the following meetings is not offered to "victimId" in VCA
       | meeting                                 | meetingTypeCode | reason                                                       |
       | CPS pre-trial meeting                   | 1               | CPS pre-trial meeting - Not Offered reason                   |

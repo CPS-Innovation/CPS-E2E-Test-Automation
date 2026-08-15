@@ -329,46 +329,41 @@ public class VictimCaseAppStepDefinition {
             //assert for input = output
             VictimCaseAppAssertions.assertCategoryList(id, victimCmsDetails, response);
         }
-
     }
 
     @When("the following meetings are not offered to {string} in VCA")
-    public void meetingAreNotOffered(String witnessVictimType, DataTable dataTable) {
+    public void meetingAreNotOffered(String victimType, DataTable dataTable) {
 
         Map<String, String> idGuidMap = context.get("idGuidMap");
-        Map<String, List<String>> witnessVictimMapIds = context.get("witnessVictimMapIds");
+        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
 
-//        Map<Integer, VictimMeetingOfferDetails> victimMeetingOfferDetailsMap = new HashMap<>();
-//        context.set("victimMeetingOfferDetailsMap", victimMeetingOfferDetailsMap);
+        Map<Integer, Meetings> meetingOfferMap = new HashMap<>();
+        context.set("meetingOfferMap", meetingOfferMap);
 
-//        List<Integer> meetingTypeCodeList = new ArrayList<>();
+        for (String id : victimMapIds.get(victimType)) {
 
-        for (String id : witnessVictimMapIds.get(witnessVictimType)) {
             for (Map<String, String> row : rows) {
                 String meetingType = row.get("meeting");
                 String reason = row.get("notOfferedReason");
                 MeetingType meetingTypeCode = MeetingType.fromString(meetingType);
-//                meetingTypeCodeList.add(victimMeetingTypeCode.getValue());
 
-//                VictimMeetingOfferDetails victimMeetingOfferDetails = VictimWitnessPayloadBuilder.payLoadForAddVictimMeetingDetails(victimMeetingTypeCode.getValue(), reason);
-//                witnessService.addVictimMeetingDetailsToVCA(idGuidMap.get(id), convertObjectToString(victimMeetingOfferDetails));
-//                victimMeetingDetailsMap.put(victimMeetingTypeCode.getValue(), victimMeetingOfferDetails);
-//
+//                Meetings meetingsOffer = victimService.addMeetingNotOfferedToVCA(idGuidMap,meetingTypeCode.getValue(), reason );
+
 //                VictimMeetingOfferDetails victimMeetingOfferDetails = witnessService.addVictimMeetingOfferToVCA(idGuidMap.get(id),victimMeetingTypeCode.getValue(), reason );
 
-//                victimMeetingOfferDetailsMap.put(victimMeetingTypeCode.getValue(),victimMeetingOfferDetails);
 
-//                VictimMeetingOfferDetails victimMeetingOfferDetails = VictimWitnessPayloadBuilder.payLoadForAddVictimMeetingDetails(victimMeetingTypeCode.getValue(), reason);
-//                witnessService.addVictimMeetingDetailsToVCA(idGuidMap.get(id), convertObjectToString(victimMeetingOfferDetails));
-//                victimMeetingDetailsMap.put(victimMeetingTypeCode.getValue(), victimMeetingOfferDetails);
+
+
+
+
+
 
 
 
 
             }
-//            context.set("victimMeetingDetailsMap", victimMeetingDetailsMap);
-//            context.set("meetingTypeCodeList", meetingTypeCodeList);
+
         }
 
     }

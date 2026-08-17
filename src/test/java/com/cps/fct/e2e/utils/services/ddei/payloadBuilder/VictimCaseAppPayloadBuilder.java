@@ -240,7 +240,7 @@ public class VictimCaseAppPayloadBuilder {
                 .build();
     }
 
-    public static Meetings meetingOfferedMethod(int meetingTypeCode, int meetingMethod) {
+    public static Meetings meetingOfferMethod(int meetingTypeCode, int meetingMethod) {
         return Meetings.builder()
                 .MeetingType(meetingTypeCode)
                 .MeetingContextGuid(FakerUtils.uuid())
@@ -252,6 +252,21 @@ public class VictimCaseAppPayloadBuilder {
                 .build();
     }
 
+    public static Meetings meetingResponse(int meetingTypeCode, int responseMethod, String meetingContextGuid, String meetingRespType) {
+        return Meetings.builder()
+                .MeetingType(meetingTypeCode)
+                .MeetingOfferAttempt(1)
+                .MeetingContextGuid(meetingContextGuid)
+                .MeetingOffered(true)
+                .MeetingRequested(false)
+                .VictimResponse(meetingRespType)
+                .MethodOfResponse(responseMethod)
+                .VictimResponseDate("No Response".equals(meetingRespType)
+                                ? todayDate()
+                                : todayMinusFourDays())
+                .LastModifiedBy("meetingResponseUser")
+                .build();
+    }
 
 
 

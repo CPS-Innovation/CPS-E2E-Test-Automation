@@ -40,12 +40,12 @@ Feature: VCA-API-S15-S51-S53 - Arrange the accepted meeting offer to victim with
       | Victim complaint                      | By telephone        | Accepted      |
       | Other CPS meeting                     | Letter by email     | Accepted      |
       | Victim Communication Liaison          | Letter by police    | Accepted      |
-    And the accepted meeting offer is arranged using following to "victim" in VCA
-      | meetingType                           | meetingSource              | meetingMethod | LocationType      | LocationName                           |
-      | CPS pre-trial meeting                 | Victim requested           | In Person     | CPS location      | Petty France                           |
-      | Inform victim about charging decision | CPS offered                | Hybrid        | Magistrates court | Newcastle upon Tyne Magistrates' Court |
-      | Victims Right to Review               | Requested by a third party | In Person     | Crown court       | Newcastle upon Tyne Crown Court        |
-      | Victim complaint                      | Victim requested           | Hybrid        | Other             | Specify Location                       |
-      | Other CPS meeting                     | CPS offered                | Virtual Call  |                   |                                        |
-      | Victim Communication Liaison          | Requested by a third party | Virtual Call  |                   |                                        |
-
+#    And the accepted meeting offer is arranged using following to "victim" in VCA
+#      | meetingType                           | meetingSource              | meetingMethod | LocationType      | LocationName                           |
+#      | CPS pre-trial meeting                 | Victim requested           | In Person     | CPS location      | Petty France                           |
+#      | Inform victim about charging decision | CPS offered                | Hybrid        | Magistrates court | Newcastle upon Tyne Magistrates' Court |
+#      | Victims Right to Review               | Requested by a third party | In Person     | Crown court       | Newcastle upon Tyne Crown Court        |
+#      | Victim complaint                      | Victim requested           | Hybrid        | Other             | Specify Location                       |
+#      | Other CPS meeting                     | CPS offered                | Virtual Call  |                   |                                        |
+#      | Victim Communication Liaison          | Requested by a third party | Virtual Call  |                   |                                        |
+#

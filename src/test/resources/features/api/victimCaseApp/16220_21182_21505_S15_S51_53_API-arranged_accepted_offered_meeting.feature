@@ -1,4 +1,4 @@
-@regression @vca_api_regression @VCA_API_S51
+@regression @vca_api_regression @VCA_API_S15 @VCA_API_S51 @VCA_API_S53
 
 Feature: VCA-API-S15-S51-S53 - Arrange the accepted meeting offer to victim with details.
   As a Victim Liaison Officer

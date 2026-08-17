@@ -1,4 +1,4 @@
-@regression @vca_api_regression @VCA_API_S11_S12_50
+@regression @vca_api_regression @VCA_API_S11 @VCA_API_S12 @VCA_API_S50
 
 Feature: VCA-API-S11-S12-S50 - Record the offered meetings response by victims
   As a Victim Liaison Officer

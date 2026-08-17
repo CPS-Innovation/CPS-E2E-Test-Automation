@@ -1,6 +1,6 @@
 @regression @vca_api_regression @VCA_API_S9
 
-Feature: VCA-API-S10 - Add category type for victim and verify wm01u message
+Feature: VCA-API-S9 - Add category type for victim and verify wm01u message
   As a Victim Liaison Officer
   I want to add category type for victim
   Update information is reflected in CMS database
@@ -30,4 +30,3 @@ Feature: VCA-API-S10 - Add category type for victim and verify wm01u message
 #  Intimidated
 #  Serving prisoner or on remand
 #  Interpreter instructed by prosecution
-

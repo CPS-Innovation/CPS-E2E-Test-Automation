@@ -280,6 +280,7 @@ public class VictimCaseAppStepDefinition {
         HttpResponseWrapper response = victimService.caseCmsContactList(caseId);
         String cm01RequestPayload = context.get("modifiedCM01RequestPayload");
         VictimCaseAppAssertions.assertCaseCmsContact(cm01RequestPayload, response);
+        /* TO-DO - Need to fix the assertions */
     }
 
     @When("the following category type is added to {string} in VCA")
@@ -317,6 +318,7 @@ public class VictimCaseAppStepDefinition {
             HttpResponseWrapper response = victimService.getVictimDetailsFromCMS(context.get("caseId"));
             //assert for input = output
             VictimCaseAppAssertions.assertCategoryList(id, victimCmsDetails, response);
+            /* TO-DO - Need to fix the assertions */
         }
     }
 
@@ -440,6 +442,7 @@ public class VictimCaseAppStepDefinition {
                 Meetings meetingOfferMethod = meetingDetailsMap.get(meetingTypeCode);
                 HttpResponseWrapper response = victimService.listMeetingOffered(idGuidMap.get(id), meetingTypeCode);
                 VictimCaseAppAssertions.assertMeetingResponse(meetingOfferMethod, response);
+                /* TO-DO - Need to fix the assertions */
             }
         }
     }

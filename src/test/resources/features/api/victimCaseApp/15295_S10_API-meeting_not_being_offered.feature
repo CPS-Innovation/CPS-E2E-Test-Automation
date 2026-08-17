@@ -5,7 +5,7 @@ Feature: VCA-API-S10 - Meetings are not offered to victims for different meeting
   I want to record the meetings is not being offered with reasons for following types:-
   1. CPS pre-trial meeting
   2. Inform victim about charging decision
-  3. Stopped or Substantially altered charge (VCL Scheme)
+  3. Victim Communication Liaison (VCL Scheme)
   4. Victims' Right to Review (VRR)
   5. Victim complaint
   6. Other CPS meeting
@@ -21,11 +21,11 @@ Feature: VCA-API-S10 - Meetings are not offered to victims for different meeting
     When the "victim" is onboarded as "Universal" service lead in VCA
     Then the Victim liaison officer is assigned to "victim" in VCA
     When the following meetings are not offered to "victim" in VCA
-      | meetingType                             | notOfferedReason                                             |
-      | CPS pre-trial meeting                   | CPS pre-trial meeting - Not Offered reason                   |
-      | Inform victim about charging decision   | Inform victim about charging decision - Not Offered reason   |
-      | Stopped or Substantially altered charge | Stopped or Substantially altered charge - Not Offered reason |
-      | Victims Right to Review                 | Victims Right to Review - Not Offered reason                 |
-      | Victim complaint                        | Victim complaint - Not Offered reason                        |
-      | Other CPS meeting                       | Other CPS meeting -  Not Offered reason                      |
-  Then meetings not offered to "victim" are verified
+      | meetingType                           | notOfferedReason                                           |
+      | CPS pre-trial meeting                 | CPS pre-trial meeting - Not Offered reason                 |
+      | Inform victim about charging decision | Inform victim about charging decision - Not Offered reason |
+      | Victim Communication Liaison          | Victim Communication Liaison - Not Offered reason          |
+      | Victims Right to Review               | Victims Right to Review - Not Offered reason               |
+      | Victim complaint                      | Victim complaint - Not Offered reason                      |
+      | Other CPS meeting                     | Other CPS meeting -  Not Offered reason                    |
+    Then meetings not offered to "victim" are verified

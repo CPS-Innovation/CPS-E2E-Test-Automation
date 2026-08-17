@@ -17,6 +17,16 @@ import static com.cps.fct.e2e.utils.common.JsonUtils.toJsonString;
 
 public class VictimCaseAppPayloadBuilder {
 
+    public static String convertObjectToString(Object object) {
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(PreferredMethodOfContact.class, new PreferredMethodOfContactAdapter())
+                .setPrettyPrinting()
+                .create();
+        return gson.toJson(object);
+    }
+
+
+
     public static CaseInfo onboardVictim(String caseUrn) {
         return CaseInfo.builder()
                 .Urn(caseUrn)
@@ -227,6 +237,17 @@ public class VictimCaseAppPayloadBuilder {
                 .build();
     }
 
+    public static String payLoadForAddOrUpdateCategory(VictimCmsDetails victimDetails) {
+        AddUpdateVictimDetails builder = new AddUpdateVictimDetails();
+        List<Map<String, Object>> patchPayload = builder
+                .replace("/types", victimDetails.getCategory())
+                .add("/justification", victimDetails.getJustification())
+                .build();
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        return gson.toJson(patchPayload);
+    }
+
     public static Meetings meetingNotOffered(int meetingTypeCode, String reason) {
         return Meetings.builder()
                 .MeetingType(meetingTypeCode)
@@ -252,16 +273,16 @@ public class VictimCaseAppPayloadBuilder {
                 .build();
     }
 
-    public static Meetings meetingResponse(int meetingTypeCode, int responseMethod, String meetingContextGuid, String meetingRespType) {
+    public static Meetings meetingOfferResponse(int meetingTypeCode, int offerResponseMethod, String meetingContextGuid, String meetingOfferResponse) {
         return Meetings.builder()
                 .MeetingType(meetingTypeCode)
                 .MeetingOfferAttempt(1)
                 .MeetingContextGuid(meetingContextGuid)
                 .MeetingOffered(true)
                 .MeetingRequested(false)
-                .VictimResponse(meetingRespType)
-                .MethodOfResponse(responseMethod)
-                .VictimResponseDate("No Response".equals(meetingRespType)
+                .VictimResponse(meetingOfferResponse)
+                .MethodOfResponse(offerResponseMethod)
+                .VictimResponseDate("No Response".equals(meetingOfferResponse)
                                 ? todayDate()
                                 : todayMinusFourDays())
                 .LastModifiedBy("meetingResponseUser")
@@ -283,250 +304,6 @@ public class VictimCaseAppPayloadBuilder {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    public static VictimCmsDetails getVictimWitnessCategory(String categoryCode) {
-//        return VictimCmsDetails.builder()
-//                .category(categoryCode)
-//                .justification("JUSTIFICATION TEXT")
-//                .build();
-//    }
-
-    public static String convertObjectToString(Object object) {
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(PreferredMethodOfContact.class, new PreferredMethodOfContactAdapter())
-                .setPrettyPrinting()
-                .create();
-        return gson.toJson(object);
-    }
-
-    public static CpsContacts payLoadForAddVictimContactDetails(int contactTypeCode) {
-
-        if (contactTypeCode == 2) {
-            return CpsContacts.builder()
-                    .ContactName(FakerUtils.fullName())
-                    .ContactTelephone(FakerUtils.homePhone())
-                    .ContactEmail(FakerUtils.email())
-                    .ContactType(contactTypeCode)
-                    .CreatedBy("E2E TestAutomation")
-                    .Address(Address.builder().build())
-                    .build();
-        } else {
-            return CpsContacts.builder()
-                    .ContactName(FakerUtils.fullName())
-                    .ContactTelephone(FakerUtils.homePhone())
-                    .ContactEmail(FakerUtils.email())
-                    .ContactType(contactTypeCode)
-                    .CreatedBy("E2E TestAutomation")
-                    .Address(Address.builder()
-                            .AddressLine1(FakerUtils.buildingNumber())
-                            .AddressLine2(FakerUtils.streetName())
-                            .AddressLine3(FakerUtils.streetName())
-                            .AddressLine4(FakerUtils.streetName())
-                            .AddressLine5(FakerUtils.streetAddress())
-                            .Postcode(FakerUtils.ukPostCode())
-                            .City(FakerUtils.cityName())
-                            .Country(FakerUtils.countyName())
-                            .build())
-                    .build();
-        }
-    }
-
-    public static CpsContacts payLoadForUpdateVictimContactDetails(int contactTypeCode) {
-
-        if (contactTypeCode == 2) {
-            return CpsContacts.builder()
-                    .ContactName("NEWSURENAME Update")
-                    .ContactTelephone("07777777777")
-                    .ContactEmail("new_email_address@gov.gov")
-                    .ContactType(contactTypeCode)
-                    .LastModifiedBy("Modified by E2E TestAutomation")
-                    .Address(Address.builder().build())
-                    .build();
-        } else {
-            return CpsContacts.builder()
-                    .ContactName("NEWSURENAME Update")
-                    .ContactTelephone("07777777777")
-                    .ContactEmail("new_email_address@gov.gov")
-                    .ContactType(contactTypeCode)
-                    .LastModifiedBy("Modified by E2E TestAutomation")
-                    .Address(Address.builder()
-                            .AddressLine1("New Address Line1")
-                            .AddressLine2("New Address Line2")
-                            .AddressLine3("New Address Line3")
-                            .AddressLine4("New Address Line4")
-                            .AddressLine5("New Address Line5")
-                            .Postcode("NW011NE")
-                            .City("New City")
-                            .Country("New County")
-                            .build())
-                    .build();
-        }
-    }
-
-    // This method used for Onboarding(first time)
-    public static String payLoadForAddVictimWitnessToVCA(String caseUrn) {
-        Map<String, Object> payload = new HashMap<>();
-        payload.put("Urn", caseUrn);
-        payload.put("CreatedBy", "Onboard CPS user");
-        payload.put("Service", 1);
-        payload.put("Onboarded", false);
-        return toJsonString(payload);
-    }
-
-
-    public static String payLoadForUpdateWitnessDetailsWitnessId(VictimCmsDetails victimDetails) {
-        AddUpdateVictimDetails builder = new AddUpdateVictimDetails();
-        List<Map<String, Object>> patchPayload = builder
-                .replace("/contactDetails/title", "Dr")
-                .replace("/contactDetails/gender", "Unknown")
-                .replace("/dateOfBirth", "1990-02-01")
-                .replace("/contactDetails/ethnicity", "British")
-                .replace("/contactDetails/disability", "Yes")
-                .replace("/previousConvictions", "True")
-                .replace("/contactDetails/phoneNumber", victimDetails.getContactDetailsPhoneNumber())
-                .replace("/contactDetails/mobileNumber", victimDetails.getContactDetailsMobileNumber())
-                .replace("/contactDetails/workPhoneNumber", victimDetails.getContactDetailsWorkPhoneNumber())
-                .replace("/contactDetails/email", victimDetails.getContactDetailsEmail())
-                .replace("/contactDetails/postalAddress/addressLine1", victimDetails.getContactDetailsPostalAddressAddressLine1())
-                .replace("/contactDetails/postalAddress/addressLine2", victimDetails.getContactDetailsPostalAddressAddressLine2())
-                .replace("/contactDetails/postalAddress/addressLine3", victimDetails.getContactDetailsPostalAddressAddressLine3())
-                .replace("/contactDetails/postalAddress/addressLine4", victimDetails.getContactDetailsPostalAddressAddressLine4())
-                .replace("/contactDetails/postalAddress/addressLine5", victimDetails.getContactDetailsPostalAddressAddressLine5())
-                .replace("/contactDetails/postalAddress/postcode", victimDetails.getContactDetailsPostalAddressPostcode())
-                .add("/justification", victimDetails.getJustification())
-                .build();
-
-        //TODO : existing defect on address line
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        return gson.toJson(patchPayload);
-    }
-
-    public static String payLoadForAddOrUpdateCategory(VictimCmsDetails victimDetails) {
-        AddUpdateVictimDetails builder = new AddUpdateVictimDetails();
-        List<Map<String, Object>> patchPayload = builder
-                .replace("/types", victimDetails.getCategory())
-                .add("/justification", victimDetails.getJustification())
-                .build();
-
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        return gson.toJson(patchPayload);
-    }
-
-    public static Meetings payLoadForAddVictimMeetingDetails(int meetingTypeCode, String reason) {
-
-        return Meetings.builder()
-                .MeetingType(meetingTypeCode)
-                .MeetingContextGuid(FakerUtils.uuid())
-                .MeetingOffered(false)
-                .MeetingRequested(false)
-                .MethodOfOffer(10)
-                .DateOfOffer(defaultDate())
-                .ReasonForNoOffer(reason)
-                .CreatedBy("automationUser")
-                .build();
-    }
-
-    public static Meetings payLoadForAddVictimMeetingMethodDetails(int meetingTypeCode, int methodTypeCode) {
-
-        return Meetings.builder()
-                .MeetingType(meetingTypeCode)
-                .MeetingContextGuid(FakerUtils.uuid())
-                .MeetingOffered(true)
-                .MeetingRequested(false)
-                .MethodOfOffer(methodTypeCode)
-                .DateOfOffer(todayMinusFiveDays())
-                .CreatedBy("automationUser")
-                .build();
-    }
-
-    public static Meetings payLoadForMeetingStatusDetails(int meetingTypeCode, int methodTypeCode, String meetingStatus) {
-
-        return Meetings.builder()
-                .MeetingType(meetingTypeCode)
-                .MethodOfOffer(methodTypeCode)
-                .DateOfOffer(todayMinusFiveDays())
-                .MeetingOfferAttempt(1)
-                .MeetingContextGuid(FakerUtils.uuid())
-                .MeetingOffered(true)
-                .MeetingRequested(false)
-                .VictimResponse(meetingStatus)
-                .MethodOfResponse(methodTypeCode)
-                .VictimResponseDate(todayMinusFourDays())
-                .LastModifiedBy("automationUser")
-                .build();
-    }
-
-    public static Meetings payLoadForNoResponseMeetingDetails(int meetingTypeCode, int methodTypeCode) {
-
-        return Meetings.builder()
-                .MeetingType(meetingTypeCode)
-                .MethodOfOffer(methodTypeCode)
-                .DateOfOffer(todayMinusFiveDays())
-                .MeetingOfferAttempt(1)
-                .MeetingContextGuid(FakerUtils.uuid())
-                .MeetingOffered(true)
-                .MeetingRequested(false)
-                .VictimResponse("No Response")
-                .MethodOfResponse(10)
-                .VictimResponseDate(todayMinusFourDays())
-                .LastModifiedBy("automationUser")
-                .build();
-    }
 
 
 }

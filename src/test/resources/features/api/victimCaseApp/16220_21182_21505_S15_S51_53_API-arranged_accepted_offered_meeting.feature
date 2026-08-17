@@ -1,8 +1,8 @@
 @regression @vca_api_regression @VCA_API_S51
 
-Feature: VCA-API-S51 - Arrange the accepted meeting offer by victim with details.
+Feature: VCA-API-S15-S51-S53 - Arrange the accepted meeting offer to victim with details.
   As a Victim Liaison Officer
-  I want to record the meeting arrangement details for offered and accepted meeting by victim for following:-
+  I want to record the meeting arrangement details for accepted offered meeting to victim for following:-
   ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   ¦ Meeting Type                            | Meeting Method       | Meeting Arrangement               | Meeting Type   | Location Type        | Meeting Attendees       |
   ¦-----------------------------------------|----------------------|-----------------------------------|----------------|----------------------|-------------------------|

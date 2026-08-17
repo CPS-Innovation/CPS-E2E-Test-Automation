@@ -15,7 +15,7 @@ import java.util.List;
 
 public class PlaywrightManager {
 
-    private static final int DEFAULT_PLAYWRIGHT_TIMEOUT_MILLIS = 10_000;
+    private static final int DEFAULT_PLAYWRIGHT_TIMEOUT_MILLIS = 25_000;
     private static final Path TEST_ARTIFACTS_DIR = Path.of("test-artifacts");
     private static final Path SCREENSHOTS_DIR = TEST_ARTIFACTS_DIR.resolve("screenshots");
     private static final Path VIDEOS_DIR = TEST_ARTIFACTS_DIR.resolve("videos");

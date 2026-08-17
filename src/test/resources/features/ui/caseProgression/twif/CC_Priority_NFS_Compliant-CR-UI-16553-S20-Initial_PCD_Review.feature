@@ -10,7 +10,7 @@ Feature: CR-UI-S20 - CC Initial PCD Review for Priority NFS Compliant
 
 
   @ui @CR_UI_16553 @CR_UI_S20 @EarlyAdviseWit28DaysActionPlan
-  Scenario: Priority NFS Compliant PCD review of test type full code without action plan
+  Scenario: Priority NFS Compliant PCD review of test type CC and Early Advise without action plan
     Given I login to case review app
     And Search the case "URN"
     When I start "Priority PCD Review"
@@ -31,6 +31,6 @@ Feature: CR-UI-S20 - CC Initial PCD Review for Priority NFS Compliant
 
     And I submit the charging decision as following
       | Investigative stage        | Create MG3 document |
-      | Bail for charging decision | true                |
+      | Bail for charging decision | False               |
 
     Then review is submitted successfully

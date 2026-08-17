@@ -8,6 +8,8 @@ import org.assertj.core.api.SoftAssertions;
 
 import java.net.URI;
 
+import static com.cps.fct.e2e.utils.playwright.PlaywrightNetworkUtils.waitForResponseTriggeredBy;
+
 public class CaseIdSearchPage extends BasePage {
 
     private static final int LANDING_PAGE_TIMEOUT_MILLIS = 30_000;
@@ -21,6 +23,12 @@ public class CaseIdSearchPage extends BasePage {
     private static final String CASE_ID_INPUT_SELECTOR = "#Input_CaseID2";
     private static final String URN_RADIO_SELECTOR = "#Radio_URN-input";
     private static final String URN_INPUT_SELECTOR = "#Input_URN";
+    // The View Case click posts a case-existence check before navigating to the landing page. It is a
+    // stable action name (not tied to review type or environment), so wait on it to confirm the search
+    // request resolved before the URL-outcome polling below.
+    private static final String CASE_EXISTS_CHECK_ENDPOINT = "DataActionCheckIfCaseExists";
+    private static final String POST_METHOD = "POST";
+    private static final int SUCCESS_STATUS = 200;
 
     private enum SearchOutcome { LANDED, CASE_NOT_FOUND, TIMED_OUT }
 
@@ -121,7 +129,14 @@ public class CaseIdSearchPage extends BasePage {
 
     private void submitSearchWithRetries(Runnable submitSearch, String searchDescription) {
         for (int attempt = 1; attempt <= MAX_SEARCH_ATTEMPTS; attempt++) {
-            submitSearch.run();
+            waitForResponseTriggeredBy(
+                    page,
+                    "Search case (" + searchDescription + ")",
+                    CASE_EXISTS_CHECK_ENDPOINT,
+                    POST_METHOD,
+                    SUCCESS_STATUS,
+                    submitSearch
+            );
             waitUntilLoadingIndicatorIsGone();
             SearchOutcome outcome = waitForSearchOutcome();
 

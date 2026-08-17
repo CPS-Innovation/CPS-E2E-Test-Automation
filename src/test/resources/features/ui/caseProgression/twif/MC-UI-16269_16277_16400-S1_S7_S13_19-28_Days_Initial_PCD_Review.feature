@@ -10,7 +10,7 @@ Feature: CR-UI-S1_S7_S13 - MC Initial PCD Review
 
 
   @ui @CR_UI_16400 @CR_UI_S13 @fullCodeWith28DaysActionPlan
-  Scenario: 28 days PCD review of test type full test code with 28 days action plan
+  Scenario: 28 days PCD review of test type MC and full test code with 28 days action plan
     Given I login to case review app
     And Search the case "URN"
     When I start "28 day PCD Review"
@@ -29,13 +29,13 @@ Feature: CR-UI-S1_S7_S13 - MC Initial PCD Review
     And I add an action point plan for "28 days" and "Key Witness Details"
     And I submit the charging decision as following
       | Investigative stage        | Method | Create MG3 document |
-      | Bail for charging decision | Area   | true                |
+      | Bail for charging decision | Area   | False               |
 
     Then review is submitted successfully
 
 
   @ui @CR_UI_16277 @CR_UI_S7 @thresholdWithActionPlan
-  Scenario: 28 days PCD review of test type Threshold with 28 days action plan
+  Scenario: 28 days PCD review of test type MC and Threshold with 28 days action plan
     Given I login to case review app
     And Search the case "URN"
     When I start "28 day PCD Review"
@@ -53,7 +53,7 @@ Feature: CR-UI-S1_S7_S13 - MC Initial PCD Review
     And I add an action point plan for "28 days" and "Key Witness Details"
     And I submit the charging decision as following
       | Investigative stage        | Method | Create MG3 document |
-      | Bail for charging decision | Area   | true                |
+      | Bail for charging decision | Area   | False               |
 
     Then review is submitted successfully
 
@@ -73,6 +73,6 @@ Feature: CR-UI-S1_S7_S13 - MC Initial PCD Review
     And I continue without action plan
     And I submit the charging decision as following
       | Investigative stage        | Create MG3 document |
-      | Bail for charging decision | true                |
+      | Bail for charging decision | False               |
 
     Then review is submitted successfully

@@ -4,10 +4,14 @@ import com.cps.fct.e2e.utils.playwright.PlaywrightContext;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.options.AriaRole;
 
+import static com.cps.fct.e2e.utils.playwright.PlaywrightNetworkUtils.waitForResponseTriggeredBy;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CaseReviewPage extends BasePage {
 
+    private static final String ACTION_START_REVIEW_ENDPOINT = "ActionStartNewReview";
+    private static final String POST_METHOD = "POST";
+    private static final int SUCCESS_STATUS = 200;
 
     public CaseReviewPage(PlaywrightContext context) {
         super(context);
@@ -54,10 +58,17 @@ public class CaseReviewPage extends BasePage {
     }
 
     public void startReview(String caseId, String typeOfReview) {
-        waitForLoginPageToLoadCompletely().
-                assertPageLoadSuccessful(caseId, typeOfReview)
-                .clickReviewButton()
-                .waitUntilLoadingIndicatorIsGone();
+        waitForLoginPageToLoadCompletely()
+                .assertPageLoadSuccessful(caseId, typeOfReview);
+        waitForResponseTriggeredBy(
+                page,
+                "Start review",
+                ACTION_START_REVIEW_ENDPOINT,
+                POST_METHOD,
+                SUCCESS_STATUS,
+                this::clickReviewButton
+        );
+        waitUntilLoadingIndicatorIsGone();
     }
 
     public void resumeReview(String caseId, String typeOfReview) {

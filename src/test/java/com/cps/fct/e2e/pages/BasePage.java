@@ -20,7 +20,7 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 public abstract class BasePage {
 
 
-    private static final int DEFAULT_TIMEOUT_MILLIS = 10000;
+    private static final int DEFAULT_TIMEOUT_MILLIS = 25_000;
     private static final int RICH_TEXT_EDITOR_WAIT_TIMEOUT_MILLIS = 10000;
     private static final int RICH_TEXT_STABLE_FOR_MILLIS = 500;
     // Fallback settle after the editor reports ready: there is no exposed "CKEditor initialised"

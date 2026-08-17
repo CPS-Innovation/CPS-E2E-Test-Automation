@@ -1,7 +1,7 @@
 @regression @caseReview @ui
 Feature: CR-UI-S17 - MC Initial PCD Review for Priority NFS Compliant
   As a prosecutor lawyer,
-  I want to complete CC initial NFS Compliant day PCD reviews for Full Code, Threshold
+  I want to complete MC initial NFS Compliant day PCD reviews for Full Code, Threshold
   So that I can submit the review with the correct analysis, monitoring codes, action plan outcome and MG3 document.
 
   Background: Case Creation
@@ -10,7 +10,7 @@ Feature: CR-UI-S17 - MC Initial PCD Review for Priority NFS Compliant
 
 
   @CR_UI_16404 @CR_UI_S17 @fullCodeWithoutActionPlan
-  Scenario: Priority NFS Compliant PCD review of test type full code without action plan
+  Scenario: Priority NFS Compliant PCD review of test type MC and full code without action plan
     Given I login to case review app
     And Search the case "URN"
     When I start "Priority PCD Review"
@@ -28,8 +28,8 @@ Feature: CR-UI-S17 - MC Initial PCD Review for Priority NFS Compliant
 
     And I continue without action plan
     And I submit the charging decision as following
-      | Investigative stage        | Method |
-      | Bail for charging decision | Area   |
+      | Investigative stage        | Method | Create MG3 document |
+      | Bail for charging decision | Area   | True                |
 
     Then review is submitted successfully
 

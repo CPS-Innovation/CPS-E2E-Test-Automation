@@ -355,7 +355,6 @@ public class VictimCaseAppStepDefinition {
         }
     }
 
-
     @Then("meetings not offered to {string} are verified")
     public void meetingNotOfferedVerified(String victimType) {
         Map<String, String> idGuidMap = context.get("idGuidMap");

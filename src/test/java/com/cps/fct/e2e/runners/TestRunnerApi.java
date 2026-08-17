@@ -23,7 +23,7 @@ import static io.cucumber.junit.platform.engine.Constants.OBJECT_FACTORY_PROPERT
 @ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "com.cps.fct.e2e")
 @ConfigurationParameter(
         key = PLUGIN_PROPERTY_NAME,
-        value = "pretty, json:target/cucumber-report/cucumber.json"
+        value = "pretty, json:target/cucumber-report/cucumber.json, io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"
 )
 @ConfigurationParameter(
         key = OBJECT_FACTORY_PROPERTY_NAME,

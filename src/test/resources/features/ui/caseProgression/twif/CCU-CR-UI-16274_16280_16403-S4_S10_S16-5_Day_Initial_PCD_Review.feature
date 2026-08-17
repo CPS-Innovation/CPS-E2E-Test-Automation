@@ -29,7 +29,7 @@ Feature: CR-UI-S4_S10_S16 - CCU Initial PCD Review
     And I add an action point plan for "1 days" and "Other (specify)"
     And I submit the charging decision as following
       | Investigative stage        | Method | Create MG3 document |
-      | Bail for charging decision | Area   | true                |
+      | Bail for charging decision | Area   | False               |
 
     Then review is submitted successfully
 
@@ -53,7 +53,7 @@ Feature: CR-UI-S4_S10_S16 - CCU Initial PCD Review
 #    And I add an action point plan for "28 days" and "Key Witness Details"
 #    And I submit the charging decision as following
 #      | Investigative stage        | Method | Create MG3 document |
-#      | Bail for charging decision | Area   | true                |
+#      | Bail for charging decision | Area   | False               |
 #
 #    Then review is submitted successfully
 
@@ -80,6 +80,6 @@ Feature: CR-UI-S4_S10_S16 - CCU Initial PCD Review
 
     And I submit the charging decision as following
       | Investigative stage        | Create MG3 document |
-      | Bail for charging decision | true                |
+      | Bail for charging decision | False               |
 
     Then review is submitted successfully

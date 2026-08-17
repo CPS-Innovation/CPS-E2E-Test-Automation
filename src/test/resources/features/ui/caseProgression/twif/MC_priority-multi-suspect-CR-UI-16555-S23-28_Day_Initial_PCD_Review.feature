@@ -10,7 +10,7 @@ Feature: CR-UI-S23 - MC Initial PCD Review for Priority NFS Complaint
 
 
   @CR_UI_16555 @CR_UI_S23 @fullTestCodeWithoutActionPlan
-  Scenario: 28 days PCD review of case type MC and test type Full Code without action plan
+  Scenario: Priority 28 days PCD review of case type MC and test type Full Code without action plan
     Given I login to case review app
     And Search the case "URN"
     When I start "Priority PCD Review"

@@ -24,4 +24,4 @@ Feature: CR-UI-S19 - MC Initial PCD Review for multi suspect
     And I continue without action plan
     And I submit the charging decision as following
       | Investigative stage        | Create MG3 document |
-      | Bail for charging decision | true                |
+      | Bail for charging decision | False               |

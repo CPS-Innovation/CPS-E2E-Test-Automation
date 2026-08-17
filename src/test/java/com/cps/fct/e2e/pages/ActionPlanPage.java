@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 
 import com.microsoft.playwright.assertions.LocatorAssertions;
 
+import static com.cps.fct.e2e.utils.playwright.PlaywrightNetworkUtils.waitForResponseTriggeredBy;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
 public class ActionPlanPage extends BasePage {
@@ -58,6 +59,12 @@ public class ActionPlanPage extends BasePage {
             DateTimeFormatter.ISO_LOCAL_DATE
     );
     private static final int DATE_SELECTION_TIMEOUT_MILLIS = 10_000;
+    // Continuing past the action plan navigates to the Complete submission details page. Wait on that
+    // page's investigative-stages load (a stable action name, not tied to review type or environment)
+    // so the next step doesn't race the navigation.
+    private static final String SUBMISSION_DETAILS_LOAD_ENDPOINT = "ScreenDataSetGetInvestigativeStages";
+    private static final String POST_METHOD = "POST";
+    private static final int SUCCESS_STATUS = 200;
 
     public ActionPlanPage(PlaywrightContext context) {
         super(context);
@@ -98,7 +105,14 @@ public class ActionPlanPage extends BasePage {
 
     public void continueWithOutActionPlan() {
         waitForTextInLocator("h1", CASE_ACTION_PLAN_HEADER);
-        clickContinueWithoutActionPlan();
+        waitForResponseTriggeredBy(
+                page,
+                "Continue without action plan",
+                SUBMISSION_DETAILS_LOAD_ENDPOINT,
+                POST_METHOD,
+                SUCCESS_STATUS,
+                this::clickContinueWithoutActionPlan
+        );
         waitUntilLoadingIndicatorIsGone(LOADING_INDICATOR_TEXT);
     }
 

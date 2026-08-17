@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import static com.cps.fct.e2e.utils.playwright.PlaywrightNetworkUtils.enableApiTrafficLogging;
+import static com.cps.fct.e2e.utils.playwright.PlaywrightNetworkUtils.waitForResponseTriggeredBy;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 public class ChargeDecisionAnalysisPage extends BasePage {
 
@@ -45,6 +47,17 @@ public class ChargeDecisionAnalysisPage extends BasePage {
     private static final String DG_COMPLAINT_HEADER = "DG file quality assessment";
     private static final String DG_COMPLAINT_SUBHEADER = "Is the submitted file compliant in accordance with the Directors Guidance (DG6)?";
     private static final String SAVE_AND_CONTINUE_BUTTON_TEXT = "Save and continue";
+    private static final String ACTION_SAVE_ANALYSIS_ENDPOINT = "ActionSaveAnalysis";
+    private static final String ACTION_SAVE_DG_ASSESSMENT_ENDPOINT = "ActionCheckSubTypeAndSaveDG";
+    // Charging-decision save endpoints. Match on the suspect-count-agnostic prefix
+    // (ActionSaveChargeDecision covers both ...MultiSuspect and ...SingleSuspect) so the waits
+    // hold across single- and multi-defendant cases rather than being tied to one test's data.
+    private static final String ACTION_CHARGE_DECISION_CLEANUP_ENDPOINT = "ActionChargeDecisionCleanUp";
+    private static final String ACTION_APPLY_PROPOSED_CHARGE_ENDPOINT = "ActionUpdateProposedChargingDecision";
+    private static final String ACTION_SAVE_CHARGE_DECISION_ENDPOINT = "ActionSaveChargeDecision";
+    private static final String ACTION_SAVE_CONSENT_DECISIONS_ENDPOINT = "ActionSaveConsentDecisions";
+    private static final String SAVE_ANALYSIS_METHOD = "POST";
+    private static final int SUCCESS_STATUS = 200;
     private static final String PREVIEW_HEADER = "Preview";
     private static final String CONTINUE_BUTTON_TEXT = "Continue";
     private static final String ADD_RELATIONSHIP_LINK_SELECTOR = "a[id$='Addrelationship']";
@@ -132,6 +145,8 @@ public class ChargeDecisionAnalysisPage extends BasePage {
     private final List<String> selectedGlobalMonitoringCodes = new ArrayList<>();
     private final List<String> selectedLocalMonitoringCodes = new ArrayList<>();
     private String selectedSuspectVictimRelationship;
+    private boolean isPreChargeAnalysisNetworkLoggingEnabled;
+    private boolean isChargingDecisionNetworkLoggingEnabled;
 
     public ChargeDecisionAnalysisPage(PlaywrightContext context) {
         super(context);
@@ -148,6 +163,15 @@ public class ChargeDecisionAnalysisPage extends BasePage {
     public ChargeDecisionAnalysisPage assertSection(String headerText) {
         clickSectionIfNotVisible(headerText);
         return this;
+    }
+
+    public void enablePreChargeAnalysisNetworkLogging() {
+        if (isPreChargeAnalysisNetworkLoggingEnabled) {
+            return;
+        }
+
+        enableApiTrafficLogging(page, "Pre-charge analysis");
+        isPreChargeAnalysisNetworkLoggingEnabled = true;
     }
 
     private void clickSectionIfNotVisible(String sectionName) {
@@ -171,9 +195,29 @@ public class ChargeDecisionAnalysisPage extends BasePage {
         assertNextSectionSelectedIfKnown(completedSectionName);
     }
 
+    private void clickSaveAnalysisAndAssertSectionProgress(String completedSectionName) {
+        clickSaveAnalysis(completedSectionName);
+        assertSectionCompleted(completedSectionName);
+        assertNextSectionSelectedIfKnown(completedSectionName);
+    }
+
     private void clickSaveAndContinueAndAssertSectionCompleted(String completedSectionName) {
         clickSaveAndContinue();
         assertSectionCompleted(completedSectionName);
+    }
+
+    private void clickSaveAnalysis(String sectionName) {
+        waitUntilBusyIndicatorsAreGone();
+        waitForResponseTriggeredBy(
+                page,
+                "Save pre-charge analysis section: " + sectionName,
+                ACTION_SAVE_ANALYSIS_ENDPOINT,
+                SAVE_ANALYSIS_METHOD,
+                SUCCESS_STATUS,
+                this::clickSaveAndContinueButton
+        );
+        page.waitForTimeout(DEFAULT_WAIT_TIMEOUT_MS);
+        waitUntilBusyIndicatorsAreGone();
     }
 
     public ChargeDecisionAnalysisPage enterTextInRichEditor(String randomWords) {
@@ -210,7 +254,7 @@ public class ChargeDecisionAnalysisPage extends BasePage {
     public void enterTextInAllocationSectionAndChooseNGAPAsYes(String sectionName, String randomWords) {
         enterSectionTextOnly(sectionName, randomWords)
                 .checkNGAPOptionAsYes()
-                .clickSaveAndContinueAndAssertSectionProgress(sectionName);
+                .clickSaveAnalysisAndAssertSectionProgress(sectionName);
     }
 
     // Priority PCD reviews omit the "Has the file been submitted as NGAP?" question from the
@@ -222,7 +266,7 @@ public class ChargeDecisionAnalysisPage extends BasePage {
         if (isNgapQuestionPresent()) {
             sectionPage.checkNGAPOptionAsYes();
         }
-        sectionPage.clickSaveAndContinueAndAssertSectionProgress(sectionName);
+        sectionPage.clickSaveAnalysisAndAssertSectionProgress(sectionName);
     }
 
     private boolean isNgapQuestionPresent() {
@@ -235,7 +279,7 @@ public class ChargeDecisionAnalysisPage extends BasePage {
         enteredAnalysisTextBySection.put(CASE_HEADLINE_LABEL, randomWords);
         assertCaseHeadlineSection(typeOfReview)
                 .enterTextInRichEditor(randomWords)
-                .clickSaveAndContinueAndAssertSectionProgress(CASE_HEADLINE_LABEL);
+                .clickSaveAnalysisAndAssertSectionProgress(CASE_HEADLINE_LABEL);
     }
 
     public void enterThresholdCaseHeadLine(String typeOfReview, String randomWords) {
@@ -247,7 +291,7 @@ public class ChargeDecisionAnalysisPage extends BasePage {
 
     public void enterSectionText(String headerLabel, String randomWords) {
         enteredAnalysisTextBySection.put(headerLabel, randomWords);
-        assertSection(headerLabel).enterTextInRichEditor(randomWords).clickSaveAndContinueAndAssertSectionProgress(headerLabel);
+        assertSection(headerLabel).enterTextInRichEditor(randomWords).clickSaveAnalysisAndAssertSectionProgress(headerLabel);
     }
 
     public void enterEarlyAdviceSectionText(String headerLabel, String randomWords, String expectedNextHeader) {
@@ -1049,11 +1093,42 @@ public class ChargeDecisionAnalysisPage extends BasePage {
         if (isDgComplianceQuestionPresent()) {
             checkCheckbox(RADIO_ROLE_YES);
         }
-        clickSaveAndContinue();
+        clickSaveDgAssessment();
+    }
+
+    private void clickSaveDgAssessment() {
+        waitUntilBusyIndicatorsAreGone();
+        waitForResponseTriggeredBy(
+                page,
+                "Save DG file quality assessment",
+                ACTION_SAVE_DG_ASSESSMENT_ENDPOINT,
+                SAVE_ANALYSIS_METHOD,
+                SUCCESS_STATUS,
+                this::clickSaveAndContinueButton
+        );
+        page.waitForTimeout(DEFAULT_WAIT_TIMEOUT_MS);
+        waitUntilBusyIndicatorsAreGone();
     }
 
     private boolean isDgComplianceQuestionPresent() {
         return page.getByText(DG_COMPLAINT_SUBHEADER, new Page.GetByTextOptions().setExact(true)).count() > 0;
+    }
+
+    // Runs a charging-decision click and blocks until its backing POST resolves, instead of racing
+    // the next assertion behind a fixed timeout. Listening starts before the click, so a fast
+    // response cannot be missed.
+    private void clickAndWaitForChargingResponse(String actionDescription, String endpointContains, Runnable action) {
+        waitUntilBusyIndicatorsAreGone();
+        waitForResponseTriggeredBy(
+                page,
+                actionDescription,
+                endpointContains,
+                SAVE_ANALYSIS_METHOD,
+                SUCCESS_STATUS,
+                action
+        );
+        page.waitForTimeout(DEFAULT_WAIT_TIMEOUT_MS);
+        waitUntilBusyIndicatorsAreGone();
     }
 
     public void applyChargingDecision(Map<String, String> decisionChargingData) {
@@ -1114,8 +1189,11 @@ public class ChargeDecisionAnalysisPage extends BasePage {
             selectDefendantForChargingDecision(defendantName);
         }
 
-        clickSaveAndContinue();
-        page.waitForTimeout(DEFAULT_WAIT_TIMEOUT_MS);
+        clickAndWaitForChargingResponse(
+                "Start charging decision",
+                ACTION_CHARGE_DECISION_CLEANUP_ENDPOINT,
+                this::clickSaveAndContinueButton
+        );
     }
 
     private void completeChargingDecisionDetails(Map<String, String> decisionChargingData) {
@@ -1127,8 +1205,11 @@ public class ChargeDecisionAnalysisPage extends BasePage {
 
         waitForTextInLocator("h2", DECISION_CODE_QUESTION);
         checkRadioByName(requiredChargingDecisionValue(decisionChargingData, DECISION_CODE_FIELD));
-        clickSaveAndContinue();
-        page.waitForTimeout(DEFAULT_WAIT_TIMEOUT_MS);
+        clickAndWaitForChargingResponse(
+                "Save charge decision type and code",
+                ACTION_SAVE_CHARGE_DECISION_ENDPOINT,
+                this::clickSaveAndContinueButton
+        );
 
         switch (normalizeText(decisionType)) {
             case "no further action" -> completeNoFurtherActionDecisionDetails(decisionChargingData);
@@ -1213,11 +1294,17 @@ public class ChargeDecisionAnalysisPage extends BasePage {
         // TODO: Support selecting individual ChargeCodeBody rows by code when future scenarios need it.
         assertAllChargeCodeBodyCheckboxesChecked();
         selectChargeCodeDecision(chargeCodeDecision);
-        clickApplyChargeDecision();
-        page.waitForTimeout(DEFAULT_WAIT_TIMEOUT_MS);
-        waitUntilBusyIndicatorsAreGone();
+        clickAndWaitForChargingResponse(
+                "Apply proposed charge decision",
+                ACTION_APPLY_PROPOSED_CHARGE_ENDPOINT,
+                this::clickApplyChargeDecision
+        );
         assertChargeDescriptionStatus(chargeCodeDecision);
-        clickContinue();
+        clickAndWaitForChargingResponse(
+                "Save charge decision",
+                ACTION_SAVE_CHARGE_DECISION_ENDPOINT,
+                this::clickContinue
+        );
         assertChargeDecisionTypeSelections(decisionChargingData);
     }
 
@@ -1311,9 +1398,11 @@ public class ChargeDecisionAnalysisPage extends BasePage {
         );
         assertThat(saveAndContinueButton).isVisible();
         saveAndContinueButton.scrollIntoViewIfNeeded();
-        saveAndContinueButton.click();
-        page.waitForTimeout(DEFAULT_WAIT_TIMEOUT_MS);
-        waitUntilBusyIndicatorsAreGone();
+        clickAndWaitForChargingResponse(
+                "Save AG consent decision",
+                ACTION_SAVE_CONSENT_DECISIONS_ENDPOINT,
+                saveAndContinueButton::click
+        );
     }
 
     private String requiredChargingDecisionValue(Map<String, String> decisionChargingData, String fieldName) {

@@ -28,6 +28,6 @@ Feature: CR-UI-S15_S3_S9 - RASSO Initial PCD Review
 #    And I add an action point plan for "14 days" and "Record of taped interview"
 #    And I submit the charging decision as following
 #      | Investigative stage        | Method | Create MG3 document |
-#      | Bail for charging decision | Area   | true                |
+#      | Bail for charging decision | Area   | False               |
 #
 #    Then review is submitted successfully

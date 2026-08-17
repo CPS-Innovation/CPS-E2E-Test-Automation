@@ -13,7 +13,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
-        <maven.surefire.plugin.version>3.2.1</maven.surefire.plugin.version>
+        <maven.surefire.plugin.version>3.5.4</maven.surefire.plugin.version>
+        <surefire.rerunFailingTestsCount>0</surefire.rerunFailingTestsCount>
         <maven.compiler.source.version>25</maven.compiler.source.version>
         <maven.compiler.target.version>25</maven.compiler.target.version>
 
@@ -23,6 +24,7 @@
         <jackson.core.version>3.0.4</jackson.core.version>
         <cucumber.version>7.18.0</cucumber.version>
         <junit.jupiter.version>5.10.1</junit.jupiter.version>
+        <allure.version>2.35.2</allure.version>
         <restassured.version>5.5.7</restassured.version>
     </properties>
 
@@ -39,6 +41,13 @@
                 <groupId>org.junit</groupId>
                 <artifactId>junit-bom</artifactId>
                 <version>${junit.jupiter.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.qameta.allure</groupId>
+                <artifactId>allure-bom</artifactId>
+                <version>${allure.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -87,6 +96,12 @@
             <groupId>io.cucumber</groupId>
             <artifactId>html-formatter</artifactId>
             <version>21.3.1</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-cucumber7-jvm</artifactId>
             <scope>test</scope>
         </dependency>
 
@@ -267,7 +282,13 @@
                         <include>**/*TestRunnerApi.java</include>
                     </includes>
                     <useModulePath>false</useModulePath>
-                    <testFailureIgnore>true</testFailureIgnore>
+                    <rerunFailingTestsCount>${surefire.rerunFailingTestsCount}</rerunFailingTestsCount>
+                    <systemPropertyVariables>
+                        <cucumber.object-factory>com.cps.fct.e2e.support.CucumberObjectFactory</cucumber.object-factory>
+                        <cucumber.glue>com.cps.fct.e2e</cucumber.glue>
+                        <cucumber.junit-platform.naming-strategy>long</cucumber.junit-platform.naming-strategy>
+                    </systemPropertyVariables>
+                    <testFailureIgnore>false</testFailureIgnore>
                 </configuration>
                 <dependencies>
                     <dependency>

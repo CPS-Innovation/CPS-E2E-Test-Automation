@@ -25,20 +25,20 @@ Feature: VCA-API-S11-S12-S50 - Record the offered meetings response by victims
     And the "victim" is onboarded as "Universal" service lead in VCA
     And the Victim liaison officer is assigned to "victim" in VCA
     And the following meetings are offered using following methods to "victim" in VCA
-      | meetingType                             | meetingMethod    |
-      | CPS pre-trial meeting                   | Letter by post   |
-      | Inform victim about charging decision   | Letter by email  |
-      | Stopped or Substantially altered charge | Letter by police |
-      | Victims Right to Review                 | Letter by ISVA   |
-      | Victim complaint                        | By telephone     |
-      | Other CPS meeting                       | Letter by email  |
+      | meetingType                           | offerMethod      |
+      | CPS pre-trial meeting                 | Letter by post   |
+      | Inform victim about charging decision | Letter by email  |
+      | Victim Communication Liaison          | Letter by police |
+      | Victims Right to Review               | Letter by ISVA   |
+      | Victim complaint                      | By telephone     |
+      | Other CPS meeting                     | Letter by email  |
     When the following offered meeting response from "victim" is recorded in VCA
-      | meetingType                             | responseMethod    | meetingResponse |
-      | CPS pre-trial meeting                   | Letter by email  | Accepted        |
-      | Inform victim about charging decision   | Letter by police | Declined        |
-      | Stopped or Substantially altered charge | No Response      | No Response     |
-      | Victims Right to Review                 | By telephone     | Accepted        |
-      | Victim complaint                        | Letter by email  | Declined        |
-      | Other CPS meeting                       | No Response      | No Response     |
+      | meetingType                           | offerResponseMethod | offerResponse |
+      | CPS pre-trial meeting                 | Letter by email     | Accepted      |
+      | Inform victim about charging decision | Letter by police    | Declined      |
+      | Victim Communication Liaison          | No Response         | No Response   |
+      | Victims Right to Review               | By telephone        | Accepted      |
+      | Victim complaint                      | Letter by email     | Declined      |
+      | Other CPS meeting                     | No Response         | No Response   |
     Then meeting response is verified for "victim" is recorded in VCA
 

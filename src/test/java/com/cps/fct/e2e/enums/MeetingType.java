@@ -1,4 +1,5 @@
 package com.cps.fct.e2e.enums;
+
 import lombok.Getter;
 
 @Getter
@@ -21,21 +22,13 @@ public enum MeetingType {
         return switch (value.trim().toLowerCase()) {
             case "cps pre-trial meeting" -> CPS_PTM;
             case "inform victim about charging decision" -> CD;
-            case "stopped or substantially altered charge" -> VCL;
+            case "victim communication liaison" -> VCL;
             case "victims right to review" -> VRR;
             case "victim complaint" -> COMPLAINTS;
             case "other cps meeting" -> OTHERS;
-            default -> throw new IllegalArgumentException( "Unknown Meeting type: " + value );
+            default -> throw new IllegalArgumentException("Unknown Meeting type: " + value);
         };
     }
-
-
-
-
-
-
-
-
 
 
 }

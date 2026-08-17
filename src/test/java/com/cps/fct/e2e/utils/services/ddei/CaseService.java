@@ -1,7 +1,7 @@
 package com.cps.fct.e2e.utils.services.ddei;
 
 import com.cps.fct.e2e.model.caseCreation.Case;
-import com.cps.fct.e2e.model.caseReview.UserData;
+import com.cps.fct.e2e.model.caseReviewApp.UserData;
 import com.cps.fct.e2e.utils.common.EnvConfig;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
 import com.cps.fct.e2e.utils.httpClient.HttpClientBuilder;

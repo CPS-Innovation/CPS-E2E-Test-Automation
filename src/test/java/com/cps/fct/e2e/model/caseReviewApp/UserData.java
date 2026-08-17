@@ -1,4 +1,4 @@
-package com.cps.fct.e2e.model.caseReview;
+package com.cps.fct.e2e.model.caseReviewApp;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;

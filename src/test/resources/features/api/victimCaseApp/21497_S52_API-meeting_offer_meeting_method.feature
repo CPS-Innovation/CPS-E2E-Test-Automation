@@ -25,12 +25,12 @@ Feature: VCA-API-S11 - Offer meetings via meeting methods to victims
     And the "victim" is onboarded as "Universal" service lead in VCA
     And the Victim liaison officer is assigned to "victim" in VCA
     When the following meetings are offered using following methods to "victim" in VCA
-      | meetingType                             | meetingMethod    |
-      | CPS pre-trial meeting                   | Letter by post   |
-      | Inform victim about charging decision   | Letter by email  |
-      | Stopped or Substantially altered charge | Letter by police |
-      | Victims Right to Review                 | Letter by ISVA   |
-      | Victim complaint                        | By telephone     |
-      | Other CPS meeting                       | Letter by email  |
+      | meetingType                           | offerMethod      |
+      | CPS pre-trial meeting                 | Letter by post   |
+      | Inform victim about charging decision | Letter by email  |
+      | Victim Communication Liaison          | Letter by police |
+      | Victims Right to Review               | Letter by ISVA   |
+      | Victim complaint                      | By telephone     |
+      | Other CPS meeting                     | Letter by email  |
     Then offered meeting type and method is verified for "victim" in VCA
 

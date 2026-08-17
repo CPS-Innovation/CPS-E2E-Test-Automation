@@ -21,28 +21,31 @@ Feature: VCA-API-S15-S51-S53 - Arrange the accepted meeting offer to victim with
 
   @meetingInPersonArrange
   Scenario: Victim accepts an offered meeting for different meeting types
-    Given witness and victim details are available
-    And the "victimId" is onboarded to VCA
-    And the Victim liaison officer is assigned to "victimId" in VCA
-    And the following meetings via meeting method is offered to "victimId" in VCA
-      | meeting                                 | meetingTypeCode | method           | methodTypeCode |
-      | CPS pre-trial meeting                   | 1               | Letter by post   | 1              |
-      | Inform victim about charging decision   | 2               | Letter by email  | 2              |
-      | Stopped or Substantially altered charge | 3               | Letter by police | 3              |
-      | Victims Right to Review                 | 4               | Letter by ISVA   | 4              |
-      | Victim complaint                        | 5               | By telephone     | 5              |
-      | Other CPS meeting                       | 99              | Letter by email  | 5              |
-    And offered meetings is "Accepted" by "victimId" in VCA
-    When the "In-person" meeting is arranged with following details
-      | meeting                                 | meetingTypeCode | method           | methodTypeCode | meetingSource              | meetingSourceCode | meetingType | methodTypeCode | LocationType      | LocationTypeCode | LocationName                           |
-      | CPS pre-trial meeting                   | 1               | Letter by post   | 1              | CPS offered                | 1                 | In-person   | 1              | CPS location      | 1                | Petty France                           |
-      | Inform victim about charging decision   | 2               | Letter by email  | 2              | Victim requested           | 2                 | Hybrid      | 2              | Magistrates court | 2                | Newcastle upon Tyne Magistrates' Court |
-      | Stopped or Substantially altered charge | 3               | Letter by police | 3              | Requested by a third party | 3                 | In-person   | 3              | Crown court       | 3                | Newcastle upon Tyne Crown Court        |
-      | Victims Right to Review                 | 4               | Letter by ISVA   | 4              | CPS offered                | 1                 | Hybrid      | 3              | Police station    | 4                | Northumbria                            |
-      | Victim complaint                        | 5               | By telephone     | 5              | Victim requested           | 2                 | In person   | 1              | Other             | 5                | Test Automation                        |
-      | Other CPS meeting                       | 99              | Letter by email  | 5              | Requested by a third party | 3                 | Hybrid      | 2              | CPS location      | 1                | Petty France                           |
-    And the following meeting attendees are added
-    Then the meeting arragement details of "victimId" is verified in VCA
-
-
+    Given victim details are available in VCA
+    And the "victim" is onboarded as "Universal" service lead in VCA
+    And the Victim liaison officer is assigned to "victim" in VCA
+    And the following meetings are offered using following methods to "victim" in VCA
+      | meetingType                           | offerMethod      |
+      | CPS pre-trial meeting                 | Letter by post   |
+      | Inform victim about charging decision | Letter by email  |
+      | Victim Communication Liaison          | Letter by police |
+      | Victims Right to Review               | Letter by ISVA   |
+      | Victim complaint                      | By telephone     |
+      | Other CPS meeting                     | Letter by email  |
+    When the following offered meeting response from "victim" is recorded in VCA
+      | meetingType                           | offerResponseMethod | offerResponse |
+      | CPS pre-trial meeting                 | Letter by email     | Accepted      |
+      | Inform victim about charging decision | Letter by post      | Accepted      |
+      | Victims Right to Review               | Letter by post      | Accepted      |
+      | Victim complaint                      | By telephone        | Accepted      |
+      | Other CPS meeting                     | Letter by email     | Accepted      |
+      | Victim Communication Liaison          | Letter by police    | Accepted      |
+    And the accepted meeting offer is arranged using following to "victim" in VCA
+      | meetingType                           | meetingSource              | meetingMethod | LocationType      | LocationName                           |
+      | CPS pre-trial meeting                 | Victim requested           | In Person     | CPS location      | Petty France                           |
+      | Inform victim about charging decision | CPS offered                | Hybrid        | Magistrates court | Newcastle upon Tyne Magistrates' Court |
+      | Victims Right to Review               | Requested by a third party | In Person     | Crown court       | Newcastle upon Tyne Crown Court        |
+      | Victim complaint                      | Victim requested           | Hybrid        | Other             | Specify Location                       |
+      | Other CPS meeting                     | CPS offered                | Virtual Call  |                   |                                        |
+      | Victim Communication Liaison          | Requested by a third party | Virtual Call  |                   |                                        |
 

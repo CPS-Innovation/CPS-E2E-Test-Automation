@@ -1,4 +1,4 @@
-@regression @vca_api_regression @VCA_API_S5_S6_S7
+@regression @vca_api_regression @VCA_API_S5 @VCA_API_S6 @VCA_API_S7
 
 Feature: VCA-API-S5_S6_S7 - Add and update cps-contacts to victims
   As a Victim Liaison Officer
@@ -18,7 +18,7 @@ Feature: VCA-API-S5_S6_S7 - Add and update cps-contacts to victims
     And the "victim" is onboarded as "Universal" service lead in VCA
     And the Victim liaison officer is assigned to "victim" in VCA
     When the following cps-contacts are added to "victim" in VCA
-      | cpsContactType                           |
+      | cpsContactType                        |
       | Family Liaison Officer                |
       | Independent Sexual Violence Adviser   |
       | Independent Domestic Violence Adviser |
@@ -30,12 +30,12 @@ Feature: VCA-API-S5_S6_S7 - Add and update cps-contacts to victims
     And the "victim" is onboarded as "Universal" service lead in VCA
     And the Victim liaison officer is assigned to "victim" in VCA
     And the following cps-contacts are added to "victim" in VCA
-      | cpsContactType                           |
+      | cpsContactType                        |
       | Family Liaison Officer                |
       | Independent Sexual Violence Adviser   |
       | Independent Domestic Violence Adviser |
     When the following cps-contacts are updated to "victim" in VCA
-      | cpsContactType                           |
+      | cpsContactType                        |
       | Family Liaison Officer                |
       | Independent Sexual Violence Adviser   |
       | Independent Domestic Violence Adviser |

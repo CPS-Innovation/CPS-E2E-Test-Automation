@@ -370,10 +370,10 @@ public class VictimService extends BaseService {
     }
 
     public HttpResponseWrapper listMeetingNotOfferedDetails(String guid, Integer meetingTypeCode) {
-        return service.sendRequest(getMeetingNotOfferDetailsForRequestParams(guid, meetingTypeCode));
+        return service.sendRequest(getMeetingNotOfferDetailsRequestParams(guid, meetingTypeCode));
     }
 
-    private HttpClientBuilder getMeetingNotOfferDetailsForRequestParams(String guid, Integer meetingTypeCode) {
+    private HttpClientBuilder getMeetingNotOfferDetailsRequestParams(String guid, Integer meetingTypeCode) {
         return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("DDEI_HOST"))
                 .endpoint(format("/api/victims/%s/meeting-offers/%s", guid, meetingTypeCode))
@@ -383,8 +383,13 @@ public class VictimService extends BaseService {
                 .build();
     }
 
-    public void addMeetingOfferedMethod(String guid, String requestBody) {
-        service.sendRequest(addMeetingOfferedMethodRequestParams(guid, requestBody));
+    public String addMeetingOfferedMethod(String guid, String requestBody) {
+        HttpResponseWrapper responseWrapper = service.sendRequest(addMeetingOfferedMethodRequestParams(guid, requestBody));
+        String meetingContextGuid = JsonPath.read(responseWrapper.getBody(), "$.value.meetingContextGuid");
+        assertThat(meetingContextGuid)
+                .withFailMessage("Meeting Context Guid was not returned from the API response")
+                .isNotNull();
+        return meetingContextGuid;
     }
 
     private HttpClientBuilder addMeetingOfferedMethodRequestParams(String guid, String requestBody) {
@@ -398,21 +403,34 @@ public class VictimService extends BaseService {
                 .build();
     }
 
-    public HttpResponseWrapper listMeetingOfferedMethod(String guid, Integer meetingTypeCode) {
-        return service.sendRequest(getMeetingOfferMethodForRequestParams(guid, meetingTypeCode));
+    public HttpResponseWrapper listMeetingOffered(String guid, Integer meetingTypeCode) {
+        return service.sendRequest(getMeetingOfferRequestParams(guid, meetingTypeCode));
     }
 
-    private HttpClientBuilder getMeetingOfferMethodForRequestParams(String guid, Integer meetingTypeCode) {
+    private HttpClientBuilder getMeetingOfferRequestParams(String guid, Integer meetingTypeCode) {
         return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("DDEI_HOST"))
                 .endpoint(format("/api/victims/%s/meeting-offers/%s", guid, meetingTypeCode))
                 .addHeaders(ddeiHeaders())
                 .method("GET")
-                .resourceName("getMeetingNotOffered")
+                .resourceName("getMeetingOffered")
                 .build();
     }
 
+    public void addMeetingOfferedResponse(String guid, String requestBody) {
+        service.sendRequest(addMeetingOfferedResponseRequestParams(guid, requestBody));
+    }
 
+    private HttpClientBuilder addMeetingOfferedResponseRequestParams(String guid, String requestBody) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/victims/%s/meeting-offers", guid))
+                .addHeaders(ddeiHeaders())
+                .method("PATCH")
+                .body(requestBody)
+                .resourceName("addMeetingResponse")
+                .build();
+    }
 
 
 

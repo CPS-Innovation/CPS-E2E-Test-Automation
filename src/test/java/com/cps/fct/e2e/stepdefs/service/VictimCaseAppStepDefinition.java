@@ -7,6 +7,7 @@ import com.cps.fct.e2e.utils.httpClient.HttpResponseWrapper;
 import com.cps.fct.e2e.utils.services.ddei.CommonService;
 import com.cps.fct.e2e.utils.services.ddei.CaseService;
 import com.cps.fct.e2e.utils.services.ddei.VictimService;
+import com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimCaseAppPayloadBuilder;
 import com.cps.fct.e2e.utils.services.ddei.responseAssertions.VictimCaseAppAssertions;
 import com.jayway.jsonpath.JsonPath;
 import io.cucumber.datatable.DataTable;
@@ -326,8 +327,8 @@ public class VictimCaseAppStepDefinition {
         Map<String, List<String>> victimMapIds = context.get("victimMapIds");
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
 
-        Map<Integer, Meetings> meetingNotOfferMap = new HashMap<>();
-        context.set("meetingNotOfferMap", meetingNotOfferMap);
+        Map<Integer, Meetings> meetingDetailsMap = new HashMap<>();
+        context.set("meetingDetailsMap", meetingDetailsMap);
 
         for (String id : victimMapIds.get(victimType)) {
             for (Map<String, String> row : rows) {
@@ -336,9 +337,9 @@ public class VictimCaseAppStepDefinition {
                 MeetingType meetingTypeCode = MeetingType.fromString(meetingType);//Enum
                 Meetings meetingNotOffered = meetingNotOffered(meetingTypeCode.getValue(), reason);//Class
                 victimService.addMeetingsNotOffered(idGuidMap.get(id), convertObjectToString(meetingNotOffered));
-                meetingNotOfferMap.put(meetingTypeCode.getValue(), meetingNotOffered);
+                meetingDetailsMap.put(meetingTypeCode.getValue(), meetingNotOffered);
             }
-            context.set("meetingNotOfferMap", meetingNotOfferMap);
+            context.set("meetingNotOfferMap", meetingDetailsMap);
         }
     }
 
@@ -346,11 +347,11 @@ public class VictimCaseAppStepDefinition {
     public void meetingNotOfferedVerified(String victimType) {
         Map<String, String> idGuidMap = context.get("idGuidMap");
         Map<String, List<String>> victimMapIds = context.get("victimMapIds");
-        Map<Integer, Meetings> meetingNotOfferMap = context.get("meetingNotOfferMap");
+        Map<Integer, Meetings> meetingDetailsMap = context.get("meetingDetailsMap");
 
         for (String id : victimMapIds.get(victimType)) {
-            for (Integer meetingTypeCode : meetingNotOfferMap.keySet()) {
-                Meetings meetingNotOffered = meetingNotOfferMap.get(meetingTypeCode);
+            for (Integer meetingTypeCode : meetingDetailsMap.keySet()) {
+                Meetings meetingNotOffered = meetingDetailsMap.get(meetingTypeCode);
                 HttpResponseWrapper response = victimService.listMeetingNotOfferedDetails(idGuidMap.get(id), meetingTypeCode);
                 VictimCaseAppAssertions.assertMeetingNotOfferedDetails(meetingTypeCode, meetingNotOffered, response);
             }
@@ -358,14 +359,17 @@ public class VictimCaseAppStepDefinition {
     }
 
     @When("the following meetings are offered using following methods to {string} in VCA")
-    public void meetingOffered(String victimType, DataTable dataTable) {
+    public void meetingOfferedMethod(String victimType, DataTable dataTable) {
 
         Map<String, String> idGuidMap = context.get("idGuidMap");
         Map<String, List<String>> victimMapIds = context.get("victimMapIds");
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
 
-        Map<Integer, Meetings> meetingOfferMethodMap = new HashMap<>();
-        context.set("meetingOfferMethodMap", meetingOfferMethodMap);
+        Map<Integer, Meetings> meetingDetailsMap = new HashMap<>();
+        context.set("meetingDetailsMap", meetingDetailsMap);
+
+        Map<Integer, String> meetingContextGuidMap = new HashMap<>();
+        context.set("meetingContextGuidMap", meetingContextGuidMap);
 
         for (String id : victimMapIds.get(victimType)) {
             for (Map<String, String> row : rows) {
@@ -373,30 +377,80 @@ public class VictimCaseAppStepDefinition {
                 String meetingMethod = row.get("meetingMethod");
                 MeetingType meetingTypeCode = MeetingType.fromString(meetingType); //Enum
                 MeetingMethod meetingMethodCode = MeetingMethod.fromString(meetingMethod); //Enum
-                Meetings meetingOfferedMethod = meetingOfferedMethod(meetingTypeCode.getValue(), meetingMethodCode.getValue());//Class
-                victimService.addMeetingOfferedMethod(idGuidMap.get(id), convertObjectToString(meetingOfferedMethod));
-                meetingOfferMethodMap.put(meetingTypeCode.getValue(), meetingOfferedMethod);
+                Meetings meetingOfferedMethod = meetingOfferMethod(meetingTypeCode.getValue(), meetingMethodCode.getValue());//Class
+                String meetingContextGuid = victimService.addMeetingOfferedMethod(idGuidMap.get(id), convertObjectToString(meetingOfferedMethod));
+                meetingDetailsMap.put(meetingTypeCode.getValue(), meetingOfferedMethod);
+                meetingContextGuidMap.put(meetingTypeCode.getValue(), meetingContextGuid);
             }
-            context.set("meetingOfferMethodMap", meetingOfferMethodMap);
+            context.set("meetingDetailsMap", meetingDetailsMap);
+            context.set("meetingContextGuidMap", meetingContextGuidMap);
+
         }
     }
 
     @Then("offered meeting type and method is verified for {string} in VCA")
     public void verifyOfferMeetingMethod(String victimType) {
-        ;
-        ;
+
         Map<String, String> idGuidMap = context.get("idGuidMap");
         Map<String, List<String>> victimMapIds = context.get("victimMapIds");
-        Map<Integer, Meetings> meetingOfferMethodMap = context.get("meetingOfferMethodMap");
+        Map<Integer, Meetings> meetingDetailsMap = context.get("meetingDetailsMap");
 
         for (String id : victimMapIds.get(victimType)) {
-            for (Integer meetingTypeCode : meetingOfferMethodMap.keySet()) {
-                Meetings meetingOfferMethod = meetingOfferMethodMap.get(meetingTypeCode);
-                HttpResponseWrapper response = victimService.listMeetingOfferedMethod(idGuidMap.get(id), meetingTypeCode);
+            for (Integer meetingTypeCode : meetingDetailsMap.keySet()) {
+                Meetings meetingOfferMethod = meetingDetailsMap.get(meetingTypeCode);
+                HttpResponseWrapper response = victimService.listMeetingOffered(idGuidMap.get(id), meetingTypeCode);
                 VictimCaseAppAssertions.assertMeetingOfferMethod(meetingTypeCode, meetingOfferMethod, response);
             }
         }
     }
+
+    @When("the following offered meeting response from {string} is recorded in VCA")
+    public void meetingAcceptDeclineNoResponse(String victimType,DataTable dataTable) {
+
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+        Map<Integer, Meetings> meetingDetailsMap = context.get("meetingDetailsMap");
+        Map<Integer, String> meetingContextGuidMap = context.get("meetingContextGuidMap");
+
+        for (String id : victimMapIds.get(victimType)) {
+            for (Map<String, String> row : rows) {
+                String meetingType = row.get("meetingType");
+                String meetingResponseMethod = row.get("responseMethod");
+                String meetingResponseType = row.get("meetingResponse");
+                MeetingType meetingTypeCode = MeetingType.fromString(meetingType); //Enum
+                MeetingMethod meetingResMethodCode = MeetingMethod.fromString(meetingResponseMethod); //Enum
+                String meetingContextGuid = meetingContextGuidMap.get(meetingTypeCode.getValue());
+                Meetings meetingResponse = meetingResponse(meetingTypeCode.getValue(), meetingResMethodCode.getValue(), meetingContextGuid, meetingResponseType);
+                victimService.addMeetingOfferedResponse(idGuidMap.get(id), convertObjectToString(meetingResponse));
+            }
+            context.set("meetingDetailsMap", meetingDetailsMap);
+        }
+    }
+
+    @Then("meeting response is verified for {string} is recorded in VCA")
+    public void verifyMeetingResponse(String victimType) {
+
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
+        Map<Integer, Meetings> meetingDetailsMap = context.get("meetingDetailsMap");
+
+        for (String id : victimMapIds.get(victimType)) {
+            for (Integer meetingTypeCode : meetingDetailsMap.keySet()) {
+                Meetings meetingOfferMethod = meetingDetailsMap.get(meetingTypeCode);
+                HttpResponseWrapper response = victimService.listMeetingOffered(idGuidMap.get(id), meetingTypeCode);
+                VictimCaseAppAssertions.assertMeetingResponse(meetingOfferMethod, response);
+            }
+        }
+    }
+
+
+
+
+
+
+
+
 
 
 

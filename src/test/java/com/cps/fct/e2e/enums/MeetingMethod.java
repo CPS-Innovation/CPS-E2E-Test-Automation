@@ -7,7 +7,8 @@ public enum MeetingMethod {
     EMAIL(2),
     POLICE(3),
     ISVA(4),
-    PHONE(5);
+    PHONE(5),
+    NO_RESPONSE(10);
 
     private final int value;
 
@@ -22,6 +23,7 @@ public enum MeetingMethod {
             case "letter by police" -> POLICE;
             case "letter by isva" -> ISVA;
             case "by telephone" -> PHONE;
+            case "no response" -> NO_RESPONSE;
              default -> throw new IllegalArgumentException( "Unknown Meeting source: " + value );
         };
     }

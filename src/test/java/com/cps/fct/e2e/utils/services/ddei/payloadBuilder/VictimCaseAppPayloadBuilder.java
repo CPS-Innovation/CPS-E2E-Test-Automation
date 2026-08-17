@@ -240,6 +240,89 @@ public class VictimCaseAppPayloadBuilder {
                 .build();
     }
 
+    public static Meetings meetingOfferedMethod(int meetingTypeCode, int meetingMethod) {
+        return Meetings.builder()
+                .MeetingType(meetingTypeCode)
+                .MeetingContextGuid(FakerUtils.uuid())
+                .MeetingOffered(true)
+                .MeetingRequested(false)
+                .MethodOfOffer(meetingMethod)
+                .DateOfOffer(todayMinusFiveDays())
+                .CreatedBy("meetingOfferedUsingMethod")
+                .build();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //    public static VictimCmsDetails getVictimWitnessCategory(String categoryCode) {
 //        return VictimCmsDetails.builder()
@@ -255,7 +338,6 @@ public class VictimCaseAppPayloadBuilder {
                 .create();
         return gson.toJson(object);
     }
-
 
     public static CpsContacts payLoadForAddVictimContactDetails(int contactTypeCode) {
 

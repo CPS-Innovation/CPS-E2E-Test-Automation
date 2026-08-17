@@ -1,8 +1,8 @@
-@regression @vca_api_regression @VCA_API_S11
+@regression @vca_api_regression @VCA_API_S52
 
-Feature: VCA-API-S11 - Decline of offered meetings by victims
+Feature: VCA-API-S11 - Offer meetings via meeting methods to victims
   As a Victim Liaison Officer
-  I want to record the meetings declined by victim for following type and method:-
+  I want to record the following meeting type offered via meeting method to victim:-
   ----------------------------------------------------------------------
   ¦ Meeting Type                                ¦ Meeting Method       ¦
   ¦---------------------------------------------¦----------------------¦
@@ -13,14 +13,14 @@ Feature: VCA-API-S11 - Decline of offered meetings by victims
   ¦ 5.Victim complaint                          ¦ 5.By telephone       ¦
   ¦ 6.Other CPS meeting                         ¦                      ¦
   ----------------------------------------------------------------------
-  Verify that meeting declined details are recorded
+  Verify that meeting offered and meeting method details are recorded
 
   Background: Create cases with single defendant with multi charge with victim and witness
     Given create new case using "CM01" for type "single defendant multiple offence"
     And add "victim" using "LM04" for the case
 
   @ptmDeclined
-  Scenario: Victim decline an offered meeting for different meeting types
+  Scenario: Offer different meeting types via meeting method types for a victim
     Given victim details are available in VCA
     And the "victim" is onboarded as "Universal" service lead in VCA
     And the Victim liaison officer is assigned to "victim" in VCA
@@ -32,5 +32,5 @@ Feature: VCA-API-S11 - Decline of offered meetings by victims
       | Victims Right to Review                 | Letter by ISVA   |
       | Victim complaint                        | By telephone     |
       | Other CPS meeting                       | Letter by email  |
-    And offered meetings is "Declined" by "victimId" in VCA
-    Then the "Declined" meeting details of "victimId" is verified in VCA
+    Then offered meeting type and method is verified for "victim" in VCA
+

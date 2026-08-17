@@ -30,13 +30,6 @@ import static io.cucumber.junit.platform.engine.Constants.OBJECT_FACTORY_PROPERT
         value = "com.cps.fct.e2e.support.CucumberObjectFactory"
 )
 public class TestRunnerApi {
-//    comment-vm
-//    static {
-//        System.setProperty("cucumber.filter.tags",
-//                        "@S1_S2_15300_15789" +
-//                        "@S3_S4_15791_15793"
-//        );
-//    }
     @Test
     void generateCucumberReport() {
         String jsonPath = "target/cucumber-report/cucumber.json";

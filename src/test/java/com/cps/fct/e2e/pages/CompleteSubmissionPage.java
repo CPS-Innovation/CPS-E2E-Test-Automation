@@ -143,7 +143,7 @@ public class CompleteSubmissionPage extends BasePage {
         // window and the appear/disappear gate below would miss it. Gate on the spinner + text instead.
         clickSubmitReviewButton(isMg3SubmissionRequired);
         waitForSubmitReviewProgressToFinish(isMg3SubmissionRequired);
-        waitForLoginPageToLoadCompletely();
+        waitForDomContentLoaded();
         return isMg3SubmissionRequired;
     }
 
@@ -439,7 +439,7 @@ public class CompleteSubmissionPage extends BasePage {
         Locator retryLink = mg3CreationRetryLink();
         retryLink.scrollIntoViewIfNeeded();
         retryLink.click();
-        waitForLoginPageToLoadCompletely();
+        waitForDomContentLoaded();
     }
 
     private void setCreateMg3Document(boolean createMg3Document) {

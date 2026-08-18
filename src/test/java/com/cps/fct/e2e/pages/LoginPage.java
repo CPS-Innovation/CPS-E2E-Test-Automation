@@ -49,7 +49,7 @@ public class LoginPage extends BasePage {
             String username, String password) throws InterruptedException {
 
         navigateToLoginPage().
-                waitForLoginPageToLoadCompletely()
+                waitForLoginPageToLoad()
                 .completeLogin(username, password)
                 .waitForCaseReviewHomePage()
                 .verifyNoLoginErrorsPresent();
@@ -538,9 +538,8 @@ public class LoginPage extends BasePage {
         return new String(new char[]{'P', 'A', 'S', 'S', 'W', 'O', 'R', 'D'});
     }
 
-    @Override
-    public LoginPage waitForLoginPageToLoadCompletely() {
-        super.waitForLoginPageToLoadCompletely();
+    public LoginPage waitForLoginPageToLoad() {
+        super.waitForDomContentLoaded();
         waitForLoginRouteToSettle();
         return this;
     }

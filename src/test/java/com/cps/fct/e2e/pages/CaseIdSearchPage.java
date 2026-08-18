@@ -68,7 +68,7 @@ public class CaseIdSearchPage extends BasePage {
                     throw e;
                 }
                 page.reload();
-                waitForLoginPageToLoadCompletely();
+                waitForCaseSearchPageToLoad();
                 waitUntilLoadingIndicatorIsGone();
             }
         }
@@ -117,12 +117,12 @@ public class CaseIdSearchPage extends BasePage {
     }
 
     public void searchCase(String caseId) {
-        waitForLoginPageToLoadCompletely().assertPageLoadSuccessful();
+        waitForCaseSearchPageToLoad().assertPageLoadSuccessful();
         submitSearchWithRetries(() -> inputCaseId(caseId).clickOnViewCaseButton(), "Case ID " + caseId);
     }
 
     public String searchCaseUrn(String urn) {
-        waitForLoginPageToLoadCompletely().assertPageLoadSuccessful();
+        waitForCaseSearchPageToLoad().assertPageLoadSuccessful();
         submitSearchWithRetries(() -> inputUrn(urn).clickOnViewCaseButton(), "URN " + urn);
         return cmsCaseIdFromCurrentUrl();
     }
@@ -214,8 +214,7 @@ public class CaseIdSearchPage extends BasePage {
         waitUntilLoadingIndicatorIsGone("Loading...");
     }
 
-    @Override
-    public CaseIdSearchPage waitForLoginPageToLoadCompletely() {
+    public CaseIdSearchPage waitForCaseSearchPageToLoad() {
         waitForTextToAppear("View a Case");
         return this;
     }

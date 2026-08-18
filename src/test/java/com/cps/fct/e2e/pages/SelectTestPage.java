@@ -18,9 +18,7 @@ public class SelectTestPage extends BasePage {
         super(context);
     }
 
-    @Override
-    public SelectTestPage waitForLoginPageToLoadCompletely() {
-        waitForElement(page, AriaRole.HEADING, "Reviews");
+    public SelectTestPage waitForSelectTestPageToLoad() {
         waitForElement(page, AriaRole.HEADING, "Select test");
         return this;
     }
@@ -40,7 +38,7 @@ public class SelectTestPage extends BasePage {
 
     public void chooseReviewType(String typeOfTest)
     {
-        waitForLoginPageToLoadCompletely()
+        waitForSelectTestPageToLoad()
             .chooseTestType(typeOfTest)
             .clickSaveAndContinueAndWaitForSaveTestTypeResponse();
         waitUntilLoadingIndicatorIsGone();

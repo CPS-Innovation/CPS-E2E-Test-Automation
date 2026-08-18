@@ -33,7 +33,6 @@ Feature: CR-UI-S2_S14 - CC Initial PCD Review
 
     Then review is submitted successfully
 
-
   @ui @CR_UI_16270 @CR_UI_S2 @earlyAdviceWith28DayActionPlan
   Scenario: 5 days PCD review of case type CC and test type Early Advice with 28 days action plan
     Given I login to case review app

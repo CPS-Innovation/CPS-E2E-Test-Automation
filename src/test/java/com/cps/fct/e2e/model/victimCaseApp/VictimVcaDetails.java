@@ -1,6 +1,6 @@
 package com.cps.fct.e2e.model.victimCaseApp;
 
-import com.cps.fct.e2e.enums.PreferredMethodOfContact;
+import com.cps.fct.e2e.enums.vicitmCaseApp.PreferredMethodOfContact;
 import lombok.Builder;
 import lombok.Data;
 

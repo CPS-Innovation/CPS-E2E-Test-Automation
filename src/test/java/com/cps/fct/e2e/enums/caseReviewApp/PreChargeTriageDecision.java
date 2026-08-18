@@ -1,4 +1,4 @@
-package com.cps.fct.e2e.model;
+package com.cps.fct.e2e.enums.caseReviewApp;
 
 /**
  * The triage decision outcome recorded against a pre-charge case (the {@code decision} field of the

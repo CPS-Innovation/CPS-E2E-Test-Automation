@@ -1,20 +1,17 @@
 package com.cps.fct.e2e.stepdefs.service;
 
-import com.cps.fct.e2e.enums.*;
+import com.cps.fct.e2e.enums.vicitmCaseApp.*;
 import com.cps.fct.e2e.model.victimCaseApp.*;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
 import com.cps.fct.e2e.utils.httpClient.HttpResponseWrapper;
 import com.cps.fct.e2e.utils.services.ddei.CommonService;
-import com.cps.fct.e2e.utils.services.ddei.CaseService;
+import com.cps.fct.e2e.utils.services.ddei.CaseReviewService;
 import com.cps.fct.e2e.utils.services.ddei.VictimService;
-import com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimCaseAppPayloadBuilder;
 import com.cps.fct.e2e.utils.services.ddei.responseAssertions.VictimCaseAppAssertions;
-import com.jayway.jsonpath.JsonPath;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.restassured.response.Response;
 import org.picocontainer.annotations.Inject;
 
 import java.util.*;
@@ -25,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class VictimCaseAppStepDefinition {
     @Inject
-    private CaseService caseService;
+    private CaseReviewService caseReviewService;
 
     @Inject
     private VictimService victimService;

@@ -10,6 +10,9 @@ public class SelectTestPage extends BasePage {
     private static final String SAVE_TEST_TYPE_ENDPOINT = "ActionSaveCaseIncludingTestType";
     private static final String SAVE_TEST_TYPE_METHOD = "POST";
     private static final int SUCCESS_STATUS = 200;
+    private static final String EARLY_ADVICE_TEST_TYPE = "Early Advice";
+    private static final String EARLY_ADVICE_FIRST_PAGE_HEADING = "What advice is sought?";
+    private static final String DEFAULT_FIRST_PAGE_HEADING = "Case headline";
 
     public SelectTestPage(PlaywrightContext context) {
         super(context);
@@ -63,9 +66,28 @@ public class SelectTestPage extends BasePage {
     }
 
     private SelectTestPage assertSelectedTestTypePageReady(String typeOfTest) {
-        assertThat(page.getByText("You've selected " + typeOfTest)).isVisible();
-        assertThat(page.locator("h1")).containsText("Case headline");
+        waitForSelectedTestTypeText(typeOfTest);
+        assertThat(page.locator("h1")).containsText(firstPageHeading(typeOfTest));
         return this;
+    }
+
+    private void waitForSelectedTestTypeText(String typeOfTest) {
+        page.waitForCondition(() -> Boolean.TRUE.equals(page.evaluate("""
+                typeOfTest => {
+                    const text = (document.body.innerText || document.body.textContent || '')
+                        .replace(/\\s+/g, ' ')
+                        .trim();
+                    return text.includes('selected ' + typeOfTest);
+                }
+                """, typeOfTest)));
+    }
+
+    private String firstPageHeading(String typeOfTest) {
+        if (EARLY_ADVICE_TEST_TYPE.equalsIgnoreCase(typeOfTest)) {
+            return EARLY_ADVICE_FIRST_PAGE_HEADING;
+        }
+
+        return DEFAULT_FIRST_PAGE_HEADING;
     }
 
 }

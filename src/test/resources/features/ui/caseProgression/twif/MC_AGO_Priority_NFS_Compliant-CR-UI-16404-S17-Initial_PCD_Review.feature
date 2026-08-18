@@ -28,8 +28,8 @@ Feature: CR-UI-S17 - MC Initial PCD Review for Priority NFS Compliant
 
     And I continue without action plan
     And I submit the charging decision as following
-      | Investigative stage        | Method | Create MG3 document |
-      | Bail for charging decision | Area   | True                |
+      | Investigative stage        | Method |
+      | Bail for charging decision | Area   |
 
     Then review is submitted successfully
 

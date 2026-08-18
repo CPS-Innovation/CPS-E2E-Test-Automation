@@ -288,7 +288,10 @@ public abstract class BasePage {
 
     }
         public void waitForElement(Page page, AriaRole role, String expectedTexts) {
-        Locator locator = page.getByRole(role);
+        Locator locator = page.getByRole(
+                role,
+                new Page.GetByRoleOptions().setName(expectedTexts)
+        );
         locator.waitFor(new Locator.WaitForOptions().setTimeout(DEFAULT_TIMEOUT_MILLIS));
     }
 

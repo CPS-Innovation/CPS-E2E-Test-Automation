@@ -34,6 +34,9 @@ public class CompleteSubmissionPage extends BasePage {
     private static final String THRESHOLD_TEST_REVIEW_TYPE = "Threshold Test";
     private static final String EARLY_ADVICE_REVIEW_TYPE = "Early Advice";
     private static final String DECISION_TYPE_CHARGE = "Charge";
+    private static final String CREATE_MG3_WITH_CHARGE_DECISION_ERROR =
+            "Remove 'Create MG3 document' from the feature file data table. "
+                    + "decision type Charge creates MG3 documents by default.";
     private static final int MG3_CREATION_RETRY_ATTEMPTS = 3;
     private static final int MG3_CREATION_RETRY_DELAY_MILLIS = 20_000;
     private static final int MG3_SUBMISSION_SUCCESS_TIMEOUT_MILLIS = 65_000;
@@ -122,6 +125,7 @@ public class CompleteSubmissionPage extends BasePage {
     ) {
         waitForPageToLoad();
         assertChargeDecisionMatchesReviewType(reviewType, decisionTypes);
+        assertCreateMg3DocumentNotSuppliedForChargeDecision(createMg3Document, decisionTypes);
 
         boolean isMg3SubmissionRequired = isMg3SubmissionRequired(createMg3Document, decisionTypes);
         if (createMg3Document != null && !hasChargeDecision(decisionTypes)) {
@@ -453,6 +457,15 @@ public class CompleteSubmissionPage extends BasePage {
                     + " decision type is only supported for "
                     + THRESHOLD_TEST_REVIEW_TYPE + " and " + FULL_CODE_TEST_REVIEW_TYPE
                     + ". Actual review type: " + reviewType);
+        }
+    }
+
+    private void assertCreateMg3DocumentNotSuppliedForChargeDecision(
+            Boolean createMg3Document,
+            List<String> decisionTypes
+    ) {
+        if (createMg3Document != null && hasChargeDecision(decisionTypes)) {
+            throw new IllegalArgumentException(CREATE_MG3_WITH_CHARGE_DECISION_ERROR);
         }
     }
 

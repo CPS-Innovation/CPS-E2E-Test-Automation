@@ -4,6 +4,7 @@ import com.cps.fct.e2e.utils.playwright.PlaywrightContext;
 import com.microsoft.playwright.options.AriaRole;
 
 import static com.cps.fct.e2e.utils.playwright.PlaywrightNetworkUtils.waitForResponseTriggeredBy;
+import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
 public class SelectTestPage extends BasePage {
     private static final String SAVE_TEST_TYPE_ENDPOINT = "ActionSaveCaseIncludingTestType";
@@ -38,8 +39,9 @@ public class SelectTestPage extends BasePage {
     {
         waitForLoginPageToLoadCompletely()
             .chooseTestType(typeOfTest)
-            .clickSaveAndContinueAndWaitForSaveTestTypeResponse()
-            .waitUntilLoadingIndicatorIsGone();
+            .clickSaveAndContinueAndWaitForSaveTestTypeResponse();
+        waitUntilLoadingIndicatorIsGone();
+        assertSelectedTestTypePageReady(typeOfTest);
     }
 
     @Override
@@ -57,6 +59,12 @@ public class SelectTestPage extends BasePage {
                 this::clickSaveAndContinue
         );
 
+        return this;
+    }
+
+    private SelectTestPage assertSelectedTestTypePageReady(String typeOfTest) {
+        assertThat(page.getByText("You've selected " + typeOfTest)).isVisible();
+        assertThat(page.locator("h1")).containsText("Case headline");
         return this;
     }
 

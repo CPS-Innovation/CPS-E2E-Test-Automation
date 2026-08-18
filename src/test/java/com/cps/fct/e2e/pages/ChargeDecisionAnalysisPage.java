@@ -48,6 +48,8 @@ public class ChargeDecisionAnalysisPage extends BasePage {
     private static final String DG_COMPLAINT_SUBHEADER = "Is the submitted file compliant in accordance with the Directors Guidance (DG6)?";
     private static final String SAVE_AND_CONTINUE_BUTTON_TEXT = "Save and continue";
     private static final String ACTION_SAVE_ANALYSIS_ENDPOINT = "ActionSaveAnalysis";
+    private static final String ACTION_SAVE_THRESHOLD_CONDITION_ENDPOINT = "ActionSaveCondition_StreamlinedThreshold";
+    private static final String ACTION_REPLACE_THRESHOLD_WORKFLOW_ENDPOINT = "ActionReplaceWorkflow";
     private static final String ACTION_SAVE_DG_ASSESSMENT_ENDPOINT = "ActionCheckSubTypeAndSaveDG";
     // Charging-decision save endpoints. Match on the suspect-count-agnostic prefix
     // (ActionSaveChargeDecision covers both ...MultiSuspect and ...SingleSuspect) so the waits
@@ -206,6 +208,41 @@ public class ChargeDecisionAnalysisPage extends BasePage {
         assertSectionCompleted(completedSectionName);
     }
 
+    private void clickSaveAnalysisAndAssertSectionCompleted(String completedSectionName) {
+        clickSaveAnalysis(completedSectionName);
+        assertSectionCompleted(completedSectionName);
+    }
+
+    private void clickSaveThresholdConditionAndAssertSectionCompleted(String completedSectionName) {
+        waitUntilBusyIndicatorsAreGone();
+        waitForResponseTriggeredBy(
+                page,
+                "Save Threshold Test condition section: " + completedSectionName,
+                ACTION_SAVE_THRESHOLD_CONDITION_ENDPOINT,
+                SAVE_ANALYSIS_METHOD,
+                SUCCESS_STATUS,
+                this::clickSaveAndContinueButton
+        );
+        page.waitForTimeout(DEFAULT_WAIT_TIMEOUT_MS);
+        waitUntilBusyIndicatorsAreGone();
+        assertSectionCompleted(completedSectionName);
+    }
+
+    private void clickSaveThresholdAdditionalAnalysisAndAssertSectionCompleted(String completedSectionName) {
+        waitUntilBusyIndicatorsAreGone();
+        waitForResponseTriggeredBy(
+                page,
+                "Save Threshold Test additional analysis section: " + completedSectionName,
+                ACTION_REPLACE_THRESHOLD_WORKFLOW_ENDPOINT,
+                SAVE_ANALYSIS_METHOD,
+                SUCCESS_STATUS,
+                this::clickSaveAndContinueButton
+        );
+        page.waitForTimeout(DEFAULT_WAIT_TIMEOUT_MS);
+        waitUntilBusyIndicatorsAreGone();
+        assertSectionCompleted(completedSectionName);
+    }
+
     private void clickSaveAnalysis(String sectionName) {
         waitUntilBusyIndicatorsAreGone();
         waitForResponseTriggeredBy(
@@ -286,7 +323,7 @@ public class ChargeDecisionAnalysisPage extends BasePage {
         enteredAnalysisTextBySection.put(CASE_HEADLINE_LABEL, randomWords);
         assertCaseHeadlineSection(typeOfReview)
                 .enterTextInRichEditor(randomWords)
-                .clickSaveAndContinueAndAssertSectionCompleted(CASE_HEADLINE_LABEL);
+                .clickSaveAnalysisAndAssertSectionCompleted(CASE_HEADLINE_LABEL);
     }
 
     public void enterSectionText(String headerLabel, String randomWords) {
@@ -307,12 +344,13 @@ public class ChargeDecisionAnalysisPage extends BasePage {
         assertSection(headerLabel)
                 .enterTextInRichEditor(randomWords)
                 .chooseVisibleRadioAnswer(answer)
-                .clickSaveAndContinueAndAssertSectionCompleted(headerLabel);
+                .clickSaveThresholdConditionAndAssertSectionCompleted(headerLabel);
     }
 
     public void skipThresholdAdditionalAnalysis(String headerLabel) {
         assertSection(headerLabel)
-                .clickSaveAndContinueAndAssertSectionCompleted(headerLabel);
+                .clickSaveThresholdAdditionalAnalysisAndAssertSectionCompleted(headerLabel);
+        assertMonitoringCodesPageVisible();
     }
 
     public ChargeDecisionAnalysisPage enterSectionTextOnly(String headerLabel, String randomWords) {

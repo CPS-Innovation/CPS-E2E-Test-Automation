@@ -117,35 +117,9 @@
                 "Country": "UK"
               }
             }
-          },
-          {
-            "UniqueID": "{{CM01_CaseOffenceId_2}}",
-            "CJSCode": {
-              "Code": {
-                "Alternative": {
-                  "ActOrSource": "OF",
-                  "Year": "61"
-                },
-                "Reason": "016"
-              }
-            },
-            "Description": "Suspect One Offence 2",
-            "Category": "Summary Only",
-            "FromDate": "2001-10-01",
-            "Particulars": {
-              "Address": {
-                "AddressLine": [
-                  "{{DEF_1_Street_Address}}",
-                  "{{DEF_1_City}}"
-                ],
-                "Postcode": "{{DEF_1_Postcode}}",
-                "Country": "UK"
-              }
-            }
           }
         ]
       },
-
 
       {
         "AccusedPerson": {
@@ -213,12 +187,12 @@
         },
         "ProposedCharge": [
           {
-            "UniqueID": "{{CM01_CaseOffenceId_3}}",
+            "UniqueID": "{{CM01_CaseOffenceId_2}}",
             "CJSCode": {
               "Code": {
                 "Alternative": {
-                  "ActOrSource": "OF",
-                  "Year": "61"
+                  "ActOrSource": "FA",
+                  "Year": "88"
                 },
                 "Reason": "016"
               }
@@ -237,35 +211,9 @@
                 "Country": "UK"
               }
             }
-          },
-          {
-            "UniqueID": "{{CM01_CaseOffenceId_4}}",
-            "CJSCode": {
-              "Code": {
-                "Alternative": {
-                  "ActOrSource": "CE",
-                  "Year": "79"
-                },
-                "Reason": "287"
-              }
-            },
-            "Description": "Suspect Two Offence 2",
-            "Category": "Summary Only",
-            "FromDate": "2001-10-01",
-            "Particulars": {
-              "Address": {
-                "AddressLine": [
-                  "{{DEF_2_Street_Address}}",
-                  "{{DEF_2_City}}"
-                ],
-                "Postcode": "{{DEF_2_Postcode}}",
-                "Country": "UK"
-              }
-            }
           }
         ]
       },
-
 
       {
         "AccusedPerson": {
@@ -333,7 +281,7 @@
         },
         "ProposedCharge": [
           {
-            "UniqueID": "{{CM01_CaseOffenceId_5}}",
+            "UniqueID": "{{CM01_CaseOffenceId_3}}",
             "CJSCode": {
               "Code": {
                 "Alternative": {
@@ -357,35 +305,9 @@
                 "Country": "UK"
               }
             }
-          },
-          {
-            "UniqueID": "{{CM01_CaseOffenceId_6}}",
-            "CJSCode": {
-              "Code": {
-                "Alternative": {
-                  "ActOrSource": "WT",
-                  "Year": "06"
-                },
-                "Reason": "053"
-              }
-            },
-            "Description": "Suspect Three Offence 2",
-            "Category": "Summary Only",
-            "FromDate": "2001-10-01",
-            "Particulars": {
-              "Address": {
-                "AddressLine": [
-                  "{{DEF_3_Street_Address}}",
-                  "{{DEF_3_City}}"
-                ],
-                "Postcode": "{{DEF_3_Postcode}}",
-                "Country": "UK"
-              }
-            }
           }
         ]
       },
-
 
       {
         "AccusedPerson": {
@@ -453,45 +375,20 @@
         },
         "ProposedCharge": [
           {
-            "UniqueID": "{{CM01_CaseOffenceId_7}}",
+            "UniqueID": "{{CM01_CaseOffenceId_4}}",
             "CJSCode": {
               "Code": {
                 "Alternative": {
-                  "ActOrSource": "OF",
-                  "Year": "61"
+                  "ActOrSource": "FA",
+                  "Year": "88"
                 },
-                "Reason": "102"
+                "Reason": "016"
               }
             },
             "Description": "Suspect four Offence 1",
             "Category": "Summary Only",
             "FromDate": "2001-10-01",
 
-            "Particulars": {
-              "Address": {
-                "AddressLine": [
-                  "{{DEF_4_Street_Address}}",
-                  "{{DEF_4_City}}"
-                ],
-                "Postcode": "{{DEF_4_Postcode}}",
-                "Country": "UK"
-              }
-            }
-          },
-          {
-            "UniqueID": "{{CM01_CaseOffenceId_8}}",
-            "CJSCode": {
-              "Code": {
-                "Alternative": {
-                  "ActOrSource": "OF",
-                  "Year": "61"
-                },
-                "Reason": "019"
-              }
-            },
-            "Description": "Suspect four Offence 2",
-            "Category": "Summary Only",
-            "FromDate": "2001-10-01",
             "Particulars": {
               "Address": {
                 "AddressLine": [

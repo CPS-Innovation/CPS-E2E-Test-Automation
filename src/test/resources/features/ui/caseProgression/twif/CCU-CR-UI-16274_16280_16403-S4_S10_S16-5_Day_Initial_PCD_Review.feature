@@ -34,28 +34,28 @@ Feature: CR-UI-S4_S10_S16 - CCU Initial PCD Review
     Then review is submitted successfully
 
 
-#  @ui @CR_UI_16280 @CR_UI_S10 @thresholdWithActionPlan
-#  Scenario: 5 days PCD review of test type Threshold with 1 day action plan
-#    Given I login to case review app
-#    And Search the case "URN"
-#    When I start "28 day PCD Review"
-#    And select test as "Threshold Test"
-#    And I complete the Threshold Test pre-charge analysis details with:
-#      | field                       | value                              |
-#      | Suspect-victim relationship | Partner                            |
-#      | Global monitoring codes     | Asset Recovery; DA specialist court |
-#
-#    And I preview pre charge analysis
-#    When I make charging decision as following:
-#      | decision type     | decision code                   | reason | out come of case | offence category |
-#      | No further action | K - No prosecution - Evidential | D81    | D80              | Robbery          |
-#
-#    And I add an action point plan for "28 days" and "Key Witness Details"
-#    And I submit the charging decision as following
-#      | Investigative stage        | Method | Create MG3 document |
-#      | Bail for charging decision | Area   | False               |
-#
-#    Then review is submitted successfully
+  @ui @CR_UI_16280 @CR_UI_S10 @thresholdWithActionPlan
+  Scenario: 5 days PCD review of test type Threshold with 1 day action plan
+    Given I login to case review app
+    And Search the case "URN"
+    When I start "5 day PCD Review"
+    And select test as "Threshold Test"
+    And I complete the Threshold Test pre-charge analysis details with:
+      | field                       | value                              |
+      | Suspect-victim relationship | Partner                            |
+      | Global monitoring codes     | Asset Recovery; DA specialist court |
+
+    And I preview pre charge analysis
+    When I make charging decision as following:
+      | decision type     | decision code                   | reason | out come of case | offence category |
+      | No further action | K - No prosecution - Evidential | D81    | D80              | Robbery          |
+
+    And I add an action point plan for "1 days" and "Key Witness Details"
+    And I submit the charging decision as following
+      | Investigative stage        | Method | Create MG3 document |
+      | Bail for charging decision | Area   | False               |
+
+    Then review is submitted successfully
 
 
   @ui @CR_UI_16274 @CR_UI_S4 @earlyAdviceWith14DayActionPlan

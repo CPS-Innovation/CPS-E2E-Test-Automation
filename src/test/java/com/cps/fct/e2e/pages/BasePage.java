@@ -209,7 +209,7 @@ public abstract class BasePage {
     }
 
 
-    public BasePage waitForLoginPageToLoadCompletely() {
+    public BasePage waitForDomContentLoaded() {
         page.waitForLoadState(LoadState.DOMCONTENTLOADED);
         return this;
     }

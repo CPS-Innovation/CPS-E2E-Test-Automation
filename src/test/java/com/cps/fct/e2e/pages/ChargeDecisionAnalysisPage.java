@@ -1605,7 +1605,7 @@ public class ChargeDecisionAnalysisPage extends BasePage {
     private void finishChargingDecisionAfterFinalDefendant() {
         clickSaveAndContinue();
         waitUntilLoadingIndicatorIsGone(LOADING_INDICATOR_TEXT);
-        waitForLoginPageToLoadCompletely();
+        waitForDomContentLoaded();
 //        clickSaveAndContinue();
     }
 

@@ -33,10 +33,8 @@ public class CaseReviewPage extends BasePage {
     }
 
 
-    @Override
-    public CaseReviewPage waitForLoginPageToLoadCompletely() {
+    public CaseReviewPage waitForReviewSelectionPageToLoad() {
         waitForElement(page, AriaRole.HEADING, "Reviews");
-        waitForElement(page, AriaRole.HEADING, "Select test");
         return this;
     }
 
@@ -58,7 +56,7 @@ public class CaseReviewPage extends BasePage {
     }
 
     public void startReview(String caseId, String typeOfReview) {
-        waitForLoginPageToLoadCompletely()
+        waitForReviewSelectionPageToLoad()
                 .assertPageLoadSuccessful(caseId, typeOfReview);
         waitForResponseTriggeredBy(
                 page,
@@ -72,7 +70,7 @@ public class CaseReviewPage extends BasePage {
     }
 
     public void resumeReview(String caseId, String typeOfReview) {
-        waitForLoginPageToLoadCompletely().
+        waitForReviewSelectionPageToLoad().
                 assertPageLoadSuccessful(caseId, typeOfReview)
                 .clickResumeButton()
                 .waitUntilLoadingIndicatorIsGone();

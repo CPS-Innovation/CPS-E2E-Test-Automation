@@ -7,6 +7,7 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import lombok.Getter;
 import org.apache.http.params.CoreConnectionPNames;
+import org.apache.hc.client5.http.config.RequestConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,10 +16,15 @@ import java.util.Map;
 
 public class HttpClientBuilder {
 
+//    RestAssuredConfig restConfig = RestAssuredConfig.config()
+//            .httpClient(HttpClientConfig.httpClientConfig()
+//                    .setParam(CoreConnectionPNames.CONNECTION_TIMEOUT, 30000)// timeout request max of 30S
+//                    .setParam(CoreConnectionPNames.SO_TIMEOUT, 90000));
+
     RestAssuredConfig restConfig = RestAssuredConfig.config()
             .httpClient(HttpClientConfig.httpClientConfig()
-                    .setParam(CoreConnectionPNames.CONNECTION_TIMEOUT, 30000)// timeout request max of 30S
-                    .setParam(CoreConnectionPNames.SO_TIMEOUT, 90000));
+                    .setParam("http.connection.timeout", 30000)
+                    .setParam("http.socket.timeout", 90000));
 
     private static final Logger logger = LoggerFactory.getLogger(HttpClientBuilder.class);
     private final String baseUri;
@@ -32,7 +38,7 @@ public class HttpClientBuilder {
     private final int retryCount;
     @Getter
     private final String resourceName;
-    RequestSpecification requestSpecification =  RestAssured
+    RequestSpecification requestSpecification = RestAssured
             .given()
             .config(restConfig)
             .relaxedHTTPSValidation();
@@ -44,7 +50,7 @@ public class HttpClientBuilder {
         this.method = builder.method;
         this.headers = Map.copyOf(builder.headers);
         this.queryParams = Map.copyOf(builder.queryParams);
-        this.formParams = builder.formParams!=null ? Map.copyOf(builder.formParams):Map.of();
+        this.formParams = builder.formParams != null ? Map.copyOf(builder.formParams) : Map.of();
         this.body = builder.body;
         this.retryCount = builder.retryCount;
         this.resourceName = builder.resourceName;
@@ -59,14 +65,14 @@ public class HttpClientBuilder {
                 .headers(headers);
 
 
-        if (formParams!=null && !formParams.isEmpty()) {
+        if (formParams != null && !formParams.isEmpty()) {
             request.formParams(formParams);
         }
 
-        if (queryParams!=null) {
+        if (queryParams != null) {
             request.queryParams(queryParams);
         }
-        if (body!=null) {
+        if (body != null) {
             request.body(body);
         }
 
@@ -143,14 +149,14 @@ public class HttpClientBuilder {
 
 
         public Builder addFormParams(Map<String, String> params) {
-            if (params!=null) {
+            if (params != null) {
                 this.formParams.putAll(params);
             }
             return this;
         }
 
         public Builder addHeaders(Map<String, String> headers) {
-            if (headers!=null) {
+            if (headers != null) {
                 this.headers.putAll(headers);
             }
             return this;

@@ -13,7 +13,8 @@ import java.util.UUID;
 
 public class FakerUtils {
 
-    public static final Faker faker = new Faker(new Locale("en"));
+//    public static final Faker faker = new Faker(new Locale("en"));
+    public static final Faker faker = new Faker(Locale.ENGLISH);
     private static final Random random = new Random();
 
     public static String uuid() {

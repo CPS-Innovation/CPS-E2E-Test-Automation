@@ -105,33 +105,33 @@ public class JsonUtils {
 
     @SuppressWarnings("unchecked")
     public static <T> T readJsonPath(String jsonBody, String jsonPathExpression, Class<T> type) {
-            Object result = JsonPath.read(jsonBody, jsonPathExpression);
+        Object result = JsonPath.read(jsonBody, jsonPathExpression);
 
-            if (result instanceof JSONArray array) {
-                if (array.isEmpty()) return null;
-                result = array.getFirst();
+        if (result instanceof JSONArray array) {
+            if (array.isEmpty()) return null;
+            result = array.getFirst();
+        }
+
+        if (result == null) return null;
+
+        if (type.isInstance(result)) {
+            return (T) result;
+        }
+
+        try {
+            if (type == String.class) {
+                return (T) result.toString();
+            } else if (type == Integer.class) {
+                return (T) Integer.valueOf(result.toString());
+            } else if (type == Boolean.class) {
+                return (T) Boolean.valueOf(result.toString());
             }
-
-            if (result == null) return null;
-
-            if (type.isInstance(result)) {
-                return (T) result;
-            }
-
-            try {
-                if (type == String.class) {
-                    return (T) result.toString();
-                } else if (type == Integer.class) {
-                    return (T) Integer.valueOf(result.toString());
-                } else if (type == Boolean.class) {
-                    return (T) Boolean.valueOf(result.toString());
-                }
-            } catch (Exception e) {
-                return null;
-            }
-
+        } catch (Exception e) {
             return null;
         }
+
+        return null;
+    }
 
     public static <T> String toJson(T object) throws JsonProcessingException {
 //        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);  // TODO:

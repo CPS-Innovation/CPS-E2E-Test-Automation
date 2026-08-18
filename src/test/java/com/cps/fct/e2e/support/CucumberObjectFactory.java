@@ -10,7 +10,7 @@ import com.cps.fct.e2e.utils.payloadBuilders.PayloadBuilderForCM01;
 import com.cps.fct.e2e.utils.payloadBuilders.PayloadBuilderForLM04;
 import com.cps.fct.e2e.utils.playwright.PlaywrightContext;
 import com.cps.fct.e2e.utils.playwright.PlaywrightManager;
-import com.cps.fct.e2e.utils.services.ddei.CaseService;
+import com.cps.fct.e2e.utils.services.ddei.CaseReviewService;
 import com.cps.fct.e2e.utils.services.ddei.CommonService;
 import com.cps.fct.e2e.utils.services.ddei.VictimService;
 import com.cps.fct.e2e.utils.services.caseCreation.CaseCreateService;
@@ -26,7 +26,7 @@ public class CucumberObjectFactory implements ObjectFactory {
     private final PicoFactory delegate = new PicoFactory();
 
     public CucumberObjectFactory() {
-        delegate.addClass(CaseService.class);
+        delegate.addClass(CaseReviewService.class);
         delegate.addClass(CommonService.class);
         delegate.addClass(ScenarioContext.class);
         delegate.addClass(DefaultHttpService.class);

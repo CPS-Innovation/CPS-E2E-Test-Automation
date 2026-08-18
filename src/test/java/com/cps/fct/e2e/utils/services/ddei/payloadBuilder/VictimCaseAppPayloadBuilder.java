@@ -1,19 +1,17 @@
 package com.cps.fct.e2e.utils.services.ddei.payloadBuilder;
 
-import com.cps.fct.e2e.enums.PreferredMethodOfContact;
+import com.cps.fct.e2e.enums.vicitmCaseApp.PreferredMethodOfContact;
 import com.cps.fct.e2e.model.victimCaseApp.*;
 import com.cps.fct.e2e.utils.common.FakerUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static com.cps.fct.e2e.utils.common.FakerUtils.*;
 import static com.cps.fct.e2e.utils.common.FakerUtils.streetAddress;
-import static com.cps.fct.e2e.utils.common.JsonUtils.toJsonString;
 
 public class VictimCaseAppPayloadBuilder {
 

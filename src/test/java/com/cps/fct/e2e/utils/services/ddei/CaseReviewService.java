@@ -28,7 +28,7 @@ import static com.cps.fct.e2e.utils.services.ddei.payloadBuilder.PreChargeCaseBu
 import static com.cps.fct.e2e.utils.services.ddei.payloadBuilder.PreChargeCaseBuilder.constructPreChargeTriagePriority;
 import static java.lang.String.format;
 
-public class CaseService extends BaseService {
+public class CaseReviewService extends BaseService {
 
 
     public List<Case> listCaseDetails(String caseURn) {

@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class CaseProgressionUiSteps {
+public class CaseReviewUiStepDefinition {
 
     private static final String CREATE_MG3_DOCUMENT_COLUMN = "Create MG3 document";
     private static final String CREATE_MG3_DOCUMENT_CONTEXT_KEY = "createMg3Document";
@@ -81,7 +81,7 @@ public class CaseProgressionUiSteps {
 
     @Inject ScenarioContext context;
 
-    public CaseProgressionUiSteps() {
+    public CaseReviewUiStepDefinition() {
     }
 
     @Given("I login to case review app")

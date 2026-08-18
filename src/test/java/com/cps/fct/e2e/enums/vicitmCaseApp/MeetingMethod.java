@@ -1,4 +1,4 @@
-package com.cps.fct.e2e.enums;
+package com.cps.fct.e2e.enums.vicitmCaseApp;
 import lombok.Getter;
 
 @Getter

@@ -1,8 +1,10 @@
 package com.cps.fct.e2e.stepdefs.service;
 
-import com.cps.fct.e2e.model.Case;
+import com.cps.fct.e2e.model.caseCreation.*;
+import com.cps.fct.e2e.model.caseReviewApp.*;
+import com.cps.fct.e2e.model.victimCaseApp.*;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
-import com.cps.fct.e2e.utils.services.ddei.CaseService;
+import com.cps.fct.e2e.utils.services.ddei.CaseReviewService;
 import com.cps.fct.e2e.utils.services.ddei.CommonService;
 //import com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.core.internal.com.fasterxml.jackson.core.JsonProcessingException;
@@ -13,10 +15,10 @@ import org.picocontainer.annotations.Inject;
 
 import java.util.List;
 
-public class CaseStepDefs  {
+public class CaseReviewStepDefinition  {
 
     @Inject
-    private CaseService caseService;
+    private CaseReviewService caseReviewService;
 
     @Inject
     private CommonService service;
@@ -25,16 +27,16 @@ public class CaseStepDefs  {
     private ScenarioContext context;
 
 
-    @Given("case URN exists in CMS")
-    public void caseURNExistsInCMS() {
-        List<Case> caseDetails = caseService.listCaseDetails(context.get("caseUrn"));
-        context.set("caseDetails", caseDetails);
-    }
+//    @Given("case URN exists in CMS")
+//    public void caseURNExistsInCMS() {
+//        List<Case> caseDetails = caseReviewService.listCaseDetails(context.get("caseUrn"));
+//        context.set("caseDetails", caseDetails);
+//    }
 
     @And("precharge the {string} triage case for {string} PCD review")
     public void prechargeTriageCaseForPcdReview(String caseType, String decisionToBeMade) throws JsonProcessingException {
         service.createCmsAuthToken(context);
-        caseService.prechargeTriageCaseAccepted(
+        caseReviewService.prechargeTriageCaseAccepted(
                 requiredContextValue("caseUrn"),
                 requiredContextValue("caseId"),
                 caseType,
@@ -47,7 +49,7 @@ public class CaseStepDefs  {
     @And("precharge the RED {string} triage case for {string} PCD review")
     public void prechargeRedTriageCaseForPcdReview(String caseType, String triageDecision) throws JsonProcessingException {
         service.createCmsAuthToken(context);
-        caseService.prechargeTriageCasePriority(
+        caseReviewService.prechargeTriageCasePriority(
                 requiredContextValue("caseUrn"),
                 requiredContextValue("caseId"),
                 caseType,

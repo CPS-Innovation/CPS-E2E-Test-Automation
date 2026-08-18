@@ -50,11 +50,11 @@ Feature: CR-UI-S17 - MC Initial PCD Review for Priority NFS Compliant
       | Charge        | A - Charge and request evidential file | Accept               | Yes - AG consent given | D81    | D80              | Robbery          |
 
     And I add an action point plan with:
-      | field              | value   |
-      | Date required by   | 7 days  |
-      | Chaser task        | No      |
-      | Related to suspect | All     |
-      | Action             | Suspect |
+      | field              | value                |
+      | Date required by   | 7 days               |
+      | Chaser task        | No                   |
+      | Related to suspect | All                  |
+      | Action             | Orders on Conviction |
 
     And I submit the charging decision as following
       | Investigative stage        | Method |

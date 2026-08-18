@@ -2,7 +2,6 @@ package com.cps.fct.e2e.stepdefs.service;
 
 import com.cps.fct.e2e.model.caseCreation.*;
 import com.cps.fct.e2e.model.caseReviewApp.*;
-import com.cps.fct.e2e.model.victimCaseApp.*;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
 import com.cps.fct.e2e.utils.services.ddei.CaseReviewService;
 import com.cps.fct.e2e.utils.services.ddei.CommonService;

@@ -262,7 +262,6 @@ public class VictimCaseAppApiStepDefinition {
         Map<Integer, CpsContacts> cpsContactUpdateMap = context.get("cpsContactUpdateMap");
 
         for (String id : victimMapIds.get(victimType)) {
-
             for (Integer key : cpsContactUpdateMap.keySet()) {
                 CpsContacts victimCpsContacts = cpsContactUpdateMap.get(key);
                 HttpResponseWrapper response = victimService.listCpsContactDetails(idGuidMap.get(id));
@@ -331,10 +330,10 @@ public class VictimCaseAppApiStepDefinition {
 
         for (String id : victimMapIds.get(victimType)) {
             for (Map<String, String> row : rows) {
-                String meetingType = row.get("meetingType");
-                String reason = row.get("notOfferedReason");
-                MeetingType meetingTypeCode = MeetingType.fromString(meetingType);//Enum
-                Meetings meetingNotOffered = meetingNotOffered(meetingTypeCode.getValue(), reason);//Class
+//                String meetingType = row.get("meetingType");
+//                String reason = row.get("notOfferedReason");
+                MeetingType meetingTypeCode = MeetingType.fromString(row.get("meetingType"));//Enum
+                Meetings meetingNotOffered = meetingNotOffered(meetingTypeCode.getValue(), row.get("notOfferedReason"));//Class
                 victimService.addMeetingsNotOffered(idGuidMap.get(id), convertObjectToString(meetingNotOffered));
                 meetingDetailsMap.put(meetingTypeCode.getValue(), meetingNotOffered);
             }
@@ -372,11 +371,11 @@ public class VictimCaseAppApiStepDefinition {
 
         for (String id : victimMapIds.get(victimType)) {
             for (Map<String, String> row : rows) {
-                String meetingType = row.get("meetingType");
-                String offerMethod = row.get("offerMethod");
-                MeetingType meetingTypeCode = MeetingType.fromString(meetingType); //Enum
-                MeetingMethod meetingMethodCode = MeetingMethod.fromString(offerMethod); //Enum
-                Meetings meetingOfferedMethod = meetingOfferMethod(meetingTypeCode.getValue(), meetingMethodCode.getValue());//Class
+//                String meetingType = row.get("meetingType");
+//                String offerMethod = row.get("offerMethod");
+                MeetingType meetingTypeCode = MeetingType.fromString(row.get("meetingType")); //Enum
+                OfferMethod offerMethodCode = OfferMethod.fromString(row.get("offerMethod")); //Enum
+                Meetings meetingOfferedMethod = meetingOfferMethod(meetingTypeCode.getValue(), offerMethodCode.getValue());//Class
                 String meetingContextGuid = victimService.addMeetingOfferedMethod(idGuidMap.get(id), convertObjectToString(meetingOfferedMethod));
                 meetingDetailsMap.put(meetingTypeCode.getValue(), meetingOfferedMethod);
                 meetingContextGuidMap.put(meetingTypeCode.getValue(), meetingContextGuid);
@@ -414,13 +413,13 @@ public class VictimCaseAppApiStepDefinition {
 
         for (String id : victimMapIds.get(victimType)) {
             for (Map<String, String> row : rows) {
-                String meetingType = row.get("meetingType");
-                String meetingOfferResponseMethod = row.get("offerResponseMethod");
-                String meetingOfferResponse = row.get("offerResponse");
-                MeetingType meetingTypeCode = MeetingType.fromString(meetingType); //Enum
-                MeetingMethod meetingResponseMethodCode = MeetingMethod.fromString(meetingOfferResponseMethod); //Enum
+//                String meetingType = row.get("meetingType");
+//                String meetingOfferResponseMethod = row.get("offerResponseMethod");
+//                String meetingOfferResponse = row.get("offerResponse");
+                MeetingType meetingTypeCode = MeetingType.fromString(row.get("meetingType")); //Enum
+                OfferMethod meetingResponseMethodCode = OfferMethod.fromString(row.get("offerResponseMethod")); //Enum
                 String meetingContextGuid = meetingContextGuidMap.get(meetingTypeCode.getValue());
-                Meetings meetingResponse = meetingOfferResponse(meetingTypeCode.getValue(), meetingResponseMethodCode.getValue(), meetingContextGuid, meetingOfferResponse);
+                Meetings meetingResponse = meetingOfferResponse(meetingTypeCode.getValue(), meetingResponseMethodCode.getValue(), meetingContextGuid, row.get("offerResponse"));
                 victimService.addMeetingOfferedResponse(idGuidMap.get(id), convertObjectToString(meetingResponse));
             }
             context.set("meetingDetailsMap", meetingDetailsMap);
@@ -444,7 +443,32 @@ public class VictimCaseAppApiStepDefinition {
         }
     }
 
+    @When("the accepted meeting is arranged using following for {string} in VCA")
+    public void meetingArranged(String victimType,DataTable dataTable) {
 
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+        Map<Integer, Meetings> meetingDetailsMap = context.get("meetingDetailsMap");
+        Map<Integer, String> meetingContextGuidMap = context.get("meetingContextGuidMap");
+
+        for (String id : victimMapIds.get(victimType)) {
+            for (Map<String, String> row : rows) {
+
+                MeetingType meetingTypeCode = MeetingType.fromString(row.get("meetingType")); //Enum
+                Meetings meetingsArranged = meetingArrange(meetingTypeCode.getValue(), meetingContextGuidMap.get(meetingTypeCode.getValue()),
+                                                            MeetingSource.fromString(row.get("meetingSource")).getValue(),
+                                                            MeetingMethod.fromString(row.get("meetingMethod")).getValue(),
+                                                            MeetingLocation.fromString(row.get("locationType")).getValue(),
+                                                            row.get("locationName"));
+
+//                Meetings meetingResponse = meetingOfferResponse(meetingTypeCode.getValue(), meetingResponseMethodCode.getValue(), meetingContextGuid, meetingOfferResponse);
+//                victimService.addMeetingOfferedResponse(idGuidMap.get(id), convertObjectToString(meetingResponse));
+
+            }
+            context.set("meetingDetailsMap", meetingDetailsMap);
+        }
+    }
 
 
 

@@ -1,5 +1,6 @@
-package com.cps.fct.e2e.stepdefs.ui;
+package com.cps.fct.e2e.stepDefinition.ui;
 
+import com.cps.fct.e2e.pages.PageObjects;
 import com.cps.fct.e2e.utils.common.EnvConfig;
 import com.cps.fct.e2e.utils.common.FakerUtils;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
@@ -18,7 +19,23 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import com.cps.fct.e2e.utils.services.ddei.CaseReviewService;
+import com.cps.fct.e2e.utils.services.ddei.CommonService;
+//import com.fasterxml.jackson.core.JsonProcessingException;
+import io.cucumber.core.internal.com.fasterxml.jackson.core.JsonProcessingException;
+//import io.cucumber.messages.ndjson.internal.com.fasterxml.jackson.core.JsonProcessingException;
+
+
 public class CaseReviewUiStepDefinition {
+
+    @Inject
+    private CaseReviewService caseReviewService;
+
+    @Inject
+    private CommonService service;
+
+    @Inject
+    private ScenarioContext context;
 
     private static final String CREATE_MG3_DOCUMENT_COLUMN = "Create MG3 document";
     private static final String CREATE_MG3_DOCUMENT_CONTEXT_KEY = "createMg3Document";
@@ -79,10 +96,11 @@ public class CaseReviewUiStepDefinition {
 
     @Inject private PageObjects pages;
 
-    @Inject ScenarioContext context;
 
     public CaseReviewUiStepDefinition() {
     }
+
+
 
     @Given("I login to case review app")
     public void loginToCaseReviewApp() throws InterruptedException {
@@ -137,9 +155,46 @@ public class CaseReviewUiStepDefinition {
         context.set("caseId", caseId);
     }
 
+//    @When("I start {string}")
+//    public void iStartDaysPCDReview(String typeOfReview) {
+//        pages.caseReviewPage.startReview(context.get("caseId"),typeOfReview);
+//        context.set("typeOfReview", typeOfReview);
+//    }
+
+
+
+    @And("precharge the {string} triage case for {string} PCD review")
+    public void prechargeTriageCaseForPcdReview(String caseType, String decisionToBeMade) throws JsonProcessingException {
+        service.createCmsAuthToken(context);
+        caseReviewService.prechargeTriageCaseAccepted(
+                requiredContextValue("caseUrn"),
+                requiredContextValue("caseId"),
+                caseType,
+                decisionToBeMade);
+    }
+
+    // RED (Priority) triage. The decisionToBeMade is fixed to Priority; the triage decision
+    // (e.g. NFS Compliant) is passed in and recorded in the payload's decision field, with
+    // rejectedDecision left null/null because the case is accepted rather than rejected.
+    @And("precharge the RED {string} triage case for {string} PCD review")
+    public void prechargeRedTriageCaseForPcdReview(String caseType, String triageDecision) throws JsonProcessingException {
+        service.createCmsAuthToken(context);
+        caseReviewService.prechargeTriageCasePriority(
+                requiredContextValue("caseUrn"),
+                requiredContextValue("caseId"),
+                caseType,
+                triageDecision);
+    }
+
+
+
     @When("I start {string}")
     public void iStartDaysPCDReview(String typeOfReview) {
-        pages.caseReviewPage.startReview(context.get("caseId"),typeOfReview);
+        try {
+            pages.caseReviewPage.startReview(context.get("caseId"),typeOfReview);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         context.set("typeOfReview", typeOfReview);
     }
 

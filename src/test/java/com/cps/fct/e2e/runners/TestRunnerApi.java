@@ -29,7 +29,7 @@ import static io.cucumber.junit.platform.engine.Constants.OBJECT_FACTORY_PROPERT
 
 @ConfigurationParameter(
         key = OBJECT_FACTORY_PROPERTY_NAME,
-        value = "com.cps.fct.e2e.support.CucumberObjectFactory"
+        value = "com.cps.fct.e2e.utils.support.CucumberObjectFactory"
 )
 public class TestRunnerApi {
     @Test

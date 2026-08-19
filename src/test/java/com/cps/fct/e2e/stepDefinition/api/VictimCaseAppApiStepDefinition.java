@@ -1,4 +1,4 @@
-package com.cps.fct.e2e.stepdefs.service;
+package com.cps.fct.e2e.stepDefinition.api;
 
 import com.cps.fct.e2e.enums.vicitmCaseApp.*;
 import com.cps.fct.e2e.model.victimCaseApp.*;
@@ -20,7 +20,7 @@ import static com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimCaseAppPa
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-public class VictimCaseAppStepDefinition {
+public class VictimCaseAppApiStepDefinition {
     @Inject
     private CaseReviewService caseReviewService;
 
@@ -33,7 +33,7 @@ public class VictimCaseAppStepDefinition {
     @Inject
     private CommonService service;
 
-    public VictimCaseAppStepDefinition() {
+    public VictimCaseAppApiStepDefinition() {
     }
 
     @Given("victim details are available in VCA")

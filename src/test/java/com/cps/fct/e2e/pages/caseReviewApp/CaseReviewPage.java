@@ -1,5 +1,6 @@
-package com.cps.fct.e2e.pages;
+package com.cps.fct.e2e.pages.caseReviewApp;
 
+import com.cps.fct.e2e.pages.BasePage;
 import com.cps.fct.e2e.utils.playwright.PlaywrightContext;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.options.AriaRole;
@@ -33,8 +34,10 @@ public class CaseReviewPage extends BasePage {
     }
 
 
-    public CaseReviewPage waitForReviewSelectionPageToLoad() {
+    @Override
+    public CaseReviewPage waitForLoginPageToLoadCompletely() {
         waitForElement(page, AriaRole.HEADING, "Reviews");
+        waitForElement(page, AriaRole.HEADING, "Select test");
         return this;
     }
 
@@ -55,9 +58,10 @@ public class CaseReviewPage extends BasePage {
         return this;
     }
 
-    public void startReview(String caseId, String typeOfReview) {
-        waitForReviewSelectionPageToLoad()
-                .assertPageLoadSuccessful(caseId, typeOfReview);
+    public void startReview(String caseId, String typeOfReview) throws InterruptedException {
+//        waitForLoginPageToLoadCompletely()
+//                .assertPageLoadSuccessful(caseId, typeOfReview);
+        Thread.sleep(5000);
         waitForResponseTriggeredBy(
                 page,
                 "Start review",
@@ -70,7 +74,7 @@ public class CaseReviewPage extends BasePage {
     }
 
     public void resumeReview(String caseId, String typeOfReview) {
-        waitForReviewSelectionPageToLoad().
+        waitForLoginPageToLoadCompletely().
                 assertPageLoadSuccessful(caseId, typeOfReview)
                 .clickResumeButton()
                 .waitUntilLoadingIndicatorIsGone();

@@ -1,4 +1,4 @@
-package com.cps.fct.e2e.stepdefs.service;
+package com.cps.fct.e2e.stepDefinition.api;
 
 import com.cps.fct.e2e.utils.fileMapping.FileUtils;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 
-public class CaseCreateStepDefinition {
+public class CaseCreateApiStepDefinition {
 
     private static final String DEFENDANT_COUNT_CONTEXT_KEY = "defendantCount";
     private static final String CASE_DATA_FILE_NAME_CONTEXT_KEY = "caseDataFileName";

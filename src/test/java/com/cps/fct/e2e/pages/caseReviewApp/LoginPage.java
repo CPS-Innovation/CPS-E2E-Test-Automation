@@ -1,5 +1,6 @@
-package com.cps.fct.e2e.pages;
+package com.cps.fct.e2e.pages.caseReviewApp;
 
+import com.cps.fct.e2e.pages.BasePage;
 import com.cps.fct.e2e.utils.common.EnvConfig;
 import com.cps.fct.e2e.utils.playwright.PlaywrightContext;
 import com.microsoft.playwright.Locator;

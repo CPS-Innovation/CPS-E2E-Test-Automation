@@ -1,6 +1,6 @@
 package com.cps.fct.e2e.utils.services.ddei.payloadBuilder;
 
-import com.cps.fct.e2e.enums.vicitmCaseApp.PreferredMethodOfContact;
+import com.cps.fct.e2e.enums.vicitmCaseApp.*;
 import com.cps.fct.e2e.model.victimCaseApp.*;
 import com.cps.fct.e2e.utils.common.FakerUtils;
 import com.google.gson.Gson;
@@ -284,6 +284,15 @@ public class VictimCaseAppPayloadBuilder {
                                 ? todayDate()
                                 : todayMinusFourDays())
                 .LastModifiedBy("meetingResponseUser")
+                .build();
+    }
+
+    public static Meetings meetingArrange(int meetingType, String meetingContextGuid, int meetingSource,
+                                                            int meetingMethod, int locationType, String LocationName){
+
+
+
+        return Meetings.builder()
                 .build();
     }
 

@@ -5,8 +5,6 @@ import net.masterthought.cucumber.ReportBuilder;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.suite.api.*;
 import org.w3c.dom.*;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.nio.file.*;
 import java.util.Collections;
@@ -25,7 +23,8 @@ import static io.cucumber.junit.platform.engine.Constants.OBJECT_FACTORY_PROPERT
         key = PLUGIN_PROPERTY_NAME,
         value = "pretty, json:target/cucumber-report/cucumber.json, io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm" )
 //@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@caseReview" )
-@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@vca_api_regression" )
+//@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@vca_api_regression" )
+
 
 @ConfigurationParameter(
         key = OBJECT_FACTORY_PROPERTY_NAME,

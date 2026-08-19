@@ -1,8 +1,8 @@
-package com.cps.fct.e2e.support;
+package com.cps.fct.e2e.utils.support;
 
 
 import com.cps.fct.e2e.pages.BasePage;
-import com.cps.fct.e2e.stepdefs.ui.PageObjects;
+import com.cps.fct.e2e.pages.PageObjects;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
 import com.cps.fct.e2e.utils.httpClient.DefaultHttpService;
 import com.cps.fct.e2e.utils.httpClient.HttpStatusValidator;
@@ -72,12 +72,12 @@ public class CucumberObjectFactory implements ObjectFactory {
         return delegate.getInstance(aClass);
     }
 
-    private Set<Class<?>> addAllPages() {
-            Reflections reflections = new Reflections("com.cps.fct.e2e.pages"); // replace with your actual package
-             return reflections.getSubTypesOf(Object.class).stream()
-                    .filter(clazz -> clazz.getSimpleName().endsWith("Page"))
-                    .collect(Collectors.toSet());
-    }
+//    private Set<Class<?>> addAllPages() {
+//            Reflections reflections = new Reflections("com.cps.fct.e2e.pages"); // replace with your actual package
+//             return reflections.getSubTypesOf(Object.class).stream()
+//                    .filter(clazz -> clazz.getSimpleName().endsWith("Page"))
+//                    .collect(Collectors.toSet());
+//    }
 
 }
 

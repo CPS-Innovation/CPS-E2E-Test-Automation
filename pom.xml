@@ -291,7 +291,7 @@
                     <useModulePath>false</useModulePath>
                     <rerunFailingTestsCount>${surefire.rerunFailingTestsCount}</rerunFailingTestsCount>
                     <systemPropertyVariables>
-                        <cucumber.object-factory>com.cps.fct.e2e.support.CucumberObjectFactory</cucumber.object-factory>
+                        <cucumber.object-factory>com.cps.fct.e2e.utils.support.CucumberObjectFactory</cucumber.object-factory>
                         <cucumber.glue>com.cps.fct.e2e</cucumber.glue>
                         <cucumber.junit-platform.naming-strategy>long</cucumber.junit-platform.naming-strategy>
                     </systemPropertyVariables>

@@ -1,9 +1,9 @@
-package com.cps.fct.e2e.pages;
+package com.cps.fct.e2e.pages.caseReviewApp;
 
+import com.cps.fct.e2e.pages.BasePage;
 import com.cps.fct.e2e.utils.playwright.PlaywrightContext;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.PlaywrightException;
-import com.microsoft.playwright.options.AriaRole;
 
 import java.util.List;
 import java.util.Map;

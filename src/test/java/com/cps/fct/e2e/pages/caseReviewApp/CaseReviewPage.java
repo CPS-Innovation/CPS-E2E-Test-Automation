@@ -33,8 +33,6 @@ public class CaseReviewPage extends BasePage {
         return page.locator("button:has-text('Resume')");
     }
 
-
-    @Override
     public CaseReviewPage waitForLoginPageToLoadCompletely() {
         waitForElement(page, AriaRole.HEADING, "Reviews");
         waitForElement(page, AriaRole.HEADING, "Select test");

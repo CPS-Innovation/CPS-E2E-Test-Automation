@@ -81,8 +81,8 @@ public class CaseReviewService extends BaseService {
         triagePreChargeCaseRequestParams(caseId, result.taskId(), preChargePayload);
     }
 
-    // RED (Priority) triage. The triage outcome is recorded in the payload's decision field
-    // (e.g. NFS Compliant) and rejectedDecision stays null/null because the case is accepted.
+    // RED (Priority) triage. The triage outcome is recorded in the payload's decision field.
+    // NFS-compliant decisions are accepted; non-compliant decisions are rejected with triage reasons.
     public void prechargeTriageCasePriority(
             String caseUrn, String caseId, String caseType, String triageDecision) throws JsonProcessingException {
         DataStoreForPartyAndTaskIds result = getPartyIdAndTaskId(caseUrn, caseId);

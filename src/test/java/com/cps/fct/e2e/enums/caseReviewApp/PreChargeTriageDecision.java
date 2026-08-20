@@ -2,19 +2,20 @@ package com.cps.fct.e2e.enums.caseReviewApp;
 
 /**
  * The triage decision outcome recorded against a pre-charge case (the {@code decision} field of the
- * {@link PreChargeDecision} payload). This is a separate axis from {@code decisionToBeMade} (the
+ * pre-charge decision payload). This is a separate axis from {@code decisionToBeMade} (the
  * triage route, e.g. Priority / 5Day / 28Day).
  */
 public enum PreChargeTriageDecision {
 
-    NFS_COMPLIANT("NFS Compliant");
-    // TODO: NON_NFS_COMPLIANT("Non-NFS Compliant") — a rejected decision, so its payload must
-    //       populate rejectedDecision.actionPlanDue / chaseTaskDue instead of leaving them null.
+    NFS_COMPLIANT("NFS Compliant"),
+    NFS_NON_COMPLIANT("NFS Non-Compliant", "NFS Non Compliant", "Non-NFS Compliant", "Non NFS Compliant");
 
     private final String wireValue;
+    private final String[] aliases;
 
-    PreChargeTriageDecision(String wireValue) {
+    PreChargeTriageDecision(String wireValue, String... aliases) {
         this.wireValue = wireValue;
+        this.aliases = aliases;
     }
 
     public String wireValue() {
@@ -27,8 +28,13 @@ public enum PreChargeTriageDecision {
             if (decision.wireValue.equalsIgnoreCase(normalized)) {
                 return decision;
             }
+            for (String alias : decision.aliases) {
+                if (alias.equalsIgnoreCase(normalized)) {
+                    return decision;
+                }
+            }
         }
         throw new IllegalArgumentException("Unsupported pre-charge triage decision: '" + value
-                + "'. Currently supported: 'NFS Compliant'. ('Non-NFS Compliant' is not yet implemented.)");
+                + "'. Supported values: 'NFS Compliant', 'NFS Non-Compliant'.");
     }
 }

@@ -11,9 +11,57 @@ It allows writing readable and maintainable test scenarios for REST APIs.
 
 - Java 25
 - Maven 3.9.12
+- Allure CLI, for viewing test reports
 - IDE (IntelliJ)
 
 ---
+
+## Allure Report Setup
+
+Allure results are written to `target/allure-results`.
+
+### Install Allure CLI from the zip release
+
+1. Download the Allure zip file from the Allure release page.
+2. Extract the zip file to a local tools directory, for example `D:\Tools\allure`.
+3. Add the extracted Allure `bin` folder to your Windows `Path`.
+
+Example Windows environment variable setup:
+
+```powershell
+[Environment]::SetEnvironmentVariable("ALLURE_HOME", "D:\Tools\allure", "User")
+[Environment]::SetEnvironmentVariable("Path", $env:Path + ";D:\Tools\allure\bin", "User")
+```
+
+Replace `D:\Tools\allure` with the actual folder where the zip was extracted.
+
+Close and reopen PowerShell or IntelliJ, then verify:
+
+```powershell
+allure --version
+```
+
+On macOS or Linux, install with Homebrew:
+
+```bash
+brew install allure
+allure --version
+```
+
+Or add the extracted Allure `bin` directory to your shell profile:
+
+```bash
+export ALLURE_HOME=/path/to/allure
+export PATH="$PATH:$ALLURE_HOME/bin"
+```
+
+### Serve the Allure Report
+
+After running tests, serve the report from the generated results:
+
+```bash
+allure serve target/allure-results
+```
 
 ## Project Structure
 
@@ -118,6 +166,18 @@ mvn clean test -Denv=qa -Dbrowser=edge -Dheadless=true -Dtracing=true -Dvideo=tr
 ```
 mvn clean test -Dcucumber.filter.tags="@ui and @api"
 mvn clean test -Dcucumber.filter.tags="not @ui" // not ui tests
+```
+
+#### Run all API and UI tests with 2 retries
+
+```
+mvn clean test -Dcucumber.filter.tags="@api or @ui" -Dsurefire.rerunFailingTestsCount=2
+```
+
+For UI execution options, include the browser/headless/tracing/video properties as needed:
+
+```
+mvn clean test -Denv=qa -Dbrowser=edge -Dheadless=true -Dtracing=true -Dvideo=true -Dcucumber.filter.tags="@api or @ui" -Dsurefire.rerunFailingTestsCount=2
 ```
 
 ### Rebasing and Merging Your Branch into `develop`

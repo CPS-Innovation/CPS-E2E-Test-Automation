@@ -571,5 +571,20 @@ public class VictimCaseAppApiStepDefinition {
         }
     }
 
+    @When("the arranged meeting is conducted with following details and logged for {string} in VCA")
+    public void logConductedMeetingDetails(String victimType , DataTable dataTable){
+
+
+
+
+
+
+
+    }
+
+
+
+
+
 
 }

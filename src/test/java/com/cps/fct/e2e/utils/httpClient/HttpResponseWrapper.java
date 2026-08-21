@@ -4,6 +4,8 @@ import io.restassured.http.Header;
 import io.restassured.response.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Map;
 
@@ -35,6 +37,11 @@ public class HttpResponseWrapper {
 
     public Map<String, String> getHeaders() {
         return headers;
+    }
+
+    public <T> T getBodyAs(Class<T> clazz) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.readValue(body, clazz);
     }
 
 

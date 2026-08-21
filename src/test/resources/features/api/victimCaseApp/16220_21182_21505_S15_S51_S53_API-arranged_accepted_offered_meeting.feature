@@ -54,5 +54,6 @@ Feature: VCA-API-S15-S51-S53 - Arrange the accepted meeting offer to victim with
       | Victim liaison officer |
       | Defence Solicitor      |
       | Officer in Charge      |
-#    Then the arranged meeting and attendees details for "victim" in verified
+    Then the arranged meeting and attendees details for "victim" in verified
+#    TODO - Need to fix teh assertion
 

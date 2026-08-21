@@ -2,8 +2,12 @@ package com.cps.fct.e2e.utils.services.ddei.payloadBuilder;
 
 import com.cps.fct.e2e.enums.vicitmCaseApp.*;
 import com.cps.fct.e2e.model.victimCaseApp.*;
+import com.cps.fct.e2e.utils.httpClient.HttpResponseWrapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -340,23 +344,25 @@ public class VictimCaseAppPayloadBuilder {
         return attendees;
     }
 
-    public static Meetings meetingCancel(int meetingType, String meetingContextGuid, String cancelReason) {
-        victimService.getExistingMeetingdetails(meetingType,meetingContextGuid);
-
-
-
-
-
-
-
-        return Meetings.builder()
-                .MeetingType(meetingType)
+//    @SneakyThrows
+    public static MeetingCancel meetingCancel(int meetingTypeCode, String meetingContextGuid, String cancelReason, Meetings meetingsInputDetails) {
+        return MeetingCancel.builder()
+                .MeetingType(meetingTypeCode)
                 .MeetingContextGuid(meetingContextGuid)
-                .MeetingConducted(false)
+                .MeetingMethod(meetingsInputDetails.getMeetingMethod())
+                .MeetingSource(meetingsInputDetails.getMeetingSource())
+                .MeetingDateTime(meetingsInputDetails.getMeetingDateTime())
+                .LocationType(meetingsInputDetails.getLocationType())
+                .LocationName(meetingsInputDetails.getLocationName())
+                .SpecialNeeds(false)
+                .RequiresInterpretor(true)
+                .RequiresSupportAttendance(true)
+                .NatureOfNeeds(meetingsInputDetails.getNatureOfNeeds())
+                .OtherTypeDescription(meetingsInputDetails.getOtherTypeDescription())
                 .Cancelled(true)
                 .CancellationReason(cancelReason)
                 .CancellationDate(UTCDateTimeInPastBy(1))
-                .LastModifiedBy("CancelMeetingUser")
+                .LastModifiedBy("CancelUSer")
                 .build();
     }
 

@@ -467,6 +467,20 @@ public class VictimService extends BaseService {
                 .build();
     }
 
+    public HttpResponseWrapper getMeetingArranged(String meetingDetailsGuid) {
+        return service.sendRequest( getMeetingArrangedRequestParams(meetingDetailsGuid));
+    }
+
+    private HttpClientBuilder getMeetingArrangedRequestParams(String meetingDetailsGuid) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/victims/meetings/%s", meetingDetailsGuid))
+                .addHeaders(ddeiHeaders())
+                .method("GET")
+                .resourceName("getArrangedMeetingDetails")
+                .build();
+    }
+
     public void cancelMeeting(String meetingVictimGuid, String requestBody) {
         service.sendRequest(cancelMeetingRequestParams(meetingVictimGuid, requestBody));
     }
@@ -474,28 +488,13 @@ public class VictimService extends BaseService {
     private HttpClientBuilder cancelMeetingRequestParams(String meetingVictimGuid, String requestBody) {
         return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("DDEI_HOST"))
-                .endpoint(format("/api/victims/meetings/%s/", meetingVictimGuid))
+                .endpoint(format("/api/victims/meetings/%s", meetingVictimGuid))
                 .addHeaders(ddeiHeaders())
                 .method("PATCH")
                 .body(requestBody)
                 .resourceName("cancelMeeting")
                 .build();
     }
-
-    public HttpResponseWrapper getMeetingDetails(String meetingDetailsGuid) {
-        return service.sendRequest( getMeetingDetailsRequestParams(meetingDetailsGuid));
-    }
-
-    private HttpClientBuilder getMeetingDetailsRequestParams(String meetingDetailsGuid) {
-        return new HttpClientBuilder.Builder()
-                .baseUri(EnvConfig.get("DDEI_HOST"))
-                .endpoint(format("/api/cases/%s/witnesses", meetingDetailsGuid))
-                .addHeaders(ddeiHeaders())
-                .method("GET")
-                .resourceName("getArrangedMeetingDetails")
-                .build();
-    }
-
 
 
 }

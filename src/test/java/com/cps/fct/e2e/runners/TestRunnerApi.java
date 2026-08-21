@@ -23,7 +23,7 @@ import static io.cucumber.junit.platform.engine.Constants.OBJECT_FACTORY_PROPERT
         key = PLUGIN_PROPERTY_NAME,
         value = "pretty, json:target/cucumber-report/cucumber.json, io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm" )
 //@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@caseReview" )
-//@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@vca_api_regression" )
+@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@VCA_API_S54" )
 
 
 @ConfigurationParameter(

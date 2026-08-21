@@ -15,6 +15,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.picocontainer.annotations.Inject;
 
+import java.sql.SQLOutput;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -504,6 +505,28 @@ public class VictimCaseAppApiStepDefinition {
 
     }
 
+    @Then("the arranged meeting and attendees details for {string} in verified")
+    public void verifyArrangedAttendeesMeetings(String victimType){
+
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
+        Map<Integer, Meetings> meetingDetailsMap = context.get("meetingDetailsMap");
+        Map<Integer, String> meetingContextGuidMap = context.get("meetingContextGuidMap");
+        Map<Integer, String> meetingDetailsGuidMap = context.get("meetingDetailsGuidMap");
+        Map<Integer, String> meetingAttendeesDetailsMap = context.get ("meetingAttendeesDetailsMap");
+
+        for (String id : victimMapIds.get(victimType)) {
+            for (Integer meetingTypeCode : meetingDetailsMap.keySet()) {
+                Meetings meetingDetails = meetingDetailsMap.get(meetingTypeCode);
+
+                HttpResponseWrapper response = victimService.getMeetingArranged(meetingDetailsGuidMap.get(meetingTypeCode));
+
+                VictimCaseAppAssertions.assertArrangedMeeting(meetingDetails, response);
+                /* TO-DO - Need to fix the assertions */
+            }
+        }
+    }
+
     @When("the arranged meeting is cancelled with a reason for {string} in VCA")
     public void cancelArrangedMeeting(String victimType, DataTable dataTable ){
 
@@ -512,31 +535,23 @@ public class VictimCaseAppApiStepDefinition {
         Map<Integer, Meetings> meetingDetailsMap = context.get("meetingDetailsMap");
         Map<Integer, String> meetingContextGuidMap = context.get("meetingContextGuidMap");
         Map<Integer, String> meetingDetailsGuidMap = context.get("meetingDetailsGuidMap");
+        Map<Integer, MeetingCancel> meetingCancelDetailsMap = new HashMap<>();
+        context.set("meetingCancelDetailsMap", meetingCancelDetailsMap);
 
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
 
         for (String id : victimMapIds.get(victimType)) {
             for (Map<String, String> row : rows) {
                 MeetingType meetingTypeCode = MeetingType.fromString(row.get("meetingType"));
-
-                HttpResponseWrapper existingMeetingDetails = victimService.getMeetingDetails(meetingDetailsGuidMap.get(meetingTypeCode.getValue()));
-                victimService.victimWitnessIds(responseVictimWitnessIds, context);
-
-
-
-                Meetings meetingsCancelled = meetingCancel(meetingTypeCode.getValue(), meetingContextGuidMap.get(meetingTypeCode.getValue()),
-                        row.get("cancellationReason"));
+               Meetings meetingsInputDetails = meetingDetailsMap.get(meetingTypeCode.getValue());
+                MeetingCancel meetingsCancelled = meetingCancel(meetingTypeCode.getValue(), meetingContextGuidMap.get(meetingTypeCode.getValue()),
+                        row.get("cancellationReason"),meetingsInputDetails);
                 victimService.cancelMeeting(meetingDetailsGuidMap.get(meetingTypeCode.getValue()), convertObjectToString(meetingsCancelled));
-                meetingDetailsMap.put(meetingTypeCode.getValue(), meetingsCancelled);
+                meetingCancelDetailsMap.put(meetingTypeCode.getValue(), meetingsCancelled);
             }
-            context.set("meetingDetailsMap", meetingDetailsMap);
+            context.set("meetingCancelDetailsMap", meetingCancelDetailsMap);
         }
     }
-
-
-
-
-
 
 
 

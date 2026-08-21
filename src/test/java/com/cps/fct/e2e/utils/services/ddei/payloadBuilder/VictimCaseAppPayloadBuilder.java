@@ -306,19 +306,15 @@ public class VictimCaseAppPayloadBuilder {
     }
 
     public static String meetingAttendeesRequestBody(String chairPerson, List<String> meetingAttendeesRoles) {
-
         List<MeetingAttendees> requestBody = createAttendeesRequestBody(chairPerson, meetingAttendeesRoles);
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .create();
-
         return gson.toJson(requestBody);
     }
 
     public static List<MeetingAttendees> createAttendeesRequestBody(String chairPerson, List<String> meetingAttendeesRoles) {
-
         List<MeetingAttendees> attendees = new ArrayList<>();
-
         for (String role : meetingAttendeesRoles) {
             MeetingAttendees.MeetingAttendeesBuilder builder = MeetingAttendees.builder()
                     .CreatedBy("AutomationUser")
@@ -332,12 +328,8 @@ public class VictimCaseAppPayloadBuilder {
         return attendees;
     }
 
-
     public static List<MeetingAttendees> addMeetingAttendee(String chairPerson, List<String> meetingAttendeesRoles) {
-
         List<MeetingAttendees> attendees = new ArrayList<>();
-        System.out.println(meetingAttendeesRoles);
-
         for (String role : meetingAttendeesRoles) {
             MeetingAttendees.MeetingAttendeesBuilder builder = MeetingAttendees.builder()
                     .CreatedBy("AutomationUser")
@@ -348,15 +340,32 @@ public class VictimCaseAppPayloadBuilder {
         return attendees;
     }
 
-    public static String meetingAttendeesSamplePayload(String chairPerson, List<String> meetingAttendeesRoles) {
+    public static Meetings meetingCancel(int meetingType, String meetingContextGuid, String cancelReason) {
+        victimService.getExistingMeetingdetails(meetingType,meetingContextGuid);
 
-        List<MeetingAttendees> postPayload = addMeetingAttendee(chairPerson, meetingAttendeesRoles);
-        Gson gson = new GsonBuilder()
-                .setPrettyPrinting()
-                .create();
 
-        return gson.toJson(postPayload);
+
+
+
+
+
+        return Meetings.builder()
+                .MeetingType(meetingType)
+                .MeetingContextGuid(meetingContextGuid)
+                .MeetingConducted(false)
+                .Cancelled(true)
+                .CancellationReason(cancelReason)
+                .CancellationDate(UTCDateTimeInPastBy(1))
+                .LastModifiedBy("CancelMeetingUser")
+                .build();
     }
+
+
+
+
+
+
+
 
 
 }

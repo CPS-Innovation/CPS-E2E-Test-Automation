@@ -13,7 +13,7 @@ Feature: VCA-API-S16 - Log the meeting outcome of conducted arranged arranged ac
   ¦ 5.Victim complaint                      | 5.By telephone       |                                   |                | 5. Other             |                         |
   ¦ 6.Other CPS meeting                     |                      |                                   |                |                      |                         |
   ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  Verify that meeting acceptance details are recorded
+  Verify that conducted meeting outcome details are recorded
 
   Background: Create cases with single defendant with multi charge with victim and witness
     Given create new case using "CM01" for type "single defendant multiple offence"

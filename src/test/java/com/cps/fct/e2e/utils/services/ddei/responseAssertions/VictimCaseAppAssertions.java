@@ -181,6 +181,16 @@ public class VictimCaseAppAssertions {
         softly.assertAll();
     }
 
+    public static void assertCancelArrangedMeeting(MeetingCancel inputDetails,
+                                             HttpResponseWrapper responsePayload){
+        SoftAssertions softly = new SoftAssertions();
 
+        JsonPath result = new JsonPath(responsePayload.getBody());
+
+        assertThat(result.getInt("value[0].meetingType")).isEqualTo(inputDetails.getMeetingType());
+        assertThat(result.getString("value[0].meetingContextGuid")).isEqualTo(inputDetails.getMeetingContextGuid());
+
+        softly.assertAll();
+    }
 
 }

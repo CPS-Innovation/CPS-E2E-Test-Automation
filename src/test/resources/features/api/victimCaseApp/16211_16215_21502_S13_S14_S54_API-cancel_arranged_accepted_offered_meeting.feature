@@ -62,3 +62,4 @@ Feature: VCA-API-S15-S51-S53 - Cancel the arranged accepted offered meeting to v
       | Victim complaint                      | No longer required       |
       | Other CPS meeting                     | Other Cancel Reason      |
       | Victim Communication Liaison          | Victim withdrew          |
+    Then the cancelled meeting details for "victim" in verified

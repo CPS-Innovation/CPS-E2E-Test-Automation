@@ -7,6 +7,7 @@ import com.cps.fct.e2e.utils.httpClient.HttpResponseWrapper;
 import com.cps.fct.e2e.utils.services.ddei.CommonService;
 import com.cps.fct.e2e.utils.services.ddei.CaseReviewService;
 import com.cps.fct.e2e.utils.services.ddei.VictimService;
+import com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimCaseAppPayloadBuilder;
 import com.cps.fct.e2e.utils.services.ddei.responseAssertions.VictimCaseAppAssertions;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
@@ -15,6 +16,7 @@ import io.cucumber.java.en.When;
 import org.picocontainer.annotations.Inject;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimCaseAppPayloadBuilder.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -382,7 +384,6 @@ public class VictimCaseAppApiStepDefinition {
             }
             context.set("meetingDetailsMap", meetingDetailsMap);
             context.set("meetingContextGuidMap", meetingContextGuidMap);
-
         }
     }
 
@@ -403,7 +404,7 @@ public class VictimCaseAppApiStepDefinition {
     }
 
     @When("the following offered meeting response from {string} is recorded in VCA")
-    public void meetingAcceptDeclineNoResponse(String victimType,DataTable dataTable) {
+    public void meetingAcceptDeclineNoResponse(String victimType, DataTable dataTable) {
 
         Map<String, String> idGuidMap = context.get("idGuidMap");
         Map<String, List<String>> victimMapIds = context.get("victimMapIds");
@@ -444,7 +445,7 @@ public class VictimCaseAppApiStepDefinition {
     }
 
     @When("the accepted meeting is arranged using following for {string} in VCA")
-    public void meetingArranged(String victimType,DataTable dataTable) {
+    public void meetingArranged(String victimType, DataTable dataTable) {
 
         Map<String, String> idGuidMap = context.get("idGuidMap");
         Map<String, List<String>> victimMapIds = context.get("victimMapIds");
@@ -452,27 +453,56 @@ public class VictimCaseAppApiStepDefinition {
         Map<Integer, Meetings> meetingDetailsMap = context.get("meetingDetailsMap");
         Map<Integer, String> meetingContextGuidMap = context.get("meetingContextGuidMap");
 
+        Map<Integer, String> meetingDetailsGuidMap = new HashMap<>();
+        context.set("meetingDetailsGuidMap", meetingDetailsGuidMap);
+
         for (String id : victimMapIds.get(victimType)) {
             for (Map<String, String> row : rows) {
 
                 MeetingType meetingTypeCode = MeetingType.fromString(row.get("meetingType")); //Enum
                 Meetings meetingsArranged = meetingArrange(meetingTypeCode.getValue(), meetingContextGuidMap.get(meetingTypeCode.getValue()),
-                                                            MeetingSource.fromString(row.get("meetingSource")).getValue(),
-                                                            MeetingMethod.fromString(row.get("meetingMethod")).getValue(),
-                                                            MeetingLocation.fromString(row.get("locationType")).getValue(),
-                                                            row.get("locationName"));
-
-//                Meetings meetingResponse = meetingOfferResponse(meetingTypeCode.getValue(), meetingResponseMethodCode.getValue(), meetingContextGuid, meetingOfferResponse);
-//                victimService.addMeetingOfferedResponse(idGuidMap.get(id), convertObjectToString(meetingResponse));
-
+                        MeetingSource.fromString(row.get("meetingSource")).getValue(),
+                        MeetingMethod.fromString(row.get("meetingMethod")).getValue(),
+                        MeetingLocation.fromString(row.get("locationType")).getValue(),
+                        row.get("locationName"));
+                String meetingDetailsGuid = victimService.arrangeMeeting(idGuidMap.get(id), convertObjectToString(meetingsArranged));
+                meetingDetailsMap.put(meetingTypeCode.getValue(), meetingsArranged);
+                meetingDetailsGuidMap.put(meetingTypeCode.getValue(), meetingDetailsGuid);
             }
             context.set("meetingDetailsMap", meetingDetailsMap);
+            context.set("meetingDetailsGuidMap", meetingDetailsGuidMap);
         }
     }
 
+    @When("the meeting attendees are added and make {string} as chair person for {string} meeting")
+    public void meetingAttendees(String chairPerson, String victimType, DataTable dataTable) {
 
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
+        Map<Integer, Meetings> meetingDetailsMap = context.get("meetingDetailsMap");
+        Map<Integer, String> meetingDetailsGuidMap = context.get("meetingDetailsGuidMap");
 
+        Map<Integer, String> meetingAttendeesDetailsMap = new HashMap<>();
+        context.set("meetingAttendeesDetailsMap", meetingAttendeesDetailsMap);
 
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+
+        for (String id : victimMapIds.get(victimType)) {
+            for (Integer meetingTypeCodeKey : meetingDetailsMap.keySet()) {
+                String meetingDetailsGuid = meetingDetailsGuidMap.get(meetingTypeCodeKey);
+
+                List<String> meetingAttendeesRoles = rows.stream()
+                        .map(row -> row.get("meetingAttendeesRoles"))
+                        .collect(Collectors.toList());
+
+                String payloadBody = meetingAttendeesRequestBody(chairPerson,meetingAttendeesRoles);
+                victimService.addMeetingAttendees(meetingDetailsGuid,payloadBody);
+                meetingAttendeesDetailsMap.put(meetingTypeCodeKey, payloadBody);
+            }
+            context.set("meetingAttendeesDetailsMap", meetingAttendeesDetailsMap);
+        }
+
+    }
 
 
 

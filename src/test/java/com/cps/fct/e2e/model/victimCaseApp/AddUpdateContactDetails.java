@@ -6,15 +6,15 @@ import java.util.List;
 import java.util.Map;
 
 
-public class AddUpdateVictimDetails {
+public class AddUpdateContactDetails {
 
     private final List<Map<String, Object>> operations;
 
-    public AddUpdateVictimDetails() {
+    public AddUpdateContactDetails() {
         this.operations = new ArrayList<>();
     }
 
-    public AddUpdateVictimDetails replace(String path, Object value) {
+    public AddUpdateContactDetails replace(String path, Object value) {
         Map<String, Object> operation = new HashMap<>();
         operation.put("op", "replace");
         operation.put("path", path);
@@ -23,7 +23,7 @@ public class AddUpdateVictimDetails {
         return this;
     }
 
-    public AddUpdateVictimDetails add(String path, Object value) {
+    public AddUpdateContactDetails add(String path, Object value) {
         Map<String, Object> operation = new HashMap<>();
         operation.put("op", "add");
         operation.put("path", path);

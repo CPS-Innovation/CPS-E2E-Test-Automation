@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public class FakerUtils {
 
-//    public static final Faker faker = new Faker(new Locale("en"));
+    //    public static final Faker faker = new Faker(new Locale("en"));
     public static final Faker faker = new Faker(Locale.ENGLISH);
     private static final Random random = new Random();
 
@@ -23,6 +23,10 @@ public class FakerUtils {
 
     public static String fullName() {
         return faker.name().lastName().toUpperCase() + " " + faker.name().firstName();
+    }
+
+    public static String surnameFirstname() {
+        return faker.name().lastName().toUpperCase() + ", " + faker.name().firstName();
     }
 
     public static String firstName() {
@@ -58,9 +62,12 @@ public class FakerUtils {
     }
 
     public static String populateSentences() {
-        return faker.yoda().quote();    }
+        return faker.yoda().quote();
+    }
 
-    public static String title() {return faker.name().prefix(); }
+    public static String title() {
+        return faker.name().prefix();
+    }
 
     public static String gender() {
         return faker.demographic().sex();

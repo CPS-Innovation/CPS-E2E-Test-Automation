@@ -143,11 +143,11 @@ public class VictimService extends BaseService {
                 .build();
     }
 
-    public void addVictimServiceLead(String caseVictimGuid, String requestBody){
-        service.sendRequest(addVictimServiceLeadRequestParams(caseVictimGuid,requestBody));
+    public void addVictimServiceLead(String caseVictimGuid, String requestBody) {
+        service.sendRequest(addVictimServiceLeadRequestParams(caseVictimGuid, requestBody));
     }
 
-    private HttpClientBuilder addVictimServiceLeadRequestParams (String caseVictimGuid, String requestBody) {
+    private HttpClientBuilder addVictimServiceLeadRequestParams(String caseVictimGuid, String requestBody) {
         return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("DDEI_HOST"))
                 .endpoint(format("/api/victims/case-info/%s", caseVictimGuid))
@@ -177,7 +177,7 @@ public class VictimService extends BaseService {
         service.sendRequest(assignVictimLiaisonOfficerRequestParams(guid, requestBody));
     }
 
-    private HttpClientBuilder assignVictimLiaisonOfficerRequestParams( String guid, String requestBody) {
+    private HttpClientBuilder assignVictimLiaisonOfficerRequestParams(String guid, String requestBody) {
         return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("DDEI_HOST"))
                 .endpoint(format("/api/victims/case-info/%s", guid))
@@ -219,11 +219,11 @@ public class VictimService extends BaseService {
                 .build();
     }
 
-    public HttpResponseWrapper getVictimDetailsFromCMS(String caseId){
+    public HttpResponseWrapper getVictimDetailsFromCMS(String caseId) {
         return service.sendRequest(getVictimDetailsFromCMSRequestParams(caseId));
     }
 
-    private HttpClientBuilder getVictimDetailsFromCMSRequestParams(String caseId){
+    private HttpClientBuilder getVictimDetailsFromCMSRequestParams(String caseId) {
         return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("DDEI_HOST"))
                 .endpoint(format("api/cases/%s/witnesses", caseId))
@@ -253,7 +253,7 @@ public class VictimService extends BaseService {
     }
 
     private HttpClientBuilder updateVictimPersonalDetailsToCMSRequestParams(VictimCmsDetails victimDetails,
-                                                                         String caseId, String victimId) {
+                                                                            String caseId, String victimId) {
         return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("DDEI_HOST"))
                 .endpoint(format("/api/cases/%s/witnesses/%s", caseId, victimId))
@@ -343,7 +343,7 @@ public class VictimService extends BaseService {
     }
 
     private HttpClientBuilder addVictimCategoryInVcaRequestParams(VictimCmsDetails victimDetails,
-                                                                String caseId, String victimId) {
+                                                                  String caseId, String victimId) {
         return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("DDEI_HOST"))
                 .endpoint(format("/api/cases/%s/witnesses/%s", caseId, victimId))
@@ -432,8 +432,40 @@ public class VictimService extends BaseService {
                 .build();
     }
 
+    public String arrangeMeeting(String guid, String requestBody) {
+        HttpResponseWrapper responseWrapper = service.sendRequest(arrangeMeetingRequestParams(guid, requestBody));
+        String meetingDetailsGuid = JsonPath.read(responseWrapper.getBody(), "$.value.victimMeetingDetailsGuid");
+        assertThat(meetingDetailsGuid)
+                .withFailMessage("Victim Meeting Details Guid was not returned from the API response")
+                .isNotNull();
+        return meetingDetailsGuid;
+    }
 
+    private HttpClientBuilder arrangeMeetingRequestParams(String guid, String requestBody) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/victims/%s/meetings", guid))
+                .addHeaders(ddeiHeaders())
+                .method("POST")
+                .body(requestBody)
+                .resourceName("arrangeMeeting")
+                .build();
+    }
 
+    public void addMeetingAttendees(String meetingVictimGuid, String requestBody) {
+        service.sendRequest(addMeetingAttendeesRequestParams(meetingVictimGuid, requestBody));
+    }
+
+    private HttpClientBuilder addMeetingAttendeesRequestParams(String meetingVictimGuid, String requestBody) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/victims/meetings/%s/attendees", meetingVictimGuid))
+                .addHeaders(ddeiHeaders())
+                .method("POST")
+                .body(requestBody)
+                .resourceName("addMeetingAttendees")
+                .build();
+    }
 
 
 

@@ -1,12 +1,12 @@
 package com.cps.fct.e2e.model.victimCaseApp;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
+import lombok.*;
 
 @Data
 @Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 
 public class Meetings {
 

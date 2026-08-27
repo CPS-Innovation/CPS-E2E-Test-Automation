@@ -55,16 +55,17 @@ Feature: VCA-API-S16 - Log the meeting outcome of conducted arranged arranged ac
       | Defence Solicitor      |
       | Officer in Charge      |
     When the arranged meeting is conducted with following details and logged for "victim" in VCA
-      | meetingType                           | meetingDuration | agreedToResearch   | noteToOci            | noteToVictim | proposedActions |
-      | CPS pre-trial meeting                 |                 | Yes                | Yes                  | Yes          | Take Action     |
-      | Inform victim about charging decision |                 | No                 | No                   | No           | No              |
-      | Victims Right to Review               |                 | Question not asked | Change of court date |              |                 |
-      | Victim complaint                      |                 |                    | No longer required   |              |                 |
-      | Other CPS meeting                     |                 |                    | Other Cancel Reason  |              |                 |
-      | Victim Communication Liaison          |                 |                    | Victim withdrew      |              |                 |
+      | meetingType                           | meetingDuration     | agreedToResearch   | noteToOci | noteToVictim | proposedActions |
+      | CPS pre-trial meeting                 | 1 hours 59 minutes  | Yes                | Yes       | Yes          | Take Action    |
+      | Inform victim about charging decision | 2 hours 00 minutes  | No                 | No        | No           | No              |
+      | Victims Right to Review               | 0 hours 30 minutes  | Question not asked | No        | Yes          | Take Action     |
+      | Victim complaint                      | 0 hours 59 minutes  | No                 | Yes       | No           | Take Action     |
+      | Other CPS meeting                     | 0 hours 10 minutes  | Question not asked | Yes       | Yes          | Take Action     |
+      | Victim Communication Liaison          | 10 hours 59 minutes | Yes                | No        | No           | No              |
     And the following attendees attended the meeting lead by "Counsel"
-      | meetingAttendeesRoles  |
+      | logAttendeesRoles  |
       | Counsel                |
       | Victim liaison officer |
       | Defence Solicitor      |
       | Officer in Charge      |
+    Then the logged meeting details are verified for "victim" in VCA

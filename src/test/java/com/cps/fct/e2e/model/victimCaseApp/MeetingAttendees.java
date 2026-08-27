@@ -14,10 +14,9 @@ public class MeetingAttendees {
     private String AttendeeRole;
     private String CreatedBy;
     private boolean ChairPerson;
-
-
-
-
+    private String LastModifiedBy;
+    private String MeetingAttendeeGuid;
+    private boolean AttendedMeeting;
 
 
 }

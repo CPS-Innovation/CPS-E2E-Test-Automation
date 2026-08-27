@@ -132,7 +132,6 @@ public class FakerUtils {
         return faker.job().title();
     }
 
-
     public static String twoDigitNumber() {
         return String.valueOf(random.nextInt(90) + 10);
     }

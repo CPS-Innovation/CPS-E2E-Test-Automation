@@ -6,8 +6,8 @@ import com.cps.fct.e2e.pages.PageObjects;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
 import com.cps.fct.e2e.utils.httpClient.DefaultHttpService;
 import com.cps.fct.e2e.utils.httpClient.HttpStatusValidator;
-import com.cps.fct.e2e.utils.payloadBuilders.PayloadBuilderForCM01;
-import com.cps.fct.e2e.utils.payloadBuilders.PayloadBuilderForLM04;
+import com.cps.fct.e2e.utils.services.caseCreation.payloadBuilders.PayloadBuilderForCM01;
+import com.cps.fct.e2e.utils.services.caseCreation.payloadBuilders.PayloadBuilderForLM04;
 import com.cps.fct.e2e.utils.playwright.PlaywrightContext;
 import com.cps.fct.e2e.utils.playwright.PlaywrightManager;
 import com.cps.fct.e2e.utils.services.ddei.CaseReviewService;
@@ -19,7 +19,6 @@ import io.cucumber.picocontainer.PicoFactory;
 import org.reflections.Reflections;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class CucumberObjectFactory implements ObjectFactory {
 

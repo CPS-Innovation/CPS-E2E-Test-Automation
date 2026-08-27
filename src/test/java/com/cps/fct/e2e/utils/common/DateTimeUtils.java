@@ -5,26 +5,20 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
-
 public class DateTimeUtils {
     private static final LocalDate today = LocalDate.now();
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     public static final DateTimeFormatter UTC_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
     public static final DateTimeFormatter UTC_TIME_NOW = DateTimeFormatter.ofPattern("HH:mm:ss");
 
-    public static String pcdRequestDate() {
-        LocalDate pastDate = today.minusDays(20);
-        return pastDate.format(formatter);
-    }
-
-    public static String pcdDecisionByDate() {
-        LocalDate futureDate = today.plusDays(27);
-        return futureDate.format(formatter);
-    }
-
     public static String UTCDateInPast(int noOfDays) {
         LocalDate pastDate = today.minusDays(noOfDays);
         return pastDate.format(formatter);
+    }
+
+    public static String UTCDateInFuture(int noOfDays ) {
+        LocalDate futureDate = today.plusDays(noOfDays);
+        return futureDate.format(formatter);
     }
 
     public static String UTCTimeNow() {
@@ -48,9 +42,6 @@ public class DateTimeUtils {
         ZonedDateTime newDate = now.minusDays(noOfDays);
         return newDate.format(UTC_FORMATTER);
     }
-
-
-
 
 
 }

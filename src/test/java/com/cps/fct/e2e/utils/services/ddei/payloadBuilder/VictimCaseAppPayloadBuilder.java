@@ -2,21 +2,17 @@ package com.cps.fct.e2e.utils.services.ddei.payloadBuilder;
 
 import com.cps.fct.e2e.enums.vicitmCaseApp.*;
 import com.cps.fct.e2e.model.victimCaseApp.*;
-import com.cps.fct.e2e.utils.httpClient.HttpResponseWrapper;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.cps.fct.e2e.utils.common.FakerUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.cps.fct.e2e.utils.common.DateTimeUtils.UTCDateTimeInPastBy;
+import static com.cps.fct.e2e.utils.common.DateTimeUtils.*;
 import static com.cps.fct.e2e.utils.common.FakerUtils.*;
-import static com.cps.fct.e2e.utils.common.FakerUtils.streetAddress;
 
 public class VictimCaseAppPayloadBuilder {
 
@@ -332,19 +328,7 @@ public class VictimCaseAppPayloadBuilder {
         return attendees;
     }
 
-    public static List<MeetingAttendees> addMeetingAttendee(String chairPerson, List<String> meetingAttendeesRoles) {
-        List<MeetingAttendees> attendees = new ArrayList<>();
-        for (String role : meetingAttendeesRoles) {
-            MeetingAttendees.MeetingAttendeesBuilder builder = MeetingAttendees.builder()
-                    .CreatedBy("AutomationUser")
-                    .AttendeeRole(role)
-                    .ChairPerson(role.equalsIgnoreCase(chairPerson));
-            attendees.add(builder.build());
-        }
-        return attendees;
-    }
-
-//    @SneakyThrows
+    //    @SneakyThrows
     public static MeetingCancel meetingCancel(int meetingTypeCode, String meetingContextGuid, String cancelReason, Meetings meetingsInputDetails) {
         return MeetingCancel.builder()
                 .MeetingType(meetingTypeCode)
@@ -366,12 +350,76 @@ public class VictimCaseAppPayloadBuilder {
                 .build();
     }
 
+    public static MeetingLogged meetingLog(int meetingTypeCode, String meetingContextGuid, String meetingDuration,
+                                           int agreedToResearch, String noteToOci, String noteToVictim, String proposedAction,
+                                           Meetings meetingsInputDetails) {
+        return MeetingLogged.builder()
+                .MeetingType(meetingTypeCode)
+                .MeetingContextGuid(meetingContextGuid)
+                .MeetingMethod(meetingsInputDetails.getMeetingMethod())
+                .MeetingSource(meetingsInputDetails.getMeetingSource())
+                .MeetingDateTime(meetingsInputDetails.getMeetingDateTime())
+                .LocationType(meetingsInputDetails.getLocationType())
+                .LocationName(meetingsInputDetails.getLocationName())
+                .SpecialNeeds(false)
+                .RequiresInterpretor(true)
+                .RequiresSupportAttendance(true)
+                .NatureOfNeeds(meetingsInputDetails.getNatureOfNeeds())
+                .OtherTypeDescription(meetingsInputDetails.getOtherTypeDescription())
+                .MeetingConducted(true)
+                .Cancelled(false)
+                .ReasonNotConducted("Unselected")
+                .MeetingDuration(meetingDuration)
+                .ActionAgreed(
+                        proposedAction != null
+                                && !proposedAction.isEmpty()
+                                && !"No".equalsIgnoreCase(proposedAction)
+                )
+                .ProposedActions("No".equals(proposedAction) ? "" : proposedAction)
+                .ContactForResearch(agreedToResearch)
+                .NotesSentToOic("Yes".equals(noteToOci))
+                .NotesSentToVictim("Yes".equals(noteToVictim))
+                .LastModifiedBy("LogMeetingUSer")
+                .build();
+    }
 
+    public static String logAttendeesRequestBody(Map<String, String> meetingAttendeeGuids, String chairPerson, List<String> meetingAttendeesRoles) {
+        List<MeetingAttendees> requestBody = logMeetingAttendeesRequestBody(meetingAttendeeGuids, chairPerson, meetingAttendeesRoles);
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .create();
+        return gson.toJson(requestBody);
+    }
 
+    public static List<MeetingAttendees> logMeetingAttendeesRequestBody(Map<String, String> meetingAttendeeGuids, String chairPerson, List<String> logAttendeesRoles) {
+        List<MeetingAttendees> attendees = new ArrayList<>();
+        for (String role : logAttendeesRoles) {
+            String meetingAttendeeGuid = meetingAttendeeGuids.get(role);
+            MeetingAttendees.MeetingAttendeesBuilder builder = MeetingAttendees.builder()
+                    .LastModifiedBy("AutomationUser")
+                    .AttendedMeeting(true)
+                    .MeetingAttendeeGuid(meetingAttendeeGuid)
+                    .AttendeeRole(role)
+                    .ChairPerson(role.equalsIgnoreCase(chairPerson));
+            attendees.add(builder.build());
+        }
+        return attendees;
+    }
 
-
-
-
+    public static Communication logOtherComms(int journeyTypeCode, int communicationType, int direction, String personContacted, String purpose) {
+        return Communication.builder()
+                .JourneyType(journeyTypeCode)
+                .CommunicationType(communicationType)
+                .Direction(direction)
+                .DateOfCommunication(UTCDateInPast(3))
+                .TimeOfCommunication(UTCTimeNow())
+                .PurposeOfCommunication(purpose)
+                .PersonRole(personContacted)
+                .PersonName(firstnameSurname())
+                .CreatedBy("adhocCommunicationUser")
+                .OtherCommunicationType(communicationType == 6 ? "Other Contact method" : "")
+                .build();
+    }
 
 
 }

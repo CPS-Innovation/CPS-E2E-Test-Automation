@@ -459,7 +459,6 @@ public class VictimCaseAppApiStepDefinition {
 
         for (String id : victimMapIds.get(victimType)) {
             for (Map<String, String> row : rows) {
-
                 MeetingType meetingTypeCode = MeetingType.fromString(row.get("meetingType")); //Enum
                 Meetings meetingsArranged = meetingArrange(meetingTypeCode.getValue(), meetingContextGuidMap.get(meetingTypeCode.getValue()),
                         MeetingSource.fromString(row.get("meetingSource")).getValue(),
@@ -486,6 +485,12 @@ public class VictimCaseAppApiStepDefinition {
         Map<Integer, String> meetingAttendeesDetailsMap = new HashMap<>();
         context.set("meetingAttendeesDetailsMap", meetingAttendeesDetailsMap);
 
+        Map<Integer, String> meetingAttendeesGuidsMap = new HashMap<>();
+        context.set("meetingAttendeesGuidsMap", meetingAttendeesGuidsMap);
+
+        Map<Integer, Map<String, String>> meetingTypeAttendeesGuidsMap = new HashMap<>();
+        context.set("meetingTypeAttendeesGuidsMap", meetingTypeAttendeesGuidsMap);
+
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
 
         for (String id : victimMapIds.get(victimType)) {
@@ -497,10 +502,13 @@ public class VictimCaseAppApiStepDefinition {
                         .collect(Collectors.toList());
 
                 String payloadBody = meetingAttendeesRequestBody(chairPerson, meetingAttendeesRoles);
-                victimService.addMeetingAttendees(meetingDetailsGuid, payloadBody);
+                Map<String, String> attendeeGuidList = victimService.addMeetingAttendees(meetingDetailsGuid, payloadBody);
                 meetingAttendeesDetailsMap.put(meetingTypeCodeKey, payloadBody);
+                meetingTypeAttendeesGuidsMap.put(meetingTypeCodeKey, attendeeGuidList);
+
             }
             context.set("meetingAttendeesDetailsMap", meetingAttendeesDetailsMap);
+            context.set("meetingTypeAttendeesGuidsMap", meetingTypeAttendeesGuidsMap);
         }
 
     }
@@ -572,16 +580,123 @@ public class VictimCaseAppApiStepDefinition {
     }
 
     @When("the arranged meeting is conducted with following details and logged for {string} in VCA")
-    public void logConductedMeetingDetails(String victimType , DataTable dataTable){
+    public void logConductedMeetingDetails(String victimType, DataTable dataTable) {
+
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
+        Map<Integer, Meetings> meetingDetailsMap = context.get("meetingDetailsMap");
+        Map<Integer, String> meetingContextGuidMap = context.get("meetingContextGuidMap");
+        Map<Integer, String> meetingDetailsGuidMap = context.get("meetingDetailsGuidMap");
+        Map<Integer, MeetingLogged> meetingLoggedDetailsMap = new HashMap<>();
+        context.set("meetingLoggedDetailsMap", meetingLoggedDetailsMap);
+
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+        for (String id : victimMapIds.get(victimType)) {
+            for (Map<String, String> row : rows) {
+                MeetingType meetingTypeCode = MeetingType.fromString(row.get("meetingType"));
+                Meetings meetingsInputDetails = meetingDetailsMap.get(meetingTypeCode.getValue());
+
+                String meetingDuration = row.get("meetingDuration");
+                int agreedToResearch = MeetingContactResearch.fromString(row.get("agreedToResearch")).getValue();
+                String noteToOci = row.get("noteToOci");
+                String noteToVictim = row.get("noteToVictim");
+                String proposedActions = row.get("proposedActions");
+
+                MeetingLogged meetingLogged = meetingLog(meetingTypeCode.getValue(), meetingContextGuidMap.get(meetingTypeCode.getValue()),
+                        meetingDuration, agreedToResearch, noteToOci, noteToVictim, proposedActions, meetingsInputDetails);
+
+                victimService.loggedMeeting(meetingDetailsGuidMap.get(meetingTypeCode.getValue()), convertObjectToString(meetingLogged));
+                meetingLoggedDetailsMap.put(meetingTypeCode.getValue(), meetingLogged);
+
+            }
+            context.set("meetingLoggedDetailsMap", meetingLoggedDetailsMap);
+        }
+    }
+
+    @When("the following attendees attended the meeting lead by {string}")
+    public void logMeetingAttendees(String chairPerson, DataTable dataTable) {
+
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
+        Map<Integer, Meetings> meetingDetailsMap = context.get("meetingDetailsMap");
+        Map<Integer, String> meetingDetailsGuidMap = context.get("meetingDetailsGuidMap");
+        Map<Integer, MeetingLogged> meetingLoggedDetailsMap = context.get("meetingLoggedDetailsMap");
+        Map<Integer, Map<String, String>> meetingTypeAttendeesGuidsMap = context.get("meetingTypeAttendeesGuidsMap");
+        Map<Integer, String> meetingAttendeesDetailsMap = context.get("meetingAttendeesDetailsMap");
 
 
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+        for (Integer meetingTypeCodeKey : meetingLoggedDetailsMap.keySet()) {
+            String meetingDetailsGuid = meetingDetailsGuidMap.get(meetingTypeCodeKey);
+            Map<String, String> meetingAttendeeGuids = meetingTypeAttendeesGuidsMap.get(meetingTypeCodeKey);
+            List<String> logAttendeesRoles = rows.stream()
+                    .map(row -> row.get("logAttendeesRoles"))
+                    .collect(Collectors.toList());
 
+            String payloadBody = logAttendeesRequestBody(meetingAttendeeGuids, chairPerson, logAttendeesRoles);
+            victimService.logMeetingAttendees(meetingDetailsGuid, payloadBody);
+            meetingAttendeesDetailsMap.put(meetingTypeCodeKey, payloadBody);
 
+        }
+        context.set("meetingAttendeesDetailsMap", meetingAttendeesDetailsMap);
+    }
+
+    @Then("the logged meeting details are verified for {string} in VCA")
+    public void verifyLoggedMeetings(String victimType) {
+        Map<Integer, String> meetingDetailsGuidMap = context.get("meetingDetailsGuidMap");
+        Map<Integer, MeetingLogged> meetingLoggedDetailsMap = context.get("meetingLoggedDetailsMap");
+        Map<Integer, Map<String, String>> meetingTypeAttendeesGuidsMap = context.get("meetingTypeAttendeesGuidsMap");
+        Map<Integer, String> meetingAttendeesDetailsMap = context.get("meetingAttendeesDetailsMap");
+        for (Integer meetingTypeCodeKey : meetingLoggedDetailsMap.keySet()) {
+            String meetingDetailsGuid = meetingDetailsGuidMap.get(meetingTypeCodeKey);
+            /* TO-DO - Need to add the verification steps */
+        }
+
+    }
+
+    @When("the following {string} communication are logged to {string} in VCA")
+    public void logOtherCommunication(String journeyType, String victimType, DataTable dataTable) {
+
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+
+        Map<Integer, Communication> otherCommunicationMap = new HashMap<>();
+        context.set("otherCommunicationMap", otherCommunicationMap);
+
+        for (String id : victimMapIds.get(victimType)) {
+            for (Map<String, String> row : rows) {
+                String personContacted = row.get("personContacted");
+                String purpose = row.get("purpose");
+
+                CommunicationType communicationType = CommunicationType.fromString(row.get("communicationType"));
+                CommunicationDirection direction = CommunicationDirection.fromString(row.get("direction"));
+                JourneyType journeyTypeCode = JourneyType.fromString(journeyType);
+                Communication otherCommunication = logOtherComms(journeyTypeCode.getValue(),communicationType.getValue(),direction.getValue(),personContacted,purpose);
+                victimService.addOtherCommunication(idGuidMap.get(id), convertObjectToString(otherCommunication));
+                otherCommunicationMap.put(communicationType.getValue(), otherCommunication);
+            }
+            context.set("otherCommunicationMap", otherCommunicationMap);
+        }
+    }
+
+    @Then("verify the logged other communication for the {string} in VCA")
+    public void verifyOtherComms(String victimType) {
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
+        Map<Integer, Communication> otherCommunicationMap = context.get("otherCommunicationMap");
+
+        for (String id : victimMapIds.get(victimType)) {
+            for (Integer communicationType : otherCommunicationMap.keySet()) {
+                int CommsType = communicationType;
+                /* TO-DO - Need to add the verification steps */
+
+            }
+        }
 
 
 
     }
-
 
 
 

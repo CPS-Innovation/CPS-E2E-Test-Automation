@@ -1,7 +1,6 @@
 package com.cps.fct.e2e.utils.services.ddei;
 
 import com.cps.fct.e2e.model.victimCaseApp.VictimCmsDetails;
-import com.cps.fct.e2e.model.victimCaseApp.VictimVcaDetails;
 import com.cps.fct.e2e.utils.common.EnvConfig;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
 import com.cps.fct.e2e.utils.httpClient.HttpClientBuilder;
@@ -13,7 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import io.restassured.RestAssured;
 import io.restassured.response.Response;
 
 import static com.cps.fct.e2e.utils.common.JsonUtils.extractFromJsonToList;
@@ -452,8 +450,22 @@ public class VictimService extends BaseService {
                 .build();
     }
 
-    public void addMeetingAttendees(String meetingVictimGuid, String requestBody) {
-        service.sendRequest(addMeetingAttendeesRequestParams(meetingVictimGuid, requestBody));
+    public Map<String, String> addMeetingAttendees(String meetingVictimGuid, String requestBody) {
+        HttpResponseWrapper responseWrapper = service.sendRequest(addMeetingAttendeesRequestParams(meetingVictimGuid, requestBody));
+//        String meetingAttendeesGuid = JsonPath.read(responseWrapper.getBody(), "$.value[0].meetingAttendeeGuid");
+//        assertThat(meetingAttendeesGuid)
+//                .withFailMessage("Victim Meeting Attendees Guid was not returned from the API response")
+//                .isNotNull();
+//        return meetingAttendeesGuid;
+        List<Map<String, Object>> attendees =
+                JsonPath.read(responseWrapper.getBody(), "$.value");
+        Map<String, String> attendeeGuidByRole = new HashMap<>();
+        for (Map<String, Object> attendee : attendees) {
+            String role = (String) attendee.get("attendeeRole");
+            String guid = (String) attendee.get("meetingAttendeeGuid");
+            attendeeGuidByRole.put(role, guid);
+        }
+        return attendeeGuidByRole;
     }
 
     private HttpClientBuilder addMeetingAttendeesRequestParams(String meetingVictimGuid, String requestBody) {
@@ -495,6 +507,54 @@ public class VictimService extends BaseService {
                 .resourceName("cancelMeeting")
                 .build();
     }
+
+    public void loggedMeeting(String meetingVictimGuid, String requestBody) {
+        service.sendRequest(loggedMeetingRequestParams(meetingVictimGuid, requestBody));
+    }
+
+    private HttpClientBuilder loggedMeetingRequestParams(String meetingVictimGuid, String requestBody) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/victims/meetings/%s", meetingVictimGuid))
+                .addHeaders(ddeiHeaders())
+                .method("PATCH")
+                .body(requestBody)
+                .resourceName("loggedMeeting")
+                .build();
+    }
+
+
+    public void logMeetingAttendees(String meetingVictimGuid, String requestBody) {
+       service.sendRequest(logMeetingAttendeesRequestParams(meetingVictimGuid, requestBody));
+    }
+
+    private HttpClientBuilder logMeetingAttendeesRequestParams(String meetingVictimGuid, String requestBody) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/victims/meetings/%s/attendees", meetingVictimGuid))
+                .addHeaders(ddeiHeaders())
+                .method("PATCH")
+                .body(requestBody)
+                .resourceName("logMeetingAttendees")
+                .build();
+    }
+
+    public void addOtherCommunication(String guid, String requestBody) {
+        service.sendRequest(addOtherCommunicationRequestParams(guid, requestBody));
+    }
+
+    private HttpClientBuilder addOtherCommunicationRequestParams(String guid, String requestBody) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/victims/%s/adhoc-journey/victim-communication", guid))
+                .addHeaders(ddeiHeaders())
+                .method("POST")
+                .body(requestBody)
+                .resourceName("addAdhocCommunication")
+                .build();
+    }
+
+
 
 
 }

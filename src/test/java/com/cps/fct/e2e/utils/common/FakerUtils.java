@@ -24,6 +24,9 @@ public class FakerUtils {
     public static String fullName() {
         return faker.name().lastName().toUpperCase() + " " + faker.name().firstName();
     }
+    public static String firstnameSurname() {
+        return faker.name().firstName()+ " " + faker.name().lastName();
+    }
 
     public static String surnameFirstname() {
         return faker.name().lastName().toUpperCase() + ", " + faker.name().firstName();

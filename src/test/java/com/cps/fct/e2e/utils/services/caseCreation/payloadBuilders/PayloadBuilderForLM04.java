@@ -1,7 +1,6 @@
-package com.cps.fct.e2e.utils.payloadBuilders;
+package com.cps.fct.e2e.utils.services.caseCreation.payloadBuilders;
 
 import com.cps.fct.e2e.utils.common.JsonReplacer;
-import com.cps.fct.e2e.utils.common.JsonUtils;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
 
 import java.io.IOException;

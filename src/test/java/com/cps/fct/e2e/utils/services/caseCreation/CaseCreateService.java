@@ -6,8 +6,8 @@ import com.cps.fct.e2e.utils.common.JsonUtils;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
 import com.cps.fct.e2e.utils.httpClient.HttpClientBuilder;
 import com.cps.fct.e2e.utils.httpClient.HttpResponseWrapper;
-import com.cps.fct.e2e.utils.payloadBuilders.PayloadBuilderForCM01;
-import com.cps.fct.e2e.utils.payloadBuilders.PayloadBuilderForLM04;
+import com.cps.fct.e2e.utils.services.caseCreation.payloadBuilders.PayloadBuilderForCM01;
+import com.cps.fct.e2e.utils.services.caseCreation.payloadBuilders.PayloadBuilderForLM04;
 import com.cps.fct.e2e.utils.services.BaseService;
 import org.picocontainer.annotations.Inject;
 

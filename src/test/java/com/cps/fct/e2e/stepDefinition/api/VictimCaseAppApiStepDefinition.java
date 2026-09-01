@@ -624,7 +624,6 @@ public class VictimCaseAppApiStepDefinition {
         Map<Integer, Map<String, String>> meetingTypeAttendeesGuidsMap = context.get("meetingTypeAttendeesGuidsMap");
         Map<Integer, String> meetingAttendeesDetailsMap = context.get("meetingAttendeesDetailsMap");
 
-
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
         for (Integer meetingTypeCodeKey : meetingLoggedDetailsMap.keySet()) {
             String meetingDetailsGuid = meetingDetailsGuidMap.get(meetingTypeCodeKey);
@@ -647,6 +646,7 @@ public class VictimCaseAppApiStepDefinition {
         Map<Integer, MeetingLogged> meetingLoggedDetailsMap = context.get("meetingLoggedDetailsMap");
         Map<Integer, Map<String, String>> meetingTypeAttendeesGuidsMap = context.get("meetingTypeAttendeesGuidsMap");
         Map<Integer, String> meetingAttendeesDetailsMap = context.get("meetingAttendeesDetailsMap");
+
         for (Integer meetingTypeCodeKey : meetingLoggedDetailsMap.keySet()) {
             String meetingDetailsGuid = meetingDetailsGuidMap.get(meetingTypeCodeKey);
             /* TO-DO - Need to add the verification steps */
@@ -672,7 +672,7 @@ public class VictimCaseAppApiStepDefinition {
                 CommunicationType communicationType = CommunicationType.fromString(row.get("communicationType"));
                 CommunicationDirection direction = CommunicationDirection.fromString(row.get("direction"));
                 JourneyType journeyTypeCode = JourneyType.fromString(journeyType);
-                Communication otherCommunication = logOtherComms(journeyTypeCode.getValue(),communicationType.getValue(),direction.getValue(),personContacted,purpose);
+                Communication otherCommunication = logOtherComms(journeyTypeCode.getValue(), communicationType.getValue(), direction.getValue(), personContacted, purpose);
                 victimService.addOtherCommunication(idGuidMap.get(id), convertObjectToString(otherCommunication));
                 otherCommunicationMap.put(communicationType.getValue(), otherCommunication);
             }
@@ -694,9 +694,94 @@ public class VictimCaseAppApiStepDefinition {
             }
         }
 
+    }
 
+    @When("the following communication for victim not contacted is logged to {string} in VCA")
+    public void victimNotContactedComms(String victimType, DataTable dataTable) {
+
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
+
+        Map<Integer, Decision> decisionListMap = new HashMap<>();
+        context.set("decisionListMap", decisionListMap);
+
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+
+        for (String id : victimMapIds.get(victimType)) {
+
+            for (Map<String, String> row : rows) {
+                TaskList taskType = TaskList.fromString(row.get("decisionType"));
+                Decision createDecision = createVictimNotContactDecision(taskType.getValue());
+                victimService.informDecision(taskType.getValue(), idGuidMap.get(id), convertObjectToString(createDecision));
+                decisionListMap.put(taskType.getValue(), createDecision);
+            }
+
+            context.set("decisionListMap", decisionListMap);
+        }
 
     }
+
+    @Then("verify the logged decision to charge communication for the {string} in VCA")
+    public void verifyDecisionComm(String victimType) {
+
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
+        Map<Integer, Decision> decisionListMap = context.get("decisionListMap");
+
+        for (String id : victimMapIds.get(victimType)) {
+            for (Integer decisionType : decisionListMap.keySet()) {
+                int decType = decisionType;
+                /* TO-DO - Need to add the verification steps */
+
+            }
+
+        }
+
+    }
+
+    @When("the following tasks to log communication are created for {string} in VCA")
+    public void createLogCommunicationTask(String victimType, DataTable dataTable) {
+
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
+
+        Map<Integer, Task> createTaskListMap = new HashMap<>();
+        context.set("createTaskListMap", createTaskListMap);
+
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+
+        for (String id : victimMapIds.get(victimType)) {
+
+            for (Map<String, String> row : rows) {
+                TaskList taskType = TaskList.fromString(row.get("taskType"));
+                Task createLogCommsTask = createLogCommsTask(taskType.getValue(),victimService.getUserPartyId());
+                victimService.logCommunicationTask(idGuidMap.get(id), convertObjectToString(createLogCommsTask));
+                createTaskListMap.put(taskType.getValue(),createLogCommsTask);
+            }
+
+            context.set("createTaskListMap", createTaskListMap);
+        }
+
+    }
+
+    @Then("verify the task to log communication for the {string} in VCA")
+    public void verifyLogCommunicationTask(String victimType ){
+
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
+        Map<Integer, Task> createTaskListMap = context.get("createTaskListMap");
+
+        for (String id : victimMapIds.get(victimType)) {
+            for (Integer taskType : createTaskListMap.keySet()) {
+                int taskTyp = taskType;
+                /* TO-DO - Need to add the verification steps */
+
+            }
+
+        }
+
+    }
+
 
 
 

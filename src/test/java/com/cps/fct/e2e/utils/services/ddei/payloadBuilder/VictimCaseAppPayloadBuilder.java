@@ -421,6 +421,40 @@ public class VictimCaseAppPayloadBuilder {
                 .build();
     }
 
+    public static Decision createVictimNotContactDecision(int decision) {
+        if (decision == 3) {
+            return Decision.builder()
+                    .DecisionToChargeContextGuid(uuid())
+                    .DateOfHearing("1900-01-01")
+                    .LocationOfHearing("")
+                    .NoFurtherAttempts(false)
+                    .VictimNotContacted(true)
+                    .VictimNotContactedReason("victim not contacted reason")
+                    .CreatedBy("decisionUser")
+                    .build();
+
+        } else if (decision == 4) {
+            return Decision.builder()
+                    .NoFurtherActionContextGuid(uuid())
+                    .VictimWithdrawn(true)
+                    .VictimNotContacted(true)
+                    .VictimNotContactedReason("victim not contacted reason")
+                    .CreatedBy("decisionUser")
+                    .build();
+        }
+        return null;
+    }
+
+    public static Task createLogCommsTask(int task, int userPartyId) {
+        return Task.builder()
+                .Assignee(userPartyId)
+                .DueDate(UTCDateTimeInFutureDayBy(1))
+                .Task(task)
+                .OrderNumber(1)
+                .CreatedBy("createLogCommsTask")
+                .build();
+    }
+
 
 }
 

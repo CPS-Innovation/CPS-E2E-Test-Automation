@@ -555,6 +555,42 @@ public class VictimService extends BaseService {
     }
 
 
+    public void informDecision(int decision, String guid, String requestBody) {
+        service.sendRequest(informDecisionRequestParams(decision, guid, requestBody));
+    }
+
+    private HttpClientBuilder informDecisionRequestParams(int decision ,String guid, String requestBody) {
+        String endpoint = switch (decision) {
+            case 3 -> format("/api/victims/%s/decision-to-charge", guid);
+            case 4 -> format("/api/victims/%s/no-further-action", guid);
+            default -> throw new IllegalArgumentException("Invalid decision: " + decision);
+        };
+
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(endpoint)
+                .addHeaders(ddeiHeaders())
+                .method("POST")
+                .body(requestBody)
+                .resourceName("informDecisionCommunication")
+                .build();
+    }
+
+    public void logCommunicationTask(String guid, String requestBody) {
+        service.sendRequest(logCommunicationTaskRequestParams(guid, requestBody));
+    }
+
+    private HttpClientBuilder logCommunicationTaskRequestParams(String guid, String requestBody) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/VictimCaseInfos/%s/ActiveTasks?adhocTask=false", guid))
+                .addHeaders(ddeiHeaders())
+                .method("POST")
+                .body(requestBody)
+                .resourceName("addAdhocCommunication")
+                .build();
+    }
+
 
 
 }

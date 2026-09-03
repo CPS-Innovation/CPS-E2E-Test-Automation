@@ -2,7 +2,6 @@ package com.cps.fct.e2e.utils.services.ddei.payloadBuilder;
 
 import com.cps.fct.e2e.enums.vicitmCaseApp.*;
 import com.cps.fct.e2e.model.victimCaseApp.*;
-import com.cps.fct.e2e.utils.common.FakerUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.commons.lang3.StringUtils;
@@ -44,7 +43,7 @@ public class VictimCaseAppPayloadBuilder {
                 .build();
     }
 
-    public static VictimLiaisonOfficer assignVictimLiaisonOfficer(Integer userPartyId) {
+    public static VictimLiaisonOfficer assignVictimLiaisonOfficer(int userPartyId) {
         return VictimLiaisonOfficer.builder()
                 .VLOPartyId(userPartyId)
                 .LastModifiedBy("Assign VLO")
@@ -454,6 +453,25 @@ public class VictimCaseAppPayloadBuilder {
                 .CreatedBy("createLogCommsTask")
                 .build();
     }
+
+    public static VictimVcaDetails addChargeTypeToVCA(int chargeType, int userPartyId) {
+        return VictimVcaDetails.builder()
+                .PreferredName("")
+                .preferredMethodOfContact(PreferredMethodOfContact.Default)
+                .IsYouth(Boolean.FALSE)
+                .SuitableContactTimes("")
+                .SpecialConsiderationNeeds("")
+                .VLOPartyId(userPartyId)
+                .ChargeType(chargeType)
+                .LastModifiedBy("addChargeType")
+                .build();
+    }
+
+
+
+
+
+
 
 
 }

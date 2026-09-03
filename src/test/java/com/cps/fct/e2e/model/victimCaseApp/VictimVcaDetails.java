@@ -15,6 +15,8 @@ public class VictimVcaDetails {
     private String LastModifiedBy;
     private int Service;
     private boolean Onboarded;
+    private int ChargeType;
+    private int VLOPartyId;
 }
 
 

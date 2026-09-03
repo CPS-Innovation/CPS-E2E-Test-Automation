@@ -591,6 +591,20 @@ public class VictimService extends BaseService {
                 .build();
     }
 
+    public void addCaseChargeTypeToVCA(String guid, String requestBody) {
+        service.sendRequest(addCaseChargeTypeToVCARequestParams(guid, requestBody));
+    }
+
+    private HttpClientBuilder addCaseChargeTypeToVCARequestParams(String guid, String requestBody) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/victims/case-info/%s", guid))
+                .addHeaders(ddeiHeaders())
+                .method("PATCH")
+                .body(requestBody)
+                .resourceName("addCaseChargeTypeToVca")
+                .build();
+    }
 
 
 }

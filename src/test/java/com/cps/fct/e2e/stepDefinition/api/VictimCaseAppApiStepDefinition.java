@@ -55,32 +55,18 @@ public class VictimCaseAppApiStepDefinition {
         Map<String, VictimVcaDetails> victimDetailsToVcaMap = new HashMap<>();
         context.set("victimDetailsToVcaMap", victimDetailsToVcaMap);
 
-
-//
-//        Map<String, String> categoryMap = new HashMap<>();
-//        context.set("categoryMap", categoryMap);
-//
-
-//        Map<String, Integer> victimContactTypeMap = new HashMap<>();
-//        context.set("victimContactTypeMap", victimContactTypeMap);
-//
-//        Map<String, VictimWitnessCMSContact> victimWitnessCMSContactMap = new HashMap<>();
-//        context.set("victimWitnessCMSContactMap", victimWitnessCMSContactMap);
-//
-//        Map<String, VictimLiaisonOfficerDetails> victimWitnessVLODetails = new HashMap<>();
-//        context.set("victimWitnessVLODetails", victimWitnessVLODetails);
-
     }
 
     @When("the {string} is onboarded as {string} service lead in VCA")
-    public void victimOnboardForService(String victimType, String service) {
+    public void victimOnboardForService(String victimType, String serviceType) {
 
         CaseInfo victimCaseInfo;
         VictimVcaDetails victimVcaDetails;
 
-        OnboardService serviceTypeCode = OnboardService.fromString(service);
+        OnboardService serviceTypeCode = OnboardService.fromString(serviceType);
         Map<String, String> idGuidMap = context.get("idGuidMap");
         Map<String, List<String>> victimMapIds = context.get("victimMapIds");
+
 
         for (String id : victimMapIds.get(victimType)) {
             victimCaseInfo = onboardVictim(context.get("caseUrn"));
@@ -754,9 +740,9 @@ public class VictimCaseAppApiStepDefinition {
 
             for (Map<String, String> row : rows) {
                 TaskList taskType = TaskList.fromString(row.get("taskType"));
-                Task createLogCommsTask = createLogCommsTask(taskType.getValue(),victimService.getUserPartyId());
+                Task createLogCommsTask = createLogCommsTask(taskType.getValue(), victimService.getUserPartyId());
                 victimService.logCommunicationTask(idGuidMap.get(id), convertObjectToString(createLogCommsTask));
-                createTaskListMap.put(taskType.getValue(),createLogCommsTask);
+                createTaskListMap.put(taskType.getValue(), createLogCommsTask);
             }
 
             context.set("createTaskListMap", createTaskListMap);
@@ -765,7 +751,7 @@ public class VictimCaseAppApiStepDefinition {
     }
 
     @Then("verify the task to log communication for the {string} in VCA")
-    public void verifyLogCommunicationTask(String victimType ){
+    public void verifyLogCommunicationTask(String victimType) {
 
         Map<String, String> idGuidMap = context.get("idGuidMap");
         Map<String, List<String>> victimMapIds = context.get("victimMapIds");
@@ -782,9 +768,38 @@ public class VictimCaseAppApiStepDefinition {
 
     }
 
+    @When("the charging type {string} is added to case information to {string} in VCA")
+    public void chargingType(String chargeType, String victimType) {
+
+        VictimVcaDetails victimVcaDetails;
+        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+        Map<String, VictimVcaDetails> victimDetailsToVcaMap = context.get("victimDetailsToVcaMap");
+
+        for (String id : victimMapIds.get(victimType)) {
+            VictimVcaDetails caseChargeDetails = addChargeTypeToVCA(ChargeType.fromString(chargeType).getValue(), victimService.getUserPartyId());
+            victimService.addCaseChargeTypeToVCA(idGuidMap.get(id), convertObjectToString(caseChargeDetails));
+            victimDetailsToVcaMap.put(idGuidMap.get(id), caseChargeDetails);
+        }
+        context.set("victimDetailsToVcaMap", victimDetailsToVcaMap);
+
+    }
+
+    @Then("the case charging type is verified for {string} in VCA")
+    public void verifyChargeType(String victimType) {
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
+        Map<String, VictimVcaDetails> victimDetailsToVcaMap = context.get("victimDetailsToVcaMap");
+
+        for (String id : victimMapIds.get(victimType)) {
+
+            String ids = id;
+            /* TO-DO - Need to add the verification steps */
 
 
+        }
 
+    }
 
 
 }

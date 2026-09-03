@@ -44,18 +44,34 @@
               "TypeOfNumber": "home"
             }
           ],
-          "Email": "victim_pure@email.co.gov.uk"
-        }
+          "Email": "victim_test@email.co.gov.uk"
+        },
+        "DateOfBirth": "1985-02-10",
+        "PersonClassification": [
+          {
+            "ClassificationType": "StatusInformation",
+            "ClassificationCode": "KeyWitness",
+            "ClassificationValue": {
+              "ClassificationValueText": "Yes"
+            }
+          }
+        ]
       },
-      "TypeOfPerson": "Victim",
+      "TypeOfPerson": "VictimWitness",
       "DateOfBirth": "1970-08-03",
-      "Victim": {
-        "XOffenceId": [
-          "{{LM04_CaseOffenceId}}"
-        ],
-        "VPSStatus": {
-          "ResponseToVPSOffer": "Accepted",
-          "SchemeExplained": false
+      "WitnessAndVictim": {
+        "Witness": {
+          "Occupation": "Civilian",
+          "WarnedByPolice": false
+        },
+        "Victim": {
+          "XOffenceId": [
+            "{{LM04_CaseOffenceId}}"
+          ],
+          "VPSStatus": {
+            "ResponseToVPSOffer": "Accepted",
+            "SchemeExplained": false
+          }
         }
       },
       "LinkedSuspects": null

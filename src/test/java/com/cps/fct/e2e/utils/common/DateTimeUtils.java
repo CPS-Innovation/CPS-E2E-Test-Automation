@@ -10,6 +10,7 @@ public class DateTimeUtils {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     public static final DateTimeFormatter UTC_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
     public static final DateTimeFormatter UTC_TIME_NOW = DateTimeFormatter.ofPattern("HH:mm:ss");
+    public static final DateTimeFormatter UTC_TIME_HRS_MINS = DateTimeFormatter.ofPattern("HH:mm");
 
     public static String UTCDateInPast(int noOfDays) {
         LocalDate pastDate = today.minusDays(noOfDays);
@@ -24,6 +25,11 @@ public class DateTimeUtils {
     public static String UTCTimeNow() {
         ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
         return now.format(UTC_TIME_NOW);
+    }
+
+    public static String UTCTimeHrsMinsNow() {
+        ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
+        return now.format(UTC_TIME_HRS_MINS);
     }
 
     public static String UTCDateTimeNow() {

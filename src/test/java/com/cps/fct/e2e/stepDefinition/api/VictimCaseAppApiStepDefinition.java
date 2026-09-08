@@ -15,12 +15,10 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.picocontainer.annotations.Inject;
 
-import java.sql.SQLOutput;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimCaseAppPayloadBuilder.*;
-import static org.assertj.core.api.Assertions.assertThat;
 
 
 public class VictimCaseAppApiStepDefinition {
@@ -734,6 +732,9 @@ public class VictimCaseAppApiStepDefinition {
         Map<Integer, Task> createTaskListMap = new HashMap<>();
         context.set("createTaskListMap", createTaskListMap);
 
+        Map<Integer, Integer> taskTypeTaskIdMap = new HashMap<>();
+        context.set("taskTypeTaskIdMap", taskTypeTaskIdMap);
+
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
 
         for (String id : victimMapIds.get(victimType)) {
@@ -741,11 +742,13 @@ public class VictimCaseAppApiStepDefinition {
             for (Map<String, String> row : rows) {
                 TaskList taskType = TaskList.fromString(row.get("taskType"));
                 Task createLogCommsTask = createLogCommsTask(taskType.getValue(), victimService.getUserPartyId());
-                victimService.logCommunicationTask(idGuidMap.get(id), convertObjectToString(createLogCommsTask));
-                createTaskListMap.put(taskType.getValue(), createLogCommsTask);
-            }
 
+                Integer taskTypeTaskId = victimService.logCommunicationTask(idGuidMap.get(id), convertObjectToString(createLogCommsTask));
+                createTaskListMap.put(taskType.getValue(), createLogCommsTask);
+                taskTypeTaskIdMap.put(taskType.getValue(), taskTypeTaskId);
+            }
             context.set("createTaskListMap", createTaskListMap);
+            context.set("taskTypeTaskIdMap", taskTypeTaskIdMap);
         }
 
     }
@@ -776,6 +779,7 @@ public class VictimCaseAppApiStepDefinition {
         Map<String, String> idGuidMap = context.get("idGuidMap");
         Map<String, VictimVcaDetails> victimDetailsToVcaMap = context.get("victimDetailsToVcaMap");
 
+
         for (String id : victimMapIds.get(victimType)) {
             VictimVcaDetails caseChargeDetails = addChargeTypeToVCA(ChargeType.fromString(chargeType).getValue(), victimService.getUserPartyId());
             victimService.addCaseChargeTypeToVCA(idGuidMap.get(id), convertObjectToString(caseChargeDetails));
@@ -796,10 +800,100 @@ public class VictimCaseAppApiStepDefinition {
             String ids = id;
             /* TO-DO - Need to add the verification steps */
 
-
         }
 
     }
 
+    @When("the first telephone call attempt is successful to inform victim with following details for {string} in VCA")
+    public void firstCallSuccessful(String victimType, DataTable dataTable) {
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
 
-}
+        Map<Integer, TelephoneCommunication> teleCommsListMap = new HashMap<>();
+        context.set("teleCommsListMap", teleCommsListMap);
+
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+        for (String id : victimMapIds.get(victimType)) {
+            for (Map<String, String> row : rows) {
+                JourneyType journeyTypeCode = JourneyType.fromString(row.get("journeyType"));
+                String informVictim = row.get("informVictim");
+                CommunicationDirection callDirection = CommunicationDirection.fromString(row.get("callDirection"));
+                String notes = row.get("notes");
+                TelephoneCommunication firstCall = firstTeleCall(journeyTypeCode.getValue(), informVictim, callDirection.getValue(), notes);
+                victimService.addFirstCallAttempt(idGuidMap.get(id), convertObjectToString(firstCall));
+                teleCommsListMap.put(journeyTypeCode.getValue(), firstCall);
+            }
+            context.set("communicationListMap", teleCommsListMap);
+        }
+    }
+
+    @When("follow up as below for {string} in VCA")
+    public void followUp(String victimType, DataTable dataTable) {
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
+
+        Map<String, FollowUpCommunication> followUpCommsListMap = new HashMap<>();
+        context.set("followUpCommsListMap", followUpCommsListMap);
+
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+        for (String id : victimMapIds.get(victimType)) {
+            for (Map<String, String> row : rows) {
+                JourneyType journeyTypeCode = JourneyType.fromString(row.get("journeyType"));
+                String followUpMethod = row.get("followUpMethod").toLowerCase(Locale.ROOT);
+                String notes = row.get("notes");
+                FollowUpCommunication finalFollow = finalFollowUp(journeyTypeCode.getValue(), notes, followUpMethod);
+                victimService.addFollowUpComms(idGuidMap.get(id), followUpMethod, convertObjectToString(finalFollow));
+                followUpCommsListMap.put(followUpMethod, finalFollow);
+            }
+            context.set("followUpCommsListMap", followUpCommsListMap);
+        }
+    }
+
+    @When("verify the charge decision communication for {string} in VCA")
+    public void verifyChargeDecision(String victimType) {
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
+        Map<Integer, TelephoneCommunication> teleCommsListMap = context.get("teleCommsListMap");
+        Map<String, FollowUpCommunication> followUpCommsListMap = context.get("followUpCommsListMap");
+
+        for (String id : victimMapIds.get(victimType)) {
+            String ids = id;
+            /* TO-DO - Need to add the verification steps */
+
+        }
+    }
+
+    @When("the first telephone call attempt is un-successful to inform victim with following details for {string} in VCA")
+    public void firstCallUnSuccessful(String victimType, DataTable dataTable) {
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
+
+        Map<Integer, TelephoneCommunication> teleCommsListMap = new HashMap<>();
+        context.set("teleCommsListMap", teleCommsListMap);
+
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+        for (String id : victimMapIds.get(victimType)) {
+            for (Map<String, String> row : rows) {
+                JourneyType journeyTypeCode = JourneyType.fromString(row.get("journeyType"));
+                String informVictim = row.get("informVictim");
+                CommunicationDirection callDirection = CommunicationDirection.fromString(row.get("callDirection"));
+                String notes = row.get("notes");
+                TelephoneCommunication firstCall = firstTeleCall(journeyTypeCode.getValue(), informVictim, callDirection.getValue(), notes);
+                victimService.addFirstCallAttempt(idGuidMap.get(id), convertObjectToString(firstCall));
+                String smsSent = row.get("smsSent").toLowerCase(Locale.ROOT);
+                TelephoneCommunication smsSentStatus = firstCallSmsStatus(journeyTypeCode.getValue(), informVictim, callDirection.getValue(), notes, smsSent);
+                victimService.addFirstCallAttemptSms(idGuidMap.get(id), convertObjectToString(smsSentStatus));
+
+                if ("yes".equalsIgnoreCase(smsSent)) {
+                    SmsCommunication smsSend = firstCallSmsSend(journeyTypeCode.getValue());
+                    victimService.addSmsSendDetails(idGuidMap.get(id), convertObjectToString(smsSend));
+
+                }
+//                teleCommsListMap.put(journeyTypeCode.getValue(),smsSentStatus);
+                }
+                context.set("teleCommsListMap", teleCommsListMap);
+            }
+        }
+
+
+    }

@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.cps.fct.e2e.utils.common.DateTimeUtils.*;
+import static com.cps.fct.e2e.utils.common.DateTimeUtils.UTCDateTimeNow;
 import static com.cps.fct.e2e.utils.common.FakerUtils.*;
 
 public class VictimCaseAppPayloadBuilder {
@@ -447,7 +448,7 @@ public class VictimCaseAppPayloadBuilder {
     public static Task createLogCommsTask(int task, int userPartyId) {
         return Task.builder()
                 .Assignee(userPartyId)
-                .DueDate(UTCDateTimeInFutureDayBy(1))
+                .DueDate(UTCDateTimeNow())
                 .Task(task)
                 .OrderNumber(1)
                 .CreatedBy("createLogCommsTask")
@@ -466,6 +467,71 @@ public class VictimCaseAppPayloadBuilder {
                 .LastModifiedBy("addChargeType")
                 .build();
     }
+
+
+    public static TelephoneCommunication firstTeleCall(int journeyType, String callOutcome, int callDirection, String notes) {
+        return TelephoneCommunication.builder()
+                .JourneyType(journeyType)
+                .PhoneNumber("")
+                .CallDirection(callDirection)
+                .DateOfContact(UTCDateTimeInPastBy(2))
+                .AbleToInformOnCall("Yes".equalsIgnoreCase(callOutcome))
+                .Notes(notes)
+                .SkippedSMS(false)
+                .SkippedFollowUp(false)
+                .ReasonForNoFollowUp("")
+                .CreatedBy("firstCallAttempt")
+                .build();
+    }
+
+    public static FollowUpCommunication finalFollowUp(int journeyType, String notes, String followUpMethod) {
+        if ("email".equals(followUpMethod)) {
+            return FollowUpCommunication.builder()
+                    .SentAt(UTCDateTimeNow())
+                    .JourneyType(journeyType)
+                    .Notes(notes)
+                    .CreatedBy("followUpUser")
+                    .build();
+        } else if ("post".equals(followUpMethod)) {
+            return FollowUpCommunication.builder()
+                    .TimeSent(UTCDateTimeNow())
+                    .JourneyType(journeyType)
+                    .Notes(notes)
+                    .CreatedBy("followUpUser")
+                    .build();
+        }
+        return null;
+    }
+
+    public static TelephoneCommunication firstCallSmsStatus(int journeyType, String callOutcome, int callDirection, String notes, String smsSent) {
+        return TelephoneCommunication.builder()
+                .JourneyType(journeyType)
+                .AttemptOrder(1)
+                .PhoneNumber("")
+                .CallDirection(callDirection)
+                .DateOfContact(UTCDateTimeInPastBy(1))
+                .AbleToInformOnCall("Yes".equalsIgnoreCase(callOutcome))
+                .Notes(notes)
+                .SkippedSMS("no".equalsIgnoreCase(smsSent))
+                .SkippedFollowUp(false)
+                .ReasonForNoFollowUp("")
+                .LastModifiedBy("addSmsDetails")
+                .build();
+    }
+
+
+    public static SmsCommunication firstCallSmsSend(int journeyType) {
+        return SmsCommunication.builder()
+                .JourneyType(journeyType)
+                .DateTimeSent(UTCDateTimeNow())
+                .Sent(false)
+                .MessageContent(UTCTimeHrsMinsNow())
+                .CreatedBy("addSmsDetails")
+                .build();
+    }
+
+
+
 
 
 

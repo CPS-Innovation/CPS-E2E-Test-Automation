@@ -35,8 +35,6 @@ public enum TaskOrder {
             case "letter dispatch method" -> LDP;
             case "log email" -> LE;
             case "log letter" -> LL;
-
-
             default -> throw new IllegalArgumentException("Unknown TaskList: " + value);
         };
     }

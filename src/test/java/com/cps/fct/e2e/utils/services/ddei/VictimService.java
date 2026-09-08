@@ -576,8 +576,17 @@ public class VictimService extends BaseService {
                 .build();
     }
 
-    public void logCommunicationTask(String guid, String requestBody) {
-        service.sendRequest(logCommunicationTaskRequestParams(guid, requestBody));
+//    public void logCommunicationTask(String guid, String requestBody) {
+//        service.sendRequest(logCommunicationTaskRequestParams(guid, requestBody));
+//    }
+
+    public Integer logCommunicationTask(String guid, String requestBody) {
+        HttpResponseWrapper responseWrapper = service.sendRequest(logCommunicationTaskRequestParams(guid, requestBody));
+        Integer taskTypeTaskId =  JsonPath.read(responseWrapper.getBody(), "$.value.id");
+        assertThat(taskTypeTaskId)
+                .withFailMessage("Task Type Task Id was not returned from the API response")
+                .isNotNull();
+        return taskTypeTaskId;
     }
 
     private HttpClientBuilder logCommunicationTaskRequestParams(String guid, String requestBody) {
@@ -605,6 +614,111 @@ public class VictimService extends BaseService {
                 .resourceName("addCaseChargeTypeToVca")
                 .build();
     }
+
+
+    public void addFirstCallAttempt(String guid, String requestBody) {
+        service.sendRequest(addFirstCallAttemptRequestParams(guid, requestBody));
+    }
+
+    private HttpClientBuilder addFirstCallAttemptRequestParams(String guid, String requestBody) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/victims/%s/victim-communication/telephone", guid))
+                .addHeaders(ddeiHeaders())
+                .method("POST")
+                .body(requestBody)
+                .resourceName("addCaseChargeTypeToVca")
+                .build();
+    }
+
+//    public void getActiveTask(String guid, int taskType) {
+//        service.sendRequest(getActiveTaskRequestParams(guid, taskType));
+//    }
+
+    public Integer getActiveTask(String guid, int taskType) {
+        HttpResponseWrapper responseWrapper = service.sendRequest(getActiveTaskRequestParams(guid, taskType));
+        Integer taskTypeTaskId =  JsonPath.read(responseWrapper.getBody(), "$.value[0].id");
+        assertThat(taskTypeTaskId)
+                .withFailMessage("Task Type Task Id was not returned from the API response")
+                .isNotNull();
+        return taskTypeTaskId;
+    }
+
+    private HttpClientBuilder getActiveTaskRequestParams(String guid, int taskType) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/victim-case/%s/tasks?taskType=%s", guid,taskType))
+                .addHeaders(ddeiHeaders())
+                .method("GET")
+                .resourceName("addCaseChargeTypeToVca")
+                .build();
+    }
+
+    public void activeTaskUpdate(String guid, int activeTaskId, String requestBody) {
+        service.sendRequest(activeTaskUpdateRequestParams(guid, activeTaskId,requestBody));
+    }
+
+    private HttpClientBuilder activeTaskUpdateRequestParams(String guid, int activeTaskId, String requestBody) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/VictimCaseInfos/%s/ActiveTask/%s/?markAsComplete=true", guid,activeTaskId))
+                .addHeaders(ddeiHeaders())
+                .method("PATCH")
+                .body(requestBody)
+                .resourceName("updateActiveTask")
+                .build();
+    }
+
+    public void addFollowUpComms(String guid, String followUpMethod, String requestBody) {
+        service.sendRequest(addFollowUpCommsRequestParams(guid, followUpMethod, requestBody));
+    }
+
+    private HttpClientBuilder addFollowUpCommsRequestParams(String guid, String followUpMethod, String requestBody) {
+        String communicationType =
+                "post".equals(followUpMethod) ? "letter" : followUpMethod;
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/victims/%s/victim-communication/%s", guid, communicationType))
+                .addHeaders(ddeiHeaders())
+                .method("POST")
+                .body(requestBody)
+                .resourceName("addCaseChargeTypeToVca")
+                .build();
+    }
+
+    public void addFirstCallAttemptSms(String guid, String requestBody) {
+        service.sendRequest(addFirstCallAttemptSmsRequestParams(guid, requestBody));
+    }
+
+    private HttpClientBuilder addFirstCallAttemptSmsRequestParams(String guid, String requestBody) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/victims/%s/victim-communication/telephone", guid))
+                .addHeaders(ddeiHeaders())
+                .method("PATCH")
+                .body(requestBody)
+                .resourceName("addNoSmsSent")
+                .build();
+    }
+
+    public void addSmsSendDetails(String guid, String requestBody) {
+        service.sendRequest(addSmsSendDetailsRequestParams(guid, requestBody));
+    }
+
+    private HttpClientBuilder addSmsSendDetailsRequestParams(String guid, String requestBody) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/victims/%s/victim-communication/sms", guid))
+                .addHeaders(ddeiHeaders())
+                .method("POST")
+                .body(requestBody)
+                .resourceName("addSmsDetails")
+                .build();
+    }
+
+
+
+
 
 
 }

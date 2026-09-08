@@ -24,8 +24,8 @@ public enum JourneyType {
             case "no further action" -> NFA;
             case "vcl" -> VCL;
             case "non integrated vcl" -> NIVCL;
-            case "non integrated decision to charge" -> NIDC;
-            case "non integrated no further action" -> NINFA;
+            case "inform of a decision to charge" -> NIDC;
+            case "inform of a no further action decision" -> NINFA;
             case "other" -> OTHER;
             default -> throw new IllegalArgumentException("Unknown CommunicationType: " + value);
         };

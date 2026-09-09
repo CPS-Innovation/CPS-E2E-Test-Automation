@@ -1,4 +1,4 @@
-@regression @vca_api_regression @VCA_API_S24
+@regression @vca_api_regression @VCA_API_S24 @VCA_API_S25 @VCA_API_S38
 
 Feature: VCA-API-S24 - Log charge decision communication where first call attempt was successful and follow up communication is sent in email or post for victims in Victim Case Application.
   As a Victim Liaison Officer

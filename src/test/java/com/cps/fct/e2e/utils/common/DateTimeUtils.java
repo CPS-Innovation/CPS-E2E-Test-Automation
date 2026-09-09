@@ -49,5 +49,4 @@ public class DateTimeUtils {
         return newDate.format(UTC_FORMATTER);
     }
 
-
 }

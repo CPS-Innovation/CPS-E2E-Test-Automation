@@ -469,12 +469,12 @@ public class VictimCaseAppPayloadBuilder {
     }
 
 
-    public static TelephoneCommunication firstTeleCall(int journeyType, String callOutcome, int callDirection, String notes) {
+    public static TelephoneCommunication firstTeleCall(int journeyType, String callOutcome, int callDirection, String notes, int days) {
         return TelephoneCommunication.builder()
                 .JourneyType(journeyType)
                 .PhoneNumber("")
                 .CallDirection(callDirection)
-                .DateOfContact(UTCDateTimeInPastBy(2))
+                .DateOfContact(UTCDateTimeInPastBy(days))
                 .AbleToInformOnCall("Yes".equalsIgnoreCase(callOutcome))
                 .Notes(notes)
                 .SkippedSMS(false)
@@ -492,7 +492,7 @@ public class VictimCaseAppPayloadBuilder {
                     .Notes(notes)
                     .CreatedBy("followUpUser")
                     .build();
-        } else if ("post".equals(followUpMethod)) {
+        } else if ("post".equals(followUpMethod) || "letter".equals(followUpMethod)) {
             return FollowUpCommunication.builder()
                     .TimeSent(UTCDateTimeNow())
                     .JourneyType(journeyType)
@@ -503,13 +503,13 @@ public class VictimCaseAppPayloadBuilder {
         return null;
     }
 
-    public static TelephoneCommunication firstCallSmsStatus(int journeyType, String callOutcome, int callDirection, String notes, String smsSent) {
+    public static TelephoneCommunication firstCallSmsStatus(int journeyType, String callOutcome, int callDirection, String notes, int days, String smsSent) {
         return TelephoneCommunication.builder()
                 .JourneyType(journeyType)
                 .AttemptOrder(1)
                 .PhoneNumber("")
                 .CallDirection(callDirection)
-                .DateOfContact(UTCDateTimeInPastBy(1))
+                .DateOfContact(UTCDateTimeInPastBy(days))
                 .AbleToInformOnCall("Yes".equalsIgnoreCase(callOutcome))
                 .Notes(notes)
                 .SkippedSMS("no".equalsIgnoreCase(smsSent))
@@ -520,10 +520,10 @@ public class VictimCaseAppPayloadBuilder {
     }
 
 
-    public static SmsCommunication firstCallSmsSend(int journeyType) {
+    public static SmsCommunication firstCallSmsSend(int journeyType, int days) {
         return SmsCommunication.builder()
                 .JourneyType(journeyType)
-                .DateTimeSent(UTCDateTimeNow())
+                .DateTimeSent(UTCDateTimeInPastBy(days))
                 .Sent(false)
                 .MessageContent(UTCTimeHrsMinsNow())
                 .CreatedBy("addSmsDetails")

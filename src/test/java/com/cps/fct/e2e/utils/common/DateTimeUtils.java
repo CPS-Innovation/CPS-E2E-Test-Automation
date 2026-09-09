@@ -31,16 +31,10 @@ public class DateTimeUtils {
         return newDate.format(UTC_FORMATTER);
     }
 
-    public static String UTCDateTimeInFutureMonthBy(int noOfMonths) {
-        ZonedDateTime originalDate = ZonedDateTime.now(ZoneOffset.UTC);
-        ZonedDateTime newDate = originalDate.plusMonths(noOfMonths);
-        return newDate.format(UTC_FORMATTER);
-    }
-
-    public static String UTCDateTimeInPastDayBy(int noOfDays) {
+    public static String UTCDateTimeInPastBy(int noOfDays) {
         ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
         ZonedDateTime newDate = now.minusDays(noOfDays);
-        return now.format(UTC_FORMATTER);
+        return newDate.format(UTC_FORMATTER);
     }
 
 

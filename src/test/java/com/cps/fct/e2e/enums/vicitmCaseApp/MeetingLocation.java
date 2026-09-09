@@ -19,11 +19,11 @@ public enum MeetingLocation {
 
     public static MeetingLocation fromString(String value) {
         return switch (value.trim().toLowerCase()) {
-            case "cps location " -> CPS ;
+            case "cps location" -> CPS ;
             case "magistrates court" -> MC;
             case "crown court" -> CC ;
             case "police station" -> PS;
-            case "virtual" -> VIRTUAL ;
+            case "virtual call" -> VIRTUAL ;
             case "other" -> OTHER ;
             default -> throw new IllegalArgumentException("Unknown Meeting location: " + value);
         };

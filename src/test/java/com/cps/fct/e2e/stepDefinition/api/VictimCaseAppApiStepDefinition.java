@@ -806,6 +806,7 @@ public class VictimCaseAppApiStepDefinition {
 
     @When("the first telephone call attempt is successful to inform victim with following details for {string} in VCA")
     public void firstCallSuccessful(String victimType, DataTable dataTable) {
+        int days = 3;
         Map<String, String> idGuidMap = context.get("idGuidMap");
         Map<String, List<String>> victimMapIds = context.get("victimMapIds");
 
@@ -813,13 +814,14 @@ public class VictimCaseAppApiStepDefinition {
         context.set("teleCommsListMap", teleCommsListMap);
 
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+
         for (String id : victimMapIds.get(victimType)) {
             for (Map<String, String> row : rows) {
                 JourneyType journeyTypeCode = JourneyType.fromString(row.get("journeyType"));
                 String informVictim = row.get("informVictim");
                 CommunicationDirection callDirection = CommunicationDirection.fromString(row.get("callDirection"));
                 String notes = row.get("notes");
-                TelephoneCommunication firstCall = firstTeleCall(journeyTypeCode.getValue(), informVictim, callDirection.getValue(), notes);
+                TelephoneCommunication firstCall = firstTeleCall(journeyTypeCode.getValue(), informVictim, callDirection.getValue(), notes, days);
                 victimService.addFirstCallAttempt(idGuidMap.get(id), convertObjectToString(firstCall));
                 teleCommsListMap.put(journeyTypeCode.getValue(), firstCall);
             }
@@ -865,27 +867,29 @@ public class VictimCaseAppApiStepDefinition {
 
     @When("the first telephone call attempt is un-successful to inform victim with following details for {string} in VCA")
     public void firstCallUnSuccessful(String victimType, DataTable dataTable) {
+        int days = 3;
         Map<String, String> idGuidMap = context.get("idGuidMap");
         Map<String, List<String>> victimMapIds = context.get("victimMapIds");
-
         Map<Integer, TelephoneCommunication> teleCommsListMap = new HashMap<>();
         context.set("teleCommsListMap", teleCommsListMap);
 
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+
         for (String id : victimMapIds.get(victimType)) {
             for (Map<String, String> row : rows) {
                 JourneyType journeyTypeCode = JourneyType.fromString(row.get("journeyType"));
                 String informVictim = row.get("informVictim");
                 CommunicationDirection callDirection = CommunicationDirection.fromString(row.get("callDirection"));
                 String notes = row.get("notes");
-                TelephoneCommunication firstCall = firstTeleCall(journeyTypeCode.getValue(), informVictim, callDirection.getValue(), notes);
+                TelephoneCommunication firstCall = firstTeleCall(journeyTypeCode.getValue(), informVictim, callDirection.getValue(), notes, days);
                 victimService.addFirstCallAttempt(idGuidMap.get(id), convertObjectToString(firstCall));
                 String smsSent = row.get("smsSent").toLowerCase(Locale.ROOT);
-                TelephoneCommunication smsSentStatus = firstCallSmsStatus(journeyTypeCode.getValue(), informVictim, callDirection.getValue(), notes, smsSent);
+                TelephoneCommunication smsSentStatus = firstCallSmsStatus(journeyTypeCode.getValue(), informVictim, callDirection.getValue(), notes, days,smsSent);
                 victimService.addFirstCallAttemptSms(idGuidMap.get(id), convertObjectToString(smsSentStatus));
 
                 if ("yes".equalsIgnoreCase(smsSent)) {
-                    SmsCommunication smsSend = firstCallSmsSend(journeyTypeCode.getValue());
+                    int smsDays = 2;
+                    SmsCommunication smsSend = firstCallSmsSend(journeyTypeCode.getValue(),smsDays);
                     victimService.addSmsSendDetails(idGuidMap.get(id), convertObjectToString(smsSend));
 
                 }
@@ -894,6 +898,101 @@ public class VictimCaseAppApiStepDefinition {
                 context.set("teleCommsListMap", teleCommsListMap);
             }
         }
+
+
+    @When("the second telephone call attempt is successful to inform victim with following details for {string} in VCA")
+    public void secondCallSuccessful(String victimType, DataTable dataTable) {
+        int days = 2;
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
+        Map<Integer, TelephoneCommunication> teleCommsListMap = new HashMap<>();
+        context.set("teleCommsListMap", teleCommsListMap);
+
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+
+        for (String id : victimMapIds.get(victimType)) {
+            for (Map<String, String> row : rows) {
+                JourneyType journeyTypeCode = JourneyType.fromString(row.get("journeyType"));
+                String informVictim = row.get("informVictim");
+                CommunicationDirection callDirection = CommunicationDirection.fromString(row.get("callDirection"));
+                String notes = row.get("notes");
+                TelephoneCommunication firstCall = firstTeleCall(journeyTypeCode.getValue(), informVictim, callDirection.getValue(), notes, days);
+                victimService.addFirstCallAttempt(idGuidMap.get(id), convertObjectToString(firstCall));
+                teleCommsListMap.put(journeyTypeCode.getValue(), firstCall);
+            }
+            context.set("communicationListMap", teleCommsListMap);
+        }
+    }
+
+    @When("the second telephone call attempt is un-successful to inform victim with following details for {string} in VCA")
+    public void secondCallUnSuccessful(String victimType, DataTable dataTable) {
+        int days = 2;
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
+        Map<Integer, TelephoneCommunication> teleCommsListMap = new HashMap<>();
+        context.set("teleCommsListMap", teleCommsListMap);
+
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+
+        for (String id : victimMapIds.get(victimType)) {
+            for (Map<String, String> row : rows) {
+                JourneyType journeyTypeCode = JourneyType.fromString(row.get("journeyType"));
+                String informVictim = row.get("informVictim");
+                CommunicationDirection callDirection = CommunicationDirection.fromString(row.get("callDirection"));
+                String notes = row.get("notes");
+                TelephoneCommunication firstCall = firstTeleCall(journeyTypeCode.getValue(), informVictim, callDirection.getValue(), notes, days);
+                victimService.addFirstCallAttempt(idGuidMap.get(id), convertObjectToString(firstCall));
+            }
+            context.set("teleCommsListMap", teleCommsListMap);
+        }
+    }
+
+    @When("the third telephone call attempt is successful to inform victim with following details for {string} in VCA")
+    public void thirdCallSuccessful(String victimType, DataTable dataTable) {
+        int days = 1;
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
+        Map<Integer, TelephoneCommunication> teleCommsListMap = new HashMap<>();
+        context.set("teleCommsListMap", teleCommsListMap);
+
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+
+        for (String id : victimMapIds.get(victimType)) {
+            for (Map<String, String> row : rows) {
+                JourneyType journeyTypeCode = JourneyType.fromString(row.get("journeyType"));
+                String informVictim = row.get("informVictim");
+                CommunicationDirection callDirection = CommunicationDirection.fromString(row.get("callDirection"));
+                String notes = row.get("notes");
+                TelephoneCommunication firstCall = firstTeleCall(journeyTypeCode.getValue(), informVictim, callDirection.getValue(), notes, days);
+                victimService.addFirstCallAttempt(idGuidMap.get(id), convertObjectToString(firstCall));
+                teleCommsListMap.put(journeyTypeCode.getValue(), firstCall);
+            }
+            context.set("communicationListMap", teleCommsListMap);
+        }
+    }
+
+    @When("the third telephone call attempt is un-successful to inform victim with following details for {string} in VCA")
+    public void thirdCallUnSuccessful(String victimType, DataTable dataTable) {
+        int days = 1;
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
+        Map<Integer, TelephoneCommunication> teleCommsListMap = new HashMap<>();
+        context.set("teleCommsListMap", teleCommsListMap);
+
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+
+        for (String id : victimMapIds.get(victimType)) {
+            for (Map<String, String> row : rows) {
+                JourneyType journeyTypeCode = JourneyType.fromString(row.get("journeyType"));
+                String informVictim = row.get("informVictim");
+                CommunicationDirection callDirection = CommunicationDirection.fromString(row.get("callDirection"));
+                String notes = row.get("notes");
+                TelephoneCommunication firstCall = firstTeleCall(journeyTypeCode.getValue(), informVictim, callDirection.getValue(), notes, days);
+                victimService.addFirstCallAttempt(idGuidMap.get(id), convertObjectToString(firstCall));
+            }
+            context.set("teleCommsListMap", teleCommsListMap);
+        }
+    }
 
 
     }

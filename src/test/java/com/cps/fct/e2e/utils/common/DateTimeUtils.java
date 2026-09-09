@@ -17,7 +17,7 @@ public class DateTimeUtils {
         return pastDate.format(formatter);
     }
 
-    public static String UTCDateInFuture(int noOfDays ) {
+        public static String UTCDateInFuture(int noOfDays ) {
         LocalDate futureDate = today.plusDays(noOfDays);
         return futureDate.format(formatter);
     }

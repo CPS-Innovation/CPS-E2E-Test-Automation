@@ -21,10 +21,12 @@ Feature: Review TWIF Case and Apply Charges
     When I make charging decision as following:
       | decision type     | decision code                   | reason | out come of case | offence category |
       | No further action | K - No prosecution - Evidential | D81    | D80              | Robbery          |
+
     And I continue without action plan
     And I submit the charging decision as following
       | Investigative stage        | Method | Create MG3 document |
       | Bail for charging decision | Area   | true                |
+
     Then review is submitted successfully
 
 

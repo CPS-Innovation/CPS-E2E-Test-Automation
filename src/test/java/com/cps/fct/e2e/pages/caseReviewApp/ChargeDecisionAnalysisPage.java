@@ -438,6 +438,7 @@ public class ChargeDecisionAnalysisPage extends BasePage {
 
         if (isNativeSelect(dropdown)) {
             selectNativeDropdownOption(dropdown, optionText, PRINCIPAL_OFFENCE_CATEGORY_LABEL);
+            assertNativeDropdownOptionSelected(dropdown, optionText, PRINCIPAL_OFFENCE_CATEGORY_LABEL);
         } else {
             selectTypeAheadDropdownOption(dropdown, optionText);
         }
@@ -464,16 +465,35 @@ public class ChargeDecisionAnalysisPage extends BasePage {
     }
 
     private void selectNativeDropdownOption(Locator dropdown, String optionText, String fieldName) {
-        Locator options = dropdown.locator("option");
-        for (int optionIndex = 0; optionIndex < options.count(); optionIndex++) {
-            String visibleText = options.nth(optionIndex).innerText().trim();
-            if (optionMatches(visibleText, optionText)) {
-                dropdown.selectOption(new SelectOption().setIndex(optionIndex));
-                return;
+        long deadline = System.currentTimeMillis() + UI_SETTLE_TIMEOUT_MILLIS;
+        String lastVisibleOptions = "";
+
+        while (System.currentTimeMillis() < deadline) {
+            try {
+                Locator options = dropdown.locator("option");
+                List<String> visibleOptions = new ArrayList<>();
+
+                for (int optionIndex = 0; optionIndex < options.count(); optionIndex++) {
+                    String visibleText = options.nth(optionIndex).innerText().trim();
+                    visibleOptions.add(visibleText);
+                    if (optionMatches(visibleText, optionText)) {
+                        dropdown.selectOption(new SelectOption().setIndex(optionIndex));
+                        return;
+                    }
+                }
+
+                lastVisibleOptions = String.join(", ", visibleOptions);
+            } catch (PlaywrightException exception) {
+                if (isGenuineLocatorError(exception)) {
+                    throw exception;
+                }
             }
+
+            page.waitForTimeout(DEFAULT_WAIT_TIMEOUT_MS);
         }
 
-        throw new IllegalArgumentException(fieldName + " option was not found: " + optionText);
+        throw new IllegalArgumentException(fieldName + " option was not found: " + optionText
+                + ". Last visible options: [" + lastVisibleOptions + "]");
     }
 
     private void selectTypeAheadDropdownOption(Locator dropdown, String optionText) {

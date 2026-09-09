@@ -174,8 +174,7 @@ public class CaseReviewUiStepDefinition {
     }
 
     // RED (Priority) triage. The decisionToBeMade is fixed to Priority; the triage decision
-    // (e.g. NFS Compliant) is passed in and recorded in the payload's decision field, with
-    // rejectedDecision left null/null because the case is accepted rather than rejected.
+    // is passed in and recorded in the payload's decision field.
     @And("precharge the RED {string} triage case for {string} PCD review")
     public void prechargeRedTriageCaseForPcdReview(String caseType, String triageDecision) throws JsonProcessingException {
         service.createCmsAuthToken(context);

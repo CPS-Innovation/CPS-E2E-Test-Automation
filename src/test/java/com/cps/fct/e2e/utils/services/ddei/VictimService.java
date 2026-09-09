@@ -452,11 +452,6 @@ public class VictimService extends BaseService {
 
     public Map<String, String> addMeetingAttendees(String meetingVictimGuid, String requestBody) {
         HttpResponseWrapper responseWrapper = service.sendRequest(addMeetingAttendeesRequestParams(meetingVictimGuid, requestBody));
-//        String meetingAttendeesGuid = JsonPath.read(responseWrapper.getBody(), "$.value[0].meetingAttendeeGuid");
-//        assertThat(meetingAttendeesGuid)
-//                .withFailMessage("Victim Meeting Attendees Guid was not returned from the API response")
-//                .isNotNull();
-//        return meetingAttendeesGuid;
         List<Map<String, Object>> attendees =
                 JsonPath.read(responseWrapper.getBody(), "$.value");
         Map<String, String> attendeeGuidByRole = new HashMap<>();
@@ -576,9 +571,6 @@ public class VictimService extends BaseService {
                 .build();
     }
 
-//    public void logCommunicationTask(String guid, String requestBody) {
-//        service.sendRequest(logCommunicationTaskRequestParams(guid, requestBody));
-//    }
 
     public Integer logCommunicationTask(String guid, String requestBody) {
         HttpResponseWrapper responseWrapper = service.sendRequest(logCommunicationTaskRequestParams(guid, requestBody));
@@ -631,9 +623,6 @@ public class VictimService extends BaseService {
                 .build();
     }
 
-//    public void getActiveTask(String guid, int taskType) {
-//        service.sendRequest(getActiveTaskRequestParams(guid, taskType));
-//    }
 
     public Integer getActiveTask(String guid, int taskType) {
         HttpResponseWrapper responseWrapper = service.sendRequest(getActiveTaskRequestParams(guid, taskType));
@@ -715,10 +704,6 @@ public class VictimService extends BaseService {
                 .resourceName("addSmsDetails")
                 .build();
     }
-
-
-
-
 
 
 }

@@ -27,8 +27,7 @@ public class PageObjects {
     @Inject
     public CompleteSubmissionPage completeSubmissionPage;
 
-    @Inject
-    public VcaLoginPage vcaLoginPage;
+
 
 
 }

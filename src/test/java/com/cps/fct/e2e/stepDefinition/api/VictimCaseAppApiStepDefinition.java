@@ -399,9 +399,6 @@ public class VictimCaseAppApiStepDefinition {
 
         for (String id : victimMapIds.get(victimType)) {
             for (Map<String, String> row : rows) {
-//                String meetingType = row.get("meetingType");
-//                String meetingOfferResponseMethod = row.get("offerResponseMethod");
-//                String meetingOfferResponse = row.get("offerResponse");
                 MeetingType meetingTypeCode = MeetingType.fromString(row.get("meetingType")); //Enum
                 OfferMethod meetingResponseMethodCode = OfferMethod.fromString(row.get("offerResponseMethod")); //Enum
                 String meetingContextGuid = meetingContextGuidMap.get(meetingTypeCode.getValue());

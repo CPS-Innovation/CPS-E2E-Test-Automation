@@ -161,9 +161,7 @@ public class VictimCaseAppAssertions {
         assertThat(result.getInt("value[0].meetingType")).isEqualTo(inputDetails.getMeetingType());
         assertThat(result.getInt("value[0].methodOfOffer")).isEqualTo(inputDetails.getMethodOfOffer());
         assertThat(result.getString("value[0].meetingContextGuid")).isEqualTo(inputDetails.getMeetingContextGuid());
-//        assertThat(result.getString("value[0].victimResponse")).isEqualTo(inputDetails.getVictimResponse());
-//        assertThat(result.getString("value[0].methodOfResponse")).isEqualTo(inputDetails.getMethodOfResponse());
-//        assertThat(result.getString("value[0].victimResponseDate")).isEqualTo(inputDetails.getVictimResponseDate());
+
         softly.assertAll();
     }
 
@@ -173,11 +171,7 @@ public class VictimCaseAppAssertions {
 
         JsonPath result = new JsonPath(responsePayload.getBody());
 
-//        assertThat(result.getInt("value[0].meetingType")).isEqualTo(inputDetails.getMeetingType());
-//        assertThat(result.getString("value[0].meetingContextGuid")).isEqualTo(inputDetails.getMeetingContextGuid());
-//        assertThat(result.getString("value[0].victimResponse")).isEqualTo(inputDetails.getVictimResponse());
-//        assertThat(result.getString("value[0].methodOfResponse")).isEqualTo(inputDetails.getMethodOfResponse());
-//        assertThat(result.getString("value[0].victimResponseDate")).isEqualTo(inputDetails.getVictimResponseDate());
+
         softly.assertAll();
     }
 

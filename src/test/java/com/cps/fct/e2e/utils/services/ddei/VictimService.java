@@ -488,6 +488,25 @@ public class VictimService extends BaseService {
                 .build();
     }
 
+    public HttpResponseWrapper getMeetingAttendees(String meetingAttendeesGuid) {
+        return service.sendRequest( getMeetingAttendeesRequestParams(meetingAttendeesGuid));
+    }
+
+    private HttpClientBuilder getMeetingAttendeesRequestParams(String meetingAttendeesGuid) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/victims/meetings/%s/attendees", meetingAttendeesGuid))
+                .addHeaders(ddeiHeaders())
+                .method("GET")
+                .resourceName("getMeetingAttendeesDetails")
+                .build();
+    }
+
+
+
+
+
+
     public void cancelMeeting(String meetingVictimGuid, String requestBody) {
         service.sendRequest(cancelMeetingRequestParams(meetingVictimGuid, requestBody));
     }

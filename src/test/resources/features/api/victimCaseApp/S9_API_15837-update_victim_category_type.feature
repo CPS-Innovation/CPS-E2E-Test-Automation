@@ -21,6 +21,7 @@ Feature: VCA-API-S9 - Add category type for victim and verify wm01u message
       | Vulnerable           |
       | Intimidated          |
    Then the added categories to "victimWitness" are verified
+  #TO-DO Need to Fix assertion
 
 #  Serving police officer
 #  Child under 18 years

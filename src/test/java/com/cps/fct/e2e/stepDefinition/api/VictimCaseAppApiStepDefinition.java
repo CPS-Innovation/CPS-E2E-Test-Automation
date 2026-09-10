@@ -397,6 +397,9 @@ public class VictimCaseAppApiStepDefinition {
         Map<Integer, Meetings> meetingDetailsMap = context.get("meetingDetailsMap");
         Map<Integer, String> meetingContextGuidMap = context.get("meetingContextGuidMap");
 
+        Map<Integer, String> meetingResponseMap = new HashMap<>();
+        context.set("meetingResponseMap", meetingResponseMap);
+
         for (String id : victimMapIds.get(victimType)) {
             for (Map<String, String> row : rows) {
                 MeetingType meetingTypeCode = MeetingType.fromString(row.get("meetingType")); //Enum
@@ -404,24 +407,27 @@ public class VictimCaseAppApiStepDefinition {
                 String meetingContextGuid = meetingContextGuidMap.get(meetingTypeCode.getValue());
                 Meetings meetingResponse = meetingOfferResponse(meetingTypeCode.getValue(), meetingResponseMethodCode.getValue(), meetingContextGuid, row.get("offerResponse"));
                 victimService.addMeetingOfferedResponse(idGuidMap.get(id), convertObjectToString(meetingResponse));
+                meetingResponseMap.put(meetingTypeCode.getValue(),row.get("offerResponse"));
             }
             context.set("meetingDetailsMap", meetingDetailsMap);
+            context.set("meetingResponseMap", meetingResponseMap);
+
         }
     }
 
     @Then("meeting response is verified for {string} is recorded in VCA")
     public void verifyMeetingResponse(String victimType) {
-
         Map<String, String> idGuidMap = context.get("idGuidMap");
         Map<String, List<String>> victimMapIds = context.get("victimMapIds");
         Map<Integer, Meetings> meetingDetailsMap = context.get("meetingDetailsMap");
+        Map<Integer, String> meetingResponseMap = context.get("meetingResponseMap");
 
         for (String id : victimMapIds.get(victimType)) {
             for (Integer meetingTypeCode : meetingDetailsMap.keySet()) {
                 Meetings meetingOfferMethod = meetingDetailsMap.get(meetingTypeCode);
+                String responseValue = meetingResponseMap.get(meetingTypeCode);
                 HttpResponseWrapper response = victimService.listMeetingOffered(idGuidMap.get(id), meetingTypeCode);
-                VictimCaseAppAssertions.assertMeetingResponse(meetingOfferMethod, response);
-                /* TO-DO - Need to fix the assertions */
+                VictimCaseAppAssertions.assertMeetingResponse(meetingOfferMethod,responseValue, response);
             }
         }
     }
@@ -503,13 +509,18 @@ public class VictimCaseAppApiStepDefinition {
         Map<Integer, String> meetingContextGuidMap = context.get("meetingContextGuidMap");
         Map<Integer, String> meetingDetailsGuidMap = context.get("meetingDetailsGuidMap");
         Map<Integer, String> meetingAttendeesDetailsMap = context.get("meetingAttendeesDetailsMap");
+        Map<Integer, String> meetingTypeAttendeesGuidsMap = context.get("meetingTypeAttendeesGuidsMap");
 
         for (String id : victimMapIds.get(victimType)) {
             for (Integer meetingTypeCode : meetingDetailsMap.keySet()) {
                 Meetings meetingDetails = meetingDetailsMap.get(meetingTypeCode);
-                HttpResponseWrapper response = victimService.getMeetingArranged(meetingDetailsGuidMap.get(meetingTypeCode));
-                VictimCaseAppAssertions.assertArrangedMeeting(meetingDetails, response);
-                /* TO-DO - Need to fix the assertions */
+
+                HttpResponseWrapper responseMeetingArrange = victimService.getMeetingArranged(meetingDetailsGuidMap.get(meetingTypeCode));
+                VictimCaseAppAssertions.assertArrangedMeeting(meetingDetails, responseMeetingArrange);
+
+                HttpResponseWrapper responseMeetingAttendees = victimService.getMeetingAttendees( meetingDetailsGuidMap.get(meetingTypeCode));
+                VictimCaseAppAssertions.assertMeetingAttendees(meetingAttendeesDetailsMap.get(meetingTypeCode), responseMeetingAttendees);
+
             }
         }
     }
@@ -544,17 +555,14 @@ public class VictimCaseAppApiStepDefinition {
     public void verifyCancelArrangedMeeting(String victimType) {
         Map<String, List<String>> victimMapIds = context.get("victimMapIds");
         Map<Integer, Meetings> meetingDetailsMap = context.get("meetingDetailsMap");
-        Map<Integer, String> meetingContextGuidMap = context.get("meetingContextGuidMap");
         Map<Integer, String> meetingDetailsGuidMap = context.get("meetingDetailsGuidMap");
         Map<Integer, MeetingCancel> meetingCancelDetailsMap = context.get("meetingCancelDetailsMap");
 
         for (String id : victimMapIds.get(victimType)) {
             for (Integer meetingTypeCode : meetingDetailsMap.keySet()) {
-                Meetings meetingDetails = meetingDetailsMap.get(meetingTypeCode);
                 MeetingCancel meetingCancelDetails = meetingCancelDetailsMap.get(meetingTypeCode);
                 HttpResponseWrapper response = victimService.getMeetingArranged(meetingDetailsGuidMap.get(meetingTypeCode));
                 VictimCaseAppAssertions.assertCancelArrangedMeeting(meetingCancelDetails, response);
-                /* TO-DO - Need to fix the assertions */
             }
 
         }

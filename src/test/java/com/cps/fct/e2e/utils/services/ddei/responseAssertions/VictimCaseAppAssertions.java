@@ -3,11 +3,18 @@ package com.cps.fct.e2e.utils.services.ddei.responseAssertions;
 import com.cps.fct.e2e.model.victimCaseApp.*;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
 import com.cps.fct.e2e.utils.httpClient.HttpResponseWrapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
+import lombok.SneakyThrows;
+import net.minidev.json.JSONArray;
+import org.assertj.core.api.AbstractStringAssert;
 import org.assertj.core.api.SoftAssertions;
 import com.google.gson.JsonArray;
 
+import java.sql.SQLOutput;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -135,17 +142,21 @@ public class VictimCaseAppAssertions {
         assertThat(actualSolicitorName).isEqualTo(expectedSolicitorName);
         assertThat(actualSolicitorFirmEmail).isEqualTo(expectedSolicitorEmail);
         assertThat(actualSolicitorFirmPhone).isEqualTo(expectedSolicitorPhone);
-
+        softly.assertAll();
     }
 
     public static void assertCategoryList(String id, VictimCmsDetails inputDetails,
                                           HttpResponseWrapper responsePayload) {
         SoftAssertions softly = new SoftAssertions();
-//        String responseBody = responsePayload.getBody();
-//        List<String> categoryList = extractFromJsonToList(responseBody, "$?(@.isWitnessAndVictim==true).types");
+        String responseBody = responsePayload.getBody();
 
-        //assertions
-//        assertThat(categoryList.getFirst()).isEqualTo(inputDetails.getCategory());
+//        List<String> types = readJsonPath(responseBody, "$[0].types", List.class);
+//        System.out.println(types);
+//        String result = String.join(",", types);
+//        System.out.println(result);
+//
+//        assertThat(result).isEqualTo(inputDetails.getCategory());
+
         softly.assertAll();
     }
 
@@ -174,39 +185,60 @@ public class VictimCaseAppAssertions {
         softly.assertAll();
     }
 
-    public static void assertMeetingResponse(Meetings inputDetails,
+    public static void assertMeetingResponse(Meetings inputDetails, String responseValue,
                                                 HttpResponseWrapper responsePayload){
         SoftAssertions softly = new SoftAssertions();
-
         JsonPath result = new JsonPath(responsePayload.getBody());
 
         assertThat(result.getInt("value[0].meetingType")).isEqualTo(inputDetails.getMeetingType());
         assertThat(result.getInt("value[0].methodOfOffer")).isEqualTo(inputDetails.getMethodOfOffer());
         assertThat(result.getString("value[0].meetingContextGuid")).isEqualTo(inputDetails.getMeetingContextGuid());
-
+        assertThat(result.getString("value[0].victimResponse")).isEqualTo(responseValue);
         softly.assertAll();
     }
 
     public static void assertArrangedMeeting(Meetings inputDetails,
                                              HttpResponseWrapper responsePayload){
         SoftAssertions softly = new SoftAssertions();
-
         JsonPath result = new JsonPath(responsePayload.getBody());
-
+        assertThat(result.getInt("value.meetingType")).isEqualTo(inputDetails.getMeetingType());
+        assertThat(result.getString("value.meetingContextGuid")).isEqualTo(inputDetails.getMeetingContextGuid());
+        assertThat(result.getInt("value.meetingMethod")).isEqualTo(inputDetails.getMeetingMethod());
+        assertThat(result.getInt("value.meetingSource")).isEqualTo(inputDetails.getMeetingSource());
+        assertThat(result.getInt("value.locationType")).isEqualTo(inputDetails.getLocationType());
+        assertThat(result.getString("value.locationName")).isEqualTo(inputDetails.getLocationName());
 
         softly.assertAll();
     }
+
+    @SneakyThrows
+    public static void assertMeetingAttendees(String inputDetails,
+                                              HttpResponseWrapper responsePayload)  {
+        SoftAssertions softly = new SoftAssertions();
+        JsonPath result = new JsonPath(responsePayload.getBody());
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+//        List<MeetingAttendees> expected =
+//                objectMapper.readValue(inputDetails, new TypeReference<List<MeetingAttendees>>() {} );
+//        softly.assertThat(result.getString("value[0].attendeeRole"))
+//                .isEqualTo(expected.get(0).getAttendeeRole());
+//
+//        softly.assertThat(result.getBoolean("value[0].chairPerson"))
+//                .isEqualTo(expected.get(0).isChairPerson());
+
+        softly.assertAll();
+    }
+
+
 
     public static void assertCancelArrangedMeeting(MeetingCancel inputDetails,
                                              HttpResponseWrapper responsePayload){
         SoftAssertions softly = new SoftAssertions();
-
         JsonPath result = new JsonPath(responsePayload.getBody());
-
-        assertThat(result.getInt("value[0].meetingType")).isEqualTo(inputDetails.getMeetingType());
-        assertThat(result.getString("value[0].meetingContextGuid")).isEqualTo(inputDetails.getMeetingContextGuid());
-
+        assertThat(result.getInt("value.meetingType")).isEqualTo(inputDetails.getMeetingType());
+        assertThat(result.getString("value.meetingContextGuid")).isEqualTo(inputDetails.getMeetingContextGuid());
+        assertThat(result.getString("value.cancellationReason")).isEqualTo(inputDetails.getCancellationReason());
         softly.assertAll();
     }
-
 }

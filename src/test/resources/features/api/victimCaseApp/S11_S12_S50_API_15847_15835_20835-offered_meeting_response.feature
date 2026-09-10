@@ -41,4 +41,3 @@ Feature: VCA-API-S11-S12-S50 - Record the offered meetings response by victims
       | Victim complaint                      | Letter by email     | Declined      |
       | Other CPS meeting                     | No Response         | No Response   |
     Then meeting response is verified for "victim" is recorded in VCA
-

@@ -36,6 +36,7 @@ public class CaseCreateApiStepDefinition {
         context.set(CASE_DATA_FILE_NAME_CONTEXT_KEY, caseDataFile.getName());
         context.set(DEFENDANT_COUNT_CONTEXT_KEY, defendantCount(caseDataFile));
         HttpResponseWrapper responseWrapper = messageService.cm01WithCaseDetails(caseDataFile, messageType, context);
+        System.out.println(responseWrapper);
         messageService.getCM01RequestId(responseWrapper, context);
         if (Boolean.TRUE.equals(context.get("cm01Success"))) {
             String caseId = null;

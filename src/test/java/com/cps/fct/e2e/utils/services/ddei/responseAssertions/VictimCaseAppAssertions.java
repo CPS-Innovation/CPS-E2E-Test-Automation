@@ -42,7 +42,6 @@ public class VictimCaseAppAssertions {
 
         String preferredName = readJsonPath(responseBody, "$.value.preferredName", String.class);
         Boolean iSYouth = readJsonPath(responseBody, "$.value.isYouth", Boolean.class);
-//        String expectedPreferredMethodOfContact = readJsonPath(responseBody, "$.value.preferredMethodOfContact");
         String suitableContactTime = readJsonPath(responseBody, "$.value.suitableContactTimes", String.class);
         String specialConsiderationNeeds = readJsonPath(responseBody, "$.value.specialConsiderationNeeds", String.class);
         String victimCaseInfoGuid = readJsonPath(responseBody, "$.value.victimCaseInfoGuid", String.class);
@@ -51,7 +50,6 @@ public class VictimCaseAppAssertions {
         //assertions
         assertThat(preferredName).isEqualTo(inputDetails.getPreferredName());
         assertThat(iSYouth).isEqualTo(inputDetails.isIsYouth());
-//        assertThat(expectedPreferredMethodOfContact).isEqualTo(Integer.parseInt(inputDetails.getPreferredMethodOfContact().getValue()));
         assertThat(suitableContactTime).isEqualTo(inputDetails.getSuitableContactTimes());
         assertThat(specialConsiderationNeeds).isEqualTo(inputDetails.getSpecialConsiderationNeeds());
         assertThat(victimCaseInfoGuid).isEqualTo(guid);
@@ -80,39 +78,63 @@ public class VictimCaseAppAssertions {
     }
 
     public static void assertCaseCmsContact(String cm01RequestPayload, HttpResponseWrapper responsePayload) {
-        CaseCMSContact caseCMSContact;
-        SoftAssertions softly = new SoftAssertions();
-        JsonArray context;
 
-//        List<Map<String, Object>> officerInCaseList =
-//                new JsonPath(responsePayload.getBody())
-//                        .get("find { it.contactType == 'OFFICER_IN_CASE' }");
-//        List<Map<String, Object>> defenceFirmResult =
-//                new JsonPath(responsePayload.getBody())
-//                        .get("find { it.contactType == 'OFFICER_IN_CASE' }");
-//
-//        List<Map<String, Object>> defenceSolicitorResult =
-//                new JsonPath(responsePayload.getBody())
-//                        .get("find { it.contactType == 'OFFICER_IN_CASE' }");
-//
-//        assertThat(officerInCaseList)
-//                .as("OFFICER_IN_CASE should exist in response")
-//                .isNotEmpty();
-//        Map<String, Object> officerInCase = officerInCaseList.getFirst();
-//        CaseCMSContact actualOfficerInCaseContact = CaseCMSContact.builder()
-//                .contactType((String) officerInCase.get("contactType"))
-//                .name((String) officerInCase.get("name"))
-//                .phone((String) officerInCase.get("phone"))
-//                .email((String) officerInCase.get("email"))
-//                .build();
-//        assertThat(actualOfficerInCaseContact.getContactType())
-//                .isEqualTo(.getContactType());
-//        assertThat(actualOfficerInCaseContact.getName())
-//                .isEqualTo(expectedOfficerInCaseContact.getName());
-//        assertThat(actualOfficerInCaseContact.getPhone())
-//                .isEqualTo(expectedOfficerInCaseContact.getPhone());
-//        assertThat(actualOfficerInCaseContact.getEmail())
-//                .isEqualTo(expectedOfficerInCaseContact.getEmail());
+        SoftAssertions softly = new SoftAssertions();
+        String responseBody = responsePayload.getBody();
+
+        String rank = "Constable";
+        String expectedOfficerInCaseGivenName = readJsonPath(cm01RequestPayload,
+                "$.PreChargeDecisionRequest.CaseContacts[?(@.Officer.PoliceOfficerRank == '" + rank + "')].Name.GivenName",
+                String.class);
+        String expectedOfficerInCaseFamilyName = readJsonPath(cm01RequestPayload,
+                "$.PreChargeDecisionRequest.CaseContacts[?(@.Officer.PoliceOfficerRank == '" + rank + "')].Name.FamilyName",
+                String.class);
+        String expectedOfficerInCaseName = expectedOfficerInCaseFamilyName + ", " + expectedOfficerInCaseGivenName;
+        String expectedOfficerInCaseEmail = readJsonPath(cm01RequestPayload,
+                "$.PreChargeDecisionRequest.CaseContacts[?(@.Officer.PoliceOfficerRank == '" + rank + "')].ContactDetails.Email",
+                String.class);
+        String expectedOfficerInCasePhone = readJsonPath(cm01RequestPayload,
+                "$.PreChargeDecisionRequest.CaseContacts[?(@.Officer.PoliceOfficerRank == '" + rank + "')].ContactDetails.ContactNumber[0].Number.TelNationalNumber",
+                String.class);
+
+        String expectedSolicitorFirmName = readJsonPath(cm01RequestPayload,
+                "$.PreChargeDecisionRequest.Suspect[*].DefenceSolicitor.Firm", String.class);
+
+        String expectedSolicitorEmail = readJsonPath(cm01RequestPayload,
+                "$.PreChargeDecisionRequest.Suspect[*].DefenceSolicitor.ContactDetails.Email", String.class);
+
+        String expectedSolicitorPhone = readJsonPath(cm01RequestPayload,
+                "$.PreChargeDecisionRequest.Suspect[*].DefenceSolicitor.ContactDetails.ContactNumber[0].Number.TelNationalNumber", String.class);
+
+        String expectedSolicitorGivenName = readJsonPath(cm01RequestPayload,
+                "$.PreChargeDecisionRequest.Suspect[*].DefenceSolicitor.Name.GivenName", String.class);
+
+        String expectedSolicitorFamilyName = readJsonPath(cm01RequestPayload,
+                "$.PreChargeDecisionRequest.Suspect[*].DefenceSolicitor.Name.FamilyName", String.class);
+
+        String expectedSolicitorName = expectedSolicitorFamilyName + ", " + expectedSolicitorGivenName;
+
+        String contactType = "OFFICER_IN_CASE";
+        String actualOfficerInCaseName = readJsonPath(responseBody,"$[?(@.contactType == '" + contactType + "')].name",String.class);
+        String actualOfficerInCaseEmail = readJsonPath(responseBody,"$[?(@.contactType == '" + contactType + "')].email",String.class);
+        String actualOfficerInCasePhone = readJsonPath(responseBody,"$[?(@.contactType == '" + contactType + "')].phone",String.class);
+
+        String solicitorFirm = "DEFENCE_FIRM";
+        String actualSolicitorFirmName = readJsonPath(responseBody,"$[?(@.contactType == '" + solicitorFirm + "')].name",String.class);
+        String actualSolicitorFirmEmail = readJsonPath(responseBody,"$[?(@.contactType == '" + solicitorFirm + "')].email",String.class);
+        String actualSolicitorFirmPhone = readJsonPath(responseBody,"$[?(@.contactType == '" + solicitorFirm + "')].phone",String.class);
+
+        String solicitor = "DEFENCE_SOLICITOR";
+        String actualSolicitorName = readJsonPath(responseBody,"$[?(@.contactType == '" + solicitor + "')].name",String.class);
+
+        assertThat(actualOfficerInCaseName).isEqualTo(expectedOfficerInCaseName);
+        assertThat(actualOfficerInCaseEmail).isEqualTo(expectedOfficerInCaseEmail);
+        assertThat(actualOfficerInCasePhone).isEqualTo(expectedOfficerInCasePhone);
+
+        assertThat(actualSolicitorFirmName).isEqualTo(expectedSolicitorFirmName);
+        assertThat(actualSolicitorName).isEqualTo(expectedSolicitorName);
+        assertThat(actualSolicitorFirmEmail).isEqualTo(expectedSolicitorEmail);
+        assertThat(actualSolicitorFirmPhone).isEqualTo(expectedSolicitorPhone);
 
     }
 

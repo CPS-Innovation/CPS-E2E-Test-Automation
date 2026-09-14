@@ -280,10 +280,31 @@ public class VictimCaseAppAssertions {
         assertThat(result.getInt("value[0].attemptOrder")).isEqualTo(inputDetails.getCommunicationType());
         assertThat(result.getString("value[0].personRole")).isEqualTo(inputDetails.getPersonRole());
         assertThat(result.getString("value[0].purposeOfCommunication")).isEqualTo(inputDetails.getPurposeOfCommunication());
-
+        softly.assertAll();
     }
 
+    public static void assertTeleComms(TelephoneCommunication inputDetails,
+                                        HttpResponseWrapper responsePayload){
+        SoftAssertions softly = new SoftAssertions();
+        JsonPath result = new JsonPath(responsePayload.getBody());
 
+        assertThat(result.getInt("value.userJourneyType")).isEqualTo(inputDetails.getJourneyType());
+        assertThat(result.getInt("value.callDirection")).isEqualTo(inputDetails.getCallDirection());
+        assertThat(result.getString("value.dateOfContact")).isEqualTo(inputDetails.getDateOfContact());
+        assertThat(result.getString("value.notes")).isEqualTo(inputDetails.getNotes());
+        softly.assertAll();
+    }
+
+    public static void assertFollowupComms(FollowUpCommunication inputDetails,
+                                       HttpResponseWrapper responsePayload){
+        SoftAssertions softly = new SoftAssertions();
+        JsonPath result = new JsonPath(responsePayload.getBody());
+
+        assertThat(result.getInt("value.userJourneyType")).isEqualTo(inputDetails.getJourneyType());
+        assertThat(result.getString("value.timeSent")).isEqualTo(inputDetails.getTimeSent());
+        assertThat(result.getString("value.notes")).isEqualTo(inputDetails.getNotes());
+        softly.assertAll();
+    }
 
 
 

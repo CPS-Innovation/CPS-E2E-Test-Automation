@@ -690,10 +690,9 @@ public class VictimCaseAppApiStepDefinition {
             for (Integer communicationType : otherCommunicationMap.keySet()) {
                 int commsType = communicationType;
                 int attemptNo = communicationType;
-
                 Communication communicationDetails = otherCommunicationMap.get(communicationType);
-                HttpResponseWrapper responseOtherComms = victimService.getOtherCommunication(idGuidMap.get(id),commsType,attemptNo);
-                VictimCaseAppAssertions.assertOtherComms(communicationDetails,responseOtherComms);
+                HttpResponseWrapper responseOtherComms = victimService.getOtherCommunication(idGuidMap.get(id), commsType, attemptNo);
+                VictimCaseAppAssertions.assertOtherComms(communicationDetails, responseOtherComms);
             }
         }
 
@@ -870,17 +869,32 @@ public class VictimCaseAppApiStepDefinition {
         }
     }
 
-    @When("verify the charge decision communication for {string} in VCA")
-    public void verifyChargeDecision(String victimType) {
+    @When("verify the charge decision telephone and followup communication for {string} in VCA")
+    public void verifyTelephoneChargeDecision(String victimType, DataTable dataTable) {
         Map<String, String> idGuidMap = context.get("idGuidMap");
         Map<String, List<String>> victimMapIds = context.get("victimMapIds");
         Map<Integer, TelephoneCommunication> teleCommsListMap = context.get("teleCommsListMap");
         Map<String, FollowUpCommunication> followUpCommsListMap = context.get("followUpCommsListMap");
 
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+
         for (String id : victimMapIds.get(victimType)) {
-            String ids = id;
+            for (Map<String, String> row : rows) {
+                JourneyType journeyTypeCode = JourneyType.fromString(row.get("journeyType"));
+                TelephoneCommunication teleComms = teleCommsListMap.get(journeyTypeCode.getValue());
+
+                HttpResponseWrapper responseTeleComms = victimService.getTeleComms(idGuidMap.get(id), journeyTypeCode.getValue());
+                VictimCaseAppAssertions.assertTeleComms(teleComms, responseTeleComms);
+
+                String followUpMethod = row.get("followUpMethod").toLowerCase(Locale.ROOT);
+                FollowUpCommunication followupComms = followUpCommsListMap.get(followUpMethod);
+                int commsAttempt = 2;
+
+                HttpResponseWrapper responseFollowupComms = victimService.getFollowupComms(idGuidMap.get(id), followUpMethod,journeyTypeCode.getValue(),commsAttempt);
+                VictimCaseAppAssertions.assertFollowupComms(followupComms, responseFollowupComms);
 
 
+            }
         }
     }
 
@@ -1012,6 +1026,33 @@ public class VictimCaseAppApiStepDefinition {
             context.set("teleCommsListMap", teleCommsListMap);
         }
     }
+
+    @When("verify the charge decision followup communication for {string} in VCA")
+    public void verifyFollowupChargeDecision(String victimType, DataTable dataTable) {
+        Map<String, String> idGuidMap = context.get("idGuidMap");
+        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
+        Map<String, FollowUpCommunication> followUpCommsListMap = context.get("followUpCommsListMap");
+
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+
+        for (String id : victimMapIds.get(victimType)) {
+            for (Map<String, String> row : rows) {
+                JourneyType journeyTypeCode = JourneyType.fromString(row.get("journeyType"));
+                String followUpMethod = row.get("followUpMethod").toLowerCase(Locale.ROOT);
+                FollowUpCommunication followupComms = followUpCommsListMap.get(followUpMethod);
+
+                int commsAttempt = 1;
+                HttpResponseWrapper responseFollowupComms = victimService.getFollowupComms(idGuidMap.get(id), followUpMethod,journeyTypeCode.getValue(),commsAttempt);
+                VictimCaseAppAssertions.assertFollowupComms(followupComms, responseFollowupComms);
+
+
+            }
+        }
+    }
+
+
+
+
 
 
 }

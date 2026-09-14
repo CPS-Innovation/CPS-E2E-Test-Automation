@@ -721,16 +721,46 @@ public class VictimService extends BaseService {
     }
 
     public HttpResponseWrapper getOtherCommunication(String guid, int commsType, int attemptNo) {
-        return service.sendRequest(getOtherCommunicationRequestParams(guid, commsType,attemptNo));
+        return service.sendRequest(getOtherCommunicationRequestParams(guid, commsType, attemptNo));
     }
 
     private HttpClientBuilder getOtherCommunicationRequestParams(String guid, int commsType, int attemptNo) {
         return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("DDEI_HOST"))
-                .endpoint(format("/api/victims/%s/adhoc-journey/victim-communication/%s/%s", guid, commsType , commsType))
+                .endpoint(format("/api/victims/%s/adhoc-journey/victim-communication/%s/%s", guid, commsType, commsType))
                 .addHeaders(ddeiHeaders())
                 .method("GET")
                 .resourceName("getAdhocComms")
+                .build();
+    }
+
+    public HttpResponseWrapper getTeleComms(String guid, int journeyTypeCode) {
+        return service.sendRequest(getTeleCommsRequestParams(guid, journeyTypeCode));
+    }
+
+    private HttpClientBuilder getTeleCommsRequestParams(String guid, int journeyTypeCode) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/victims/%s/victim-communication/telephone/%s/1", guid, journeyTypeCode))
+                .addHeaders(ddeiHeaders())
+                .method("GET")
+                .resourceName("getTeleComms")
+                .build();
+    }
+
+    public HttpResponseWrapper getFollowupComms(String guid, String followUpMethod, int journeyTypeCode, int commsAttempt) {
+        return service.sendRequest(getFollowupCommsRequestParams(guid, followUpMethod, journeyTypeCode, commsAttempt));
+    }
+
+    private HttpClientBuilder getFollowupCommsRequestParams(String guid, String followUpMethod, int journeyTypeCode, int commsAttempt) {
+        String communicationType =
+                "post".equals(followUpMethod) ? "letter" : followUpMethod;
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/victims/%s/victim-communication/%s/%s/%s", guid, communicationType, journeyTypeCode,commsAttempt))
+                .addHeaders(ddeiHeaders())
+                .method("GET")
+                .resourceName("getFollowupComms")
                 .build();
     }
 

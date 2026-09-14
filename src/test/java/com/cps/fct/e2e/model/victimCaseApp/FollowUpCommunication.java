@@ -11,6 +11,7 @@ import lombok.*;
 public class FollowUpCommunication {
 
     private int JourneyType;
+    private int AttemptNumber;
     private String Notes;
     private String SentAt;
     private String TimeSent;

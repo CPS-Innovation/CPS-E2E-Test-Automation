@@ -475,7 +475,7 @@ public class VictimService extends BaseService {
     }
 
     public HttpResponseWrapper getMeetingArranged(String meetingDetailsGuid) {
-        return service.sendRequest( getMeetingArrangedRequestParams(meetingDetailsGuid));
+        return service.sendRequest(getMeetingArrangedRequestParams(meetingDetailsGuid));
     }
 
     private HttpClientBuilder getMeetingArrangedRequestParams(String meetingDetailsGuid) {
@@ -489,7 +489,7 @@ public class VictimService extends BaseService {
     }
 
     public HttpResponseWrapper getMeetingAttendees(String meetingAttendeesGuid) {
-        return service.sendRequest( getMeetingAttendeesRequestParams(meetingAttendeesGuid));
+        return service.sendRequest(getMeetingAttendeesRequestParams(meetingAttendeesGuid));
     }
 
     private HttpClientBuilder getMeetingAttendeesRequestParams(String meetingAttendeesGuid) {
@@ -501,10 +501,6 @@ public class VictimService extends BaseService {
                 .resourceName("getMeetingAttendeesDetails")
                 .build();
     }
-
-
-
-
 
 
     public void cancelMeeting(String meetingVictimGuid, String requestBody) {
@@ -539,7 +535,7 @@ public class VictimService extends BaseService {
 
 
     public void logMeetingAttendees(String meetingVictimGuid, String requestBody) {
-       service.sendRequest(logMeetingAttendeesRequestParams(meetingVictimGuid, requestBody));
+        service.sendRequest(logMeetingAttendeesRequestParams(meetingVictimGuid, requestBody));
     }
 
     private HttpClientBuilder logMeetingAttendeesRequestParams(String meetingVictimGuid, String requestBody) {
@@ -573,7 +569,7 @@ public class VictimService extends BaseService {
         service.sendRequest(informDecisionRequestParams(decision, guid, requestBody));
     }
 
-    private HttpClientBuilder informDecisionRequestParams(int decision ,String guid, String requestBody) {
+    private HttpClientBuilder informDecisionRequestParams(int decision, String guid, String requestBody) {
         String endpoint = switch (decision) {
             case 3 -> format("/api/victims/%s/decision-to-charge", guid);
             case 4 -> format("/api/victims/%s/no-further-action", guid);
@@ -593,7 +589,7 @@ public class VictimService extends BaseService {
 
     public Integer logCommunicationTask(String guid, String requestBody) {
         HttpResponseWrapper responseWrapper = service.sendRequest(logCommunicationTaskRequestParams(guid, requestBody));
-        Integer taskTypeTaskId =  JsonPath.read(responseWrapper.getBody(), "$.value.id");
+        Integer taskTypeTaskId = JsonPath.read(responseWrapper.getBody(), "$.value.id");
         assertThat(taskTypeTaskId)
                 .withFailMessage("Task Type Task Id was not returned from the API response")
                 .isNotNull();
@@ -645,7 +641,7 @@ public class VictimService extends BaseService {
 
     public Integer getActiveTask(String guid, int taskType) {
         HttpResponseWrapper responseWrapper = service.sendRequest(getActiveTaskRequestParams(guid, taskType));
-        Integer taskTypeTaskId =  JsonPath.read(responseWrapper.getBody(), "$.value[0].id");
+        Integer taskTypeTaskId = JsonPath.read(responseWrapper.getBody(), "$.value[0].id");
         assertThat(taskTypeTaskId)
                 .withFailMessage("Task Type Task Id was not returned from the API response")
                 .isNotNull();
@@ -655,7 +651,7 @@ public class VictimService extends BaseService {
     private HttpClientBuilder getActiveTaskRequestParams(String guid, int taskType) {
         return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("DDEI_HOST"))
-                .endpoint(format("/api/victim-case/%s/tasks?taskType=%s", guid,taskType))
+                .endpoint(format("/api/victim-case/%s/tasks?taskType=%s", guid, taskType))
                 .addHeaders(ddeiHeaders())
                 .method("GET")
                 .resourceName("addCaseChargeTypeToVca")
@@ -663,13 +659,13 @@ public class VictimService extends BaseService {
     }
 
     public void activeTaskUpdate(String guid, int activeTaskId, String requestBody) {
-        service.sendRequest(activeTaskUpdateRequestParams(guid, activeTaskId,requestBody));
+        service.sendRequest(activeTaskUpdateRequestParams(guid, activeTaskId, requestBody));
     }
 
     private HttpClientBuilder activeTaskUpdateRequestParams(String guid, int activeTaskId, String requestBody) {
         return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("DDEI_HOST"))
-                .endpoint(format("/api/VictimCaseInfos/%s/ActiveTask/%s/?markAsComplete=true", guid,activeTaskId))
+                .endpoint(format("/api/VictimCaseInfos/%s/ActiveTask/%s/?markAsComplete=true", guid, activeTaskId))
                 .addHeaders(ddeiHeaders())
                 .method("PATCH")
                 .body(requestBody)
@@ -721,6 +717,20 @@ public class VictimService extends BaseService {
                 .method("POST")
                 .body(requestBody)
                 .resourceName("addSmsDetails")
+                .build();
+    }
+
+    public HttpResponseWrapper getOtherCommunication(String guid, int commsType, int attemptNo) {
+        return service.sendRequest(getOtherCommunicationRequestParams(guid, commsType,attemptNo));
+    }
+
+    private HttpClientBuilder getOtherCommunicationRequestParams(String guid, int commsType, int attemptNo) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/victims/%s/adhoc-journey/victim-communication/%s/%s", guid, commsType , commsType))
+                .addHeaders(ddeiHeaders())
+                .method("GET")
+                .resourceName("getAdhocComms")
                 .build();
     }
 

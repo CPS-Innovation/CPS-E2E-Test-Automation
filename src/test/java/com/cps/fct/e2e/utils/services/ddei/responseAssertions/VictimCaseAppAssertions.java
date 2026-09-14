@@ -6,6 +6,7 @@ import com.cps.fct.e2e.utils.httpClient.HttpResponseWrapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import lombok.SneakyThrows;
@@ -216,18 +217,31 @@ public class VictimCaseAppAssertions {
                                               HttpResponseWrapper responsePayload)  {
         SoftAssertions softly = new SoftAssertions();
         JsonPath result = new JsonPath(responsePayload.getBody());
-
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.setPropertyNamingStrategy(PropertyNamingStrategies.UPPER_CAMEL_CASE);
+                List<MeetingAttendees> expected =
+                objectMapper.readValue(inputDetails, new TypeReference<List<MeetingAttendees>>() {} );
 
-//        List<MeetingAttendees> expected =
-//                objectMapper.readValue(inputDetails, new TypeReference<List<MeetingAttendees>>() {} );
-//        softly.assertThat(result.getString("value[0].attendeeRole"))
-//                .isEqualTo(expected.get(0).getAttendeeRole());
-//
-//        softly.assertThat(result.getBoolean("value[0].chairPerson"))
-//                .isEqualTo(expected.get(0).isChairPerson());
+        for (int i = 0; i < expected.size(); i++) {
+            String expectedAttendeeRole = expected.get(i).getAttendeeRole();
+            String actualAttendeeRole = result.getString("value[" + i + "].attendeeRole");
 
-        softly.assertAll();
+            Boolean expectedChairPerson = expected.get(i).isChairPerson();
+            Boolean actualChairPerson = result.getBoolean("value[" + i + "].chairPerson");
+
+            if (expectedAttendeeRole != null && !expectedAttendeeRole.isEmpty()
+                    && actualAttendeeRole != null && !actualAttendeeRole.isEmpty()) {
+                softly.assertThat(actualAttendeeRole)
+                        .as("Attendee role at index " + i).isEqualTo(expectedAttendeeRole);
+            }
+
+            softly.assertThat(actualChairPerson)
+                    .as("ChairPerson for attendee at index " + i + " (" + expectedAttendeeRole + ")")
+                    .isEqualTo(expectedChairPerson);
+
+            softly.assertAll();
+        }
+
     }
 
 
@@ -241,4 +255,42 @@ public class VictimCaseAppAssertions {
         assertThat(result.getString("value.cancellationReason")).isEqualTo(inputDetails.getCancellationReason());
         softly.assertAll();
     }
+
+    public static void assertMeetingOutcome(MeetingLogged inputDetails,
+                                             HttpResponseWrapper responsePayload){
+        SoftAssertions softly = new SoftAssertions();
+        JsonPath result = new JsonPath(responsePayload.getBody());
+        assertThat(result.getInt("value.meetingType")).isEqualTo(inputDetails.getMeetingType());
+        assertThat(result.getInt("value.meetingMethod")).isEqualTo(inputDetails.getMeetingMethod());
+        assertThat(result.getInt("value.meetingSource")).isEqualTo(inputDetails.getMeetingSource());
+        assertThat(result.getString("value.meetingDuration")).isEqualTo(inputDetails.getMeetingDuration());
+        assertThat(result.getInt("value.contactForResearch")).isEqualTo(inputDetails.getContactForResearch());
+        assertThat(result.getBoolean("value.notesSentToOic")).isEqualTo(inputDetails.getNotesSentToOic());
+        assertThat(result.getBoolean("value.notesSentToVictim")).isEqualTo(inputDetails.getNotesSentToVictim());
+        assertThat(result.getString("value.proposedActions")).isEqualTo(inputDetails.getProposedActions());
+        softly.assertAll();
+    }
+
+    public static void assertOtherComms(Communication inputDetails,
+                                            HttpResponseWrapper responsePayload){
+        SoftAssertions softly = new SoftAssertions();
+        JsonPath result = new JsonPath(responsePayload.getBody());
+
+        assertThat(result.getInt("value[0].communicationType")).isEqualTo(inputDetails.getCommunicationType());
+        assertThat(result.getInt("value[0].attemptOrder")).isEqualTo(inputDetails.getCommunicationType());
+        assertThat(result.getString("value[0].personRole")).isEqualTo(inputDetails.getPersonRole());
+        assertThat(result.getString("value[0].purposeOfCommunication")).isEqualTo(inputDetails.getPurposeOfCommunication());
+
+    }
+
+
+
+
+
+
+
+
+
+
+
 }

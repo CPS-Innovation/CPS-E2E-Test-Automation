@@ -407,7 +407,7 @@ public class VictimCaseAppApiStepDefinition {
                 String meetingContextGuid = meetingContextGuidMap.get(meetingTypeCode.getValue());
                 Meetings meetingResponse = meetingOfferResponse(meetingTypeCode.getValue(), meetingResponseMethodCode.getValue(), meetingContextGuid, row.get("offerResponse"));
                 victimService.addMeetingOfferedResponse(idGuidMap.get(id), convertObjectToString(meetingResponse));
-                meetingResponseMap.put(meetingTypeCode.getValue(),row.get("offerResponse"));
+                meetingResponseMap.put(meetingTypeCode.getValue(), row.get("offerResponse"));
             }
             context.set("meetingDetailsMap", meetingDetailsMap);
             context.set("meetingResponseMap", meetingResponseMap);
@@ -427,7 +427,7 @@ public class VictimCaseAppApiStepDefinition {
                 Meetings meetingOfferMethod = meetingDetailsMap.get(meetingTypeCode);
                 String responseValue = meetingResponseMap.get(meetingTypeCode);
                 HttpResponseWrapper response = victimService.listMeetingOffered(idGuidMap.get(id), meetingTypeCode);
-                VictimCaseAppAssertions.assertMeetingResponse(meetingOfferMethod,responseValue, response);
+                VictimCaseAppAssertions.assertMeetingResponse(meetingOfferMethod, responseValue, response);
             }
         }
     }
@@ -506,21 +506,20 @@ public class VictimCaseAppApiStepDefinition {
         Map<String, String> idGuidMap = context.get("idGuidMap");
         Map<String, List<String>> victimMapIds = context.get("victimMapIds");
         Map<Integer, Meetings> meetingDetailsMap = context.get("meetingDetailsMap");
-        Map<Integer, String> meetingContextGuidMap = context.get("meetingContextGuidMap");
         Map<Integer, String> meetingDetailsGuidMap = context.get("meetingDetailsGuidMap");
         Map<Integer, String> meetingAttendeesDetailsMap = context.get("meetingAttendeesDetailsMap");
-        Map<Integer, String> meetingTypeAttendeesGuidsMap = context.get("meetingTypeAttendeesGuidsMap");
 
         for (String id : victimMapIds.get(victimType)) {
             for (Integer meetingTypeCode : meetingDetailsMap.keySet()) {
                 Meetings meetingDetails = meetingDetailsMap.get(meetingTypeCode);
 
-                HttpResponseWrapper responseMeetingArrange = victimService.getMeetingArranged(meetingDetailsGuidMap.get(meetingTypeCode));
-                VictimCaseAppAssertions.assertArrangedMeeting(meetingDetails, responseMeetingArrange);
+                if (meetingDetails.getMeetingMethod() != 2) {
+                    HttpResponseWrapper responseMeetingArrange = victimService.getMeetingArranged(meetingDetailsGuidMap.get(meetingTypeCode));
+                    VictimCaseAppAssertions.assertArrangedMeeting(meetingDetails, responseMeetingArrange);
 
-                HttpResponseWrapper responseMeetingAttendees = victimService.getMeetingAttendees( meetingDetailsGuidMap.get(meetingTypeCode));
-                VictimCaseAppAssertions.assertMeetingAttendees(meetingAttendeesDetailsMap.get(meetingTypeCode), responseMeetingAttendees);
-
+                    HttpResponseWrapper responseMeetingAttendees = victimService.getMeetingAttendees(meetingDetailsGuidMap.get(meetingTypeCode));
+                    VictimCaseAppAssertions.assertMeetingAttendees(meetingAttendeesDetailsMap.get(meetingTypeCode), responseMeetingAttendees);
+                }
             }
         }
     }
@@ -631,6 +630,7 @@ public class VictimCaseAppApiStepDefinition {
 
     @Then("the logged meeting details are verified for {string} in VCA")
     public void verifyLoggedMeetings(String victimType) {
+
         Map<Integer, String> meetingDetailsGuidMap = context.get("meetingDetailsGuidMap");
         Map<Integer, MeetingLogged> meetingLoggedDetailsMap = context.get("meetingLoggedDetailsMap");
         Map<Integer, Map<String, String>> meetingTypeAttendeesGuidsMap = context.get("meetingTypeAttendeesGuidsMap");
@@ -638,7 +638,18 @@ public class VictimCaseAppApiStepDefinition {
 
         for (Integer meetingTypeCodeKey : meetingLoggedDetailsMap.keySet()) {
             String meetingDetailsGuid = meetingDetailsGuidMap.get(meetingTypeCodeKey);
-            /* TO-DO - Need to add the verification steps */
+//            Meetings meetingDetails = meetingDetailsMap.get(meetingTypeCode);
+            MeetingLogged meetingLogged = meetingLoggedDetailsMap.get(meetingTypeCodeKey);
+
+            if (meetingLogged.getMeetingMethod() != 2) {
+                HttpResponseWrapper responseMeetingArrange = victimService.getMeetingArranged(meetingDetailsGuidMap.get(meetingTypeCodeKey));
+                VictimCaseAppAssertions.assertMeetingOutcome(meetingLogged, responseMeetingArrange);
+
+                HttpResponseWrapper responseMeetingAttendees = victimService.getMeetingAttendees(meetingDetailsGuidMap.get(meetingTypeCodeKey));
+                VictimCaseAppAssertions.assertMeetingAttendees(meetingAttendeesDetailsMap.get(meetingTypeCodeKey), responseMeetingAttendees);
+            }
+
+
         }
 
     }
@@ -677,9 +688,12 @@ public class VictimCaseAppApiStepDefinition {
 
         for (String id : victimMapIds.get(victimType)) {
             for (Integer communicationType : otherCommunicationMap.keySet()) {
-                int CommsType = communicationType;
-                /* TO-DO - Need to add the verification steps */
+                int commsType = communicationType;
+                int attemptNo = communicationType;
 
+                Communication communicationDetails = otherCommunicationMap.get(communicationType);
+                HttpResponseWrapper responseOtherComms = victimService.getOtherCommunication(idGuidMap.get(id),commsType,attemptNo);
+                VictimCaseAppAssertions.assertOtherComms(communicationDetails,responseOtherComms);
             }
         }
 
@@ -865,7 +879,7 @@ public class VictimCaseAppApiStepDefinition {
 
         for (String id : victimMapIds.get(victimType)) {
             String ids = id;
-            /* TO-DO - Need to add the verification steps */
+
 
         }
     }
@@ -889,20 +903,20 @@ public class VictimCaseAppApiStepDefinition {
                 TelephoneCommunication firstCall = firstTeleCall(journeyTypeCode.getValue(), informVictim, callDirection.getValue(), notes, days);
                 victimService.addFirstCallAttempt(idGuidMap.get(id), convertObjectToString(firstCall));
                 String smsSent = row.get("smsSent").toLowerCase(Locale.ROOT);
-                TelephoneCommunication smsSentStatus = firstCallSmsStatus(journeyTypeCode.getValue(), informVictim, callDirection.getValue(), notes, days,smsSent);
+                TelephoneCommunication smsSentStatus = firstCallSmsStatus(journeyTypeCode.getValue(), informVictim, callDirection.getValue(), notes, days, smsSent);
                 victimService.addFirstCallAttemptSms(idGuidMap.get(id), convertObjectToString(smsSentStatus));
 
                 if ("yes".equalsIgnoreCase(smsSent)) {
                     int smsDays = 2;
-                    SmsCommunication smsSend = firstCallSmsSend(journeyTypeCode.getValue(),smsDays);
+                    SmsCommunication smsSend = firstCallSmsSend(journeyTypeCode.getValue(), smsDays);
                     victimService.addSmsSendDetails(idGuidMap.get(id), convertObjectToString(smsSend));
 
                 }
 //                teleCommsListMap.put(journeyTypeCode.getValue(),smsSentStatus);
-                }
-                context.set("teleCommsListMap", teleCommsListMap);
             }
+            context.set("teleCommsListMap", teleCommsListMap);
         }
+    }
 
 
     @When("the second telephone call attempt is successful to inform victim with following details for {string} in VCA")
@@ -1000,4 +1014,4 @@ public class VictimCaseAppApiStepDefinition {
     }
 
 
-    }
+}

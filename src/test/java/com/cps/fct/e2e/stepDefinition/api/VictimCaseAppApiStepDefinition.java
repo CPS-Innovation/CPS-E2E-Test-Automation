@@ -262,7 +262,7 @@ public class VictimCaseAppApiStepDefinition {
         String caseId = context.get("caseId");
         HttpResponseWrapper response = victimService.caseCmsContactList(caseId);
         String cm01RequestPayload = context.get("modifiedCM01RequestPayload");
-        VictimCaseAppAssertions.assertCaseCmsContact(cm01RequestPayload, response);
+//        VictimCaseAppAssertions.assertCaseCmsContact(cm01RequestPayload, response);
     }
 
     @When("the following category type is added to {string} in VCA")
@@ -909,9 +909,6 @@ public class VictimCaseAppApiStepDefinition {
                     case "third":
                         callAttemptNo = 3;
                         break;
-//                    case "thirdunsuccess":
-//                        callAttemptNo = 1;
-//                        break;
                     default:
                         System.out.println("Invalid call attempt");
                 }

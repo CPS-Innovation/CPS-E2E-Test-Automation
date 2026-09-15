@@ -13,7 +13,7 @@ Feature: VCA-API-S5_S6_S7:- Add and update cps-contacts to victims
 
 
   @addCpsContactToVictim
-  Scenario: Add contacts to victims and then verify the contacts. (FCT2-15288 & FCT2-15290)
+  Scenario: Add contacts to victims and then verify the contacts. (FCT2-15288 & FCT2-15290 & FCT2-15291)
     Given victim details are available in VCA
     And the "victim" is onboarded as "Universal" service lead in VCA
     And the Victim liaison officer is assigned to "victim" in VCA
@@ -25,18 +25,14 @@ Feature: VCA-API-S5_S6_S7:- Add and update cps-contacts to victims
     Then the added cps-contacts for "victim" are verified
 
   @updateCpsContactToVictim
-  Scenario: Update the existing cps-contacts for victims and then verify. (FCT2-15291)
+  Scenario: Update the existing cps-contacts for victims and then verify. (FCT2-15288 & FCT2-15290 & FCT2-15291)
     Given victim details are available in VCA
     And the "victim" is onboarded as "Universal" service lead in VCA
     And the Victim liaison officer is assigned to "victim" in VCA
     And the following cps-contacts are added to "victim" in VCA
       | cpsContactType                        |
       | Family Liaison Officer                |
-      | Independent Sexual Violence Adviser   |
-      | Independent Domestic Violence Adviser |
     When the following cps-contacts are updated to "victim" in VCA
       | cpsContactType                        |
       | Family Liaison Officer                |
-      | Independent Sexual Violence Adviser   |
-      | Independent Domestic Violence Adviser |
     Then the updated cps-contacts for "victim" are verified

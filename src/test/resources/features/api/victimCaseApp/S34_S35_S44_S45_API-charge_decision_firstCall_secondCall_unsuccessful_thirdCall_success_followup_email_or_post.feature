@@ -1,6 +1,6 @@
 @regression @vca_api_regression @VCA_API_S34 @VCA_API_S35 @VCA_API_S44 @VCA_API_S45
 
-Feature: VCA-API-S26 - Log charge decision communication where first call attempt was un-successful and SMS details sent
+Feature: VCA-API-S34-S35-S44-S45:- Log charge decision communication where first call attempt was un-successful and SMS details sent
   and Second call attempt was un-successful and Third call attempt was successful
   and follow up communication is sent in email or post for victims in Victim Case Application.
   As a Victim Liaison Officer
@@ -18,7 +18,8 @@ Feature: VCA-API-S26 - Log charge decision communication where first call attemp
   @NoSmsThirdCallSuccess
   Scenario: Log charge decision communication where first call attempt was un-successful with No Sms sent,
   and Second call attempt was un-successful
-  and follow up communication is sent for victim
+  and third call attempt was success
+  and follow up communication is sent for victim. (FCT2-16378 & 16379 & 16388 & 16389)
     Given victim details are available in VCA
     And the "victim" is onboarded as "Universal" service lead in VCA
     And the Victim liaison officer is assigned to "victim" in VCA
@@ -41,7 +42,10 @@ Feature: VCA-API-S26 - Log charge decision communication where first call attemp
       | Inform of a no further action decision | Email          | third       | No      |
 
   @SmsSentThirdCallSuccess
-  Scenario: Log charge decision communication where first call attempt was un-successful with Sms sent and follow up communication is sent for victim
+  Scenario: Log charge decision communication where first call attempt was un-successful with Sms sent
+  and Second call attempt was un-successful
+  and third call attempt was success
+  and follow up communication is sent for victim. (FCT2-16378 & 16379 & 16388 & 16389)
     Given victim details are available in VCA
     And the "victim" is onboarded as "Universal" service lead in VCA
     And the Victim liaison officer is assigned to "victim" in VCA

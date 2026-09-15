@@ -1,6 +1,6 @@
 @regression @vca_api_regression @VCA_API_S17 @VCA_API_S18 @VCA_API_S19 @VCA_API_S20 @VCA_API_S21 @VCA_API_S22
 
-Feature: VCA-API-S16 - Log other communications with the purpose information to victims.
+Feature: VCA-API-S17 to S23:- Log other communications with the purpose information to victims.
   As a Victim Liaison Officer
   I want to record other communications to victim for following types:-
   ------------------------------------------------------------------
@@ -20,7 +20,7 @@ Feature: VCA-API-S16 - Log other communications with the purpose information to 
     And add "victim" using "LM04" for the case
 
   @logOtherCommunications
-  Scenario: Communication is logged with the purpose information to victims
+  Scenario: Communication is logged with the purpose information to victims. (FCT2-16229 & 16232 & 16235 & 16238 & 16241 & 16244 & 16247)
     Given victim details are available in VCA
     And the "victim" is onboarded as "Universal" service lead in VCA
     And the Victim liaison officer is assigned to "victim" in VCA

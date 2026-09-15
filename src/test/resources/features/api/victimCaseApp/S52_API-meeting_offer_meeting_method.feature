@@ -1,6 +1,6 @@
 @regression @vca_api_regression @VCA_API_S52
 
-Feature: VCA-API-S11 - Offer meetings via meeting methods to victims
+Feature: VCA-API-S52:- Offer meetings via meeting methods to victims
   As a Victim Liaison Officer
   I want to record the following meeting type offered via meeting method to victim:-
   ----------------------------------------------------------------------
@@ -20,7 +20,7 @@ Feature: VCA-API-S11 - Offer meetings via meeting methods to victims
     And add "victim" using "LM04" for the case
 
   @ptmDeclined
-  Scenario: Offer different meeting types via meeting method types for a victim
+  Scenario: Offer different meeting types via meeting method types for a victim. (FCT2-21497)
     Given victim details are available in VCA
     And the "victim" is onboarded as "Universal" service lead in VCA
     And the Victim liaison officer is assigned to "victim" in VCA

@@ -1,6 +1,6 @@
 @regression @vca_api_regression @VCA_API_S26 @VCA_API_S27 @VCA_API_S28 @VCA_API_S29 @VCA_API_S39 @VCA_API_S40
 
-Feature: VCA-API-S25 - Log charge decision communication where first call attempt was un-successful and SMS not sent and follow up communication is sent in email or post for victims in Victim Case Application.
+Feature: VCA-API-S26-S27-S28-S29-S39:- Log charge decision communication where first call attempt was un-successful and SMS not sent and follow up communication is sent in email or post for victims in Victim Case Application.
   As a Victim Liaison Officer
   I want to log charge decision communication for victim.
   where first call attempt was un-successful and SMS is sent
@@ -12,7 +12,8 @@ Feature: VCA-API-S25 - Log charge decision communication where first call attemp
     And add "victim" using "LM04" for the case
 
   @firstCallUnsuccessfulNoSms
-  Scenario: Log charge decision communication where first call attempt was un-successful with No Sms sent and follow up communication is sent for victim
+  Scenario: Log charge decision communication where first call attempt was un-successful with No Sms sent
+  and follow up communication is sent for victim. (FCT2-16370 & 16371 & 16372 & 16373 & 16383 & 16384)
     Given victim details are available in VCA
     And the "victim" is onboarded as "Universal" service lead in VCA
     And the Victim liaison officer is assigned to "victim" in VCA
@@ -29,7 +30,8 @@ Feature: VCA-API-S25 - Log charge decision communication where first call attemp
       | Inform of a no further action decision | Email          | first       | No      |
 
   @firstCallUnsuccessfulSentSms
-  Scenario: Log charge decision communication where first call attempt was un-successful with Sms sent and follow up communication is sent for victim
+  Scenario: Log charge decision communication where first call attempt was un-successful with Sms sent
+  and follow up communication is sent for victim. (FCT2-16370 & 16371 & 16372 & 16373 & 16383 & 16384)
     Given victim details are available in VCA
     And the "victim" is onboarded as "Universal" service lead in VCA
     And the Victim liaison officer is assigned to "victim" in VCA

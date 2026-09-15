@@ -909,25 +909,36 @@ public class VictimCaseAppApiStepDefinition {
                     case "third":
                         callAttemptNo = 3;
                         break;
+//                    case "thirdunsuccess":
+//                        callAttemptNo = 1;
+//                        break;
                     default:
                         System.out.println("Invalid call attempt");
                 }
 
-                HttpResponseWrapper responseTeleComms = victimService.getTeleComms(idGuidMap.get(id), journeyTypeCode.getValue(), callAttemptNo);
+                String smsSent = row.get("smsSent").toLowerCase(Locale.ROOT);
+                int commsTellAttempt = 0;
+                if (smsSent.equals("yes")) {
+                    commsTellAttempt = callAttemptNo + 1;
+                } else if (smsSent.equals("no")) {
+                    commsTellAttempt = callAttemptNo;
+                }
+
+                HttpResponseWrapper responseTeleComms = victimService.getTeleComms(idGuidMap.get(id), journeyTypeCode.getValue(), commsTellAttempt);
                 VictimCaseAppAssertions.assertTeleComms(teleComms, responseTeleComms);
+
+                int commsFollowAttempt = 0;
+
+                if (smsSent.equals("yes")) {
+                    commsFollowAttempt = callAttemptNo + 2;
+                } else if (smsSent.equals("no")) {
+                    commsFollowAttempt = callAttemptNo + 1;
+                }
 
                 String followUpMethod = row.get("followUpMethod").toLowerCase(Locale.ROOT);
                 FollowUpCommunication followupComms = followUpCommsListMap.get(followUpMethod);
-                String smsSent = row.get("smsSent").toLowerCase(Locale.ROOT);
 
-                int commsAttempt = 0;
-
-                if (smsSent.equals("yes")) {
-                    commsAttempt = callAttemptNo + 2;
-                } else if (smsSent.equals("no")) {
-                    commsAttempt = callAttemptNo + 1;
-                }
-                HttpResponseWrapper responseFollowupComms = victimService.getFollowupComms(idGuidMap.get(id), followUpMethod, journeyTypeCode.getValue(), commsAttempt);
+                HttpResponseWrapper responseFollowupComms = victimService.getFollowupComms(idGuidMap.get(id), followUpMethod, journeyTypeCode.getValue(), commsFollowAttempt);
                 VictimCaseAppAssertions.assertFollowupComms(followupComms, responseFollowupComms);
             }
         }
@@ -1053,6 +1064,7 @@ public class VictimCaseAppApiStepDefinition {
                 String notes = row.get("notes");
                 TelephoneCommunication thirdCall = firstTeleCall(journeyTypeCode.getValue(), informVictim, callDirection.getValue(), notes, days);
                 victimService.addCallAttempt(idGuidMap.get(id), convertObjectToString(thirdCall));
+                teleCommsListMap.put(journeyTypeCode.getValue(), thirdCall);
             }
             context.set("teleCommsListMap", teleCommsListMap);
         }

@@ -1,6 +1,6 @@
 @regression @vca_api_regression @VCA_API_S1 @VCA_API_S2
 
-Feature: VCA-API-S1_S2 - Add personal and contact details for all category types of victims and victims witness and verify wm01u message
+Feature: VCA-API-S1_S2:- Add personal and contact details for all category types of victims and victims witness and verify wm01u message
   As a Victim Liaison Officer
   I want to add personal and contact details for all category types of victims and victims witness
   Added information is reflected in CMS and VCA database
@@ -44,7 +44,7 @@ Feature: VCA-API-S1_S2 - Add personal and contact details for all category types
 
   @addPersonalAndContactDetailsForVictim
   Scenario: Add victim title, preferred name, date of birth, gender, ethnicity, disability or access needs and previous convictions details
-  and verify that newly added details are sent in wm01u message.
+  and verify that newly added details are sent in wm01u message. (FCT2-15283 & FCT2-15284)
     Given victim details are available in VCA
    #Service Types - #Universal #Enhanced #Rasso #Not aligned
     And the "victim" is onboarded as "Universal" service lead in VCA

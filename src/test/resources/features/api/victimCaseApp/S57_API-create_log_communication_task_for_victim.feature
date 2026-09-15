@@ -1,6 +1,6 @@
 @regression @vca_api_regression @VCA_API_S57
 
-Feature: VCA-API-S57 -  Create task to log communication for victims in Victim Case Application.
+Feature: VCA-API-S57:- Create task to log communication for victims in Victim Case Application.
   As a Victim Liaison Officer
   I want to create task to log communication for victim.
   Verify that task is created.
@@ -10,7 +10,7 @@ Feature: VCA-API-S57 -  Create task to log communication for victims in Victim C
     And add "victim" using "LM04" for the case
 
   @issueDecisionVictimNotContacted
-  Scenario: Create tasks to log communication for victim in Victim Case Application
+  Scenario: Create tasks to log communication for victim in Victim Case Application. (FCT2-21702)
     Given victim details are available in VCA
     And the "victim" is onboarded as "Universal" service lead in VCA
     And the Victim liaison officer is assigned to "victim" in VCA

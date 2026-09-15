@@ -31,7 +31,9 @@ Feature: VCA-API-S26 - Log charge decision communication where first call attemp
       | journeyType                            | followUpMethod | notes         |
       | Inform of a no further action decision | Email          | Email - Notes |
       #  followUpMethod :- Email or Post
-    Then verify the charge decision communication for "victim" in VCA
+    Then verify the charge decision telephone and followup communication for "victim" in VCA
+      | journeyType                            | followUpMethod | callAttempt | smsSent |
+      | Inform of a no further action decision | Email          | second      | No      |
 
   @FCUnsuccessSmsSentSCUnsuccess
   Scenario: Log charge decision communication where first call attempt was un-successful with Sms sent and follow up communication is sent for victim
@@ -50,4 +52,6 @@ Feature: VCA-API-S26 - Log charge decision communication where first call attemp
       | journeyType                            | followUpMethod | notes        |
       | Inform of a no further action decision | Post           | Post - Notes |
       #  followUpMethod :- Email or Post
-    Then verify the charge decision communication for "victim" in VCA
+    Then verify the charge decision telephone and followup communication for "victim" in VCA
+      | journeyType                            | followUpMethod | callAttempt | smsSent |
+      | Inform of a no further action decision | Post           | second      | No      |

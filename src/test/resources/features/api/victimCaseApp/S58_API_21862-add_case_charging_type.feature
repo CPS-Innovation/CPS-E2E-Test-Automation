@@ -19,5 +19,3 @@ Feature: VCA-API-S58 - Add case Charging type
     When the charging type "Police Charged" is added to case information to "victim" in VCA
 #    #charge type = Red or Green or Police Charged
     Then the case charging type is verified for "victim" in VCA
-
-

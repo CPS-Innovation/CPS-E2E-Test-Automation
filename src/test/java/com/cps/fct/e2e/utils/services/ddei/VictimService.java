@@ -765,4 +765,44 @@ public class VictimService extends BaseService {
     }
 
 
+    public HttpResponseWrapper getChargeDecision(int decision, String guid) {
+        return service.sendRequest(getChargeDecisionRequestParams(decision, guid));
+    }
+
+    private HttpClientBuilder getChargeDecisionRequestParams(int decision, String guid) {
+        String endpoint = switch (decision) {
+            case 3 -> format("/api/victims/%s/decision-to-charge", guid);
+            case 4 -> format("/api/victims/%s/no-further-action", guid);
+            default -> throw new IllegalArgumentException("Invalid decision: " + decision);
+        };
+
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(endpoint)
+                .addHeaders(ddeiHeaders())
+                .method("GET")
+                .resourceName("getChargeDecision")
+                .build();
+    }
+
+    public HttpResponseWrapper getTaskType(String guid, int taskType) {
+        return service.sendRequest(getTaskTypeRequestParams(guid, taskType));
+    }
+
+    private HttpClientBuilder getTaskTypeRequestParams(String guid, int taskType) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/victims-case/%s/tasks?taskType=%s", guid, taskType))
+                .addHeaders(ddeiHeaders())
+                .method("GET")
+                .resourceName("getTaskType")
+                .build();
+    }
+
+
+
+
+
+
+
 }

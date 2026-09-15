@@ -15,9 +15,9 @@ public class Decision {
     private String NoFurtherActionContextGuid;
     private String DateOfHearing;
     private String LocationOfHearing;
-    private boolean NoFurtherAttempts;
-    private boolean VictimWithdrawn;
-    private boolean VictimNotContacted;
+    private Boolean NoFurtherAttempts;
+    private Boolean VictimWithdrawn;
+    private Boolean VictimNotContacted;
     private String VictimNotContactedReason;
     private String CreatedBy;
     private String LastModifiedBy;

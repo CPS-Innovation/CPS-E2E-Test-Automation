@@ -1,8 +1,8 @@
-@regression @vca_api_regression @VCA_API_S15 @VCA_API_S51 @VCA_API_S53
+@regression @vca_api_regression @VCA_API_S16
 
-Feature: VCA-API-S15-S51-S53 - Arrange the accepted meeting offer to victim with details.
+Feature: VCA-API-S16:- Log the meeting outcome of conducted arranged arranged accepted offered meeting to victim with details.
   As a Victim Liaison Officer
-  I want to record the meeting arrangement details for accepted offered meeting to victim for following:-
+  I want to record the meeting outcome of conducted arranged accepted offered meeting to victim for following:-
   ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   ¦ Meeting Type                            | Meeting Method       | Meeting Arrangement               | Meeting Type   | Location Type        | Meeting Attendees       |
   ¦-----------------------------------------|----------------------|-----------------------------------|----------------|----------------------|-------------------------|
@@ -10,17 +10,17 @@ Feature: VCA-API-S15-S51-S53 - Arrange the accepted meeting offer to victim with
   ¦ 2.Inform victim about charging decision | 2.Letter by email    | 2.Victim requested                | 2.Virtual call | 2.Magistrates' court | 2.Victim Liaison Officer|
   ¦ 3.VCL Scheme                            | 3.Letter by police   | 3.Requested by third party        | 3.Hybrid       | 3.Crown court        | 3.Officer in Charge     |
   ¦ 4.Victims' Right to Review (VRR)        | 4.Letter by ISVA     |                                   |                | 4.Police station     | 4.Defence Solicitor     |
-  ¦ 5.Victim complaint                      | 5.By telephone       |                                   |                | 5. Other             | 5.Defence firm          |
+  ¦ 5.Victim complaint                      | 5.By telephone       |                                   |                | 5. Other             |                         |
   ¦ 6.Other CPS meeting                     |                      |                                   |                |                      |                         |
   ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  Verify that meeting acceptance details are recorded
+  Verify that conducted meeting outcome details are recorded
 
   Background: Create cases with single defendant with multi charge with victim and witness
     Given create new case using "CM01" for type "single defendant multiple offence"
     And add "victim" using "LM04" for the case
 
-  @meetingInPersonArrange
-  Scenario: Victim accepts an offered meeting for different meeting types
+  @meetingCancellationReason
+  Scenario: Victim accepts an offered meeting for different meeting types. (FCT2-16226)
     Given victim details are available in VCA
     And the "victim" is onboarded as "Universal" service lead in VCA
     And the Victim liaison officer is assigned to "victim" in VCA
@@ -40,7 +40,7 @@ Feature: VCA-API-S15-S51-S53 - Arrange the accepted meeting offer to victim with
       | Victim complaint                      | By telephone        | Accepted      |
       | Other CPS meeting                     | Letter by email     | Accepted      |
       | Victim Communication Liaison          | Letter by police    | Accepted      |
-    When the accepted meeting is arranged using following for "victim" in VCA
+    And the accepted meeting is arranged using following for "victim" in VCA
       | meetingType                           | meetingSource              | meetingMethod | locationType      | locationName                           |
       | CPS pre-trial meeting                 | Victim Requested           | In Person     | CPS location      | Petty France                           |
       | Inform victim about charging decision | CPS Offered                | Hybrid        | Magistrates court | Newcastle upon Tyne Magistrates' Court |
@@ -54,6 +54,18 @@ Feature: VCA-API-S15-S51-S53 - Arrange the accepted meeting offer to victim with
       | Victim liaison officer |
       | Defence Solicitor      |
       | Officer in Charge      |
-    Then the arranged meeting and attendees details for "victim" in verified
-
-
+    When the arranged meeting is conducted with following details and logged for "victim" in VCA
+      | meetingType                           | meetingDuration     | agreedToResearch   | noteToOci | noteToVictim | proposedActions |
+      | CPS pre-trial meeting                 | 1 hours 59 minutes  | Yes                | Yes       | Yes          | Take Action    |
+      | Inform victim about charging decision | 2 hours 00 minutes  | No                 | No        | No           | No              |
+      | Victims Right to Review               | 0 hours 30 minutes  | Question not asked | No        | Yes          | Take Action     |
+      | Victim complaint                      | 0 hours 59 minutes  | No                 | Yes       | No           | Take Action     |
+      | Other CPS meeting                     | 0 hours 10 minutes  | Question not asked | Yes       | Yes          | Take Action     |
+      | Victim Communication Liaison          | 10 hours 59 minutes | Yes                | No        | No           | No              |
+    And the following attendees attended the meeting lead by "Counsel"
+      | logAttendeesRoles  |
+      | Counsel                |
+      | Victim liaison officer |
+      | Defence Solicitor      |
+      | Officer in Charge      |
+    Then the logged meeting details are verified for "victim" in VCA

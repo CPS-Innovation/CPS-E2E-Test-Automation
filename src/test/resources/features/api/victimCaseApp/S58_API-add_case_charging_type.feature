@@ -1,6 +1,6 @@
 @regression @vca_api_regression @VCA_API_S58
 
-Feature: VCA-API-S58 - Add case Charging type
+Feature: VCA-API-S58:- Add case Charging type
   As a Victim Liaison Officer
   I want to add case charging type in case information in victim case application
   Update information is reflected in VCA database
@@ -12,7 +12,7 @@ Feature: VCA-API-S58 - Add case Charging type
     And add "victim" using "LM04" for the case
 
   @addChargingTYpe
-  Scenario: Add case Charging type in case information section.
+  Scenario: Add case Charging type in case information section. (FCT2-21862)
     Given victim details are available in VCA
     And the "victim" is onboarded as "Universal" service lead in VCA
     And the Victim liaison officer is assigned to "victim" in VCA

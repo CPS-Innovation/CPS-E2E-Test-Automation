@@ -1,6 +1,6 @@
 @regression @vca_api_regression @VCA_API_S55 @VCA_API_S56
 
-Feature: VCA-API-S56 & VCA-API-S56 - Issue decision communications when victim not contacted with a reason for victims.
+Feature: VCA-API-S55-S56:- Issue decision communications when victim not contacted with a reason for victims.
   As a Victim Liaison Officer
   I want to record decision communications when victim not contacted with a reason.
   Verify that decision communication details are recorded.
@@ -10,7 +10,7 @@ Feature: VCA-API-S56 & VCA-API-S56 - Issue decision communications when victim n
     And add "victim" using "LM04" for the case
 
   @issueDecisionVictimNotContacted
-  Scenario: Decision communication when victim not contacted with a reason is recorded
+  Scenario: Decision communication when victim not contacted with a reason is recorded. (FCT2-21679 & FCT2-21701)
     Given victim details are available in VCA
     And the "victim" is onboarded as "Universal" service lead in VCA
     And the Victim liaison officer is assigned to "victim" in VCA

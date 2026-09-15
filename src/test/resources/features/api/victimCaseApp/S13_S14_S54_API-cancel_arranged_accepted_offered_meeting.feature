@@ -1,6 +1,6 @@
 @regression @vca_api_regression @VCA_API_S13 @VCA_API_S14 @VCA_API_S54
 
-Feature: VCA-API-S15-S51-S53 - Cancel the arranged accepted offered meeting to victim with details.
+Feature: VCA-API-S15-S51-S53:- Cancel the arranged accepted offered meeting to victim with details.
   As a Victim Liaison Officer
   I want to record the meeting cancellation details for arranged accepted offered meeting to victim for following:-
   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -20,7 +20,7 @@ Feature: VCA-API-S15-S51-S53 - Cancel the arranged accepted offered meeting to v
     And add "victim" using "LM04" for the case
 
   @meetingCancellationReason
-  Scenario: Victim accepts an offered meeting for different meeting types
+  Scenario: Victim accepts an offered meeting for different meeting types. (FCT2-16211 & FCT2-16215 & FCT2-21805)
     Given victim details are available in VCA
     And the "victim" is onboarded as "Universal" service lead in VCA
     And the Victim liaison officer is assigned to "victim" in VCA

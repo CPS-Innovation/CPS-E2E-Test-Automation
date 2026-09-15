@@ -1,6 +1,6 @@
 @regression @vca_api_regression @VCA_API_S10
 
-Feature: VCA-API-S10 - Meetings are not offered to victims for different meeting types with a reason
+Feature: VCA-API-S10:- Meetings are not offered to victims for different meeting types with a reason
   As a Victim Liaison Officer
   I want to record the meetings is not being offered with reasons for following types:-
   1. CPS pre-trial meeting
@@ -16,7 +16,7 @@ Feature: VCA-API-S10 - Meetings are not offered to victims for different meeting
     And add "victim" using "LM04" for the case
 
   @ptmNotOffered
-  Scenario: Meetings are not offered to victims for different meeting types with a reason
+  Scenario: Meetings are not offered to victims for different meeting types with a reason. (FCT2-15295)
     Given victim details are available in VCA
     When the "victim" is onboarded as "Universal" service lead in VCA
     Then the Victim liaison officer is assigned to "victim" in VCA

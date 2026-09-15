@@ -1,6 +1,6 @@
 @regression @vca_api_regression @VCA_API_S11 @VCA_API_S12 @VCA_API_S50
 
-Feature: VCA-API-S11-S12-S50 - Record the offered meetings response by victims
+Feature: VCA-API-S11-S12-S50:- Record the offered meetings response by victims
   As a Victim Liaison Officer
   I want to record the meetings response by victim for following type and method:-
   ------------------------------------------------------------------------------------------
@@ -20,7 +20,7 @@ Feature: VCA-API-S11-S12-S50 - Record the offered meetings response by victims
     And add "victim" using "LM04" for the case
 
   @meetingResponse
-  Scenario: Victim decline an offered meeting for different meeting types
+  Scenario: Victim decline an offered meeting for different meeting types. (FCT2-15847 & FCT2-15835 & FCT2-20835)
     Given victim details are available in VCA
     And the "victim" is onboarded as "Universal" service lead in VCA
     And the Victim liaison officer is assigned to "victim" in VCA

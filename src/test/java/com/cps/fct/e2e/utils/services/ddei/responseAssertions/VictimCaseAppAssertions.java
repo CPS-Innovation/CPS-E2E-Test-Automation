@@ -307,7 +307,29 @@ public class VictimCaseAppAssertions {
     }
 
 
+    public static void assertChargeDecision(Decision inputDetails,
+                                           HttpResponseWrapper responsePayload){
+        SoftAssertions softly = new SoftAssertions();
+        JsonPath result = new JsonPath(responsePayload.getBody());
 
+        assertThat(result.getString("value.victimNotContactedReason")).isEqualTo(inputDetails.getVictimNotContactedReason());
+        assertThat(result.getBoolean("value.victimNotContacted")).isEqualTo(inputDetails.getVictimNotContacted());
+
+        softly.assertAll();
+    }
+
+
+    public static void assertCaseCharge(VictimVcaDetails inputDetails,
+                                            HttpResponseWrapper responsePayload){
+        SoftAssertions softly = new SoftAssertions();
+        JsonPath result = new JsonPath(responsePayload.getBody());
+        System.out.println(result);
+        System.out.println(inputDetails);
+
+        assertThat(result.getInt("value.chargeType")).isEqualTo(inputDetails.getChargeType());
+
+        softly.assertAll();
+    }
 
 
 

@@ -19,3 +19,6 @@ Feature: VCA-API-S56 & VCA-API-S56 - Issue decision communications when victim n
       | Decision To Charge |
       | No Further Action  |
     Then verify the logged decision to charge communication for the "victim" in VCA
+      | decisionType       |
+      | Decision To Charge |
+      | No Further Action  |

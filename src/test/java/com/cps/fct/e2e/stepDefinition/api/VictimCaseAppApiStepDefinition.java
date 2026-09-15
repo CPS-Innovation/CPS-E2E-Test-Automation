@@ -263,7 +263,6 @@ public class VictimCaseAppApiStepDefinition {
         HttpResponseWrapper response = victimService.caseCmsContactList(caseId);
         String cm01RequestPayload = context.get("modifiedCM01RequestPayload");
         VictimCaseAppAssertions.assertCaseCmsContact(cm01RequestPayload, response);
-        /* TO-DO - Need to fix the assertions */
     }
 
     @When("the following category type is added to {string} in VCA")
@@ -712,28 +711,36 @@ public class VictimCaseAppApiStepDefinition {
         for (String id : victimMapIds.get(victimType)) {
 
             for (Map<String, String> row : rows) {
+                boolean victimNotContacted = false;
                 TaskList taskType = TaskList.fromString(row.get("decisionType"));
-                Decision createDecision = createVictimNotContactDecision(taskType.getValue());
+                Decision createDecision = createVictimNotContactDecision(taskType.getValue(), victimNotContacted);
                 victimService.informDecision(taskType.getValue(), idGuidMap.get(id), convertObjectToString(createDecision));
                 decisionListMap.put(taskType.getValue(), createDecision);
             }
-
             context.set("decisionListMap", decisionListMap);
         }
 
     }
 
     @Then("verify the logged decision to charge communication for the {string} in VCA")
-    public void verifyDecisionComm(String victimType) {
+    public void verifyDecisionComm(String victimType, DataTable dataTable) {
 
         Map<String, String> idGuidMap = context.get("idGuidMap");
         Map<String, List<String>> victimMapIds = context.get("victimMapIds");
         Map<Integer, Decision> decisionListMap = context.get("decisionListMap");
 
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+
+
         for (String id : victimMapIds.get(victimType)) {
-            for (Integer decisionType : decisionListMap.keySet()) {
-                int decType = decisionType;
-                /* TO-DO - Need to add the verification steps */
+            for (Map<String, String> row : rows) {
+                TaskList taskType = TaskList.fromString(row.get("decisionType"));
+
+                Decision decisionDetails = decisionListMap.get(taskType.getValue());
+
+                HttpResponseWrapper responseChargeDecision = victimService.getChargeDecision(taskType.getValue(), idGuidMap.get(id));
+                VictimCaseAppAssertions.assertChargeDecision(decisionDetails, responseChargeDecision);
+
 
             }
 
@@ -772,21 +779,25 @@ public class VictimCaseAppApiStepDefinition {
     }
 
     @Then("verify the task to log communication for the {string} in VCA")
-    public void verifyLogCommunicationTask(String victimType) {
+    public void verifyLogCommunicationTask(String victimType, DataTable dataTable) {
 
         Map<String, String> idGuidMap = context.get("idGuidMap");
         Map<String, List<String>> victimMapIds = context.get("victimMapIds");
         Map<Integer, Task> createTaskListMap = context.get("createTaskListMap");
+        Map<Integer, Integer> taskTypeTaskIdMap = context.get("taskTypeTaskIdMap");
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
 
         for (String id : victimMapIds.get(victimType)) {
-            for (Integer taskType : createTaskListMap.keySet()) {
-                int taskTyp = taskType;
-                /* TO-DO - Need to add the verification steps */
+            for (Map<String, String> row : rows) {
+                TaskList taskType = TaskList.fromString(row.get("taskType"));
+
+                Task createTaskList = createTaskListMap.get(taskType.getValue());
+
+//                HttpResponseWrapper responseGetTaskAction = victimService.getTaskType(idGuidMap.get(id), taskType.getValue());
+//                VictimCaseAppAssertions.assertTaskAction(createTaskList, responseGetTaskAction);
 
             }
-
         }
-
     }
 
     @When("the charging type {string} is added to case information to {string} in VCA")
@@ -796,7 +807,6 @@ public class VictimCaseAppApiStepDefinition {
         Map<String, List<String>> victimMapIds = context.get("victimMapIds");
         Map<String, String> idGuidMap = context.get("idGuidMap");
         Map<String, VictimVcaDetails> victimDetailsToVcaMap = context.get("victimDetailsToVcaMap");
-
 
         for (String id : victimMapIds.get(victimType)) {
             VictimVcaDetails caseChargeDetails = addChargeTypeToVCA(ChargeType.fromString(chargeType).getValue(), victimService.getUserPartyId());
@@ -815,8 +825,11 @@ public class VictimCaseAppApiStepDefinition {
 
         for (String id : victimMapIds.get(victimType)) {
 
-            String ids = id;
-            /* TO-DO - Need to add the verification steps */
+            VictimVcaDetails caseChargeDetails = victimDetailsToVcaMap.get(idGuidMap.get(id));
+
+            HttpResponseWrapper responseCaseCharge = victimService.getVictimDetailsFromVca(idGuidMap.get(id));
+            VictimCaseAppAssertions.assertCaseCharge(caseChargeDetails, responseCaseCharge);
+
 
         }
 
@@ -890,7 +903,7 @@ public class VictimCaseAppApiStepDefinition {
                 FollowUpCommunication followupComms = followUpCommsListMap.get(followUpMethod);
                 int commsAttempt = 2;
 
-                HttpResponseWrapper responseFollowupComms = victimService.getFollowupComms(idGuidMap.get(id), followUpMethod,journeyTypeCode.getValue(),commsAttempt);
+                HttpResponseWrapper responseFollowupComms = victimService.getFollowupComms(idGuidMap.get(id), followUpMethod, journeyTypeCode.getValue(), commsAttempt);
                 VictimCaseAppAssertions.assertFollowupComms(followupComms, responseFollowupComms);
 
 
@@ -1042,17 +1055,13 @@ public class VictimCaseAppApiStepDefinition {
                 FollowUpCommunication followupComms = followUpCommsListMap.get(followUpMethod);
 
                 int commsAttempt = 1;
-                HttpResponseWrapper responseFollowupComms = victimService.getFollowupComms(idGuidMap.get(id), followUpMethod,journeyTypeCode.getValue(),commsAttempt);
+                HttpResponseWrapper responseFollowupComms = victimService.getFollowupComms(idGuidMap.get(id), followUpMethod, journeyTypeCode.getValue(), commsAttempt);
                 VictimCaseAppAssertions.assertFollowupComms(followupComms, responseFollowupComms);
 
 
             }
         }
     }
-
-
-
-
 
 
 }

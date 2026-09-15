@@ -19,3 +19,6 @@ Feature: VCA-API-S57 -  Create task to log communication for victims in Victim C
       | Inform of a decision to charge         |
       | Inform of a no further action decision |
     Then verify the task to log communication for the "victim" in VCA
+      | taskType                               |
+      | Inform of a decision to charge         |
+      | Inform of a no further action decision |

@@ -421,14 +421,14 @@ public class VictimCaseAppPayloadBuilder {
                 .build();
     }
 
-    public static Decision createVictimNotContactDecision(int decision) {
+    public static Decision createVictimNotContactDecision(int decision, boolean victimNotContacted) {
         if (decision == 3) {
             return Decision.builder()
                     .DecisionToChargeContextGuid(uuid())
                     .DateOfHearing("1900-01-01")
                     .LocationOfHearing("")
                     .NoFurtherAttempts(false)
-                    .VictimNotContacted(true)
+                    .VictimNotContacted(victimNotContacted)
                     .VictimNotContactedReason("victim not contacted reason")
                     .CreatedBy("decisionUser")
                     .build();

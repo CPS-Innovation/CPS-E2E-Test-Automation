@@ -830,7 +830,6 @@ public class VictimCaseAppApiStepDefinition {
             HttpResponseWrapper responseCaseCharge = victimService.getVictimDetailsFromVca(idGuidMap.get(id));
             VictimCaseAppAssertions.assertCaseCharge(caseChargeDetails, responseCaseCharge);
 
-
         }
 
     }
@@ -901,8 +900,11 @@ public class VictimCaseAppApiStepDefinition {
 
                 String followUpMethod = row.get("followUpMethod").toLowerCase(Locale.ROOT);
                 FollowUpCommunication followupComms = followUpCommsListMap.get(followUpMethod);
+                String smsSent = row.get("smsSent").toLowerCase(Locale.ROOT);
                 int commsAttempt = 2;
-
+                if (smsSent.equals("yes")) {
+                    commsAttempt = 3;
+                }
                 HttpResponseWrapper responseFollowupComms = victimService.getFollowupComms(idGuidMap.get(id), followUpMethod, journeyTypeCode.getValue(), commsAttempt);
                 VictimCaseAppAssertions.assertFollowupComms(followupComms, responseFollowupComms);
 
@@ -939,7 +941,7 @@ public class VictimCaseAppApiStepDefinition {
                     victimService.addSmsSendDetails(idGuidMap.get(id), convertObjectToString(smsSend));
 
                 }
-//                teleCommsListMap.put(journeyTypeCode.getValue(),smsSentStatus);
+                teleCommsListMap.put(journeyTypeCode.getValue(), smsSentStatus);
             }
             context.set("teleCommsListMap", teleCommsListMap);
         }

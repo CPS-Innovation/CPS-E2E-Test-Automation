@@ -20,5 +20,5 @@ Feature: VCA-API-S24 - Issue charge decision communication by email or post for 
       #  journeyType :- Inform of a no further action decision or #  Inform of a decision to charge
       #  followUpMethod :- Email or Post
     Then verify the charge decision followup communication for "victim" in VCA
-      | journeyType                            | followUpMethod | notes        |
-      | Inform of a no further action decision | Post           | Post - Notes |
+      | journeyType                            | followUpMethod |
+      | Inform of a no further action decision | Post           |

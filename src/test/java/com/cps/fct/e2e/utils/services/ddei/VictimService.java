@@ -623,11 +623,11 @@ public class VictimService extends BaseService {
     }
 
 
-    public void addFirstCallAttempt(String guid, String requestBody) {
-        service.sendRequest(addFirstCallAttemptRequestParams(guid, requestBody));
+    public void addCallAttempt(String guid, String requestBody) {
+        service.sendRequest(addCallAttemptRequestParams(guid, requestBody));
     }
 
-    private HttpClientBuilder addFirstCallAttemptRequestParams(String guid, String requestBody) {
+    private HttpClientBuilder addCallAttemptRequestParams(String guid, String requestBody) {
         return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("DDEI_HOST"))
                 .endpoint(format("/api/victims/%s/victim-communication/telephone", guid))
@@ -734,14 +734,14 @@ public class VictimService extends BaseService {
                 .build();
     }
 
-    public HttpResponseWrapper getTeleComms(String guid, int journeyTypeCode) {
-        return service.sendRequest(getTeleCommsRequestParams(guid, journeyTypeCode));
+    public HttpResponseWrapper getTeleComms(String guid, int journeyTypeCode, int callAttempt) {
+        return service.sendRequest(getTeleCommsRequestParams(guid, journeyTypeCode, callAttempt));
     }
 
-    private HttpClientBuilder getTeleCommsRequestParams(String guid, int journeyTypeCode) {
+    private HttpClientBuilder getTeleCommsRequestParams(String guid, int journeyTypeCode, int callAttempt) {
         return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("DDEI_HOST"))
-                .endpoint(format("/api/victims/%s/victim-communication/telephone/%s/1", guid, journeyTypeCode))
+                .endpoint(format("/api/victims/%s/victim-communication/telephone/%s/%s", guid, journeyTypeCode, callAttempt))
                 .addHeaders(ddeiHeaders())
                 .method("GET")
                 .resourceName("getTeleComms")

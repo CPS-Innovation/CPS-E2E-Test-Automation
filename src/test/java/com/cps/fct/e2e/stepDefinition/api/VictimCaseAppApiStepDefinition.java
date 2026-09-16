@@ -7,7 +7,6 @@ import com.cps.fct.e2e.utils.httpClient.HttpResponseWrapper;
 import com.cps.fct.e2e.utils.services.ddei.CommonService;
 import com.cps.fct.e2e.utils.services.ddei.CaseReviewService;
 import com.cps.fct.e2e.utils.services.ddei.VictimService;
-import com.cps.fct.e2e.utils.services.ddei.payloadBuilder.VictimCaseAppPayloadBuilder;
 import com.cps.fct.e2e.utils.services.ddei.responseAssertions.VictimCaseAppAssertions;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
@@ -60,11 +59,9 @@ public class VictimCaseAppApiStepDefinition {
 
         CaseInfo victimCaseInfo;
         VictimVcaDetails victimVcaDetails;
-
         OnboardService serviceTypeCode = OnboardService.fromString(serviceType);
         Map<String, String> idGuidMap = context.get("idGuidMap");
         Map<String, List<String>> victimMapIds = context.get("victimMapIds");
-
 
         for (String id : victimMapIds.get(victimType)) {
             victimCaseInfo = onboardVictim(context.get("caseUrn"));
@@ -88,7 +85,6 @@ public class VictimCaseAppApiStepDefinition {
             victimLiaisonOfficer = assignVictimLiaisonOfficer(victimService.getUserPartyId());
             victimService.assignVictimLiaisonOfficer(idGuidMap.get(id), convertObjectToString(victimLiaisonOfficer));
         }
-
     }
 
     @When("the {string} personal details are added to CMS")
@@ -294,13 +290,10 @@ public class VictimCaseAppApiStepDefinition {
         Map<String, List<String>> victimMapIds = context.get("victimMapIds");
         Map<String, VictimCmsDetails> victimDetailsToCmsMap = context.get("victimDetailsToCmsMap");
         for (String id : victimMapIds.get(victimType)) {
-            //Get input details from the cms mapping
+
             VictimCmsDetails victimCmsDetails = victimDetailsToCmsMap.get(id);
-            //Get details from Cms
             HttpResponseWrapper response = victimService.getVictimDetailsFromCMS(context.get("caseId"));
-            //assert for input = output
             VictimCaseAppAssertions.assertCategoryList(id, victimCmsDetails, response);
-            /* TO-DO - Need to fix the assertions */
         }
     }
 
@@ -316,8 +309,6 @@ public class VictimCaseAppApiStepDefinition {
 
         for (String id : victimMapIds.get(victimType)) {
             for (Map<String, String> row : rows) {
-//                String meetingType = row.get("meetingType");
-//                String reason = row.get("notOfferedReason");
                 MeetingType meetingTypeCode = MeetingType.fromString(row.get("meetingType"));//Enum
                 Meetings meetingNotOffered = meetingNotOffered(meetingTypeCode.getValue(), row.get("notOfferedReason"));//Class
                 victimService.addMeetingsNotOffered(idGuidMap.get(id), convertObjectToString(meetingNotOffered));
@@ -357,8 +348,6 @@ public class VictimCaseAppApiStepDefinition {
 
         for (String id : victimMapIds.get(victimType)) {
             for (Map<String, String> row : rows) {
-//                String meetingType = row.get("meetingType");
-//                String offerMethod = row.get("offerMethod");
                 MeetingType meetingTypeCode = MeetingType.fromString(row.get("meetingType")); //Enum
                 OfferMethod offerMethodCode = OfferMethod.fromString(row.get("offerMethod")); //Enum
                 Meetings meetingOfferedMethod = meetingOfferMethod(meetingTypeCode.getValue(), offerMethodCode.getValue());//Class
@@ -410,7 +399,6 @@ public class VictimCaseAppApiStepDefinition {
             }
             context.set("meetingDetailsMap", meetingDetailsMap);
             context.set("meetingResponseMap", meetingResponseMap);
-
         }
     }
 
@@ -496,7 +484,6 @@ public class VictimCaseAppApiStepDefinition {
             context.set("meetingAttendeesDetailsMap", meetingAttendeesDetailsMap);
             context.set("meetingTypeAttendeesGuidsMap", meetingTypeAttendeesGuidsMap);
         }
-
     }
 
     @Then("the arranged meeting and attendees details for {string} in verified")
@@ -562,7 +549,6 @@ public class VictimCaseAppApiStepDefinition {
                 HttpResponseWrapper response = victimService.getMeetingArranged(meetingDetailsGuidMap.get(meetingTypeCode));
                 VictimCaseAppAssertions.assertCancelArrangedMeeting(meetingCancelDetails, response);
             }
-
         }
     }
 
@@ -637,7 +623,6 @@ public class VictimCaseAppApiStepDefinition {
 
         for (Integer meetingTypeCodeKey : meetingLoggedDetailsMap.keySet()) {
             String meetingDetailsGuid = meetingDetailsGuidMap.get(meetingTypeCodeKey);
-//            Meetings meetingDetails = meetingDetailsMap.get(meetingTypeCode);
             MeetingLogged meetingLogged = meetingLoggedDetailsMap.get(meetingTypeCodeKey);
 
             if (meetingLogged.getMeetingMethod() != 2) {
@@ -647,10 +632,7 @@ public class VictimCaseAppApiStepDefinition {
                 HttpResponseWrapper responseMeetingAttendees = victimService.getMeetingAttendees(meetingDetailsGuidMap.get(meetingTypeCodeKey));
                 VictimCaseAppAssertions.assertMeetingAttendees(meetingAttendeesDetailsMap.get(meetingTypeCodeKey), responseMeetingAttendees);
             }
-
-
         }
-
     }
 
     @When("the following {string} communication are logged to {string} in VCA")
@@ -694,7 +676,6 @@ public class VictimCaseAppApiStepDefinition {
                 VictimCaseAppAssertions.assertOtherComms(communicationDetails, responseOtherComms);
             }
         }
-
     }
 
     @When("the following communication for victim not contacted is logged to {string} in VCA")
@@ -719,7 +700,6 @@ public class VictimCaseAppApiStepDefinition {
             }
             context.set("decisionListMap", decisionListMap);
         }
-
     }
 
     @Then("verify the logged decision to charge communication for the {string} in VCA")
@@ -731,21 +711,15 @@ public class VictimCaseAppApiStepDefinition {
 
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
 
-
         for (String id : victimMapIds.get(victimType)) {
             for (Map<String, String> row : rows) {
                 TaskList taskType = TaskList.fromString(row.get("decisionType"));
 
                 Decision decisionDetails = decisionListMap.get(taskType.getValue());
-
                 HttpResponseWrapper responseChargeDecision = victimService.getChargeDecision(taskType.getValue(), idGuidMap.get(id));
                 VictimCaseAppAssertions.assertChargeDecision(decisionDetails, responseChargeDecision);
-
-
             }
-
         }
-
     }
 
     @When("the following tasks to log communication are created for {string} in VCA")
@@ -826,7 +800,6 @@ public class VictimCaseAppApiStepDefinition {
         for (String id : victimMapIds.get(victimType)) {
 
             VictimVcaDetails caseChargeDetails = victimDetailsToVcaMap.get(idGuidMap.get(id));
-
             HttpResponseWrapper responseCaseCharge = victimService.getVictimDetailsFromVca(idGuidMap.get(id));
             VictimCaseAppAssertions.assertCaseCharge(caseChargeDetails, responseCaseCharge);
 
@@ -897,40 +870,48 @@ public class VictimCaseAppApiStepDefinition {
 
                 String callAttempt = row.get("callAttempt").toLowerCase(Locale.ROOT);
                 int callAttemptNo = 0;
+                String smsSent = row.get("smsSent").toLowerCase(Locale.ROOT);
+                int commsTellAttempt = 0;
+                int commsFollowAttempt = 0;
 
-                switch (callAttempt) {
+                switch (callAttempt + "-" + smsSent) {
 
-                    case "first":
+                    case "first-no":
                         callAttemptNo = 1;
+                        commsTellAttempt = callAttemptNo;
+                        commsFollowAttempt = callAttemptNo + 1;
                         break;
-                    case "second":
+                    case "first-yes":
+                        callAttemptNo = 1;
+                        commsTellAttempt = callAttemptNo;
+                        commsFollowAttempt = callAttemptNo + 2;
+                        break;
+                    case "second-no":
                         callAttemptNo = 2;
+                        commsTellAttempt = callAttemptNo;
+                        commsFollowAttempt = callAttemptNo + 1;
                         break;
-                    case "third":
+                    case "second-yes":
+                        callAttemptNo = 2;
+                        commsTellAttempt = callAttemptNo + 1;
+                        commsFollowAttempt = callAttemptNo + 2;
+                        break;
+                    case "third-no":
                         callAttemptNo = 3;
+                        commsTellAttempt = callAttemptNo;
+                        commsFollowAttempt = callAttemptNo + 1;
+                        break;
+                    case "third-yes":
+                        callAttemptNo = 3;
+                        commsTellAttempt = callAttemptNo + 1;
+                        commsFollowAttempt = callAttemptNo + 2;
                         break;
                     default:
                         System.out.println("Invalid call attempt");
                 }
 
-                String smsSent = row.get("smsSent").toLowerCase(Locale.ROOT);
-                int commsTellAttempt = 0;
-                if (smsSent.equals("yes")) {
-                    commsTellAttempt = callAttemptNo + 1;
-                } else if (smsSent.equals("no")) {
-                    commsTellAttempt = callAttemptNo;
-                }
-
                 HttpResponseWrapper responseTeleComms = victimService.getTeleComms(idGuidMap.get(id), journeyTypeCode.getValue(), commsTellAttempt);
                 VictimCaseAppAssertions.assertTeleComms(teleComms, responseTeleComms);
-
-                int commsFollowAttempt = 0;
-
-                if (smsSent.equals("yes")) {
-                    commsFollowAttempt = callAttemptNo + 2;
-                } else if (smsSent.equals("no")) {
-                    commsFollowAttempt = callAttemptNo + 1;
-                }
 
                 String followUpMethod = row.get("followUpMethod").toLowerCase(Locale.ROOT);
                 FollowUpCommunication followupComms = followUpCommsListMap.get(followUpMethod);
@@ -1080,14 +1061,11 @@ public class VictimCaseAppApiStepDefinition {
                 JourneyType journeyTypeCode = JourneyType.fromString(row.get("journeyType"));
                 String followUpMethod = row.get("followUpMethod").toLowerCase(Locale.ROOT);
                 FollowUpCommunication followupComms = followUpCommsListMap.get(followUpMethod);
-
                 int commsAttempt = 1;
                 HttpResponseWrapper responseFollowupComms = victimService.getFollowupComms(idGuidMap.get(id), followUpMethod, journeyTypeCode.getValue(), commsAttempt);
                 VictimCaseAppAssertions.assertFollowupComms(followupComms, responseFollowupComms);
-
             }
         }
-
     }
 
 

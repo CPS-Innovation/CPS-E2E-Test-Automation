@@ -50,20 +50,20 @@ Feature: VCA-API-S34-S35-S44-S45:- Log charge decision communication where first
     And the "victim" is onboarded as "Universal" service lead in VCA
     And the Victim liaison officer is assigned to "victim" in VCA
     When the first telephone call attempt is un-successful to inform victim with following details for "victim" in VCA
-      | journeyType                            | informVictim | callDirection | notes                  | smsSent |
-      | Inform of a no further action decision | No           | Inbound       | Telephone call - Notes | Yes     |
+      | journeyType                    | informVictim | callDirection | notes                  | smsSent |
+      | Inform of a decision to charge | No           | Inbound       | Telephone call - Notes | Yes     |
       #  journeyType :- Inform of a no further action decision or #  Inform of a decision to charge
     And the second telephone call attempt is un-successful to inform victim with following details for "victim" in VCA
-      | journeyType                            | informVictim | callDirection | notes                         |
-      | Inform of a no further action decision | No           | Inbound       | Second Telephone call - Notes |
+      | journeyType                    | informVictim | callDirection | notes                         |
+      | Inform of a decision to charge | No           | Inbound       | Second Telephone call - Notes |
       #  journeyType :- Inform of a no further action decision or #  Inform of a decision to charge
     And the third telephone call attempt is successful to inform victim with following details for "victim" in VCA
-      | journeyType                            | informVictim | callDirection | notes                        |
-      | Inform of a no further action decision | Yes          | Inbound       | Third Telephone call - Notes |
+      | journeyType                    | informVictim | callDirection | notes                        |
+      | Inform of a decision to charge | Yes          | Inbound       | Third Telephone call - Notes |
     And follow up as below for "victim" in VCA
-      | journeyType                            | followUpMethod | notes        |
-      | Inform of a no further action decision | Post           | Post - Notes |
+      | journeyType                    | followUpMethod | notes        |
+      | Inform of a decision to charge | Post           | Post - Notes |
       #  followUpMethod :- Email or Post
     Then verify the charge decision telephone and followup communication for "victim" in VCA
-      | journeyType                            | followUpMethod | callAttempt | smsSent |
-      | Inform of a no further action decision | Post           | third       | Yes     |
+      | journeyType                    | followUpMethod | callAttempt | smsSent |
+      | Inform of a decision to charge | Post           | third       | Yes     |

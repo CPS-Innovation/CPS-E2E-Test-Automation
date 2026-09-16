@@ -1,4 +1,4 @@
-@regression @vca_api_regression @VCA_API_S30 @VCA_API_S31 @VCA_API_S41
+@regression @vca_api_regression @VCA_API_S30 @VCA_API_S31 @VCA_API_S41 @Test1
 
 Feature: VCA-API-S30-S31-S41:- Log charge decision communication where first call attempt was un-successful and SMS details sent and Second call attempt was successful follow up communication is sent in email or post for victims in Victim Case Application.
   As a Victim Liaison Officer

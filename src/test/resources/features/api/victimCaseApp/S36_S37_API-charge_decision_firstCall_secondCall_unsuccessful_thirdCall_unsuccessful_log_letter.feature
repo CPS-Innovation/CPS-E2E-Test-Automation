@@ -1,4 +1,4 @@
-@regression @vca_api_regression @VCA_API_S36 @VCA_API_S37
+@regression @vca_api_regression @VCA_API_S36 @VCA_API_S37 @Test1
 
 Feature: VCA-API-S36-S37:- Log charge decision communication where first call attempt was un-successful and SMS details sent
   and Second call attempt was un-successful and Third call attempt was un-successful

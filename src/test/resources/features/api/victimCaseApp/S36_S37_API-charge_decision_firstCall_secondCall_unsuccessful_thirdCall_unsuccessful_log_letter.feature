@@ -57,8 +57,8 @@ Feature: VCA-API-S36-S37:- Log charge decision communication where first call at
       | Inform of a decision to charge | No           | Inbound       | Second Telephone call - Notes |
       #  journeyType :- Inform of a no further action decision or #  Inform of a decision to charge
     And the third telephone call attempt is un-successful to inform victim with following details for "victim" in VCA
-      | journeyType                            | informVictim | callDirection | notes                        |
-      | Inform of a no further action decision | No           | Inbound       | Third Telephone call - Notes |
+      | journeyType                    | informVictim | callDirection | notes                        |
+      | Inform of a decision to charge | No           | Inbound       | Third Telephone call - Notes |
     And follow up as below for "victim" in VCA
       | journeyType                    | followUpMethod | notes         |
       | Inform of a decision to charge | Email          | Email - Notes |

@@ -994,9 +994,9 @@ public class VictimCaseAppApiStepDefinition {
                 String informVictim = row.get("informVictim");
                 CommunicationDirection callDirection = CommunicationDirection.fromString(row.get("callDirection"));
                 String notes = row.get("notes");
-                TelephoneCommunication SecondCall = firstTeleCall(journeyTypeCode.getValue(), informVictim, callDirection.getValue(), notes, days);
-                victimService.addCallAttempt(idGuidMap.get(id), convertObjectToString(SecondCall));
-                teleCommsListMap.put(journeyTypeCode.getValue(), SecondCall);
+                TelephoneCommunication secondCall = firstTeleCall(journeyTypeCode.getValue(), informVictim, callDirection.getValue(), notes, days);
+                victimService.addCallAttempt(idGuidMap.get(id), convertObjectToString(secondCall));
+                teleCommsListMap.put(journeyTypeCode.getValue(), secondCall);
             }
             context.set("teleCommsListMap", teleCommsListMap);
         }

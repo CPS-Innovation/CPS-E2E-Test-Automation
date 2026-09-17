@@ -1,4 +1,4 @@
-@regression @vca_api_regression @VCA_API_S46 @VCA_API_S47
+@regression @vca_api_regression @VCA_API_S46 @VCA_API_S47 @Test1
 
 Feature: VCA-API-S46-S47:- Issue charge decision communication by email or post for victims in Victim Case Application.
   As a Victim Liaison Officer

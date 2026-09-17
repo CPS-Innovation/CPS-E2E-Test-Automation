@@ -1,4 +1,4 @@
-@regression @vca_api_regression @VCA_API_S17 @VCA_API_S18 @VCA_API_S19 @VCA_API_S20 @VCA_API_S21 @VCA_API_S22
+@regression @vca_api_regression @VCA_API_S17 @VCA_API_S18 @VCA_API_S19 @VCA_API_S20 @VCA_API_S21 @VCA_API_S22 @Test1
 
 Feature: VCA-API-S17 to S23:- Log other communications with the purpose information to victims.
   As a Victim Liaison Officer

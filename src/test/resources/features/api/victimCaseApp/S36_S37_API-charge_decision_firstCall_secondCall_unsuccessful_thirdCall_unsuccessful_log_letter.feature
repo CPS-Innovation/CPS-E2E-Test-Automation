@@ -36,9 +36,9 @@ Feature: VCA-API-S36-S37:- Log charge decision communication where first call at
     And follow up as below for "victim" in VCA
       | journeyType                            | followUpMethod | notes          |
       | Inform of a no further action decision | letter         | letter - Notes |
-#    Then verify the charge decision telephone and followup communication for "victim" in VCA
-#      | journeyType                            | followUpMethod | callAttempt  | smsSent |
-#      | Inform of a no further action decision | Post           | thirdUnsuccess | No      |
+    Then verify the charge decision telephone and followup communication for "victim" in VCA
+      | journeyType                            | followUpMethod | callAttempt | smsSent |
+      | Inform of a no further action decision | letter         | third       | No      |
 
   @SmsSentThirdCallUnsuccessful
   Scenario: Log charge decision communication where first call attempt was un-successful with Sms sent
@@ -49,8 +49,8 @@ Feature: VCA-API-S36-S37:- Log charge decision communication where first call at
     And the "victim" is onboarded as "Universal" service lead in VCA
     And the Victim liaison officer is assigned to "victim" in VCA
     When the first telephone call attempt is un-successful to inform victim with following details for "victim" in VCA
-      | journeyType                    | informVictim | callDirection | notes                  | smsSent |
-      | Inform of a decision to charge | No           | Inbound       | Telephone call - Notes | Yes     |
+      | journeyType                    | informVictim | callDirection | notes                        | smsSent |
+      | Inform of a decision to charge | No           | Inbound       | First Telephone call - Notes | Yes     |
       #  journeyType :- Inform of a no further action decision or #  Inform of a decision to charge
     And the second telephone call attempt is un-successful to inform victim with following details for "victim" in VCA
       | journeyType                    | informVictim | callDirection | notes                         |
@@ -62,6 +62,6 @@ Feature: VCA-API-S36-S37:- Log charge decision communication where first call at
     And follow up as below for "victim" in VCA
       | journeyType                    | followUpMethod | notes         |
       | Inform of a decision to charge | Email          | Email - Notes |
-#    Then verify the charge decision telephone and followup communication for "victim" in VCA
-#      | journeyType                            | followUpMethod | callAttempt  | smsSent |
-#      | Inform of a no further action decision | Email          | thirdSuccess | No      |
+    Then verify the charge decision telephone and followup communication for "victim" in VCA
+      | journeyType                    | followUpMethod | callAttempt | smsSent |
+      | Inform of a decision to charge | Email          | third       | Yes     |

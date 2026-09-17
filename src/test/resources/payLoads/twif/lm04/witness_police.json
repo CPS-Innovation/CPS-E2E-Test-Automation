@@ -1,0 +1,56 @@
+{
+  "NewWitnessOrVictim": {
+    "ItemId": "{{LM04_itemId}}",
+    "PTIURN": {
+      "Force": "{{TWIF_Force}}",
+      "Unit": "{{TWIF_Unit}}",
+      "Number": "{{LM04_PTIURN_Number}}",
+      "Year": "{{TWIF_Year}}"
+    },
+    "Person": {
+      "UniqueId": "{{LM04_Victim_Witness_Ref}}",
+      "Name": {
+        "GivenName": "{{FirstName}}",
+        "FamilyName": "{{Surname}}"
+      },
+      "ContactDetails": {
+        "Address": {
+          "AddressLine": [
+            "{{AddressLin1}}",
+            "{{AddressLin2}}"
+          ],
+          "Postcode": "NE1 1BB"
+        },
+        "ContactNumber": [
+          {
+            "Number": {
+              "TelNationalNumber": "07900998844"
+            },
+            "TypeOfNumber": "mobile"
+          },
+          {
+            "Number": {
+              "TelNationalNumber": "01912587414"
+            },
+            "TypeOfNumber": "home"
+          }
+        ],
+        "Email": "Witness_test@email.co.gov.uk"
+      },
+      "PersonClassification": [
+        {
+          "ClassificationType": "TypeOfWitness",
+          "ClassificationCode": "Police",
+          "ClassificationValue": {
+            "ClassificationValueFlag": true
+          }
+        }
+      ],
+      "TypeOfPerson": "Witness",
+      "DateOfBirth": "1970-08-03",
+      "Witness": {
+        "Occupation": "Police Officer"
+      }
+    }
+  }
+}

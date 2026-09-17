@@ -1,13 +1,11 @@
 {
   "WitnessOrVictim": {
-    "CaseId": "{{LM04_CaseId}}",
     "ItemId": "{{LM04_itemId}}",
     "PTIURN": {
-      "Force": "{{LM04_Force}}",
-      "Unit": "{{LM04_Unit}}",
+      "Force": "{{DCF_Force}}",
+      "Unit": "{{DCF_Unit}}",
       "Number": "{{LM04_PTIURN_Number}}",
-      "Year": "{{LM04_Year}}",
-      "Split": null
+      "Year": "{{DCF_Year}}"
     },
     "UpdateStatus": {
       "VersionId": "1",
@@ -16,37 +14,43 @@
     },
     "VictimWitness": {
       "Person": {
-        "UniqueId": "{{LM04_VictimRef_intimidated}}",
+        "UniqueId": "{{LM04_Victim_Witness_Ref}}",
         "Name": {
-          "Title": null,
-          "GivenName": [
-            {
-              "NameSequenceSpecified": false,
-              "Value": "{{FirstName}}"
-            }
-          ],
-          "RequestedName": null,
-          "FamilyName": {
-            "Value": "{{Surname}}"
-          }
+          "Title": "Mr",
+          "GivenName": "{{FirstName}}",
+          "FamilyName": "{{Surname}}"
         },
         "ContactDetails": {
-          "Address": null,
-          "ContactNumber": null,
-          "Email": null,
-          "DXAddress": null,
-          "SocialMedia": null,
-          "ContactPreferences": null
+          "Address": {
+            "AddressLine": [
+              "{{AddressLin1}}",
+              "{{AddressLin2}}",
+              "{{AddressLin3}}"
+            ],
+            "Postcode": "NE1 1BB",
+            "Country": "UK"
+          },
+          "ContactNumber": [
+            {
+              "Number": {
+                "TelNationalNumber": "07900998844"
+              },
+              "TypeOfNumber": "mobile"
+            },
+            {
+              "Number": {
+                "TelNationalNumber": "01912587414"
+              },
+              "TypeOfNumber": "home"
+            }
+          ],
+          "Email": "victim_test@email.co.gov.uk"
         },
-        "PNCId": null,
-        "DateOfBirth": null,
-        "Nationality": null,
-        "AlternativeContact": null,
-        "Occupation": null,
+        "DateOfBirth": "1985-02-10",
         "PersonClassification": [
           {
             "ClassificationType": "TypeOfWitness",
-            "ClassificationCode": "T",
+            "ClassificationCode": "Intimidated",
             "ClassificationValue": {
               "ClassificationValueFlag": true
             }
@@ -54,9 +58,11 @@
         ]
       },
       "TypeOfPerson": "VictimWitness",
+      "DateOfBirth": "1970-08-03",
       "WitnessAndVictim": {
         "Witness": {
-          "Occupation": "Worker"
+          "Occupation": "Civilian",
+          "WarnedByPolice": false
         },
         "Victim": {
           "XOffenceId": [

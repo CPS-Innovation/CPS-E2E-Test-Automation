@@ -1,0 +1,83 @@
+package com.cps.fct.e2e.utils.support;
+
+
+import com.cps.fct.e2e.pages.BasePage;
+import com.cps.fct.e2e.pages.PageObjects;
+import com.cps.fct.e2e.utils.common.ScenarioContext;
+import com.cps.fct.e2e.utils.httpClient.DefaultHttpService;
+import com.cps.fct.e2e.utils.httpClient.HttpStatusValidator;
+import com.cps.fct.e2e.utils.services.caseCreation.payloadBuilders.PayloadBuilderForCM01;
+import com.cps.fct.e2e.utils.services.caseCreation.payloadBuilders.PayloadBuilderForLM04;
+import com.cps.fct.e2e.utils.playwright.PlaywrightContext;
+import com.cps.fct.e2e.utils.playwright.PlaywrightManager;
+import com.cps.fct.e2e.utils.services.ddei.CaseReviewService;
+import com.cps.fct.e2e.utils.services.ddei.CommonService;
+import com.cps.fct.e2e.utils.services.ddei.VictimService;
+import com.cps.fct.e2e.utils.services.caseCreation.CaseCreateService;
+import io.cucumber.core.backend.ObjectFactory;
+import io.cucumber.picocontainer.PicoFactory;
+import org.reflections.Reflections;
+
+import java.util.Set;
+
+public class CucumberObjectFactory implements ObjectFactory {
+
+    private final PicoFactory delegate = new PicoFactory();
+
+    public CucumberObjectFactory() {
+        delegate.addClass(CaseReviewService.class);
+        delegate.addClass(CommonService.class);
+        delegate.addClass(ScenarioContext.class);
+        delegate.addClass(DefaultHttpService.class);
+        delegate.addClass(HttpStatusValidator.class);
+        delegate.addClass(PayloadBuilderForCM01.class);
+        delegate.addClass(PayloadBuilderForLM04.class);
+        delegate.addClass(VictimService.class);
+        delegate.addClass(PlaywrightManager.class);
+        delegate.addClass(PlaywrightContext.class);
+        delegate.addClass(PageObjects.class);
+        delegate.addClass(CaseCreateService.class);
+
+        addedAllPageClass();
+    }
+
+    private void addedAllPageClass() {
+        Reflections reflections = new Reflections("com.cps.fct.e2e.pages");
+        Set<Class<? extends BasePage>> pageClasses = reflections.getSubTypesOf(BasePage.class);
+        for (Class<? extends BasePage> pageClass : pageClasses) {
+            if (pageClass.getSimpleName().endsWith("Page")) {
+                delegate.addClass(pageClass);
+            }
+        }
+    }
+
+    @Override
+    public void start() {
+        delegate.start();
+    }
+
+    @Override
+    public void stop() {
+        delegate.stop();
+    }
+
+    @Override
+    public boolean addClass(Class<?> aClass) {
+        return delegate.addClass(aClass);
+    }
+
+    @Override
+    public <T> T getInstance(Class<T> aClass) {
+        return delegate.getInstance(aClass);
+    }
+
+//    private Set<Class<?>> addAllPages() {
+//            Reflections reflections = new Reflections("com.cps.fct.e2e.pages"); // replace with your actual package
+//             return reflections.getSubTypesOf(Object.class).stream()
+//                    .filter(clazz -> clazz.getSimpleName().endsWith("Page"))
+//                    .collect(Collectors.toSet());
+//    }
+
+}
+
+

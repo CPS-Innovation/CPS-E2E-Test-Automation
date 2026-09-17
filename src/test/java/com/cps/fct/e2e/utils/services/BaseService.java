@@ -24,4 +24,16 @@ public class BaseService {
                 "Cms-Auth-Values", Objects.requireNonNull(context.getAsString("Cms-Auth-Values"))
         );
     }
+
+    protected Map<String, String> caseCreateHeaders() {
+        return Map.of(
+                "Accept", "application/json",
+                "Content-Type", "application/json",
+                "X-Auth-Cookie", Objects.requireNonNull(context.getAsString("Case-Create-Auth-Values"))
+        );
+    }
+
+
+
+
 }

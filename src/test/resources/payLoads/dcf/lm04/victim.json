@@ -1,13 +1,11 @@
 {
   "WitnessOrVictim": {
-    "CaseId": "{{LM04_CaseId}}",
     "ItemId": "{{LM04_itemId}}",
     "PTIURN": {
-      "Force": "{{LM04_Force}}",
-      "Unit": "{{LM04_Unit}}",
+      "Force": "{{DCF_Force}}",
+      "Unit": "{{DCF_Unit}}",
       "Number": "{{LM04_PTIURN_Number}}",
-      "Year": "{{LM04_Year}}",
-      "Split": null
+      "Year": "{{DCF_Year}}"
     },
     "UpdateStatus": {
       "VersionId": "1",
@@ -16,56 +14,48 @@
     },
     "VictimWitness": {
       "Person": {
-        "UniqueId": "{{LM04_VictimRef_1}}",
+        "UniqueId": "{{LM04_Victim_Witness_Ref}}",
         "Name": {
-          "Title": null,
-          "GivenName": [
-            {
-              "NameSequenceSpecified": false,
-              "Value": "{{FirstName}}"
-            }
-          ],
-          "RequestedName": null,
-          "FamilyName": {
-            "Value": "{{Surname}}"
-          }
+          "Title": "Mr",
+          "GivenName": "{{FirstName}}",
+          "FamilyName": "{{Surname}}"
         },
         "ContactDetails": {
-          "Address": null,
-          "ContactNumber": null,
-          "Email": null,
-          "DXAddress": null,
-          "SocialMedia": null,
-          "ContactPreferences": null
-        },
-        "PNCId": null,
-        "DateOfBirth": null,
-        "Nationality": null,
-        "AlternativeContact": null,
-        "Occupation": null,
-        "PersonClassification": [
-          {
-            "ClassificationType": "StatusInformation",
-            "ClassificationCode": "KeyWitness",
-            "ClassificationValue": {
-              "ClassificationValueText": "Y"
+          "Address": {
+            "AddressLine": [
+              "{{AddressLin1}}",
+              "{{AddressLin2}}",
+              "{{AddressLin3}}"
+            ],
+            "Postcode": "NE1 1BB",
+            "Country": "UK"
+          },
+          "ContactNumber": [
+            {
+              "Number": {
+                "TelNationalNumber": "07900998844"
+              },
+              "TypeOfNumber": "mobile"
+            },
+            {
+              "Number": {
+                "TelNationalNumber": "01912587414"
+              },
+              "TypeOfNumber": "home"
             }
-          }
-        ]
-      },
-      "TypeOfPerson": "VictimWitness",
-      "WitnessAndVictim": {
-        "Witness": {
-          "Occupation": "Civilian"
-        },
-        "Victim": {
-          "XOffenceId": [
-            "{{LM04_CaseOffenceId}}"
           ],
-          "VPSStatus": {
-            "ResponseToVPSOffer": "Accepted",
-            "SchemeExplained": false
-          }
+          "Email": "victim_pure@email.co.gov.uk"
+        }
+      },
+      "TypeOfPerson": "Victim",
+      "DateOfBirth": "1970-08-03",
+      "Victim": {
+        "XOffenceId": [
+          "{{LM04_CaseOffenceId}}"
+        ],
+        "VPSStatus": {
+          "ResponseToVPSOffer": "Accepted",
+          "SchemeExplained": false
         }
       },
       "LinkedSuspects": null

@@ -1,0 +1,80 @@
+{
+  "WitnessOrVictim": {
+    "ItemId": "{{LM04_itemId}}",
+    "PTIURN": {
+      "Force": "{{DCF_Force}}",
+      "Unit": "{{DCF_Unit}}",
+      "Number": "{{LM04_PTIURN_Number}}",
+      "Year": "{{DCF_Year}}"
+    },
+    "UpdateStatus": {
+      "VersionId": "1",
+      "UpdateReasonType": "Create",
+      "UpdateReason": "Need to create witness"
+    },
+    "VictimWitness": {
+      "Person": {
+        "UniqueId": "{{LM04_Victim_Witness_Ref}}",
+        "Name": {
+          "Title": "Mr",
+          "GivenName": "{{FirstName}}",
+          "FamilyName": "{{Surname}}"
+        },
+        "ContactDetails": {
+          "Address": {
+            "AddressLine": [
+              "{{AddressLin1}}",
+              "{{AddressLin2}}",
+              "{{AddressLin3}}"
+            ],
+            "Postcode": "NE1 1BB",
+            "Country": "UK"
+          },
+          "ContactNumber": [
+            {
+              "Number": {
+                "TelNationalNumber": "07900998844"
+              },
+              "TypeOfNumber": "mobile"
+            },
+            {
+              "Number": {
+                "TelNationalNumber": "01912587414"
+              },
+              "TypeOfNumber": "home"
+            }
+          ],
+          "Email": "victim_test@email.co.gov.uk"
+        },
+        "DateOfBirth": "1985-02-10",
+        "PersonClassification": [
+          {
+            "ClassificationType": "TypeOfWitness",
+            "ClassificationCode": "Special",
+            "ClassificationValue": {
+              "ClassificationValueFlag": true
+            }
+          }
+        ]
+      },
+      "TypeOfPerson": "VictimWitness",
+      "DateOfBirth": "1970-08-03",
+      "WitnessAndVictim": {
+        "Witness": {
+          "Occupation": "Civilian",
+          "WarnedByPolice": false
+        },
+        "Victim": {
+          "XOffenceId": [
+            "{{LM04_CaseOffenceId}}"
+          ],
+          "VPSStatus": {
+            "ResponseToVPSOffer": "Accepted",
+            "SchemeExplained": false
+          }
+        }
+      },
+      "LinkedSuspects": null
+    }
+  }
+}

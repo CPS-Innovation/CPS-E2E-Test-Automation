@@ -5,6 +5,7 @@ import com.github.javafaker.Faker;
 import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
@@ -12,7 +13,8 @@ import java.util.UUID;
 
 public class FakerUtils {
 
-    public static final Faker faker = new Faker(new Locale("en"));
+    //    public static final Faker faker = new Faker(new Locale("en"));
+    public static final Faker faker = new Faker(Locale.ENGLISH);
     private static final Random random = new Random();
 
     public static String uuid() {
@@ -21,6 +23,13 @@ public class FakerUtils {
 
     public static String fullName() {
         return faker.name().lastName().toUpperCase() + " " + faker.name().firstName();
+    }
+    public static String firstnameSurname() {
+        return faker.name().firstName()+ " " + faker.name().lastName();
+    }
+
+    public static String surnameFirstname() {
+        return faker.name().lastName().toUpperCase() + ", " + faker.name().firstName();
     }
 
     public static String firstName() {
@@ -56,9 +65,12 @@ public class FakerUtils {
     }
 
     public static String populateSentences() {
-        return faker.yoda().quote();    }
+        return faker.yoda().quote();
+    }
 
-    public static String title() {return faker.name().prefix(); }
+    public static String title() {
+        return faker.name().prefix();
+    }
 
     public static String gender() {
         return faker.demographic().sex();
@@ -68,13 +80,36 @@ public class FakerUtils {
         return faker.address().fullAddress();
     }
 
-    public static LocalDate dateOfBirth() {
+    public static LocalDate dateOfBirthAdult() {
         Date dob = faker.date().birthday();
         return dob.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
+    public static LocalDate childDateOfBirth() {
+        LocalDate today = LocalDate.now();
+        LocalDate latestDob = today.minusYears(8).minusDays(1);
+        LocalDate earliestDob = today.minusYears(16);
+
+        long minDay = earliestDob.toEpochDay();
+        long maxDay = latestDob.toEpochDay();
+        long randomDay = faker.number().numberBetween(minDay, maxDay);
+        return LocalDate.ofEpochDay(randomDay);
+    }
+
     public static String email() {
         return faker.internet().emailAddress();
+    }
+
+    public static String cpsEmail() {
+        String firstName = faker.name().firstName().replaceAll("[^A-Za-z]", "").toLowerCase(Locale.ROOT);
+        String lastName = faker.name().lastName().replaceAll("[^A-Za-z]", "").toLowerCase(Locale.ROOT);
+        if (firstName.isBlank()) {
+            firstName = "firstname";
+        }
+        if (lastName.isBlank()) {
+            lastName = "lastname";
+        }
+        return firstName + "." + lastName + "@cps.gov.uk";
     }
 
     public static String homePhone() {
@@ -97,7 +132,6 @@ public class FakerUtils {
         return faker.job().title();
     }
 
-
     public static String twoDigitNumber() {
         return String.valueOf(random.nextInt(90) + 10);
     }
@@ -110,12 +144,8 @@ public class FakerUtils {
         return String.valueOf(random.nextInt(90000) + 10000);
     }
 
-    public static String generateFiveDigitNumber() {
-        return String.valueOf(10000 + random.nextInt(90000));
-    }
-
-    public static String generateTenDigitNumber() {
-        return String.valueOf(1000000000L + (long) (random.nextDouble() * 9000000000L));
+    public static String elevenDigitNumber() {
+        return String.valueOf(10000000000L + (long) (random.nextDouble() * 90000000000L));
     }
 
     public static String generateUppercaseAlphaNumeric(int length) {
@@ -127,6 +157,26 @@ public class FakerUtils {
                 .toString();
     }
 
+    public static String defaultDate() {
+        return "1900-01-01";
+    }
+
+    public static String todayDate() {
+        return LocalDate.now()
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
+
+    public static String todayMinusFiveDays() {
+        return LocalDate.now()
+                .minusDays(5)
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
+
+    public static String todayMinusFourDays() {
+        return LocalDate.now()
+                .minusDays(4)
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
 
     public static String uniqueId() {
         String pattern = "??-#-??-#";

@@ -10,8 +10,8 @@ public class FileUtils {
         File dir = new File(directoryPath);
         if (!dir.exists() || !dir.isDirectory()) return null;
 
-        String normalizedType = fileType.toLowerCase().replace(" ", "_");
-        File[] files = dir.listFiles((d, name) -> name.toLowerCase().contains(normalizedType) && name.endsWith(".json"));
+        String normalizedType = fileType.toLowerCase().replace(" ", "_") + ".json";
+        File[] files = dir.listFiles((d, name) -> name.equalsIgnoreCase(normalizedType));
 
         return (files!=null && files.length > 0) ? files[0]:null;
     }
@@ -23,7 +23,7 @@ public class FileUtils {
         assertThat(file)
                 .withFailMessage(" No matching file found for %s/%s with type: %s", caseType, messageType, caseDataType)
                 .isNotNull();
-        System.out.println(file.getName());
+        System.out.println("Using case data file: " + file.getAbsolutePath());
         return file;
     }
 

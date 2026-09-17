@@ -9,15 +9,27 @@ public class DateTimeUtils {
     private static final LocalDate today = LocalDate.now();
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     public static final DateTimeFormatter UTC_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+    public static final DateTimeFormatter UTC_TIME_NOW = DateTimeFormatter.ofPattern("HH:mm:ss");
+    public static final DateTimeFormatter UTC_TIME_HRS_MINS = DateTimeFormatter.ofPattern("HH:mm");
 
-    public static String pcdRequestDate() {
-        LocalDate pastDate = today.minusDays(20);
+    public static String UTCDateInPast(int noOfDays) {
+        LocalDate pastDate = today.minusDays(noOfDays);
         return pastDate.format(formatter);
     }
 
-    public static String pcdDecisionByDate() {
-        LocalDate futureDate = today.plusDays(27);
+        public static String UTCDateInFuture(int noOfDays ) {
+        LocalDate futureDate = today.plusDays(noOfDays);
         return futureDate.format(formatter);
+    }
+
+    public static String UTCTimeNow() {
+        ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
+        return now.format(UTC_TIME_NOW);
+    }
+
+    public static String UTCTimeHrsMinsNow() {
+        ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
+        return now.format(UTC_TIME_HRS_MINS);
     }
 
     public static String UTCDateTimeNow() {
@@ -31,12 +43,17 @@ public class DateTimeUtils {
         return newDate.format(UTC_FORMATTER);
     }
 
-    public static String UTCDateTimeInPastDayBy(int noOfDays) {
+    public static String UTCDateTimeInPastBy(int noOfDays) {
         ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
         ZonedDateTime newDate = now.minusDays(noOfDays);
-        return now.format(UTC_FORMATTER);
+        return newDate.format(UTC_FORMATTER);
     }
 
+    public static String UTCDateTimeInFutureMonthBy(int noOfMonths) {
+        ZonedDateTime originalDate = ZonedDateTime.now(ZoneOffset.UTC);
+        ZonedDateTime newDate = originalDate.plusMonths(noOfMonths);
+        return newDate.format(UTC_FORMATTER);
+    }
 
 
 

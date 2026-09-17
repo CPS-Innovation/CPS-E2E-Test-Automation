@@ -5,8 +5,6 @@ import net.masterthought.cucumber.ReportBuilder;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.suite.api.*;
 import org.w3c.dom.*;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.nio.file.*;
 import java.util.Collections;
@@ -21,24 +19,19 @@ import static io.cucumber.junit.platform.engine.Constants.OBJECT_FACTORY_PROPERT
 @IncludeEngines("cucumber")
 @SelectClasspathResource("features")
 @ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "com.cps.fct.e2e")
-//@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@S1_S2_15300_15789 or @S3_S4_15791_15793" )
-@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@DCF" )
 @ConfigurationParameter(
         key = PLUGIN_PROPERTY_NAME,
-        value = "pretty, json:target/cucumber-report/cucumber.json"
-)
+//        value = "pretty, json:target/cucumber-report/cucumber.json, io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm" )
+        value = "pretty, json:target/cucumber-report/cucumber.json" )
+//@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@caseReview" )
+@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@vca_api_regression" )
+
+
 @ConfigurationParameter(
         key = OBJECT_FACTORY_PROPERTY_NAME,
-        value = "com.cps.fct.e2e.support.CucumberObjectFactory"
+        value = "com.cps.fct.e2e.utils.support.CucumberObjectFactory"
 )
 public class TestRunnerApi {
-//    delete if not needed
-//    static {
-//        System.setProperty("cucumber.filter.tags",
-//                        "@S1_S2_15300_15789" +
-//                        "@S3_S4_15791_15793"
-//        );
-//    }
     @Test
     void generateCucumberReport() {
         String jsonPath = "target/cucumber-report/cucumber.json";

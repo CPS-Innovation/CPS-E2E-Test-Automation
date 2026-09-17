@@ -5,7 +5,7 @@ import java.io.File;
 public class TWIFMapper implements FileMapper {
     @Override
     public File getFile(String subtype, String fileType) {
-        String path = "src/test/resources/payloads/TWIF/" + subtype.toLowerCase();
+        String path = "src/test/resources/payLoads/twif/" + subtype.toLowerCase();
         return FileUtils.findMatchingFile(path, fileType);
     }
 }

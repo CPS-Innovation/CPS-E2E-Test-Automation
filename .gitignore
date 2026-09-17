@@ -102,6 +102,8 @@ modules.xml
 # Maven
 log/
 target/
+test-artifacts/
+videos/
 
 # Eclipse
 .classpath

@@ -1,34 +1,24 @@
 package com.cps.fct.e2e.general;
 
-import static com.cps.fct.e2e.utils.common.FakerUtils.faker;
+import com.cps.fct.e2e.utils.services.ddei.VictimService;
+import org.picocontainer.annotations.Inject;
+
+
+import static com.cps.fct.e2e.utils.common.DateTimeUtils.*;
+import static com.cps.fct.e2e.utils.common.FakerUtils.*;
 
 public class Sample {
+    @Inject
+    private VictimService victimService;
 
     public static void main(String[] args){
 //        System.out.println("Hello World");
-        county();
-    }
 
-    public static void fullName() {
-//        return faker.name().fullName();
-//        System.out.println(faker.name().firstName());
-//        System.out.println(faker.name().lastName().toUpperCase());
-
-        String fullName = faker.name().lastName().toUpperCase() + " " + faker.name().firstName();
-        System.out.println(fullName);
-
+        System.out.println(UTCTimeNow());
     }
 
 
-    public static void county() {
-//        return faker.name().fullName();
-//        System.out.println(faker.name().firstName());
-//        System.out.println(faker.name().lastName().toUpperCase());
 
-//        String fullName = faker.name().lastName().toUpperCase() + " " + faker.name().firstName();
-        System.out.println(faker.bothify("??## #??").toUpperCase());
-
-    }
 
 
 

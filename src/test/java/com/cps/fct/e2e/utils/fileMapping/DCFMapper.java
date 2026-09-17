@@ -17,7 +17,7 @@ import java.util.Locale;
 
 public class DCFMapper implements FileMapper {
 
-    private static final String BASE_DIR = "src/test/resources/payloads/DCF";
+    private static final String BASE_DIR = "src/test/resources/payLoads/dcf";
 
     @Override
     public File getFile(String subtype, String fileType) {

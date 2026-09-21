@@ -48,7 +48,6 @@ public class LoginPage extends BasePage {
 
     public void loginIntoCaseReview(
             String username, String password) throws InterruptedException {
-
         navigateToLoginPage().
                 waitForLoginPageToLoad()
                 .completeLogin(username, password)

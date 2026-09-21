@@ -64,7 +64,8 @@ public class Hooks {
             service.caseCreateAuthToken(context);
         }
 
-        isUIScenario = scenario.getSourceTagNames().contains("@ui");
+        isUIScenario = scenario.getSourceTagNames().contains("@ui")
+        || scenario.getSourceTagNames().contains("@vca_ui");
         if (isUIScenario) {
             playwrightManager.setUpBrowser(scenario);
 
@@ -72,14 +73,19 @@ public class Hooks {
 
     }
 
-    @After
-    public void afterScenario(Scenario scenario) {
-        attachReport(scenario);
-        if (isUIScenario && playwrightManager != null) {
-            playwrightManager.tearDownBrowser(scenario);
-        }
-
+    @Before("@vca_ui")
+    public void setupUiScenario(Scenario scenario) {
+        playwrightManager.setUpBrowser(scenario);
     }
+
+    @After
+//    public void afterScenario(Scenario scenario) {
+//        attachReport(scenario);
+//        if (isUIScenario && playwrightManager != null) {
+//            playwrightManager.tearDownBrowser(scenario);
+//        }
+//
+//    }
 
     private void attachReport(Scenario scenario) {
         Response failedResponse = context.get("failedResponse");

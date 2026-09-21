@@ -190,6 +190,9 @@ public abstract class BasePage {
         return page.locator("role=" + ROLE_TEXTBOX + "[name='" + name + "']");
     }
 
+    public Locator getTextboxById(String name) {
+        return page.locator("#" + name);
+    }
 
     public void checkRadioByName(String name) {
         final String ROLE_RADIO = "radio";

@@ -107,6 +107,11 @@ public class PlaywrightManager {
             return;
         }
 
+        String victimCaseAppUrl = EnvConfig.getEnv("VICTIM_CASE_APP_URL");
+        if (victimCaseAppUrl == null || caseReviewUrl.isBlank()) {
+            return;
+        }
+
         URI uri = URI.create(caseReviewUrl);
         String origin = uri.getScheme() + "://" + uri.getHost();
         if (uri.getPort() != -1) {

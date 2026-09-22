@@ -20,6 +20,9 @@ public class PlaywrightManager {
     private static final Path SCREENSHOTS_DIR = TEST_ARTIFACTS_DIR.resolve("screenshots");
     private static final Path VIDEOS_DIR = TEST_ARTIFACTS_DIR.resolve("videos");
     private static final Path TRACES_DIR = TEST_ARTIFACTS_DIR.resolve("traces");
+    private static final String CLOSE_BROWSER_PROPERTY = "closeBrowser";
+    private static final String KEEP_BROWSER_OPEN_SECONDS_PROPERTY = "keepBrowserOpenSeconds";
+    private static final String PAUSE_BEFORE_CLOSE_PROPERTY = "pauseBeforeClose";
 
     private Playwright playwright;
     private Browser browser;
@@ -33,6 +36,9 @@ public class PlaywrightManager {
     @Inject PlaywrightContext playwrightContext;
 
     public void setUpBrowser(Scenario scenario) {
+        if (isBrowserStarted()) {
+            return;
+        }
 
         playwright = Playwright.create();
         browserConsoleErrors.clear();
@@ -97,6 +103,14 @@ public class PlaywrightManager {
        });
     }
 
+    public boolean isBrowserStarted() {
+        return page != null && !page.isClosed();
+    }
+
+    private boolean hasBrowserSession() {
+        return playwright != null || browser != null || browserContext != null || page != null;
+    }
+
     private void grantLocalNetworkAccess(String browserName) {
         if (!List.of("edge", "chrome").contains(browserName)) {
             return;
@@ -138,10 +152,73 @@ public class PlaywrightManager {
         } catch (Exception e) {
             System.err.println("Error during teardown: " + e.getMessage());
         } finally {
+            if (hasBrowserSession()) {
+                pauseBeforeCloseIfRequested();
+                if (keepBrowserOpenIfRequested()) {
+                    return;
+                }
+            }
             if (playwrightContext != null) playwrightContext.detachVirtualWebAuthnAuthenticator();
             if (browserContext != null) browserContext.close();
             if (browser != null) browser.close();
             if (playwright != null) playwright.close();
+        }
+    }
+
+    private void pauseBeforeCloseIfRequested() {
+        if (!Boolean.parseBoolean(System.getProperty(PAUSE_BEFORE_CLOSE_PROPERTY, "false"))) {
+            return;
+        }
+        if (page == null || page.isClosed()) {
+            System.err.println("Cannot pause before close because the Playwright page is not available.");
+            return;
+        }
+        System.out.println("Playwright pause requested. Resume from the Playwright inspector to continue teardown.");
+        page.pause();
+    }
+
+    private boolean keepBrowserOpenIfRequested() {
+        if (Boolean.parseBoolean(System.getProperty(CLOSE_BROWSER_PROPERTY, "true"))) {
+            return false;
+        }
+
+        long keepOpenSeconds = keepBrowserOpenSeconds();
+        if (keepOpenSeconds > 0) {
+            System.out.printf("Keeping browser open for %d seconds because -D%s=false.%n",
+                    keepOpenSeconds, CLOSE_BROWSER_PROPERTY);
+            sleepForSeconds(keepOpenSeconds);
+            return true;
+        }
+
+        System.out.printf("Keeping browser open because -D%s=false. Stop the test process manually when finished.%n",
+                CLOSE_BROWSER_PROPERTY);
+        sleepForever();
+        return true;
+    }
+
+    private long keepBrowserOpenSeconds() {
+        String value = System.getProperty(KEEP_BROWSER_OPEN_SECONDS_PROPERTY, "0");
+        try {
+            return Long.parseLong(value);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Invalid value for -" + KEEP_BROWSER_OPEN_SECONDS_PROPERTY
+                    + ": " + value + ". Use a whole number of seconds.");
+        }
+    }
+
+    private void sleepForSeconds(long seconds) {
+        try {
+            Thread.sleep(seconds * 1000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    private void sleepForever() {
+        try {
+            Thread.sleep(Long.MAX_VALUE);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
     }
 

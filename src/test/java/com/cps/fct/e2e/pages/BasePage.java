@@ -28,8 +28,14 @@ public abstract class BasePage {
     private static final int RICH_TEXT_READY_SETTLE_MILLIS = 300;
 
     protected Page page;
+    private final PlaywrightContext context;
 
     public BasePage(PlaywrightContext context ) {
+        this.context = context;
+        this.page = context.getPage();
+    }
+
+    public void useCurrentPage() {
         this.page = context.getPage();
     }
 

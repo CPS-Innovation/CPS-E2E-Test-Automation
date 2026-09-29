@@ -2,97 +2,97 @@ package com.cps.fct.e2e.stepDefinition.ui;
 
 import com.cps.fct.e2e.pages.PageObjects;
 import com.cps.fct.e2e.utils.common.EnvConfig;
-import com.cps.fct.e2e.utils.common.FakerUtils;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
 import com.cps.fct.e2e.utils.common.SecurePassCode;
-import com.cps.fct.e2e.utils.services.ddei.CaseReviewService;
-import com.cps.fct.e2e.utils.services.ddei.CommonService;
-import com.jayway.jsonpath.JsonPath;
-import io.cucumber.datatable.DataTable;
-import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.picocontainer.annotations.Inject;
 
-
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 public class VictimCaseAppUiStepDefinition {
 
-    @Inject private CaseReviewService caseReviewService;
-    @Inject private CommonService service;
-    @Inject private PageObjects pages;
-    @Inject private ScenarioContext context;
-    private static final String CPS_USER_KEY = "CPS_USER";
-    private static final String PASSWORD_KEY = "PASSWORD";
-
+    @Inject
+    private PageObjects pages;
+    @Inject
+    private ScenarioContext context;
 
     public VictimCaseAppUiStepDefinition() {
     }
 
     @Given("VLO login to victim case application")
-    public void vloLogIntoVca() throws InterruptedException {
+    public void newVloLogIntoVca() {
 
-        pages.vcaLoginPage.loginIntoVca(vcaUsername(),vcaPassword());
+        pages.vcaLoginPage.loginIntoVca(
+                pages.appsLoginPage.vcaUsername(), pages.appsLoginPage.vcaPassword()
+        );
 
     }
 
-    private String vcaUsername() {
-        String envSuffix = requiredContextValue("envSuffix");
-        return requiredEnvValue(CPS_USER_KEY) + envSuffix;
-    }
+    @When("{string} is searched using case reference")
+    public void caseReferenceSearch(String victimType) {
+        String caseUrn = context.get("caseUrn");
+        Map<String, List<String>> victimMapIds = context.get("victimMapIds");
+        Map<String, String> victimTypeVictimNameMap = new HashMap<>();
+        context.set("victimTypeVictimNameMap", victimTypeVictimNameMap);
+//        String caseUrn = "10AE6487726";
+//        String victimName = "[Goodwin, Jonathon]";
 
-    private String vcaPassword() {
-
-        return SecurePassCode.decode(requiredEnvValue(PASSWORD_KEY));
-    }
-
-    private String requiredContextValue(String key) {
-        String value = context.getAsString(key);
-        if (value == null || value.isBlank()) {
-            throw new IllegalStateException("No value found in scenario context for key: " + key);
+        for (String id : victimMapIds.get(victimType)) {
+//            String victimId = String.valueOf(victimMapIds.get(victimType));
+            Map<String, List<String>> idVictimNameMap = context.get("idVictimWitnessNameMap");
+            String victimName = String.valueOf(idVictimNameMap.get(String.valueOf(victimMapIds.get(victimType))));
+            pages.vcaHomePage.searchVictimCase(caseUrn);
+            String victimFullName = pages.vcaHomePage.getVictimFullName(caseUrn, victimName);
+            victimTypeVictimNameMap.put(victimType, victimFullName);
         }
-        return value;
+        context.set("victimTypeVictimNameMap", victimTypeVictimNameMap);
+    }
+
+    @When("the {string} is onboarded to {string} service lead")
+    public void onboardVictim(String victimType, String ServiceType) {
+        Map<String, String> victimTypeVictimNameMap = context.get("victimTypeVictimNameMap");
+        String victimFullName = victimTypeVictimNameMap.get(victimType);
+        pages.vcaHomePage.onboardVictim(victimFullName, ServiceType);
+    }
+
+    @When("select {string} for next task for the {string}")
+    public void selectNextTask(String taskType, String victimType) {
+        pages.vcaHomePage.selectNextTaskForVictim(taskType);
+    }
+
+    @When("verify that {string} is onboarded")
+    public void verifyOnboard(String victimType) {
+        Map<String, String> victimTypeVictimNameMap = context.get("victimTypeVictimNameMap");
+        String victimFullName = victimTypeVictimNameMap.get(victimType);
+        pages.vcaHomePage.verifyVictimOnboard(victimFullName);
     }
 
 
-    private String requiredEnvValue(String key) {
-        String value = EnvConfig.getEnv(key);
-        if (isBlank(value)) {
-            throw new IllegalStateException("No value found in environment for key: " + key);
-        }
-        return value;
+    @When("the {string} is assigned as VLO to {string}")
+    public void assignVLO(String vloName, String victimType) {
+//        String caseUrn = context.get("caseUrn");
+        String caseUrn = "10AE5354926";
+        Map<String, String> victimTypeVictimNameMap = context.get("victimTypeVictimNameMap");
+//        String victimFullName = victimTypeVictimNameMap.get(victimType);
+        String victimFullName = "KING, Craig";
+        pages.vcaHomePage.searchVictimCase(caseUrn);
+        pages.vcaHomePage.assignVloToVictim(vloName, victimFullName);
     }
 
-    private boolean isBlank(String value) {
-        return value == null || value.isBlank();
+    @When("verify that Vlo {string} is assigned to {string}")
+    public void verifyAssignedVlo(String vloName, String victimType){
+        //        String caseUrn = context.get("caseUrn");
+        String caseUrn = "10AE5354926";
+        Map<String, String> victimTypeVictimNameMap = context.get("victimTypeVictimNameMap");
+//        String victimFullName = victimTypeVictimNameMap.get(victimType);
+        String victimFullName = "KING, Craig";
+        pages.vcaHomePage.searchVictimCase(caseUrn);
+        pages.vcaHomePage.verifyAssignedVlo(vloName);
+
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

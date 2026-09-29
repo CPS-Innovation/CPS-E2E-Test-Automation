@@ -1,8 +1,10 @@
 package com.cps.fct.e2e.utils.support;
 
 
+import com.cps.fct.e2e.pages.AppsLoginPage;
 import com.cps.fct.e2e.pages.BasePage;
 import com.cps.fct.e2e.pages.PageObjects;
+import com.cps.fct.e2e.pages.victimCaseApp.VcaHomePage;
 import com.cps.fct.e2e.pages.victimCaseApp.VcaLoginPage;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
 import com.cps.fct.e2e.utils.httpClient.DefaultHttpService;
@@ -20,6 +22,7 @@ import io.cucumber.picocontainer.PicoFactory;
 import org.reflections.Reflections;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class CucumberObjectFactory implements ObjectFactory {
 
@@ -38,7 +41,9 @@ public class CucumberObjectFactory implements ObjectFactory {
         delegate.addClass(PlaywrightContext.class);
         delegate.addClass(PageObjects.class);
         delegate.addClass(CaseCreateService.class);
+        delegate.addClass(AppsLoginPage.class);
         delegate.addClass(VcaLoginPage.class);
+        delegate.addClass(VcaHomePage.class);
 
         addedAllPageClass();
     }
@@ -73,12 +78,12 @@ public class CucumberObjectFactory implements ObjectFactory {
         return delegate.getInstance(aClass);
     }
 
-//    private Set<Class<?>> addAllPages() {
-//            Reflections reflections = new Reflections("com.cps.fct.e2e.pages"); // replace with your actual package
-//             return reflections.getSubTypesOf(Object.class).stream()
-//                    .filter(clazz -> clazz.getSimpleName().endsWith("Page"))
-//                    .collect(Collectors.toSet());
-//    }
+    private Set<Class<?>> addAllPages() {
+            Reflections reflections = new Reflections("com.cps.fct.e2e.pages");
+             return reflections.getSubTypesOf(Object.class).stream()
+                    .filter(clazz -> clazz.getSimpleName().endsWith("Page"))
+                    .collect(Collectors.toSet());
+    }
 
 }
 

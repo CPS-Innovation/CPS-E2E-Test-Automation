@@ -16,10 +16,10 @@
       "Person": {
         "UniqueId": "{{LM04_Victim_Witness_Ref}}",
         "Name": {
-          "Title": "Mr",
           "GivenName": "{{FirstName}}",
           "FamilyName": "{{Surname}}"
         },
+        "DateOfBirth": "{{AdultDoB}}",
         "ContactDetails": {
           "Address": {
             "AddressLine": [
@@ -27,28 +27,26 @@
               "{{AddressLin2}}",
               "{{AddressLin3}}"
             ],
-            "Postcode": "NE1 1BB",
-            "Country": "UK"
+            "Postcode": "{{PostCode}}"
           },
           "ContactNumber": [
             {
               "Number": {
-                "TelNationalNumber": "07900998844"
+                "TelNationalNumber": "{{MobileNumber}}"
               },
               "TypeOfNumber": "mobile"
             },
             {
               "Number": {
-                "TelNationalNumber": "01912587414"
+                "TelNationalNumber": "{{HomePhone}}"
               },
               "TypeOfNumber": "home"
             }
           ],
-          "Email": "victim_pure@email.co.gov.uk"
+          "Email": "{{Email}}"
         }
       },
       "TypeOfPerson": "Victim",
-      "DateOfBirth": "1970-08-03",
       "Victim": {
         "XOffenceId": [
           "{{LM04_CaseOffenceId}}"

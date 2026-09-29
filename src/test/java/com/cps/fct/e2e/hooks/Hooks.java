@@ -73,19 +73,14 @@ public class Hooks {
 
     }
 
-    @Before("@vca_ui")
-    public void setupUiScenario(Scenario scenario) {
-        playwrightManager.setUpBrowser(scenario);
-    }
-
     @After
-//    public void afterScenario(Scenario scenario) {
+    public void afterScenario(Scenario scenario) {
 //        attachReport(scenario);
 //        if (isUIScenario && playwrightManager != null) {
 //            playwrightManager.tearDownBrowser(scenario);
 //        }
-//
-//    }
+
+    }
 
     private void attachReport(Scenario scenario) {
         Response failedResponse = context.get("failedResponse");
@@ -115,7 +110,7 @@ public class Hooks {
         context.set("envSuffix", suffix);
     }
 
-//    This was used if CASE_TYPE is missing, get("CASE_TYPE") may return null, then .toUpperCase()
+    //    This was used if CASE_TYPE is missing, get("CASE_TYPE") may return null, then .toUpperCase()
 //    causes a less helpful NullPointerException. Very solid solution and helps with debugging
     public void setSuffixBasedOnCaseTypeInEnv(Scenario scenario) {
         String caseTypeValue = requireEnvValue(CASE_TYPE_KEY).toUpperCase();
@@ -145,7 +140,6 @@ public class Hooks {
     }
 
 }
-
 
 
 

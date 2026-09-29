@@ -41,7 +41,7 @@
               "{{DEF_Street_Address}}",
               "{{DEF_City}}"
             ],
-            "Postcode": "NE1 1BB",
+            "Postcode": "{{PostCode}}",
             "Country": "UK"
           },
           "PoliceRemandStatus": "Custody"
@@ -113,7 +113,7 @@
                   "{{DEF_Street_Address}}",
                   "{{DEF_City}}"
                 ],
-                "Postcode": "NE1 1BB",
+                "Postcode": "{{PostCode}}",
                 "Country": "UK"
               }
             }

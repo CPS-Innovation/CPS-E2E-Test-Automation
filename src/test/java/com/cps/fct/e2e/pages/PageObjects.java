@@ -1,7 +1,9 @@
 package com.cps.fct.e2e.pages;
 
 import com.cps.fct.e2e.pages.caseReviewApp.*;
+import com.cps.fct.e2e.pages.victimCaseApp.VcaHomePage;
 import com.cps.fct.e2e.pages.victimCaseApp.VcaLoginPage;
+import com.cps.fct.e2e.pages.AppsLoginPage;
 import org.picocontainer.annotations.Inject;
 
 public class PageObjects {
@@ -28,7 +30,13 @@ public class PageObjects {
     public CompleteSubmissionPage completeSubmissionPage;
 
     @Inject
+    public AppsLoginPage appsLoginPage;
+
+    @Inject
     public VcaLoginPage vcaLoginPage;
+
+    @Inject
+    public VcaHomePage vcaHomePage;
 
 
 }

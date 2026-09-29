@@ -204,7 +204,9 @@ public abstract class BasePage {
         page.locator("role=" + ROLE_LINK + "[name='" + name + "']").click();
     }
 
-
+    public Locator getRadioButtonById(String id) {
+        return page.locator("#" + id);
+    }
 
     public Locator getButtonByName(String name) {
         final String ROLE_BUTTON = "button";
@@ -234,6 +236,18 @@ public abstract class BasePage {
         page.waitForSelector("text='" + expectedText + "'",
                 new Page.WaitForSelectorOptions().setTimeout(DEFAULT_TIMEOUT_MILLIS));
     }
+
+    protected Locator waitForButtonToAppear(String expectedText) {
+        Locator button = page.getByRole(
+                AriaRole.BUTTON,
+                new Page.GetByRoleOptions().setName(expectedText)
+        );
+        button.waitFor(new Locator.WaitForOptions()
+                .setState(WaitForSelectorState.VISIBLE)
+                .setTimeout(DEFAULT_TIMEOUT_MILLIS));
+        return button;
+    }
+
 
 
     public void assertUrlContains(Page page, String expectedQueryString) {

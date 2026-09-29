@@ -20,6 +20,7 @@
           "GivenName": "{{FirstName}}",
           "FamilyName": "{{Surname}}"
         },
+        "DateOfBirth": "{{AdultDoB}}",
         "ContactDetails": {
           "Address": {
             "AddressLine": [
@@ -27,30 +28,29 @@
               "{{AddressLin2}}",
               "{{AddressLin3}}"
             ],
-            "Postcode": "NE1 1BB",
+            "Postcode": "{{PostCode}}",
             "Country": "UK"
           },
           "ContactNumber": [
             {
               "Number": {
-                "TelNationalNumber": "07900998844"
+                "TelNationalNumber": "{{MobileNumber}}"
               },
               "TypeOfNumber": "mobile"
             },
             {
               "Number": {
-                "TelNationalNumber": "01912587414"
+                "TelNationalNumber": "{{HomePhone}}"
               },
               "TypeOfNumber": "home"
             }
           ],
-          "Email": "victim_test@email.co.gov.uk"
+          "Email": "{{Email}}"
         },
-        "DateOfBirth": "1985-02-10",
         "PersonClassification": [
           {
             "ClassificationType": "TypeOfWitness",
-            "ClassificationCode": "Expert",
+            "ClassificationCode": "Interpreter",
             "ClassificationValue": {
               "ClassificationValueFlag": true
             }

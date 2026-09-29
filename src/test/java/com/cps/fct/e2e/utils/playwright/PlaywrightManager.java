@@ -1,5 +1,6 @@
 package com.cps.fct.e2e.utils.playwright;
 
+import com.cps.fct.e2e.hooks.Hooks;
 import com.cps.fct.e2e.utils.common.EnvConfig;
 import com.microsoft.playwright.*;
 import com.microsoft.playwright.assertions.PlaywrightAssertions;
@@ -13,7 +14,11 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class PlaywrightManager {
+    private static final Logger logger = LoggerFactory.getLogger(PlaywrightManager.class);
 
     private static final int DEFAULT_PLAYWRIGHT_TIMEOUT_MILLIS = 25_000;
     private static final Path TEST_ARTIFACTS_DIR = Path.of("test-artifacts");
@@ -36,7 +41,6 @@ public class PlaywrightManager {
 
         playwright = Playwright.create();
         browserConsoleErrors.clear();
-
 
         String browserName = System.getProperty("browser", "edge").toLowerCase();
         boolean headless = Boolean.parseBoolean(System.getProperty("headless", "false"));
@@ -143,10 +147,10 @@ public class PlaywrightManager {
         } catch (Exception e) {
             System.err.println("Error during teardown: " + e.getMessage());
         } finally {
-            if (playwrightContext != null) playwrightContext.detachVirtualWebAuthnAuthenticator();
-            if (browserContext != null) browserContext.close();
-            if (browser != null) browser.close();
-            if (playwright != null) playwright.close();
+//            if (playwrightContext != null) playwrightContext.detachVirtualWebAuthnAuthenticator();
+//            if (browserContext != null) browserContext.close();
+//            if (browser != null) browser.close();
+//            if (playwright != null) playwright.close();
         }
     }
 

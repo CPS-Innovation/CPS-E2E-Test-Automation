@@ -20,33 +20,7 @@
           "GivenName": "{{FirstName}}",
           "FamilyName": "{{Surname}}"
         },
-        "ContactDetails": {
-          "Address": {
-            "AddressLine": [
-              "{{AddressLin1}}",
-              "{{AddressLin2}}",
-              "{{AddressLin3}}"
-            ],
-            "Postcode": "NE1 1BB",
-            "Country": "UK"
-          },
-          "ContactNumber": [
-            {
-              "Number": {
-                "TelNationalNumber": "07900998844"
-              },
-              "TypeOfNumber": "mobile"
-            },
-            {
-              "Number": {
-                "TelNationalNumber": "01912587414"
-              },
-              "TypeOfNumber": "home"
-            }
-          ],
-          "Email": "victim_test@email.co.gov.uk"
-        },
-        "DateOfBirth": "1985-02-10",
+        "DateOfBirth": "{{AdultDoB}}",
         "PersonClassification": [
           {
             "ClassificationType": "TypeOfWitness",
@@ -55,23 +29,42 @@
               "ClassificationValueFlag": true
             }
           }
-        ]
-      },
-      "TypeOfPerson": "VictimWitness",
-      "DateOfBirth": "1970-08-03",
-      "WitnessAndVictim": {
-        "Witness": {
-          "Occupation": "Civilian",
-          "WarnedByPolice": false
-        },
-        "Victim": {
-          "XOffenceId": [
-            "{{LM04_CaseOffenceId}}"
+        ],
+        "ContactDetails": {
+          "Address": {
+            "AddressLine": [
+              "{{AddressLin1}}",
+              "{{AddressLin2}}",
+              "{{AddressLin3}}"
+            ],
+            "Postcode": "{{PostCode}}",
+            "Country": "UK"
+          },
+          "ContactNumber": [
+            {
+              "Number": {
+                "TelNationalNumber": "{{MobileNumber}}"
+              },
+              "TypeOfNumber": "mobile"
+            },
+            {
+              "Number": {
+                "TelNationalNumber": "{{HomePhone}}"
+              },
+              "TypeOfNumber": "home"
+            }
           ],
-          "VPSStatus": {
-            "ResponseToVPSOffer": "Accepted",
-            "SchemeExplained": false
-          }
+          "Email": "{{Email}}"
+        }
+      },
+      "TypeOfPerson": "Victim",
+      "Victim": {
+        "XOffenceId": [
+          "{{LM04_CaseOffenceId}}"
+        ],
+        "VPSStatus": {
+          "ResponseToVPSOffer": "Accepted",
+          "SchemeExplained": false
         }
       },
       "LinkedSuspects": null

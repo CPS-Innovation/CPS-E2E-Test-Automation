@@ -19,18 +19,18 @@
             "{{AddressLin1}}",
             "{{AddressLin2}}"
           ],
-          "Postcode": "NE1 1BB"
+          "Postcode": "{{PostCode}}"
         },
         "ContactNumber": [
           {
             "Number": {
-              "TelNationalNumber": "07900998844"
+              "TelNationalNumber": "{{MobileNumber}}"
             },
             "TypeOfNumber": "mobile"
           },
           {
             "Number": {
-              "TelNationalNumber": "01912587414"
+              "TelNationalNumber": "{{HomePhone}}"
             },
             "TypeOfNumber": "home"
           }

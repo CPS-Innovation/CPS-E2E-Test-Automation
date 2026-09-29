@@ -32,6 +32,7 @@ public class FakerUtils {
         return faker.name().lastName().toUpperCase() + ", " + faker.name().firstName();
     }
 
+
     public static String firstName() {
         return faker.name().firstName();
     }
@@ -85,16 +86,23 @@ public class FakerUtils {
         return dob.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
-    public static LocalDate childDateOfBirth() {
+    public static String adultDateOfBirth() {
+        Date dob = faker.date().birthday();
+        return String.valueOf(dob.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+    }
+
+    public static String childDateOfBirth() {
         LocalDate today = LocalDate.now();
-        LocalDate latestDob = today.minusYears(8).minusDays(1);
-        LocalDate earliestDob = today.minusYears(16);
+        LocalDate latestDob = today.minusYears(6).minusDays(1);
+        LocalDate earliestDob = today.minusYears(17);
 
         long minDay = earliestDob.toEpochDay();
         long maxDay = latestDob.toEpochDay();
         long randomDay = faker.number().numberBetween(minDay, maxDay);
-        return LocalDate.ofEpochDay(randomDay);
+        return String.valueOf(LocalDate.ofEpochDay(randomDay));
     }
+
+
 
     public static String email() {
         return faker.internet().emailAddress();

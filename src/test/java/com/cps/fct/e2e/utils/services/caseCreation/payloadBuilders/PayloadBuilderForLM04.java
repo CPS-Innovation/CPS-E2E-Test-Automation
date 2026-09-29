@@ -41,6 +41,13 @@ public class PayloadBuilderForLM04 extends JsonReplacer {
         initialLM04Map.put("{{AddressLin1}}", buildingNumber());
         initialLM04Map.put("{{AddressLin2}}", streetAddress());
         initialLM04Map.put("{{AddressLin3}}", cityName());
+        initialLM04Map.put("{{PostCode}}", ukPostCode());
+        initialLM04Map.put("{{MobileNumber}}", mobilePhone());
+        initialLM04Map.put("{{HomePhone}}", homePhone());
+        initialLM04Map.put("{{Email}}", email());
+        initialLM04Map.put("{{ChildDoB}}", childDateOfBirth());
+        initialLM04Map.put("{{AdultDoB}}", adultDateOfBirth());
+
         initialLM04Map.put("{{LM04_CaseOffenceId}}", cm01Map.get("CM01_CaseOffenceId"));
         initialLM04Map.put("{{LM04_Con_ShoulderNo}}", cm01Map.get("CM01_Con_ShoulderNo"));
 

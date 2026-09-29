@@ -11,15 +11,16 @@ public class Sample {
     @Inject
     private VictimService victimService;
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
 //        System.out.println("Hello World");
+        String victimName = "Koelpin, Ernest";
 
-        System.out.println(UTCTimeNow());
+        String victimFullName = victimName.substring(1, victimName.indexOf(",")).toUpperCase()
+                + victimName.substring(victimName.indexOf(",") + victimName.length() - 1);
+
+
+        System.out.println(victimFullName);
     }
-
-
-
-
 
 
 }

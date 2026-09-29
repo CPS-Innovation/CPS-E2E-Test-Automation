@@ -71,7 +71,7 @@
                   "{{DEF_Street_Address}}",
                   "{{DEF_City}}"
                 ],
-                "Postcode": "ZZ1 XX2",
+                "Postcode": "{{PostCode}}",
                 "Country": "UK"
               }
             },
@@ -99,7 +99,7 @@
                   "{{DEF_Street_Address}}",
                   "{{DEF_City}}"
                 ],
-                "Postcode": "ZZ1 XX2",
+                "Postcode": "{{PostCode}}",
                 "Country": "UK"
               }
             },
@@ -127,7 +127,7 @@
                   "{{DEF_Street_Address}}",
                   "{{DEF_City}}"
                 ],
-                "Postcode": "ZZ1 XX2",
+                "Postcode": "{{PostCode}}",
                 "Country": "UK"
               }
             },
@@ -158,7 +158,7 @@
             "GivenName": "{{DEF_FirstName}}",
             "FamilyName": "{{DEF_Surname}}"
           },
-          "DateOfBirth": "1992-09-08",
+          "DateOfBirth": "{{AdultDoB}}",
           "ContactDetails": {
             "Address": {
               "AddressLine": [
@@ -166,7 +166,7 @@
                 "{{DEF_Street_Address}}",
                 "{{DEF_City}}"
               ],
-              "Postcode": "NE1 1BB",
+              "Postcode": "{{PostCode}}",
               "Country": "UK"
             },
             "ContactNumber": [
@@ -218,13 +218,13 @@
                 "{{DEF_Street_Address}}",
                 "{{DEF_City}}"
               ],
-              "Postcode": "NE1 1AB",
+              "Postcode": "{{PostCode}}",
               "Country": "UK"
             },
             "ContactNumber": [
               {
                 "Number": {
-                  "TelNationalNumber": "01312345678"
+                  "TelNationalNumber": "{{HomePhone}}"
                 },
                 "TypeOfNumber": "work"
               }
@@ -254,13 +254,13 @@
               "{{DEF_Street_Address}}",
               "{{DEF_City}}"
             ],
-            "Postcode": "NE1 1AB",
+            "Postcode": "{{PostCode}}",
             "Country": "UK"
           },
           "ContactNumber": [
             {
               "Number": {
-                "TelNationalNumber": "01910000001"
+                "TelNationalNumber": "{{HomePhone}}"
               },
               "TypeOfNumber": "work"
             }
@@ -297,13 +297,13 @@
               "{{DEF_Street_Address}}",
               "{{DEF_City}}"
             ],
-            "Postcode": "NE1 1AB",
+            "Postcode": "{{PostCode}}",
             "Country": "UK"
           },
           "ContactNumber": [
             {
               "Number": {
-                "TelNationalNumber": "01910000002"
+                "TelNationalNumber": "{{HomePhone}}"
               },
               "TypeOfNumber": "work"
             }

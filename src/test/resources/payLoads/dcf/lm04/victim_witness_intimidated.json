@@ -20,6 +20,7 @@
           "GivenName": "{{FirstName}}",
           "FamilyName": "{{Surname}}"
         },
+        "DateOfBirth": "{{AdultDoB}}",
         "ContactDetails": {
           "Address": {
             "AddressLine": [
@@ -27,40 +28,50 @@
               "{{AddressLin2}}",
               "{{AddressLin3}}"
             ],
-            "Postcode": "NE1 1BB",
+            "Postcode": "{{PostCode}}",
             "Country": "UK"
           },
           "ContactNumber": [
             {
               "Number": {
-                "TelNationalNumber": "07900998844"
+                "TelNationalNumber": "{{MobileNumber}}"
               },
               "TypeOfNumber": "mobile"
             },
             {
               "Number": {
-                "TelNationalNumber": "01912587414"
+                "TelNationalNumber": "{{HomePhone}}"
               },
               "TypeOfNumber": "home"
             }
           ],
-          "Email": "Witness_test@email.co.gov.uk"
+          "Email": "{{Email}}"
         },
-        "DateOfBirth": "1985-02-10",
         "PersonClassification": [
           {
             "ClassificationType": "TypeOfWitness",
-            "ClassificationCode": "Special",
+            "ClassificationCode": "Intimidated",
             "ClassificationValue": {
               "ClassificationValueFlag": true
             }
           }
         ]
       },
-      "TypeOfPerson": "Witness",
-      "Witness": {
-        "Occupation": "Civilian",
-        "WarnedByPolice": false
+      "TypeOfPerson": "VictimWitness",
+      "WitnessAndVictim": {
+        "Witness": {
+          "Occupation": "Civilian",
+          "WarnedByPolice": false
+        },
+        "Victim": {
+          "XOffenceId": [
+            "{{LM04_CaseOffenceId}}"
+          ],
+          "VPSStatus": {
+            "ResponseToVPSOffer": "Accepted",
+            "SchemeExplained": false
+          }
+        }
       },
       "LinkedSuspects": null
     }

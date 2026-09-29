@@ -59,36 +59,39 @@ public class VictimService extends BaseService {
         List<String> witnessSpecialId = extractFromJsonToList(body,
                 "$[?(@.isWitnessAndVictim==false && @.isSpecialNeeds==true)].witnessId");
 
-        List<String> victimId = extractFromJsonToList(body,
+        List<String> victimWitnessId = extractFromJsonToList(body,
                 "$[?(@.isWitnessAndVictim==true && @.isKeyWitness=='Yes')].witnessId");
-        List<String> victimChildId = extractFromJsonToList(body,
+        List<String> victimWitnessChildId = extractFromJsonToList(body,
                 "$[?(@.isWitnessAndVictim==true && @.isChild==true)].witnessId");
-        List<String> victimExpertId = extractFromJsonToList(body,
+        List<String> victimWitnessExpertId = extractFromJsonToList(body,
                 "$[?(@.isWitnessAndVictim==true && @.isExpert==true)].witnessId");
-        List<String> victimPrisonerId = extractFromJsonToList(body,
+        List<String> victimWitnessPrisonerId = extractFromJsonToList(body,
                 "$[?(@.isWitnessAndVictim==true && @.isPrisoner==true)].witnessId");
-        List<String> victimInterpreterId = extractFromJsonToList(body,
+        List<String> victimWitnessInterpreterId = extractFromJsonToList(body,
                 "$[?(@.isWitnessAndVictim==true && @.isInterpreter==true)].witnessId");
-        List<String> victimVulnerableId = extractFromJsonToList(body,
+        List<String> victimWitnessVulnerableId = extractFromJsonToList(body,
                 "$[?(@.isWitnessAndVictim==true && @.isVulnerable==true)].witnessId");
-        List<String> victimPoliceId = extractFromJsonToList(body,
+        List<String> victimWitnessPoliceId = extractFromJsonToList(body,
                 "$[?(@.isWitnessAndVictim==true && @.isPolice==true)].witnessId");
-        List<String> victimProfessionalId = extractFromJsonToList(body,
+        List<String> victimWitnessProfessionalId = extractFromJsonToList(body,
                 "$[?(@.isWitnessAndVictim==true && @.isProfessional==true)].witnessId");
-        List<String> victimIntimidatedId = extractFromJsonToList(body,
+        List<String> victimWitnessIntimidatedId = extractFromJsonToList(body,
                 "$[?(@.isWitnessAndVictim==true && @.isIntimidated==true)].witnessId");
-        List<String> victimSpecialId = extractFromJsonToList(body,
+        List<String> victimWitnessSpecialId = extractFromJsonToList(body,
                 "$[?(@.isWitnessAndVictim==true && @.isSpecialNeeds==true)].witnessId");
 
-        List<String> pureVictimId = extractFromJsonToList(body,
+        List<String> victimId = extractFromJsonToList(body,
                 "$[?(@.isPureVictim==true && @.isWitnessAndVictim==false && @.isVulnerable==false && @.isIntimidated==false)].witnessId");
-        List<String> pureVictimVulnerableId = extractFromJsonToList(body,
+        List<String> victimVulnerableId = extractFromJsonToList(body,
                 "$[?(@.isPureVictim==true && @.isWitnessAndVictim==false && @.isVulnerable==true && @.isIntimidated==false)].witnessId");
-        List<String> pureVictimIntimidatedId = extractFromJsonToList(body,
+        List<String> victimIntimidatedId = extractFromJsonToList(body,
                 "$[?(@.isPureVictim==true && @.isWitnessAndVictim==false && @.isVulnerable==false && @.isIntimidated==true)].witnessId");
 
-        Map<String, List<String>> victimMapIds = new HashMap<>();
+
         Map<String, List<String>> witnessMapIds = new HashMap<>();
+        Map<String, List<String>> victimWitnessMapIds = new HashMap<>();
+        Map<String, List<String>> victimMapIds = new HashMap<>();
+
         witnessMapIds.put("witness", witnessId);
         witnessMapIds.put("witnessChild", witnessChildId);
         witnessMapIds.put("witnessExpert", witnessExpertId);
@@ -100,23 +103,24 @@ public class VictimService extends BaseService {
         witnessMapIds.put("witnessIntimidated", witnessIntimidatedId);
         witnessMapIds.put("witnessSpecial", witnessSpecialId);
 
-        victimMapIds.put("victimWitness", victimId);
-        victimMapIds.put("victimWitnessChild", victimChildId);
-        victimMapIds.put("victimWitnessExpert", victimExpertId);
-        victimMapIds.put("victimWitnessPrisoner", victimPrisonerId);
-        victimMapIds.put("victimWitnessInterpreter", victimInterpreterId);
-        victimMapIds.put("victimWitnessVulnerable", victimVulnerableId);
-        victimMapIds.put("victimWitnessPolice", victimPoliceId);
-        victimMapIds.put("victimWitnessProfessional", victimProfessionalId);
-        victimMapIds.put("victimWitnessIntimidated", victimIntimidatedId);
-        victimMapIds.put("victimWitnessSpecial", victimSpecialId);
+        victimWitnessMapIds.put("victimWitness", victimWitnessId);
+        victimWitnessMapIds.put("victimWitnessChild", victimWitnessChildId);
+        victimWitnessMapIds.put("victimWitnessExpert", victimWitnessExpertId);
+        victimWitnessMapIds.put("victimWitnessPrisoner", victimWitnessPrisonerId);
+        victimWitnessMapIds.put("victimWitnessInterpreter", victimWitnessInterpreterId);
+        victimWitnessMapIds.put("victimWitnessVulnerable", victimVulnerableId);
+        victimWitnessMapIds.put("victimWitnessPolice", victimWitnessPoliceId);
+        victimWitnessMapIds.put("victimWitnessProfessional", victimWitnessProfessionalId);
+        victimWitnessMapIds.put("victimWitnessIntimidated", victimWitnessIntimidatedId);
+        victimWitnessMapIds.put("victimWitnessSpecial", victimWitnessSpecialId);
 
-        victimMapIds.put("victim", pureVictimId);
-        victimMapIds.put("victimVulnerable", pureVictimVulnerableId);
-        victimMapIds.put("victimIntimidated", pureVictimIntimidatedId);
+        victimMapIds.put("victim", victimId);
+        victimMapIds.put("victimVulnerable", victimVulnerableId);
+        victimMapIds.put("victimIntimidated", victimIntimidatedId);
 
-        context.set("victimMapIds", victimMapIds);
         context.set("witnessMapIds", witnessMapIds);
+        context.set("victimWitnessMapIds", victimWitnessMapIds);
+        context.set("victimMapIds", victimMapIds);
 
     }
 

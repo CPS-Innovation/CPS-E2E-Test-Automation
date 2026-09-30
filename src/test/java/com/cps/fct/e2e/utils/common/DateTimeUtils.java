@@ -17,7 +17,26 @@ public class DateTimeUtils {
         return pastDate.format(formatter);
     }
 
-        public static String UTCDateInFuture(int noOfDays ) {
+    public static String UTCDateToday() {
+        return today.format(formatter);
+    }
+
+    public static String UTCDateSixMonthsFuture() {
+        LocalDate futureDate = today.plusDays(180);
+        return futureDate.format(formatter);
+    }
+
+    public static String UTCDateThreeMonthsFuture() {
+        LocalDate futureDate = today.plusDays(90);
+        return futureDate.format(formatter);
+    }
+
+    public static String UTCDatePastThreeMonths() {
+        LocalDate futureDate = today.plusDays(90);
+        return futureDate.format(formatter);
+    }
+
+    public static String UTCDateInFuture(int noOfDays) {
         LocalDate futureDate = today.plusDays(noOfDays);
         return futureDate.format(formatter);
     }
@@ -54,8 +73,6 @@ public class DateTimeUtils {
         ZonedDateTime newDate = originalDate.plusMonths(noOfMonths);
         return newDate.format(UTC_FORMATTER);
     }
-
-
 
 
 }

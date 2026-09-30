@@ -13,13 +13,9 @@ public class Sample {
 
     public static void main(String[] args) {
 //        System.out.println("Hello World");
-        String victimName = "Koelpin, Ernest";
-
-        String victimFullName = victimName.substring(1, victimName.indexOf(",")).toUpperCase()
-                + victimName.substring(victimName.indexOf(",") + victimName.length() - 1);
 
 
-        System.out.println(victimFullName);
+        System.out.println(UTCDateSixMonthsFuture());
     }
 
 

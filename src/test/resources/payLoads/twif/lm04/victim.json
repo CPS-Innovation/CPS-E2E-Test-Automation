@@ -13,11 +13,13 @@
         "GivenName": "{{FirstName}}",
         "FamilyName": "{{Surname}}"
       },
+      "DateOfBirth": "{{AdultDoB}}",
       "ContactDetails": {
         "Address": {
           "AddressLine": [
             "{{AddressLin1}}",
-            "{{AddressLin2}}"
+            "{{AddressLin2}}",
+            "{{AddressLin3}}"
           ],
           "Postcode": "{{PostCode}}"
         },
@@ -35,10 +37,9 @@
             "TypeOfNumber": "home"
           }
         ],
-        "Email": "victim_pure@email.co.gov.uk"
+        "Email": "{{Email}}"
       },
       "TypeOfPerson": "Victim",
-      "DateOfBirth": "1970-08-04",
       "Victim": {
         "VPSStatus": {
           "ResponseToVPSOffer": "Accepted",

@@ -13,11 +13,13 @@
         "GivenName": "{{FirstName}}",
         "FamilyName": "{{Surname}}"
       },
+      "DateOfBirth": "{{AdultDoB}}",
       "ContactDetails": {
         "Address": {
           "AddressLine": [
             "{{AddressLin1}}",
-            "{{AddressLin2}}"
+            "{{AddressLin2}}",
+            "{{AddressLin3}}"
           ],
           "Postcode": "{{PostCode}}"
         },
@@ -35,7 +37,7 @@
             "TypeOfNumber": "home"
           }
         ],
-        "Email": "victim_test@email.co.gov.uk"
+        "Email": "{{Email}}"
       },
       "PersonClassification": [
         {
@@ -47,10 +49,9 @@
         }
       ],
       "TypeOfPerson": "VictimWitness",
-      "DateOfBirth": "1970-08-03",
       "WitnessAndVictim": {
         "Witness": {
-          "Occupation": "Civillian"
+          "Occupation": "VictimWitness Expert"
         },
         "Victim": {
           "dummy": "Head"

@@ -10,6 +10,7 @@ import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static com.cps.fct.e2e.utils.common.DateTimeUtils.*;
 import static com.cps.fct.e2e.utils.common.FakerUtils.*;
 
 public class PayloadBuilderForCM01 extends JsonReplacer {
@@ -45,6 +46,12 @@ public class PayloadBuilderForCM01 extends JsonReplacer {
             Map.entry("{{CM01_itemId}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_PTIURN_Number}}", fiveDigitNumber()),
             Map.entry("{{CM01_ASN_Number}}", elevenDigitNumber()),
+
+            Map.entry("{{CM01_Suspect1_Id}}", generateUppercaseAlphaNumeric(12)),
+            Map.entry("{{CM01_Suspect2_Id}}", generateUppercaseAlphaNumeric(12)),
+            Map.entry("{{CM01_Suspect3_Id}}", generateUppercaseAlphaNumeric(12)),
+            Map.entry("{{CM01_Suspect4_Id}}", generateUppercaseAlphaNumeric(12)),
+
             Map.entry("{{CM01_Def_PersonId}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_Def_PersonId_2}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_Def_PersonId_3}}", generateUppercaseAlphaNumeric(12)),
@@ -57,6 +64,7 @@ public class PayloadBuilderForCM01 extends JsonReplacer {
             Map.entry("{{CM01_CaseOffenceId_6}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_CaseOffenceId_7}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_CaseOffenceId_8}}", generateUppercaseAlphaNumeric(12)),
+
             Map.entry("{{CM01_SolicitorId}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_SolicitorId_2}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_Ser_ShoulderNo}}", generateUppercaseAlphaNumeric(6)),
@@ -66,7 +74,7 @@ public class PayloadBuilderForCM01 extends JsonReplacer {
 
             Map.entry("{{CM01_WitnessRef_1}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_WitnessRef_2}}", generateUppercaseAlphaNumeric(12)),
-            Map.entry("{{CM01_WitnessDetailsRef_1}}", generateUppercaseAlphaNumeric(12)),
+            Map.entry("{{CM01_WitnessRef_3}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_WitnessRef_Child}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_WitnessRef_Police}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_WitnessRef_Vulnerable}}", generateUppercaseAlphaNumeric(12)),
@@ -78,7 +86,7 @@ public class PayloadBuilderForCM01 extends JsonReplacer {
 
             Map.entry("{{CM01_VictimRef_1}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_VictimRef_2}}", generateUppercaseAlphaNumeric(12)),
-            Map.entry("{{CM01_VictimDetailsRef_1}}", generateUppercaseAlphaNumeric(12)),
+            Map.entry("{{CM01_VictimRef_3}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_VictimRef_Child}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_VictimRef_Vulnerable}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_VictimRef_Intimidated}}", generateUppercaseAlphaNumeric(12)),
@@ -88,16 +96,106 @@ public class PayloadBuilderForCM01 extends JsonReplacer {
             Map.entry("{{CM01_VictimRef_Interpreter}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_VictimRef_Police}}", generateUppercaseAlphaNumeric(12)),
 
-            Map.entry("{{PoliceOfficer_GivenName}}", firstName()),
-            Map.entry("{{PoliceOfficer_SurName}}", lastName()),
-            Map.entry("{{PoliceOfficer2_GivenName}}", firstName()),
-            Map.entry("{{PoliceOfficer2_Surname}}", lastName()),
+            Map.entry("{{CM01_VictimWitnessRef_1}}", generateUppercaseAlphaNumeric(12)),
+            Map.entry("{{CM01_VictimWitnessRef_2}}", generateUppercaseAlphaNumeric(12)),
+            Map.entry("{{CM01_VictimWitnessRef_3}}", generateUppercaseAlphaNumeric(12)),
+            Map.entry("{{CM01_VictimWitnessRef_Child}}", generateUppercaseAlphaNumeric(12)),
+            Map.entry("{{CM01_VictimWitnessRef_Vulnerable}}", generateUppercaseAlphaNumeric(12)),
+            Map.entry("{{CM01_VictimWitnessRef_Intimidated}}", generateUppercaseAlphaNumeric(12)),
+            Map.entry("{{CM01_VictimWitnessRef_Professional}}", generateUppercaseAlphaNumeric(12)),
+            Map.entry("{{CM01_VictimWitnessRef_Expert}}", generateUppercaseAlphaNumeric(12)),
+            Map.entry("{{CM01_VictimWitnessRef_Prisoner}}", generateUppercaseAlphaNumeric(12)),
+            Map.entry("{{CM01_VictimWitnessRef_Interpreter}}", generateUppercaseAlphaNumeric(12)),
+            Map.entry("{{CM01_VictimWitnessRef_Police}}", generateUppercaseAlphaNumeric(12)),
+
+            Map.entry("{{Suspect1_GivenName}}", firstName()),
+            Map.entry("{{Suspect2_GivenName}}", firstName()),
+            Map.entry("{{Suspect3_GivenName}}", firstName()),
+            Map.entry("{{Suspect4_GivenName}}", firstName()),
+
+            Map.entry("{{Suspect1_SurName}}", lastName()),
+            Map.entry("{{Suspect2_SurName}}", lastName()),
+            Map.entry("{{Suspect3_SurName}}", lastName()),
+            Map.entry("{{Suspect4_SurName}}", lastName()),
+
+            Map.entry("{{Suspect1_Email}}", email()),
+            Map.entry("{{Suspect2_Email}}", email()),
+            Map.entry("{{Suspect3_Email}}", email()),
+            Map.entry("{{Suspect4_Email}}", email()),
+
+            Map.entry("{{Suspect1_Mobile}}", mobilePhone()),
+            Map.entry("{{Suspect1_HomePhone}}", homePhone()),
+
+            Map.entry("{{Suspect2_Mobile}}", mobilePhone()),
+            Map.entry("{{Suspect2_HomePhone}}", homePhone()),
+
+            Map.entry("{{Suspect3_Mobile}}", mobilePhone()),
+            Map.entry("{{Suspect3_HomePhone}}", homePhone()),
+
+            Map.entry("{{Suspect4_Mobile}}", mobilePhone()),
+            Map.entry("{{Suspect4_HomePhone}}", homePhone()),
+
+            Map.entry("{{Suspect1_BuildingNo}}", buildingNumber()),
+            Map.entry("{{Suspect1_StreetAddress}}", streetAddress()),
+            Map.entry("{{Suspect1_City}}", cityName()),
+            Map.entry("{{Suspect1_PostCode}}", ukPostCode()),
+            Map.entry("{{Suspect1_DoB}}", adultDateOfBirth()),
+
+            Map.entry("{{Suspect2_BuildingNo}}", buildingNumber()),
+            Map.entry("{{Suspect2_StreetAddress}}", streetAddress()),
+            Map.entry("{{Suspect2_City}}", cityName()),
+            Map.entry("{{Suspect2_PostCode}}", ukPostCode()),
+            Map.entry("{{Suspect2_DoB}}", adultDateOfBirth()),
+
+            Map.entry("{{Suspect3_BuildingNo}}", buildingNumber()),
+            Map.entry("{{Suspect3_StreetAddress}}", streetAddress()),
+            Map.entry("{{Suspect3_City}}", cityName()),
+            Map.entry("{{Suspect3_PostCode}}", ukPostCode()),
+            Map.entry("{{Suspect3_DoB}}", adultDateOfBirth()),
+
+            Map.entry("{{Suspect4_BuildingNo}}", buildingNumber()),
+            Map.entry("{{Suspect4_StreetAddress}}", streetAddress()),
+            Map.entry("{{Suspect4_City}}", cityName()),
+            Map.entry("{{Suspect4_PostCode}}", ukPostCode()),
+            Map.entry("{{Suspect4_DoB}}", adultDateOfBirth()),
+
+            Map.entry("{{Child1_DoB}}", childDateOfBirth()),
+            Map.entry("{{Child2_DoB}}", childDateOfBirth()),
+            Map.entry("{{Child3_DoB}}", childDateOfBirth()),
+
+            Map.entry("{{AdviceRequiredByDate}}", UTCDateThreeMonthsFuture()),
+            Map.entry("{{ProposedChargeFromDate}}", UTCDatePastThreeMonths()),
+            Map.entry("{{PCDRequestDate}}", UTCDateToday()),
+            Map.entry("{{PCDDecisionRequiredByDate}}", UTCDateSixMonthsFuture()),
+
+            Map.entry("{{Offence1_BuildingNo}}", buildingNumber()),
+            Map.entry("{{Offence1_StreetAddress}}", streetAddress()),
+            Map.entry("{{Offence1_City}}", cityName()),
+            Map.entry("{{Offence1_PostCode}}", ukPostCode()),
+
+            Map.entry("{{Offence2_BuildingNo}}", buildingNumber()),
+            Map.entry("{{Offence2_StreetAddress}}", streetAddress()),
+            Map.entry("{{Offence2_City}}", cityName()),
+            Map.entry("{{Offence2_PostCode}}", ukPostCode()),
+
+            Map.entry("{{Offence3_BuildingNo}}", buildingNumber()),
+            Map.entry("{{Offence3_StreetAddress}}", streetAddress()),
+            Map.entry("{{Offence3_City}}", cityName()),
+            Map.entry("{{Offence3_PostCode}}", ukPostCode()),
+
+            Map.entry("{{Offence4_BuildingNo}}", buildingNumber()),
+            Map.entry("{{Offence4_StreetAddress}}", streetAddress()),
+            Map.entry("{{Offence4_City}}", cityName()),
+            Map.entry("{{Offence4_PostCode}}", ukPostCode()),
+
             Map.entry("{{Solicitor_FirstName}}", firstName()),
             Map.entry("{{Solicitor_lastName}}", lastName()),
             Map.entry("{{Solicitor_email}}", email()),
+
             Map.entry("{{Solicitor_2_FirstName}}", firstName()),
             Map.entry("{{Solicitor_2_lastName}}", lastName()),
             Map.entry("{{Solicitor_2_email}}", email()),
+
             Map.entry("{{Defender_Solicitor_Company}}", companyName()),
             Map.entry("{{DEF_FirstName}}", firstName()),
             Map.entry("{{DEF_Surname}}", lastName()),
@@ -127,17 +225,32 @@ public class PayloadBuilderForCM01 extends JsonReplacer {
             Map.entry("{{DEF_Mobile}}", mobilePhone()),
             Map.entry("{{DEF_HomePhone}}", homePhone()),
             Map.entry("{{DEF_Email}}", email()),
-            Map.entry("{{Soli_Building_number}}", buildingNumber()),
-            Map.entry("{{Soli_Street_Address}}", streetAddress()),
-            Map.entry("{{Soli_HomePhone}}", homePhone()),
-            Map.entry("{{Soli_City}}", cityName()),
+            Map.entry("{{Solicitor_Building_number}}", buildingNumber()),
+            Map.entry("{{Solicitor_Street_Address}}", streetAddress()),
+            Map.entry("{{Solicitor_HomePhone}}", homePhone()),
+            Map.entry("{{Solicitor_City}}", cityName()),
+            Map.entry("{{Solicitor_Postcode}}", ukPostCode()),
+
+            Map.entry("{{PoliceOfficer_GivenName}}", firstName()),
+            Map.entry("{{PoliceOfficer_SurName}}", lastName()),
+            Map.entry("{{PoliceOfficer2_GivenName}}", firstName()),
+            Map.entry("{{PoliceOfficer2_Surname}}", lastName()),
+
+
             Map.entry("{{Police_Building_number}}", buildingNumber()),
             Map.entry("{{Police_Street_Address}}", streetAddress()),
             Map.entry("{{Police_HomePhone}}", homePhone()),
+            Map.entry("{{Police_City}}", cityName()),
+
+            Map.entry("{{PoliceStation_Building_number}}", buildingNumber()),
+            Map.entry("{{PoliceStation_Street_Address}}", streetAddress()),
+            Map.entry("{{PoliceStation_City}}", cityName()),
+            Map.entry("{{PoliceStation_Postcode}}", ukPostCode()),
+            Map.entry("{{PoliceStation_PhoneNo}}", homePhone()),
+
+
             Map.entry("{{HomePhone}}", homePhone()),
-            Map.entry("{{AdultDoB}}", adultDateOfBirth()),
-            Map.entry("{{PostCode}}", ukPostCode()),
-            Map.entry("{{Police_City}}", cityName())
+            Map.entry("{{PostCode}}", ukPostCode())
     );
 
     public PayloadBuilderForCM01() throws IOException {

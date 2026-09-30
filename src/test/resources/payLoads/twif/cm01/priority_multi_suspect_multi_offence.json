@@ -74,9 +74,9 @@
           "ContactDetails": {
             "Address": {
               "AddressLine": [
-                "{{Soli_Building_number}}",
-                "{{Soli_Street_Address}}",
-                "{{Soli_City}}"
+                "{{Solicitor_Building_number}}",
+                "{{Solicitor_Street_Address}}",
+                "{{Solicitor_City}}"
               ],
               "Postcode": "AA1 1BB",
               "Country": "UK"
@@ -84,7 +84,7 @@
             "ContactNumber": [
               {
                 "Number": {
-                  "TelNationalNumber": "{{Soli_HomePhone}}"
+                  "TelNationalNumber": "{{Solicitor_HomePhone}}"
                 },
                 "TypeOfNumber": "work"
               }
@@ -191,9 +191,9 @@
           "ContactDetails": {
             "Address": {
               "AddressLine": [
-                "{{Soli_Building_number}}",
-                "{{Soli_Street_Address}}",
-                "{{Soli_City}}"
+                "{{Solicitor_Building_number}}",
+                "{{Solicitor_Street_Address}}",
+                "{{Solicitor_City}}"
               ],
               "Postcode": "AA1 1BB",
               "Country": "UK"
@@ -201,7 +201,7 @@
             "ContactNumber": [
               {
                 "Number": {
-                  "TelNationalNumber": "{{Soli_HomePhone}}"
+                  "TelNationalNumber": "{{Solicitor_HomePhone}}"
                 },
                 "TypeOfNumber": "work"
               }
@@ -309,9 +309,9 @@
           "ContactDetails": {
             "Address": {
               "AddressLine": [
-                "{{Soli_Building_number}}",
-                "{{Soli_Street_Address}}",
-                "{{Soli_City}}"
+                "{{Solicitor_Building_number}}",
+                "{{Solicitor_Street_Address}}",
+                "{{Solicitor_City}}"
               ],
               "Postcode": "AA1 1BB",
               "Country": "UK"
@@ -319,7 +319,7 @@
             "ContactNumber": [
               {
                 "Number": {
-                  "TelNationalNumber": "{{Soli_HomePhone}}"
+                  "TelNationalNumber": "{{Solicitor_HomePhone}}"
                 },
                 "TypeOfNumber": "work"
               }
@@ -427,9 +427,9 @@
           "ContactDetails": {
             "Address": {
               "AddressLine": [
-                "{{Soli_Building_number}}",
-                "{{Soli_Street_Address}}",
-                "{{Soli_City}}"
+                "{{Solicitor_Building_number}}",
+                "{{Solicitor_Street_Address}}",
+                "{{Solicitor_City}}"
               ],
               "Postcode": "AA1 1BB",
               "Country": "UK"
@@ -437,7 +437,7 @@
             "ContactNumber": [
               {
                 "Number": {
-                  "TelNationalNumber": "{{Soli_HomePhone}}"
+                  "TelNationalNumber": "{{Solicitor_HomePhone}}"
                 },
                 "TypeOfNumber": "work"
               }

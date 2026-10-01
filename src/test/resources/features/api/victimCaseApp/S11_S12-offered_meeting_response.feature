@@ -16,7 +16,7 @@ Feature: VCA-API-S11-S12-S50:- Record the offered meetings response by victims
   Verify that meeting response details are recorded
 
   Background: Create cases with single defendant with multi charge with victim and witness
-    Given create new case using "CM01" for type "single defendant multiple offence"
+    Given create new case using "CM01" for type "single suspect multiple offence"
     And add "victim" using "LM04" for the case
 
   @meetingResponse

@@ -3,7 +3,7 @@
 Feature: sample
 
   Scenario: Sample
-    Given create new case using "CM01" for type "single defendant multiple offence"
+    Given create new case using "CM01" for type "single suspect multiple offence"
 
     And add "victim" using "LM04" for the case
     And add "victim intimidated" using "LM04" for the case

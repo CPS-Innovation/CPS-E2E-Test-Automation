@@ -13,7 +13,7 @@
       "ThirdLevel": "{{TWIF_ThirdLevel}}",
       "BottomLevel": "{{TWIF_BottomLevel}}"
     },
-    "OperationName": "TWIF Case Operator",
+    "OperationName": "{{CM01_OperationName}}",
     "CaseClassification": [
       {
         "ClassificationType": "CaseMonitoring",

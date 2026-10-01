@@ -9,7 +9,7 @@ Feature: VCA-API-S1_S2:- Add personal and contact details for all category types
   Background: Create cases with single defendant with multiple charge with all category types of victims and victims witness
   with empty personal and contact details.
 
-#    Given create new case using "CM01" for type "single defendant multiple offence"
+#    Given create new case using "CM01" for type "single suspect multiple offence"
 #    And add "victim" using "LM04" for the case
 #    And the "victim" details are available in CMS
 

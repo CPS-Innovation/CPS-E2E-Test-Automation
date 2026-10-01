@@ -44,6 +44,7 @@ public class PayloadBuilderForCM01 extends JsonReplacer {
             Map.entry("{{TWIF_BottomLevel_Priority}}", jsonUtils.getMetaDataKeyValue("twif", "BottomLevelPriority")),
 
             Map.entry("{{CM01_itemId}}", generateUppercaseAlphaNumeric(12)),
+            Map.entry("{{CM01_OperationName}}", randomOperationName(10)),
             Map.entry("{{CM01_PTIURN_Number}}", fiveDigitNumber()),
             Map.entry("{{CM01_ASN_Number}}", elevenDigitNumber()),
 
@@ -51,6 +52,7 @@ public class PayloadBuilderForCM01 extends JsonReplacer {
             Map.entry("{{CM01_Suspect2_Id}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_Suspect3_Id}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_Suspect4_Id}}", generateUppercaseAlphaNumeric(12)),
+            Map.entry("{{CM01_Suspect5_Id}}", generateUppercaseAlphaNumeric(12)),
 
             Map.entry("{{CM01_Def_PersonId}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_Def_PersonId_2}}", generateUppercaseAlphaNumeric(12)),
@@ -112,16 +114,19 @@ public class PayloadBuilderForCM01 extends JsonReplacer {
             Map.entry("{{Suspect2_GivenName}}", firstName()),
             Map.entry("{{Suspect3_GivenName}}", firstName()),
             Map.entry("{{Suspect4_GivenName}}", firstName()),
+            Map.entry("{{Suspect5_GivenName}}", firstName()),
 
             Map.entry("{{Suspect1_SurName}}", lastName()),
             Map.entry("{{Suspect2_SurName}}", lastName()),
             Map.entry("{{Suspect3_SurName}}", lastName()),
             Map.entry("{{Suspect4_SurName}}", lastName()),
+            Map.entry("{{Suspect5_SurName}}", lastName()),
 
             Map.entry("{{Suspect1_Email}}", email()),
             Map.entry("{{Suspect2_Email}}", email()),
             Map.entry("{{Suspect3_Email}}", email()),
             Map.entry("{{Suspect4_Email}}", email()),
+            Map.entry("{{Suspect5_Email}}", email()),
 
             Map.entry("{{Suspect1_Mobile}}", mobilePhone()),
             Map.entry("{{Suspect1_HomePhone}}", homePhone()),
@@ -134,6 +139,9 @@ public class PayloadBuilderForCM01 extends JsonReplacer {
 
             Map.entry("{{Suspect4_Mobile}}", mobilePhone()),
             Map.entry("{{Suspect4_HomePhone}}", homePhone()),
+
+            Map.entry("{{Suspect5_Mobile}}", mobilePhone()),
+            Map.entry("{{Suspect5_HomePhone}}", homePhone()),
 
             Map.entry("{{Suspect1_BuildingNo}}", buildingNumber()),
             Map.entry("{{Suspect1_StreetAddress}}", streetAddress()),
@@ -158,6 +166,12 @@ public class PayloadBuilderForCM01 extends JsonReplacer {
             Map.entry("{{Suspect4_City}}", cityName()),
             Map.entry("{{Suspect4_PostCode}}", ukPostCode()),
             Map.entry("{{Suspect4_DoB}}", adultDateOfBirth()),
+
+            Map.entry("{{Suspect5_BuildingNo}}", buildingNumber()),
+            Map.entry("{{Suspect5_StreetAddress}}", streetAddress()),
+            Map.entry("{{Suspect5_City}}", cityName()),
+            Map.entry("{{Suspect5_PostCode}}", ukPostCode()),
+            Map.entry("{{Suspect5_DoB}}", adultDateOfBirth()),
 
             Map.entry("{{Child1_DoB}}", childDateOfBirth()),
             Map.entry("{{Child2_DoB}}", childDateOfBirth()),

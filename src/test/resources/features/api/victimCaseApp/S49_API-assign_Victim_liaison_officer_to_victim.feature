@@ -6,7 +6,7 @@ Feature: VCA-API-S49:- Add Victim liaison officer (VLO) to victims.
   Verify that Victim liaison officer (VLO) to victim
 
   Background: Create cases with single defendant with multi charge with victim.
-    Given create new case using "CM01" for type "single defendant multiple offence"
+    Given create new case using "CM01" for type "single suspect multiple offence"
     And add "victim" using "LM04" for the case
 
   @addCaseContactsToVictim

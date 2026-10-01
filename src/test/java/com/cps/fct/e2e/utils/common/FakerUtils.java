@@ -32,6 +32,10 @@ public class FakerUtils {
         return faker.name().lastName().toUpperCase() + ", " + faker.name().firstName();
     }
 
+    public static String randomOperationName(int length) {
+        return faker.regexify("[A-Z]{"+length+"}");
+    }
+
 
     public static String firstName() {
         return faker.name().firstName();
@@ -158,6 +162,15 @@ public class FakerUtils {
 
     public static String generateUppercaseAlphaNumeric(int length) {
         String CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        SecureRandom RANDOM = new SecureRandom();
+        return RANDOM.ints(length, 0, CHARS.length())
+                .mapToObj(CHARS::charAt)
+                .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
+                .toString();
+    }
+
+    public static String generateUppercaseValue(int length) {
+        String CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         SecureRandom RANDOM = new SecureRandom();
         return RANDOM.ints(length, 0, CHARS.length())
                 .mapToObj(CHARS::charAt)

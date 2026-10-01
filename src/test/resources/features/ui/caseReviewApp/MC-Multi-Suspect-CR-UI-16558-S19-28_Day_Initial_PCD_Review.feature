@@ -5,7 +5,7 @@ Feature: CR-UI-S19 - MC Initial PCD Review for multi suspect
   So that I can submit the review with the correct analysis, monitoring codes, action plan outcome and MG3 document.
 
   Background: Case Creation
-    Given create new case using "CM01" for type "multi suspect multi offence"
+    Given create new case using "CM01" for type "multiple suspect multiple offence"
     And precharge the "MC" triage case for "28Day" PCD review
 
 

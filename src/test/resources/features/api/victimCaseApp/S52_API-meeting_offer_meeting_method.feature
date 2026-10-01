@@ -16,7 +16,7 @@ Feature: VCA-API-S52:- Offer meetings via meeting methods to victims
   Verify that meeting offered and meeting method details are recorded
 
   Background: Create cases with single defendant with multi charge with victim and witness
-    Given create new case using "CM01" for type "single defendant multiple offence"
+    Given create new case using "CM01" for type "single suspect multiple offence"
     And add "victim" using "LM04" for the case
 
   @ptmDeclined

@@ -15,7 +15,7 @@ public class Sample {
 //        System.out.println("Hello World");
 
 
-        System.out.println(UTCDateSixMonthsFuture());
+        System.out.println(randomOperationName(10));
     }
 
 

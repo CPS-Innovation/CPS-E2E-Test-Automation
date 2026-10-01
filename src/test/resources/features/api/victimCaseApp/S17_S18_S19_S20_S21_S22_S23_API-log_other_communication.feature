@@ -16,7 +16,7 @@ Feature: VCA-API-S17 to S23:- Log other communications with the purpose informat
   Verify that communication details are recorded.
 
   Background: Create cases with single defendant with multi charge with victim and witness
-    Given create new case using "CM01" for type "single defendant multiple offence"
+    Given create new case using "CM01" for type "single suspect multiple offence"
     And add "victim" using "LM04" for the case
 
   @logOtherCommunications

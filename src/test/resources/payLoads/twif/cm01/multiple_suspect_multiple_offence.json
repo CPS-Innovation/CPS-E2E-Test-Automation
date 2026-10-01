@@ -13,7 +13,7 @@
       "ThirdLevel": "{{TWIF_ThirdLevel}}",
       "BottomLevel": "{{TWIF_BottomLevel}}"
     },
-    "OperationName": "TWIF Case Operator",
+    "OperationName": "{{CM01_OperationName}}",
     "CaseClassification": [
       {
         "ClassificationType": "CaseMonitoring",
@@ -24,25 +24,43 @@
       }
     ],
     "AdviceDetails": {
-      "AdviceRequiredByDate": "2026-01-21",
+      "AdviceRequiredByDate": "{{AdviceRequiredByDate}}",
       "Paragraphs": null
     },
     "Suspect": [
       {
         "AccusedPerson": {
-          "UniqueId": "{{CM01_Def_PersonId}}",
+          "UniqueId": "{{CM01_Suspect1_Id}}",
           "Name": {
-            "GivenName": "{{DEF_1_FirstName}}",
-            "FamilyName": "{{DEF_1_Surname}}"
+            "GivenName": "{{Suspect1_GivenName}}",
+            "FamilyName": "{{Suspect1_SurName}}"
           },
-          "DateOfBirth": "1992-01-08",
-          "Address": {
-            "AddressLine": [
-              "{{DEF_1_Street_Address}}",
-              "{{DEF_1_City}}"
+          "DateOfBirth": "{{Suspect1_DoB}}",
+          "ContactDetails": {
+            "Address": {
+              "AddressLine": [
+                "{{Suspect1_BuildingNo}}",
+                "{{Suspect1_StreetAddress}}",
+                "{{Suspect1_City}}"
+              ],
+              "Postcode": "{{Suspect1_PostCode}}",
+              "Country": "UK"
+            },
+            "ContactNumber": [
+              {
+                "Number": {
+                  "TelNationalNumber": "{{Suspect1_Mobile}}"
+                },
+                "TypeOfNumber": "mobile"
+              },
+              {
+                "Number": {
+                  "TelNationalNumber": "{{Suspect1_HomePhone}}"
+                },
+                "TypeOfNumber": "home"
+              }
             ],
-            "Postcode": "{{DEF_1_Postcode}}",
-            "Country": "UK"
+            "Email": "{{Suspect1_Email}}"
           },
           "PoliceRemandStatus": "Custody"
         },
@@ -78,7 +96,7 @@
                 "{{Solicitor_Street_Address}}",
                 "{{Solicitor_City}}"
               ],
-              "Postcode": "AA1 1BB",
+              "Postcode": "{{Solicitor_Postcode}}",
               "Country": "UK"
             },
             "ContactNumber": [
@@ -98,22 +116,22 @@
             "CJSCode": {
               "Code": {
                 "Alternative": {
-                  "ActOrSource": "FA",
-                  "Year": "88"
+                  "ActOrSource": "OF",
+                  "Year": "61"
                 },
                 "Reason": "016"
               }
             },
-            "Description": "Suspect One Offence 1",
+            "Description": "OF61016 - Multiple Suspect Multiple Offence",
             "Category": "Summary Only",
-            "FromDate": "2001-10-01",
+            "FromDate": "{{ProposedChargeFromDate}}",
             "Particulars": {
               "Address": {
-                "AddressLine": [
-                  "{{DEF_1_Street_Address}}",
-                  "{{DEF_1_City}}"
+                "AddressLine": ["{{Offence1_BuildingNo}}",
+                  "{{Offence1_StreetAddress}}",
+                  "{{Offence1_City}}"
                 ],
-                "Postcode": "{{DEF_1_Postcode}}",
+                "Postcode": "{{Offence1_PostCode}}",
                 "Country": "UK"
               }
             }
@@ -126,42 +144,58 @@
                   "ActOrSource": "OF",
                   "Year": "61"
                 },
-                "Reason": "016"
+                "Reason": "017"
               }
             },
-            "Description": "Suspect One Offence 2",
+            "Description": "OF61017 - Multiple Suspect Multiple Offence",
             "Category": "Summary Only",
-            "FromDate": "2001-10-01",
+            "FromDate": "{{ProposedChargeFromDate}}",
             "Particulars": {
               "Address": {
-                "AddressLine": [
-                  "{{DEF_1_Street_Address}}",
-                  "{{DEF_1_City}}"
+                "AddressLine": ["{{Offence1_BuildingNo}}",
+                  "{{Offence1_StreetAddress}}",
+                  "{{Offence1_City}}"
                 ],
-                "Postcode": "{{DEF_1_Postcode}}",
+                "Postcode": "{{Offence1_PostCode}}",
                 "Country": "UK"
               }
             }
           }
         ]
       },
-
-
       {
         "AccusedPerson": {
-          "UniqueId": "{{CM01_Def_PersonId_2}}",
+          "UniqueId": "{{CM01_Suspect2_Id}}",
           "Name": {
-            "GivenName": "{{DEF_2_FirstName}}",
-            "FamilyName": "{{DEF_2_Surname}}"
+            "GivenName": "{{Suspect2_GivenName}}",
+            "FamilyName": "{{Suspect2_SurName}}"
           },
-          "DateOfBirth": "1992-02-08",
-          "Address": {
-            "AddressLine": [
-              "{{DEF_2_Street_Address}}",
-              "{{DEF_2_City}}"
+          "DateOfBirth": "{{Suspect2_DoB}}",
+          "ContactDetails": {
+            "Address": {
+              "AddressLine": [
+                "{{Suspect2_BuildingNo}}",
+                "{{Suspect2_StreetAddress}}",
+                "{{Suspect2_City}}"
+              ],
+              "Postcode": "{{Suspect2_PostCode}}",
+              "Country": "UK"
+            },
+            "ContactNumber": [
+              {
+                "Number": {
+                  "TelNationalNumber": "{{Suspect2_Mobile}}"
+                },
+                "TypeOfNumber": "mobile"
+              },
+              {
+                "Number": {
+                  "TelNationalNumber": "{{Suspect2_HomePhone}}"
+                },
+                "TypeOfNumber": "home"
+              }
             ],
-            "Postcode": "{{DEF_2_Postcode}}",
-            "Country": "UK"
+            "Email": "{{Suspect2_Email}}"
           },
           "PoliceRemandStatus": "Custody"
         },
@@ -197,7 +231,7 @@
                 "{{Solicitor_Street_Address}}",
                 "{{Solicitor_City}}"
               ],
-              "Postcode": "AA1 1BB",
+              "Postcode": "{{Solicitor_Postcode}}",
               "Country": "UK"
             },
             "ContactNumber": [
@@ -220,240 +254,110 @@
                   "ActOrSource": "OF",
                   "Year": "61"
                 },
-                "Reason": "016"
+                "Reason": "018"
               }
             },
-            "Description": "Suspect Two Offence 1",
+            "Description": "OF61018 - Multiple Suspect Multiple Offence",
             "Category": "Summary Only",
-            "FromDate": "2001-10-01",
-
+            "FromDate": "{{ProposedChargeFromDate}}",
             "Particulars": {
               "Address": {
-                "AddressLine": [
-                  "{{DEF_2_Street_Address}}",
-                  "{{DEF_2_City}}"
+                "AddressLine": ["{{Offence1_BuildingNo}}",
+                  "{{Offence1_StreetAddress}}",
+                  "{{Offence1_City}}"
                 ],
-                "Postcode": "{{DEF_2_Postcode}}",
+                "Postcode": "{{Offence1_PostCode}}",
                 "Country": "UK"
               }
             }
+          }
+        ]
+      },
+      {
+        "AccusedPerson": {
+          "UniqueId": "{{CM01_Suspect3_Id}}",
+          "Name": {
+            "GivenName": "{{Suspect3_GivenName}}",
+            "FamilyName": "{{Suspect3_SurName}}"
           },
+          "DateOfBirth": "{{Suspect3_DoB}}",
+          "ContactDetails": {
+            "Address": {
+              "AddressLine": [
+                "{{Suspect3_BuildingNo}}",
+                "{{Suspect3_StreetAddress}}",
+                "{{Suspect3_City}}"
+              ],
+              "Postcode": "{{Suspect3_PostCode}}",
+              "Country": "UK"
+            },
+            "ContactNumber": [
+              {
+                "Number": {
+                  "TelNationalNumber": "{{Suspect3_Mobile}}"
+                },
+                "TypeOfNumber": "mobile"
+              },
+              {
+                "Number": {
+                  "TelNationalNumber": "{{Suspect3_HomePhone}}"
+                },
+                "TypeOfNumber": "home"
+              }
+            ],
+            "Email": "{{Suspect3_Email}}"
+          },
+          "PoliceRemandStatus": "Custody"
+        },
+        "PersonClassification": [
+          {
+            "ClassificationType": "StatusInformation",
+            "ClassificationCode": "SuspectDecisionPriority",
+            "ClassificationValue": {
+              "ClassificationValueText": "G"
+            }
+          }
+        ],
+        "ASN": {
+          "Year": "{{TWIF_Year}}",
+          "Force": "{{TWIF_Force}}",
+          "Unit": "{{TWIF_Unit}}",
+          "System": "00",
+          "Number": "{{CM01_ASN_Number}}",
+          "CheckCharacter": "W"
+        },
+        "DefenceSolicitor": {
+          "Firm": "{{Defender_Solicitor_Company}}",
+          "UniqueId": "{{CM01_SolicitorId}}",
+          "Name": {
+            "Title": "Mr",
+            "GivenName": "{{Solicitor_FirstName}}",
+            "FamilyName": "{{Solicitor_lastName}}"
+          },
+          "ContactDetails": {
+            "Address": {
+              "AddressLine": [
+                "{{Solicitor_Building_number}}",
+                "{{Solicitor_Street_Address}}",
+                "{{Solicitor_City}}"
+              ],
+              "Postcode": "{{Solicitor_Postcode}}",
+              "Country": "UK"
+            },
+            "ContactNumber": [
+              {
+                "Number": {
+                  "TelNationalNumber": "{{Solicitor_HomePhone}}"
+                },
+                "TypeOfNumber": "work"
+              }
+            ],
+            "Email": "{{Solicitor_email}}"
+          }
+        },
+        "ProposedCharge": [
           {
             "UniqueID": "{{CM01_CaseOffenceId_4}}",
-            "CJSCode": {
-              "Code": {
-                "Alternative": {
-                  "ActOrSource": "CE",
-                  "Year": "79"
-                },
-                "Reason": "287"
-              }
-            },
-            "Description": "Suspect Two Offence 2",
-            "Category": "Summary Only",
-            "FromDate": "2001-10-01",
-            "Particulars": {
-              "Address": {
-                "AddressLine": [
-                  "{{DEF_2_Street_Address}}",
-                  "{{DEF_2_City}}"
-                ],
-                "Postcode": "{{DEF_2_Postcode}}",
-                "Country": "UK"
-              }
-            }
-          }
-        ]
-      },
-
-
-      {
-        "AccusedPerson": {
-          "UniqueId": "{{CM01_Def_PersonId_3}}",
-          "Name": {
-            "GivenName": "{{DEF_3_FirstName}}",
-            "FamilyName": "{{DEF_3_Surname}}"
-          },
-          "DateOfBirth": "1992-03-03",
-          "Address": {
-            "AddressLine": [
-              "{{DEF_3_Street_Address}}",
-              "{{DEF_3_City}}"
-            ],
-            "Postcode": "{{DEF_3_Postcode}}",
-            "Country": "UK"
-          },
-          "PoliceRemandStatus": "Custody"
-        },
-        "PersonClassification": [
-          {
-            "ClassificationType": "StatusInformation",
-            "ClassificationCode": "SuspectDecisionPriority",
-            "ClassificationValue": {
-              "ClassificationValueText": "G"
-            }
-          }
-        ],
-        "ASN": {
-          "Year": "{{TWIF_Year}}",
-          "Force": "{{TWIF_Force}}",
-          "Unit": "{{TWIF_Unit}}",
-          "System": "00",
-          "Number": "{{CM01_ASN_Number}}",
-          "CheckCharacter": "W"
-        },
-        "DefenceSolicitor": {
-          "Firm": "{{Defender_Solicitor_Company}}",
-          "UniqueId": "{{CM01_SolicitorId}}",
-          "Name": {
-            "Title": "Mr",
-            "GivenName": "{{Solicitor_FirstName}}",
-            "FamilyName": "{{Solicitor_lastName}}"
-          },
-          "ContactDetails": {
-            "Address": {
-              "AddressLine": [
-                "{{Solicitor_Building_number}}",
-                "{{Solicitor_Street_Address}}",
-                "{{Solicitor_City}}"
-              ],
-              "Postcode": "AA1 1BB",
-              "Country": "UK"
-            },
-            "ContactNumber": [
-              {
-                "Number": {
-                  "TelNationalNumber": "{{Solicitor_HomePhone}}"
-                },
-                "TypeOfNumber": "work"
-              }
-            ],
-            "Email": "{{Solicitor_email}}"
-          }
-        },
-        "ProposedCharge": [
-          {
-            "UniqueID": "{{CM01_CaseOffenceId_5}}",
-            "CJSCode": {
-              "Code": {
-                "Alternative": {
-                  "ActOrSource": "FA",
-                  "Year": "88"
-                },
-                "Reason": "016"
-              }
-            },
-            "Description": "Suspect Three Offence 1",
-            "Category": "Summary Only",
-            "FromDate": "2001-10-01",
-
-            "Particulars": {
-              "Address": {
-                "AddressLine": [
-                  "{{DEF_3_Street_Address}}",
-                  "{{DEF_3_City}}"
-                ],
-                "Postcode": "{{DEF_3_Postcode}}",
-                "Country": "UK"
-              }
-            }
-          },
-          {
-            "UniqueID": "{{CM01_CaseOffenceId_6}}",
-            "CJSCode": {
-              "Code": {
-                "Alternative": {
-                  "ActOrSource": "WT",
-                  "Year": "06"
-                },
-                "Reason": "053"
-              }
-            },
-            "Description": "Suspect Three Offence 2",
-            "Category": "Summary Only",
-            "FromDate": "2001-10-01",
-            "Particulars": {
-              "Address": {
-                "AddressLine": [
-                  "{{DEF_3_Street_Address}}",
-                  "{{DEF_3_City}}"
-                ],
-                "Postcode": "{{DEF_3_Postcode}}",
-                "Country": "UK"
-              }
-            }
-          }
-        ]
-      },
-
-
-      {
-        "AccusedPerson": {
-          "UniqueId": "{{CM01_Def_PersonId_4}}",
-          "Name": {
-            "GivenName": "{{DEF_4_FirstName}}",
-            "FamilyName": "{{DEF_4_Surname}}"
-          },
-          "DateOfBirth": "1992-04-04",
-          "Address": {
-            "AddressLine": [
-              "{{DEF_4_Street_Address}}",
-              "{{DEF_4_City}}"
-            ],
-            "Postcode": "{{DEF_4_Postcode}}",
-            "Country": "UK"
-          },
-          "PoliceRemandStatus": "Custody"
-        },
-        "PersonClassification": [
-          {
-            "ClassificationType": "StatusInformation",
-            "ClassificationCode": "SuspectDecisionPriority",
-            "ClassificationValue": {
-              "ClassificationValueText": "G"
-            }
-          }
-        ],
-        "ASN": {
-          "Year": "{{TWIF_Year}}",
-          "Force": "{{TWIF_Force}}",
-          "Unit": "{{TWIF_Unit}}",
-          "System": "00",
-          "Number": "{{CM01_ASN_Number}}",
-          "CheckCharacter": "W"
-        },
-        "DefenceSolicitor": {
-          "Firm": "{{Defender_Solicitor_Company}}",
-          "UniqueId": "{{CM01_SolicitorId}}",
-          "Name": {
-            "Title": "Mr",
-            "GivenName": "{{Solicitor_FirstName}}",
-            "FamilyName": "{{Solicitor_lastName}}"
-          },
-          "ContactDetails": {
-            "Address": {
-              "AddressLine": [
-                "{{Solicitor_Building_number}}",
-                "{{Solicitor_Street_Address}}",
-                "{{Solicitor_City}}"
-              ],
-              "Postcode": "AA1 1BB",
-              "Country": "UK"
-            },
-            "ContactNumber": [
-              {
-                "Number": {
-                  "TelNationalNumber": "{{Solicitor_HomePhone}}"
-                },
-                "TypeOfNumber": "work"
-              }
-            ],
-            "Email": "{{Solicitor_email}}"
-          }
-        },
-        "ProposedCharge": [
-          {
-            "UniqueID": "{{CM01_CaseOffenceId_7}}",
             "CJSCode": {
               "Code": {
                 "Alternative": {
@@ -463,17 +367,261 @@
                 "Reason": "102"
               }
             },
-            "Description": "Suspect four Offence 1",
+            "Description": "OF61102 - Multiple Suspect Multiple Offence",
             "Category": "Summary Only",
-            "FromDate": "2001-10-01",
-
+            "FromDate": "{{ProposedChargeFromDate}}",
             "Particulars": {
               "Address": {
-                "AddressLine": [
-                  "{{DEF_4_Street_Address}}",
-                  "{{DEF_4_City}}"
+                "AddressLine": ["{{Offence1_BuildingNo}}",
+                  "{{Offence1_StreetAddress}}",
+                  "{{Offence1_City}}"
                 ],
-                "Postcode": "{{DEF_4_Postcode}}",
+                "Postcode": "{{Offence1_PostCode}}",
+                "Country": "UK"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "AccusedPerson": {
+          "UniqueId": "{{CM01_Suspect4_Id}}",
+          "Name": {
+            "GivenName": "{{Suspect4_GivenName}}",
+            "FamilyName": "{{Suspect4_SurName}}"
+          },
+          "DateOfBirth": "{{Suspect4_DoB}}",
+          "ContactDetails": {
+            "Address": {
+              "AddressLine": [
+                "{{Suspect4_BuildingNo}}",
+                "{{Suspect4_StreetAddress}}",
+                "{{Suspect4_City}}"
+              ],
+              "Postcode": "{{Suspect4_PostCode}}",
+              "Country": "UK"
+            },
+            "ContactNumber": [
+              {
+                "Number": {
+                  "TelNationalNumber": "{{Suspect4_Mobile}}"
+                },
+                "TypeOfNumber": "mobile"
+              },
+              {
+                "Number": {
+                  "TelNationalNumber": "{{Suspect4_HomePhone}}"
+                },
+                "TypeOfNumber": "home"
+              }
+            ],
+            "Email": "{{Suspect4_Email}}"
+          },
+          "PoliceRemandStatus": "Custody"
+        },
+        "PersonClassification": [
+          {
+            "ClassificationType": "StatusInformation",
+            "ClassificationCode": "SuspectDecisionPriority",
+            "ClassificationValue": {
+              "ClassificationValueText": "G"
+            }
+          }
+        ],
+        "ASN": {
+          "Year": "{{TWIF_Year}}",
+          "Force": "{{TWIF_Force}}",
+          "Unit": "{{TWIF_Unit}}",
+          "System": "00",
+          "Number": "{{CM01_ASN_Number}}",
+          "CheckCharacter": "W"
+        },
+        "DefenceSolicitor": {
+          "Firm": "{{Defender_Solicitor_Company}}",
+          "UniqueId": "{{CM01_SolicitorId}}",
+          "Name": {
+            "Title": "Mr",
+            "GivenName": "{{Solicitor_FirstName}}",
+            "FamilyName": "{{Solicitor_lastName}}"
+          },
+          "ContactDetails": {
+            "Address": {
+              "AddressLine": [
+                "{{Solicitor_Building_number}}",
+                "{{Solicitor_Street_Address}}",
+                "{{Solicitor_City}}"
+              ],
+              "Postcode": "{{Solicitor_Postcode}}",
+              "Country": "UK"
+            },
+            "ContactNumber": [
+              {
+                "Number": {
+                  "TelNationalNumber": "{{Solicitor_HomePhone}}"
+                },
+                "TypeOfNumber": "work"
+              }
+            ],
+            "Email": "{{Solicitor_email}}"
+          }
+        },
+        "ProposedCharge": [
+            {
+            "UniqueID": "{{CM01_CaseOffenceId_5}}",
+            "CJSCode": {
+              "Code": {
+                "Alternative": {
+                  "ActOrSource": "OF",
+                  "Year": "61"
+                },
+                "Reason": "017"
+              }
+            },
+            "Description": "OF61017 - Multiple Suspect Multiple Offence",
+            "Category": "Summary Only",
+            "FromDate": "{{ProposedChargeFromDate}}",
+            "Particulars": {
+              "Address": {
+                "AddressLine": ["{{Offence1_BuildingNo}}",
+                  "{{Offence1_StreetAddress}}",
+                  "{{Offence1_City}}"
+                ],
+                "Postcode": "{{Offence1_PostCode}}",
+                "Country": "UK"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "AccusedPerson": {
+          "UniqueId": "{{CM01_Suspect5_Id}}",
+          "Name": {
+            "GivenName": "{{Suspect5_GivenName}}",
+            "FamilyName": "{{Suspect5_SurName}}"
+          },
+          "DateOfBirth": "{{Suspect5_DoB}}",
+          "ContactDetails": {
+            "Address": {
+              "AddressLine": [
+                "{{Suspect5_BuildingNo}}",
+                "{{Suspect5_StreetAddress}}",
+                "{{Suspect5_City}}"
+              ],
+              "Postcode": "{{Suspect5_PostCode}}",
+              "Country": "UK"
+            },
+            "ContactNumber": [
+              {
+                "Number": {
+                  "TelNationalNumber": "{{Suspect5_Mobile}}"
+                },
+                "TypeOfNumber": "mobile"
+              },
+              {
+                "Number": {
+                  "TelNationalNumber": "{{Suspect5_HomePhone}}"
+                },
+                "TypeOfNumber": "home"
+              }
+            ],
+            "Email": "{{Suspect5_Email}}"
+          },
+          "PoliceRemandStatus": "Custody"
+        },
+        "PersonClassification": [
+          {
+            "ClassificationType": "StatusInformation",
+            "ClassificationCode": "SuspectDecisionPriority",
+            "ClassificationValue": {
+              "ClassificationValueText": "G"
+            }
+          }
+        ],
+        "ASN": {
+          "Year": "{{TWIF_Year}}",
+          "Force": "{{TWIF_Force}}",
+          "Unit": "{{TWIF_Unit}}",
+          "System": "00",
+          "Number": "{{CM01_ASN_Number}}",
+          "CheckCharacter": "W"
+        },
+        "DefenceSolicitor": {
+          "Firm": "{{Defender_Solicitor_Company}}",
+          "UniqueId": "{{CM01_SolicitorId}}",
+          "Name": {
+            "Title": "Mr",
+            "GivenName": "{{Solicitor_FirstName}}",
+            "FamilyName": "{{Solicitor_lastName}}"
+          },
+          "ContactDetails": {
+            "Address": {
+              "AddressLine": [
+                "{{Solicitor_Building_number}}",
+                "{{Solicitor_Street_Address}}",
+                "{{Solicitor_City}}"
+              ],
+              "Postcode": "{{Solicitor_Postcode}}",
+              "Country": "UK"
+            },
+            "ContactNumber": [
+              {
+                "Number": {
+                  "TelNationalNumber": "{{Solicitor_HomePhone}}"
+                },
+                "TypeOfNumber": "work"
+              }
+            ],
+            "Email": "{{Solicitor_email}}"
+          }
+        },
+        "ProposedCharge": [
+          {
+            "UniqueID": "{{CM01_CaseOffenceId_6}}",
+            "CJSCode": {
+              "Code": {
+                "Alternative": {
+                  "ActOrSource": "OF",
+                  "Year": "61"
+                },
+                "Reason": "016"
+              }
+            },
+            "Description": "OF61016 - Multiple Suspect Multiple Offence",
+            "Category": "Summary Only",
+            "FromDate": "{{ProposedChargeFromDate}}",
+            "Particulars": {
+              "Address": {
+                "AddressLine": ["{{Offence1_BuildingNo}}",
+                  "{{Offence1_StreetAddress}}",
+                  "{{Offence1_City}}"
+                ],
+                "Postcode": "{{Offence1_PostCode}}",
+                "Country": "UK"
+              }
+            }
+          },
+          {
+            "UniqueID": "{{CM01_CaseOffenceId_7}}",
+            "CJSCode": {
+              "Code": {
+                "Alternative": {
+                  "ActOrSource": "OF",
+                  "Year": "61"
+                },
+                "Reason": "018"
+              }
+            },
+            "Description": "OF61018 - Multiple Suspect Multiple Offence",
+            "Category": "Summary Only",
+            "FromDate": "{{ProposedChargeFromDate}}",
+            "Particulars": {
+              "Address": {
+                "AddressLine": ["{{Offence1_BuildingNo}}",
+                  "{{Offence1_StreetAddress}}",
+                  "{{Offence1_City}}"
+                ],
+                "Postcode": "{{Offence1_PostCode}}",
                 "Country": "UK"
               }
             }
@@ -486,19 +634,19 @@
                   "ActOrSource": "OF",
                   "Year": "61"
                 },
-                "Reason": "019"
+                "Reason": "102"
               }
             },
-            "Description": "Suspect four Offence 2",
+            "Description": "OF61102 - Multiple Suspect Multiple Offence",
             "Category": "Summary Only",
-            "FromDate": "2001-10-01",
+            "FromDate": "{{ProposedChargeFromDate}}",
             "Particulars": {
               "Address": {
-                "AddressLine": [
-                  "{{DEF_4_Street_Address}}",
-                  "{{DEF_4_City}}"
+                "AddressLine": ["{{Offence1_BuildingNo}}",
+                  "{{Offence1_StreetAddress}}",
+                  "{{Offence1_City}}"
                 ],
-                "Postcode": "{{DEF_4_Postcode}}",
+                "Postcode": "{{Offence1_PostCode}}",
                 "Country": "UK"
               }
             }
@@ -506,7 +654,6 @@
         ]
       }
     ],
-
     "CaseOutlineItem": {
       "CaseOutlineHeading": {
         "ClassificationType": "CaseOutline",
@@ -515,7 +662,7 @@
           "ClassificationValueText": "KEVD"
         }
       },
-      "CaseOutlineText": "Text."
+      "CaseOutlineText": "CaseOutline Text"
     },
     "PCDPoliceContactDetails": {
       "OfficerCompleting": {
@@ -527,17 +674,17 @@
         "ContactDetails": {
           "Address": {
             "AddressLine": [
-              "{{Police_Building_number}}",
-              "{{Police_Street_Address}}",
-              "{{Police_City}}"
+              "{{PoliceStation_Building_number}}",
+              "{{PoliceStation_Street_Address}}",
+              "{{PoliceStation_City}}"
             ],
-            "Postcode": "NE1 1AB",
+            "Postcode": "{{PoliceStation_Postcode}}",
             "Country": "UK"
           },
           "ContactNumber": [
             {
               "Number": {
-                "TelNationalNumber": "{{Police_HomePhone}}"
+                "TelNationalNumber": "{{PoliceStation_PhoneNo}}"
               },
               "TypeOfNumber": "work"
             }
@@ -548,7 +695,7 @@
           }
         },
         "Rank": "PC",
-        "Station": "Surrey",
+        "Station": "{{PoliceStation_City}}",
         "ShoulderNumber": "{{CM01_Ser_ShoulderNo}}"
       },
       "OfficerSupervising": {
@@ -561,17 +708,17 @@
         "ContactDetails": {
           "Address": {
             "AddressLine": [
-              "{{Police_Building_number}}",
-              "{{Police_Street_Address}}",
-              "{{Police_City}}"
+              "{{PoliceStation_Building_number}}",
+              "{{PoliceStation_Street_Address}}",
+              "{{PoliceStation_City}}"
             ],
-            "Postcode": "NE1 1AB",
+            "Postcode": "{{PoliceStation_Postcode}}",
             "Country": "UK"
           },
           "ContactNumber": [
             {
               "Number": {
-                "TelNationalNumber": "{{Police_HomePhone}}"
+                "TelNationalNumber": "{{PoliceStation_PhoneNo}}"
               },
               "TypeOfNumber": "work"
             }
@@ -582,13 +729,13 @@
           }
         },
         "Rank": "PC",
-        "Station": "Surrey",
+        "Station": "{{PoliceStation_City}}",
         "ShoulderNumber": "{{CM01_Con_ShoulderNo}}",
         "Narrative": "Comments by Police"
       }
     },
-    "PCDRequestDate": "2025-01-01",
-    "PCDDecisionRequiredByDate": "2026-10-30",
+    "PCDRequestDate": "{{PCDRequestDate}}",
+    "PCDDecisionRequiredByDate": "{{PCDDecisionRequiredByDate}}",
     "Contact": "Telephone"
   }
 }

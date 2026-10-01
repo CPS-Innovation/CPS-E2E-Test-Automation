@@ -16,7 +16,7 @@ Feature: VCA-API-S16:- Log the meeting outcome of conducted arranged accepted of
   Verify that conducted meeting outcome details are recorded
 
   Background: Create cases with single defendant with multi charge with victim and witness
-    Given create new case using "CM01" for type "single defendant multiple offence"
+    Given create new case using "CM01" for type "single suspect multiple offence"
     And add "victim" using "LM04" for the case
 
   @meetingOutcome

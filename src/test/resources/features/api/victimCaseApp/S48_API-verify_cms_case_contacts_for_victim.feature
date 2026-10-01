@@ -6,7 +6,7 @@ Feature: VCA-API-S48:- CMS contacts are verified of victims
   Verify that CMS contacts are as equal as in cms for victim
 
   Background: Create cases with single defendant with multi charge with victim
-    Given create new case using "CM01" for type "single defendant multiple offence"
+    Given create new case using "CM01" for type "single suspect multiple offence"
     And add "victim" using "LM04" for the case
 
   @verifyCmsCaseContacts

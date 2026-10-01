@@ -12,7 +12,7 @@ Feature: VCA-API-S10:- Meetings are not offered to victims for different meeting
   Verify that not offered meeting details are recorded
 
   Background: Create cases with single defendant with multi charge with victim and witness
-    Given create new case using "CM01" for type "single defendant multiple offence"
+    Given create new case using "CM01" for type "single suspect multiple offence"
     And add "victim" using "LM04" for the case
 
   @ptmNotOffered

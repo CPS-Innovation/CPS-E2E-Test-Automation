@@ -5,12 +5,12 @@ Feature: CR-UI-S21 - RASSO Initial PCD Review
   So that I can submit the review with the correct analysis, monitoring codes, action plan outcome and MG3 document.
 
   Background: Case Creation
-    Given create new case using "CM01" for type "multi suspect same single offence"
+    Given create new case using "CM01" for type "multiple suspect single offence"
     And precharge the "RASSO" triage case for "5Day" PCD review
 
 
   @ui @CR_UI_16554 @CR_UI_S21 @thresholdWith7daysActionPlan
-  Scenario: 5 days RASSO PCD review of test type Threshold with 14 days action plan for multi suspect single offence
+  Scenario: 5 days RASSO PCD review of test type Threshold with 14 days action plan for multiple suspect single offence
     Given I login to case review app
     And Search the case "URN"
     When I start "5 day PCD Review"

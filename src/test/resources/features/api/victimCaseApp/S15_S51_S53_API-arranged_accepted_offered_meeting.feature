@@ -16,7 +16,7 @@ Feature: VCA-API-S15-S51-S53:- Arrange the accepted meeting offer to victim with
   Verify that meeting acceptance details are recorded
 
   Background: Create cases with single defendant with multi charge with victim and witness
-    Given create new case using "CM01" for type "single defendant multiple offence"
+    Given create new case using "CM01" for type "single suspect multiple offence"
     And add "victim" using "LM04" for the case
 
   @meetingInPersonArrange

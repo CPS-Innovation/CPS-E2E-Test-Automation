@@ -7,7 +7,7 @@ Feature: VCA-API-S9:- Add category type for victim and verify wm01u message
   Verify wm01u message is sent to police system
 
   Background: Create cases with multi defendant with multi charge with witness and victim.
-    Given create new case using "CM01" for type "single defendant multiple offence"
+    Given create new case using "CM01" for type "single suspect multiple offence"
     And add "victim Witness" using "LM04" for the case
 #NOTE currently works for victimWitness -- as we have a defect for victim
   @addCategoryToVictim

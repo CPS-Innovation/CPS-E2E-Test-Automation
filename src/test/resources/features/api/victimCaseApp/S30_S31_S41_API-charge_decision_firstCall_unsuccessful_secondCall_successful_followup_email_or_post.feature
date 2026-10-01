@@ -9,7 +9,7 @@ Feature: VCA-API-S30-S31-S41:- Log charge decision communication where first cal
   verify that charge decision communication is logged.
 
   Background: Create cases with single defendant with multi charge with victim and witness
-    Given create new case using "CM01" for type "single defendant multiple offence"
+    Given create new case using "CM01" for type "single suspect multiple offence"
     And add "victim" using "LM04" for the case
 
   @FirstCallUnsuccessNoSmsSecondCallSuccessful

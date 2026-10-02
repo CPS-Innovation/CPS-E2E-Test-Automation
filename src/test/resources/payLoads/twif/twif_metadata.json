@@ -6,11 +6,10 @@
   "SecondLevel": "05",
   "ThirdLevel": "AQ",
   "BottomLevel": "00",
-  "ForcePriority": "16",
-  "UnitPriority": "XL",
-  "YearPriority": "26",
-  "TopLevelPriority": "A",
-  "SecondLevelPriority": "16",
-  "ThirdLevelPriority": "AD",
-  "BottomLevelPriority": "00"
+  "PriorityForce": "16",
+  "PriorityUnit": "XL",
+  "PriorityTopLevel": "A",
+  "PrioritySecondLevel": "16",
+  "PriorityThirdLevel": "AD",
+  "PriorityBottomLevel": "00"
 }

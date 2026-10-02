@@ -151,7 +151,7 @@
     },
     "PCDPoliceContactDetails": {
       "OfficerCompleting": {
-        "UniqueId": "{{CM01_Ser_PersonId}}",
+        "UniqueId": "{{CM01_Con_PersonId}}",
         "Name": {
           "GivenName": "{{PoliceOfficer_GivenName}}",
           "FamilyName": "{{PoliceOfficer_SurName}}"
@@ -180,12 +180,14 @@
           }
         },
         "Rank": "PC",
+        "Officer": {
+          "ShoulderNumber": "{{CM01_Con_ShoulderNo}}"
+        },
         "Station": "{{PoliceStation_City}}",
-        "ShoulderNumber": "{{CM01_Ser_ShoulderNo}}"
+        "ShoulderNumber": "{{CM01_Con_ShoulderNo}}"
       },
       "OfficerSupervising": {
-
-        "UniqueId": "{{CM01_Con_PersonId}}",
+        "UniqueId": "{{CM01_Ser_PersonId}}",
         "Name": {
           "GivenName": "{{PoliceOfficer2_GivenName}}",
           "FamilyName": "{{PoliceOfficer2_Surname}}"
@@ -213,9 +215,12 @@
             "PreferredMethod": "Work Tel"
           }
         },
-        "Rank": "PC",
+        "Rank": "PS",
+        "Officer": {
+          "ShoulderNumber": "{{CM01_Ser_ShoulderNo}}"
+        },
         "Station": "{{PoliceStation_City}}",
-        "ShoulderNumber": "{{CM01_Con_ShoulderNo}}",
+        "ShoulderNumber": "{{CM01_Ser_ShoulderNo}}",
         "Narrative": "Comments by Police"
       }
     },

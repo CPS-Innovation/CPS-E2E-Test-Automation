@@ -35,13 +35,12 @@ public class PayloadBuilderForCM01 extends JsonReplacer {
             Map.entry("{{TWIF_ThirdLevel}}", jsonUtils.getMetaDataKeyValue("twif", "ThirdLevel")),
             Map.entry("{{TWIF_BottomLevel}}", jsonUtils.getMetaDataKeyValue("twif", "BottomLevel")),
 
-            Map.entry("{{TWIF_Force_Priority}}", jsonUtils.getMetaDataKeyValue("twif", "ForcePriority")),
-            Map.entry("{{TWIF_Unit_Priority}}", jsonUtils.getMetaDataKeyValue("twif", "UnitPriority")),
-            Map.entry("{{TWIF_Year_Priority}}", jsonUtils.getMetaDataKeyValue("twif", "YearPriority")),
-            Map.entry("{{TWIF_TopLevel_Priority}}", jsonUtils.getMetaDataKeyValue("twif", "TopLevelPriority")),
-            Map.entry("{{TWIF_SecondLevel_Priority}}", jsonUtils.getMetaDataKeyValue("twif", "SecondLevelPriority")),
-            Map.entry("{{TWIF_ThirdLevel_Priority}}", jsonUtils.getMetaDataKeyValue("twif", "ThirdLevelPriority")),
-            Map.entry("{{TWIF_BottomLevel_Priority}}", jsonUtils.getMetaDataKeyValue("twif", "BottomLevelPriority")),
+            Map.entry("{{TWIF_Priority_Force}}", jsonUtils.getMetaDataKeyValue("twif", "PriorityForce")),
+            Map.entry("{{TWIF_Priority_Unit}}", jsonUtils.getMetaDataKeyValue("twif", "PriorityUnit")),
+            Map.entry("{{TWIF_Priority_TopLevel}}", jsonUtils.getMetaDataKeyValue("twif", "PriorityTopLevel")),
+            Map.entry("{{TWIF_Priority_SecondLevel}}", jsonUtils.getMetaDataKeyValue("twif", "PrioritySecondLevel")),
+            Map.entry("{{TWIF_Priority_ThirdLevel}}", jsonUtils.getMetaDataKeyValue("twif", "PriorityThirdLevel")),
+            Map.entry("{{TWIF_Priority_BottomLevel}}", jsonUtils.getMetaDataKeyValue("twif", "PriorityBottomLevel")),
 
             Map.entry("{{CM01_itemId}}", generateUppercaseAlphaNumeric(12)),
             Map.entry("{{CM01_OperationName}}", randomOperationName(10)),
@@ -179,6 +178,7 @@ public class PayloadBuilderForCM01 extends JsonReplacer {
 
             Map.entry("{{AdviceRequiredByDate}}", UTCDateThreeMonthsFuture()),
             Map.entry("{{ProposedChargeFromDate}}", UTCDatePastThreeMonths()),
+            Map.entry("{{ProposedChargeToDate}}", UTCDateToday()),
             Map.entry("{{PCDRequestDate}}", UTCDateToday()),
             Map.entry("{{PCDDecisionRequiredByDate}}", UTCDateSixMonthsFuture()),
 

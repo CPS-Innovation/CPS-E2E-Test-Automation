@@ -5,7 +5,7 @@ Feature: CR-UI-S23 - MC Initial PCD Review for Priority NFS Complaint
   So that I can submit the review with the correct analysis, monitoring codes, action plan outcome and MG3 document.
 
   Background: Case Creation
-    Given create new case using "CM01" for type "priority multi suspect single offence"
+    Given create new case using "CM01" for type "priority multiple suspect single offence"
     And precharge the RED "MC" triage case for "NFS Compliant" PCD review
 
 

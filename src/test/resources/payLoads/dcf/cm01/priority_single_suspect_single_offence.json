@@ -1,0 +1,280 @@
+{
+  "PreChargeDecisionRequest": {
+    "ItemId": "{{CM01_itemId}}",
+    "PTIURN": {
+      "Force": "{{DCF_Force}}",
+      "Unit": "{{DCF_Unit}}",
+      "Number": "{{CM01_PTIURN_Number}}",
+      "Year": "{{DCF_Year}}"
+    },
+    "CPSUnit": {
+      "TopLevel": "{{DCF_TopLevel}}",
+      "SecondLevel": "{{DCF_SecondLevel}}",
+      "ThirdLevel": "{{DCF_ThirdLevel}}",
+      "BottomLevel": "{{DCF_BottomLevel}}",
+      "LiteralValue": null
+    },
+    "OperationName": "{{CM01_OperationName}}",
+    "CaseClassification": [
+      {
+        "ClassificationType": "Case Monitoring",
+        "ClassificationCode": "Pre Charge Decision",
+        "ClassificationValue": {
+          "ClassificationValueFlag": true
+        }
+      },
+      {
+        "ClassificationType": "Case Monitoring",
+        "ClassificationCode": "Not Guilty Anticipated Plea",
+        "ClassificationValue": {
+          "ClassificationValueFlag": true
+        }
+      }
+    ],
+    "FactualSummary": {
+      "Paragraphs": [
+        {
+          "ItemHeading": {
+            "ClassificationType": "Police Narrative",
+            "ClassificationCode": "Factual Summary",
+            "ClassificationValue": {
+              "ClassificationValueText": "Summary of Circumstances of Offence(s)"
+            }
+          },
+          "ItemText": "Narrative text for Summary of Circumstances of Offence(s)"
+        }
+      ]
+    },
+    "CITP": {
+      "Paragraphs": [
+        {
+          "ItemHeading": {
+            "ClassificationType": "Police Narrative",
+            "ClassificationCode": "Confidential Information",
+            "ClassificationValue": {
+              "ClassificationValueText": "Reasonable Lines of Enquiry"
+            }
+          },
+          "ItemText": "Narrative text for Reasonable Lines of Enquiry"
+        }
+      ]
+    },
+    "Suspect": [
+      {
+        "ReviewType": "Full Code Test",
+        "PossibleOrProposedCharge": [
+          {
+            "Particulars": {
+              "Address": {
+                "AddressLine": [
+                  "{{Offence1_BuildingNo}}",
+                  "{{Offence1_StreetAddress}}",
+                  "{{Offence1_City}}"
+                ],
+                "Postcode": "{{Offence1_PostCode}}",
+                "Country": "UK"
+              }
+            },
+            "AnticipatedPlea": "Not Guilty",
+            "UniqueID": "{{CM01_CaseOffenceId}}",
+            "CJSCode": {
+              "Code": {
+                "Alternative": {
+                  "ActOrSource": "OF",
+                  "Year": "61"
+                },
+                "Reason": "102"
+              }
+            },
+            "Description": "OF 61 102 - Attempt to assault a person thereby occasioning them actual bodily harm",
+            "Category": "Summary Only",
+            "FromDate": "{{ProposedChargeFromDate}}",
+            "ToDate": "{{ProposedChargeToDate}}"
+          }
+        ],
+        "Person": {
+          "PolicePreChargeRemand": {
+            "PolicePreChargeRemandStatus": "Released Under Investigation",
+            "ProposedRemandAfterCharge": "Summons"
+          },
+          "UniqueId": "{{CM01_Suspect1_Id}}",
+          "Name": {
+            "GivenName": "{{Suspect1_GivenName}}",
+            "FamilyName": "{{Suspect1_SurName}}"
+          },
+          "DateOfBirth": "{{Suspect1_DoB}}",
+          "ContactDetails": {
+            "Address": {
+              "AddressLine": [
+                "{{Suspect1_BuildingNo}}",
+                "{{Suspect1_StreetAddress}}",
+                "{{Suspect1_City}}"
+              ],
+              "Postcode": "{{Suspect1_PostCode}}",
+              "Country": "UK"
+            },
+            "ContactNumber": [
+              {
+                "Number": {
+                  "TelNationalNumber": "{{Suspect1_Mobile}}"
+                },
+                "TypeOfNumber": "mobile"
+              },
+              {
+                "Number": {
+                  "TelNationalNumber": "{{Suspect1_HomePhone}}"
+                },
+                "TypeOfNumber": "home"
+              }
+            ],
+            "Email": "{{Suspect1_Email}}"
+          },
+
+          "PersonClassification": [
+            {
+              "ClassificationType": "StatusInformation",
+              "ClassificationCode": "SuspectDecisionPriority",
+              "ClassificationValue": {
+                "ClassificationValueText": "Red"
+              }
+            }
+          ]
+        },
+        "ASN": {
+          "Year": "{{DCF_Year}}",
+          "Force": "{{DCF_Force}}",
+          "Unit": "{{DCF_Unit}}",
+          "System": "00",
+          "Number": "{{CM01_ASN_Number}}",
+          "CheckCharacter": "B"
+        },
+        "DefenceSolicitor": {
+          "Firm": "{{Defender_Solicitor_Company}}",
+          "UniqueId": "{{CM01_SolicitorId}}",
+          "Name": {
+            "Title": "Mr",
+            "GivenName": "{{Solicitor_FirstName}}",
+            "FamilyName": "{{Solicitor_lastName}}"
+          },
+          "ContactDetails": {
+            "Address": {
+              "AddressLine": [
+                "{{Solicitor_Building_number}}",
+                "{{Solicitor_Street_Address}}",
+                "{{Solicitor_City}}"
+              ],
+              "Postcode": "{{Solicitor_Postcode}}",
+              "Country": "UK"
+            },
+            "ContactNumber": [
+              {
+                "Number": {
+                  "TelNationalNumber": "{{Solicitor_HomePhone}}"
+                },
+                "TypeOfNumber": "work"
+              }
+            ],
+            "Email": "{{Solicitor_email}}"
+          }
+        },
+        "VersionId": "1"
+      }
+    ],
+    "CaseContacts": [
+      {
+        "UniqueId": "{{CM01_Ser_PersonId}}",
+        "Name": {
+          "GivenName": "{{PoliceOfficer_GivenName}}",
+          "FamilyName": "{{PoliceOfficer_SurName}}"
+        },
+        "Officer": {
+          "PoliceOfficerRank": "Sergeant",
+          "ShoulderNumber": "{{CM01_Ser_ShoulderNo}}"
+        },
+        "ContactDetails": {
+          "Address": {
+            "AddressLine": [
+              "{{PoliceStation_Building_number}}",
+              "{{PoliceStation_Street_Address}}",
+              "{{PoliceStation_City}}"
+            ],
+            "Postcode": "{{PoliceStation_Postcode}}",
+            "Country": "UK"
+          },
+          "ContactNumber": [
+            {
+              "Number": {
+                "TelNationalNumber": "{{PoliceStation_PhoneNo}}"
+              },
+              "TypeOfNumber": "work"
+            }
+          ],
+          "Email": "police.sergeant@police-station.uk",
+          "ContactPreferences": {
+            "PreferredMethod": "Email"
+          }
+        },
+        "PersonClassification": [
+          {
+            "ClassificationType": "RoleInCase",
+            "ClassificationCode": "Role",
+            "ClassificationValue": {
+              "ClassificationValueText": "Supervising Officer"
+            }
+          }
+        ]
+      },
+      {
+        "UniqueId": "{{CM01_Con_PersonId}}",
+        "Officer": {
+          "PoliceOfficerRank": "Constable",
+          "ShoulderNumber": "{{CM01_Con_ShoulderNo}}"
+        },
+        "Name": {
+          "GivenName": "{{PoliceOfficer2_GivenName}}",
+          "FamilyName": "{{PoliceOfficer2_Surname}}"
+        },
+        "ContactDetails": {
+          "Address": {
+            "AddressLine": [
+              "{{PoliceStation_Building_number}}",
+              "{{PoliceStation_Street_Address}}",
+              "{{PoliceStation_City}}"
+            ],
+            "Postcode": "{{PoliceStation_Postcode}}",
+            "Country": "UK"
+          },
+          "ContactNumber": [
+            {
+              "Number": {
+                "TelNationalNumber": "{{PoliceStation_PhoneNo}}"
+              },
+              "TypeOfNumber": "work"
+            }
+          ],
+          "Email": "police.constable@police-station.uk",
+          "ContactPreferences": {
+            "PreferredMethod": "Work Tel"
+          }
+        },
+        "PersonClassification": [
+          {
+            "ClassificationType": "RoleInCase",
+            "ClassificationCode": "Role",
+            "ClassificationValue": {
+              "ClassificationValueText": "Officer In Case"
+            }
+          },
+          {
+            "ClassificationType": "RoleInCase",
+            "ClassificationCode": "Role",
+            "ClassificationValue": {
+              "ClassificationValueText": "Disclosure Officer"
+            }
+          }
+        ]
+      }
+    ],
+    "AssociatedCases": null
+  }
+}

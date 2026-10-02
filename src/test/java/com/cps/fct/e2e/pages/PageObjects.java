@@ -4,6 +4,7 @@ import com.cps.fct.e2e.pages.caseReviewApp.*;
 import com.cps.fct.e2e.pages.victimCaseApp.VcaHomePage;
 import com.cps.fct.e2e.pages.victimCaseApp.VcaLoginPage;
 import com.cps.fct.e2e.pages.AppsLoginPage;
+import com.cps.fct.e2e.pages.victimCaseApp.VcaVictimDetailsPage;
 import org.picocontainer.annotations.Inject;
 
 public class PageObjects {
@@ -37,6 +38,9 @@ public class PageObjects {
 
     @Inject
     public VcaHomePage vcaHomePage;
+
+    @Inject
+    public VcaVictimDetailsPage vcaVictimDetailsPage;
 
 
 }

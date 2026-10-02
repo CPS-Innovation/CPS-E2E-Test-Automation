@@ -2,16 +2,16 @@
   "PreChargeDecisionRequest": {
     "ItemId": "{{CM01_itemId}}",
     "PTIURN": {
-      "Force": "{{TWIF_Force_Priority}}",
-      "Unit": "{{TWIF_Unit_Priority}}",
+      "Force": "{{TWIF_Priority_Force}}",
+      "Unit": "{{TWIF_Priority_Unit}}",
       "Number": "{{CM01_PTIURN_Number}}",
-      "Year": "{{TWIF_Year_Priority}}"
+      "Year": "{{TWIF_Year}}"
     },
     "CPSUnit": {
-      "TopLevel": "{{TWIF_TopLevel_Priority}}",
-      "SecondLevel": "{{TWIF_SecondLevel_Priority}}",
-      "ThirdLevel": "{{TWIF_ThirdLevel_Priority}}",
-      "BottomLevel": "{{TWIF_BottomLevel_Priority}}"
+      "TopLevel": "{{TWIF_Priority_TopLevel}}",
+      "SecondLevel": "{{TWIF_Priority_SecondLevel}}",
+      "ThirdLevel": "{{TWIF_Priority_ThirdLevel}}",
+      "BottomLevel": "{{TWIF_Priority_BottomLevel}}"
     },
     "OperationName": "{{CM01_OperationName}}",
     "CaseClassification": [
@@ -24,25 +24,43 @@
       }
     ],
     "AdviceDetails": {
-      "AdviceRequiredByDate": "2026-01-21",
+      "AdviceRequiredByDate": "{{AdviceRequiredByDate}}",
       "Paragraphs": null
     },
     "Suspect": [
       {
         "AccusedPerson": {
-          "UniqueId": "{{CM01_Def_PersonId}}",
+          "UniqueId": "{{CM01_Suspect1_Id}}",
           "Name": {
-            "GivenName": "{{DEF_FirstName}}",
-            "FamilyName": "{{DEF_Surname}}"
+            "GivenName": "{{Suspect1_GivenName}}",
+            "FamilyName": "{{Suspect1_SurName}}"
           },
-          "DateOfBirth": "1992-09-08",
-          "Address": {
-            "AddressLine": [
-              "{{DEF_Street_Address}}",
-              "{{DEF_City}}"
+          "DateOfBirth": "{{Suspect1_DoB}}",
+          "ContactDetails": {
+            "Address": {
+              "AddressLine": [
+                "{{Suspect1_BuildingNo}}",
+                "{{Suspect1_StreetAddress}}",
+                "{{Suspect1_City}}"
+              ],
+              "Postcode": "{{Suspect1_PostCode}}",
+              "Country": "UK"
+            },
+            "ContactNumber": [
+              {
+                "Number": {
+                  "TelNationalNumber": "{{Suspect1_Mobile}}"
+                },
+                "TypeOfNumber": "mobile"
+              },
+              {
+                "Number": {
+                  "TelNationalNumber": "{{Suspect1_HomePhone}}"
+                },
+                "TypeOfNumber": "home"
+              }
             ],
-            "Postcode": "{{PostCode}}",
-            "Country": "UK"
+            "Email": "{{Suspect1_Email}}"
           },
           "PoliceRemandStatus": "Custody"
         },
@@ -56,9 +74,9 @@
           }
         ],
         "ASN": {
-          "Year": "{{TWIF_Year_Priority}}",
-          "Force": "{{TWIF_Force_Priority}}",
-          "Unit": "{{TWIF_Unit_Priority}}",
+          "Year": "{{TWIF_Year}}",
+          "Force": "{{TWIF_Priority_Force}}",
+          "Unit": "{{TWIF_Priority_Unit}}",
           "System": "00",
           "Number": "{{CM01_ASN_Number}}",
           "CheckCharacter": "W"
@@ -78,7 +96,7 @@
                 "{{Solicitor_Street_Address}}",
                 "{{Solicitor_City}}"
               ],
-              "Postcode": "AA1 1BB",
+              "Postcode": "{{Solicitor_Postcode}}",
               "Country": "UK"
             },
             "ContactNumber": [
@@ -98,22 +116,22 @@
             "CJSCode": {
               "Code": {
                 "Alternative": {
-                  "ActOrSource": "CE",
-                  "Year": "23"
+                  "ActOrSource": "OF",
+                  "Year": "61"
                 },
-                "Reason": "010"
+                "Reason": "016"
               }
             },
-            "Description": "Priority single defendant",
+            "Description": "OF61016 - Single Suspect Multi Offence 1",
             "Category": "Summary Only",
-            "FromDate": "2001-10-01",
+            "FromDate": "{{ProposedChargeFromDate}}",
             "Particulars": {
               "Address": {
-                "AddressLine": [
-                  "{{DEF_Street_Address}}",
-                  "{{DEF_City}}"
+                "AddressLine": ["{{Offence1_BuildingNo}}",
+                  "{{Offence1_StreetAddress}}",
+                  "{{Offence1_City}}"
                 ],
-                "Postcode": "EN1 1BB",
+                "Postcode": "{{Offence1_PostCode}}",
                 "Country": "UK"
               }
             }
@@ -126,24 +144,25 @@
                   "ActOrSource": "OF",
                   "Year": "61"
                 },
-                "Reason": "016"
+                "Reason": "102"
               }
             },
-            "Description": "Priority single defendant Second Crime",
+            "Description": "OF61102 - Single Suspect multi Offence 2",
             "Category": "Summary Only",
-            "FromDate": "2001-10-01",
+            "FromDate": "{{ProposedChargeFromDate}}",
             "Particulars": {
               "Address": {
-                "AddressLine": [
-                  "{{DEF_Street_Address}}",
-                  "{{DEF_City}}"
+                "AddressLine": ["{{Offence1_BuildingNo}}",
+                  "{{Offence1_StreetAddress}}",
+                  "{{Offence1_City}}"
                 ],
-                "Postcode": "EN1 1BB",
+                "Postcode": "{{Offence1_PostCode}}",
                 "Country": "UK"
               }
             }
           }
         ]
+
       }
     ],
     "CaseOutlineItem": {
@@ -154,7 +173,7 @@
           "ClassificationValueText": "KEVD"
         }
       },
-      "CaseOutlineText": "Text."
+      "CaseOutlineText": "CaseOutline Text"
     },
     "PCDPoliceContactDetails": {
       "OfficerCompleting": {
@@ -166,17 +185,17 @@
         "ContactDetails": {
           "Address": {
             "AddressLine": [
-              "{{Police_Building_number}}",
-              "{{Police_Street_Address}}",
-              "{{Police_City}}"
+              "{{PoliceStation_Building_number}}",
+              "{{PoliceStation_Street_Address}}",
+              "{{PoliceStation_City}}"
             ],
-            "Postcode": "NE1 1AB",
+            "Postcode": "{{PoliceStation_Postcode}}",
             "Country": "UK"
           },
           "ContactNumber": [
             {
               "Number": {
-                "TelNationalNumber": "{{Police_HomePhone}}"
+                "TelNationalNumber": "{{PoliceStation_PhoneNo}}"
               },
               "TypeOfNumber": "work"
             }
@@ -187,7 +206,7 @@
           }
         },
         "Rank": "PC",
-        "Station": "Surrey",
+        "Station": "{{PoliceStation_City}}",
         "ShoulderNumber": "{{CM01_Ser_ShoulderNo}}"
       },
       "OfficerSupervising": {
@@ -200,17 +219,17 @@
         "ContactDetails": {
           "Address": {
             "AddressLine": [
-              "{{Police_Building_number}}",
-              "{{Police_Street_Address}}",
-              "{{Police_City}}"
+              "{{PoliceStation_Building_number}}",
+              "{{PoliceStation_Street_Address}}",
+              "{{PoliceStation_City}}"
             ],
-            "Postcode": "NE1 1AB",
+            "Postcode": "{{PoliceStation_Postcode}}",
             "Country": "UK"
           },
           "ContactNumber": [
             {
               "Number": {
-                "TelNationalNumber": "{{Police_HomePhone}}"
+                "TelNationalNumber": "{{PoliceStation_PhoneNo}}"
               },
               "TypeOfNumber": "work"
             }
@@ -221,13 +240,13 @@
           }
         },
         "Rank": "PC",
-        "Station": "Surrey",
+        "Station": "{{PoliceStation_City}}",
         "ShoulderNumber": "{{CM01_Con_ShoulderNo}}",
         "Narrative": "Comments by Police"
       }
     },
-    "PCDRequestDate": "2025-01-01",
-    "PCDDecisionRequiredByDate": "2026-10-30",
+    "PCDRequestDate": "{{PCDRequestDate}}",
+    "PCDDecisionRequiredByDate": "{{PCDDecisionRequiredByDate}}",
     "Contact": "Telephone"
   }
 }

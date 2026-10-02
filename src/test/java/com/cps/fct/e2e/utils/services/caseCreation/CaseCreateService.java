@@ -282,13 +282,12 @@ public class CaseCreateService extends BaseService {
         victimWitnessMapIds.put("victimWitnessIntimidated", victimWitnessIntimidatedId);
         victimWitnessMapIds.put("victimWitnessSpecial", victimWitnessSpecialId);
 
-        victimMapIds.put("victim", victimId);
-        victimMapIds.put("victimVulnerable", victimVulnerableId);
-        victimMapIds.put("victimIntimidated", victimIntimidatedId);
+        victimWitnessMapIds.put("victim", victimId);
+        victimWitnessMapIds.put("victimVulnerable", victimVulnerableId);
+        victimWitnessMapIds.put("victimIntimidated", victimIntimidatedId);
 
         context.set("witnessMapIds", witnessMapIds);
         context.set("victimWitnessMapIds", victimWitnessMapIds);
-        context.set("victimMapIds", victimMapIds);
 
         idVictimWitnessNameMap.put(String.valueOf(witnessId), witnessName);
         idVictimWitnessNameMap.put(String.valueOf(witnessChildId), witnessChildName);

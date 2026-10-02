@@ -1,0 +1,51 @@
+{
+  "NewWitnessOrVictim": {
+    "ItemId": "{{LM04_itemId}}",
+    "PTIURN": {
+      "Force": "{{TWIF_Priority_Force}}",
+      "Unit": "{{TWIF_Priority_Unit}}",
+      "Number": "{{LM04_PTIURN_Number}}",
+      "Year": "{{TWIF_Year}}"
+    },
+    "Person": {
+      "UniqueId": "{{LM04_Victim_Witness_Ref}}",
+      "Name": {
+        "GivenName": "{{FirstName}}",
+        "FamilyName": "{{Surname}}"
+      },
+      "DateOfBirth": "{{AdultDoB}}",
+      "ContactDetails": {
+        "Address": {
+          "AddressLine": [
+            "{{AddressLin1}}",
+            "{{AddressLin2}}",
+            "{{AddressLin3}}"
+          ],
+          "Postcode": "{{PostCode}}"
+        },
+        "ContactNumber": [
+          {
+            "Number": {
+              "TelNationalNumber": "{{MobileNumber}}"
+            },
+            "TypeOfNumber": "mobile"
+          },
+          {
+            "Number": {
+              "TelNationalNumber": "{{HomePhone}}"
+            },
+            "TypeOfNumber": "home"
+          }
+        ],
+        "Email": "{{Email}}"
+      },
+      "TypeOfPerson": "Victim",
+      "Victim": {
+        "VPSStatus": {
+          "ResponseToVPSOffer": "Accepted",
+          "SchemeExplained": "false"
+        }
+      }
+    }
+  }
+}

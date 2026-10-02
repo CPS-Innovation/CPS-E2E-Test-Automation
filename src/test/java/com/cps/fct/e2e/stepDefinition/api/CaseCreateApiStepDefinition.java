@@ -144,7 +144,6 @@ public class CaseCreateApiStepDefinition {
                 Map<String, List<String>> idVictimNameMap = context.get("idVictimWitnessNameMap");
                 String victimName = String.valueOf(idVictimNameMap.get(victimId));
                 System.out.println("Person Id --" + victimId + "-- FullName --- is = " + victimName );
-
                 break;
             case "witness","witnessChild","witnessExpert","witnessInterpreter","witnessIntimidated","witnessPolice",
                  "witnessPrisoner","witnessProfessional","witnessVulnerable":

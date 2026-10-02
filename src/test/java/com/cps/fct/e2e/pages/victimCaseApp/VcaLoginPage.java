@@ -17,7 +17,7 @@ public class VcaLoginPage extends BasePage {
     private static final Logger logger =
             LoggerFactory.getLogger(VcaLoginPage.class);
 
-    private static final int LOGIN_TIMEOUT_MILLIS = 25_000;
+    private static final int LOGIN_TIMEOUT_MILLIS = 35_000;
     private static final int SHORT_TIMEOUT_MILLIS = 2_000;
     private static final int LOGIN_ROUTE_READY_TIMEOUT_MILLIS = 5_000;
     private static final int INITIAL_LOGIN_REDIRECT_WAIT_MILLIS = 1_000;
@@ -85,7 +85,9 @@ public class VcaLoginPage extends BasePage {
 
     private void waitForVictimCaseAppHomePage(){
 //        waitForElementVisible("#PaginationResults",LOGIN_TIMEOUT_MILLIS);
+        waitUntilSpinnersAreGone();
         waitForElementVisible("#PaginationResults",LOGIN_TIMEOUT_MILLIS);
+
     }
 
 }

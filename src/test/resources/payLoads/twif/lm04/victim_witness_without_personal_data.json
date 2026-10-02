@@ -1,0 +1,36 @@
+{
+  "NewWitnessOrVictim": {
+    "ItemId": "{{LM04_itemId}}",
+    "PTIURN": {
+      "Force": "{{TWIF_Force}}",
+      "Unit": "{{TWIF_Unit}}",
+      "Number": "{{LM04_PTIURN_Number}}",
+      "Year": "{{TWIF_Year}}"
+    },
+    "Person": {
+      "UniqueId": "{{LM04_Victim_Witness_Ref}}",
+      "Name": {
+        "GivenName": "{{FirstName}}",
+        "FamilyName": "{{Surname}}"
+      },
+      "PersonClassification": [
+        {
+          "ClassificationType": "StatusInformation",
+          "ClassificationCode": "KeyWitness",
+          "ClassificationValue": {
+            "ClassificationValueText": "Yes"
+          }
+        }
+      ],
+      "TypeOfPerson": "VictimWitness",
+      "WitnessAndVictim": {
+        "Witness": {
+          "Occupation": "VictimWitness Civilian"
+        },
+        "Victim": {
+          "dummy": "Head"
+        }
+      }
+    }
+  }
+}

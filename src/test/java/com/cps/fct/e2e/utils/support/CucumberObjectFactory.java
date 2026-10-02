@@ -6,6 +6,7 @@ import com.cps.fct.e2e.pages.BasePage;
 import com.cps.fct.e2e.pages.PageObjects;
 import com.cps.fct.e2e.pages.victimCaseApp.VcaHomePage;
 import com.cps.fct.e2e.pages.victimCaseApp.VcaLoginPage;
+import com.cps.fct.e2e.pages.victimCaseApp.VcaVictimDetailsPage;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
 import com.cps.fct.e2e.utils.httpClient.DefaultHttpService;
 import com.cps.fct.e2e.utils.httpClient.HttpStatusValidator;
@@ -44,6 +45,7 @@ public class CucumberObjectFactory implements ObjectFactory {
         delegate.addClass(AppsLoginPage.class);
         delegate.addClass(VcaLoginPage.class);
         delegate.addClass(VcaHomePage.class);
+        delegate.addClass(VcaVictimDetailsPage.class);
 
         addedAllPageClass();
     }

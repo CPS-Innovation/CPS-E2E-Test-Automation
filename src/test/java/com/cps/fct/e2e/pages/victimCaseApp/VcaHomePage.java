@@ -50,25 +50,26 @@ public class VcaHomePage extends BasePage {
     }
 
 
-    public String getVictimFullName(String caseUrn, String victimName) {
+    public String getVictimFullName(String caseUrn, String victimWitnessName) {
         waitForTextToAppear(caseUrn);
-        String victimFullName = victimName.substring(1, victimName.indexOf(",")).toUpperCase()
-                + victimName.substring(victimName.indexOf(","), victimName.length() - 1);
-        waitForTextToAppear(victimFullName);
-        return victimFullName;
+        String victimWitnessFullName = victimWitnessName.substring(1, victimWitnessName.indexOf(",")).toUpperCase()
+                + victimWitnessName.substring(victimWitnessName.indexOf(","), victimWitnessName.length() - 1);
+        waitForTextToAppear(victimWitnessFullName);
+        System.out.println(victimWitnessFullName);
+        return victimWitnessFullName;
     }
 
-    public void onboardVictim(String victimFullName, String service) {
-        onboardPage(victimFullName);
+    public void onboardVictim(String PersonFullName, String service) {
+        onboardPage(PersonFullName);
         selectServiceLead(service);
         clickButton("Save and continue");
-        verifyOnboard(victimFullName);
+        verifyOnboard(PersonFullName);
         clickButton("Confirm details");
         logger.info("Victim  VCA");
     }
 
-    private void onboardPage(String victimFullName) {
-        String victimSurname = victimFullName.substring(0, victimFullName.indexOf(",")).trim();
+    private void onboardPage(String PersonFullName) {
+        String victimSurname = PersonFullName.substring(0, PersonFullName.indexOf(",")).trim();
         Locator onboardLink = page.getByRole(
                 AriaRole.LINK,
                 new Page.GetByRoleOptions().setName("Onboard onboard " + victimSurname + ",")
@@ -91,8 +92,8 @@ public class VcaHomePage extends BasePage {
 
     }
 
-    private void verifyOnboard(String victimFullName) {
-        String victimFirstname = victimFullName.substring(victimFullName.indexOf(",") + 1).trim();
+    private void verifyOnboard(String PersonFullName) {
+        String victimFirstname = PersonFullName.substring(PersonFullName.indexOf(",") + 1).trim();
 
         assertThat(page.getByText(
                 Pattern.compile("Success\\s*You onboarded " + victimFirstname)))
@@ -107,6 +108,7 @@ public class VcaHomePage extends BasePage {
         clickButton("Continue");
         waitForText("Check the task details");
         waitForButtonToAppear("Confirm and create").click();
+
     }
 
     public void verifyVictimOnboard(String victimFullName) {
@@ -119,11 +121,11 @@ public class VcaHomePage extends BasePage {
                 new Page.GetByRoleOptions().setName(victimFullName))).isVisible();
     }
 
-    public void assignVloToVictim(String vloName, String victimFullName) {
+    public void assignVloToVictim(String vloName, String personFullName) {
 //        System.out.println(vloName +"---------"+victimFullName);
         assertThat(page.getByRole(
                 AriaRole.LINK,
-                new Page.GetByRoleOptions().setName(victimFullName))).isVisible();
+                new Page.GetByRoleOptions().setName(personFullName))).isVisible();
         clickOnChangeForVLO();
         selectVloFromList(vloName);
         waitForButtonToAppear("Save and continue").click();
@@ -138,13 +140,9 @@ public class VcaHomePage extends BasePage {
         Locator vlOfficerRow = page.locator(".govuk-summary-list__row")
                 .filter(new Locator.FilterOptions().setHas(page.locator("dt.govuk-summary-list__key")
                                 .filter(new Locator.FilterOptions().setHasText("Victim liaison officer"))));
-//                        .setHasText("Unassigned"));
+
         assertThat(vlOfficerRow).containsText(vloName);
-
-
-
     }
-
 
 
     public void clickOnChangeForVLO() {

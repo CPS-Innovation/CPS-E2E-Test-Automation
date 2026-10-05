@@ -33,12 +33,12 @@ Feature: VCA-API-S1_S2:- Add personal and contact details for all category types
     When the "Murali" is assigned as VLO to "victimWitness"
     And verify that Vlo "Murali" is assigned to "victimWitness"
     When the following "victimWitness" personal details are added to CMS
-      | cmsField         | value      | justification |
-      | Date of birth    | 28/05/1985 | Add Date of Birth              |
-      | Gender           | Male            |               |
-      | Address          |            |               |
-      | Telephone number |            |               |
-      | Email address    |            |               |
+      | cmsField         | justification     |
+      | Date of birth    | Add Date of Birth |
+      | Gender           | Gender change     |
+      | Address          | Address Change    |
+      | Telephone number | address Change    |
+      | Email address    | email address     |
 #    When the following "victimWitness" personal details are added in VCA
 #      | field                               | value |
 #      | Preferred name                      |       |

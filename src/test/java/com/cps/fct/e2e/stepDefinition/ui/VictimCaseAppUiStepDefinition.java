@@ -110,7 +110,7 @@ public class VictimCaseAppUiStepDefinition {
             switch(row.get("cmsField")){
                 case "Date of birth":
 //                    pages.vcaVictimDetailsPage.addDateOfBirth(row.get("value"),row.get("justification"));
-                    System.out.println(row.get("value"));
+
                     System.out.println(row.get("justification"));
                     break;
                 case "Gender":

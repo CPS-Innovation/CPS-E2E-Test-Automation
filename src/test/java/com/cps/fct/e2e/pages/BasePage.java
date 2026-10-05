@@ -204,6 +204,11 @@ public abstract class BasePage {
         page.locator("role=" + ROLE_LINK + "[name='" + name + "']").click();
     }
 
+    public void clickTabByName(String name) {
+        final String ROLE_TAB = "tab";
+        page.locator("role=" + ROLE_TAB + "[name='" + name + "']").click();
+    }
+
     public Locator getRadioButtonById(String id) {
         return page.locator("#" + id);
     }
@@ -247,6 +252,18 @@ public abstract class BasePage {
                 .setTimeout(DEFAULT_TIMEOUT_MILLIS));
         return button;
     }
+
+    protected Locator waitForHeadingToAppear(String expectedText) {
+        Locator heading = page.getByRole(
+                AriaRole.HEADING,
+                new Page.GetByRoleOptions().setName(expectedText)
+        );
+        heading.waitFor(new Locator.WaitForOptions()
+                .setState(WaitForSelectorState.VISIBLE)
+                .setTimeout(DEFAULT_TIMEOUT_MILLIS));
+        return heading;
+    }
+
 
 
 

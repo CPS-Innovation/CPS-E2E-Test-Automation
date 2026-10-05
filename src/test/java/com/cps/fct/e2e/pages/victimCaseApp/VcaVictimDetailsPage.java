@@ -36,12 +36,14 @@ public class VcaVictimDetailsPage extends BasePage {
     private static final Logger logger =
             LoggerFactory.getLogger(VcaHomePage.class);
 
-    public void navigateVictimDetailsPage(){
+    public void navigateVictimDetailsPage(String caseUrn, String victimWitnessFullName){
 
         waitUntilSpinnersAreGone("Loading, please wait");
-        page.pause();
-
-
+        clickLinkByName(victimWitnessFullName);
+        waitForHeadingToAppear(victimWitnessFullName);
+        waitForText("Case URN: "+caseUrn);
+        clickTabByName("Victim Details");
+//        page.pause();
     }
 
 

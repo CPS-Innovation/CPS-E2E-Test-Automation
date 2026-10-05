@@ -187,6 +187,16 @@ public class FakerUtils {
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 
+    public static String todayDateDay() {
+        return LocalDate.now()
+                .format(DateTimeFormatter.ofPattern("dd"));
+    }
+    public static String todayDateMonth() {
+        return LocalDate.now()
+                .format(DateTimeFormatter.ofPattern("MM"));
+    }
+
+
     public static String todayMinusFiveDays() {
         return LocalDate.now()
                 .minusDays(5)
@@ -205,9 +215,10 @@ public class FakerUtils {
     }
 
 
-    public static String yearYY() {
-        int year = random.nextInt(2025 - 2020 + 1) + 2020; // Random year between 2010 and 2025
-        return String.format("%02d", year % 100);
+    public static String yearTill2005() {
+        int year = random.nextInt(2005 - 1975 ) + 1975; // Random year between 2010 and 2025
+//        return String.format("%02d", year % 100);
+        return String.valueOf(year);
     }
 
 

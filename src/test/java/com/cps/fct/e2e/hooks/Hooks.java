@@ -75,10 +75,10 @@ public class Hooks {
 
     @After
     public void afterScenario(Scenario scenario) {
-//        attachReport(scenario);
-//        if (isUIScenario && playwrightManager != null) {
-//            playwrightManager.tearDownBrowser(scenario);
-//        }
+        attachReport(scenario);
+        if (isUIScenario && playwrightManager != null) {
+            playwrightManager.tearDownBrowser(scenario);
+        }
 
     }
 

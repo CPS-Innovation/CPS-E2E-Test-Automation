@@ -15,7 +15,7 @@ public class Sample {
 //        System.out.println("Hello World");
 
 
-        System.out.println(randomOperationName(10));
+        System.out.println(yearTill2005());
     }
 
 

@@ -99,8 +99,49 @@ public class VictimCaseAppUiStepDefinition {
     @When("the following {string} personal details are added to CMS")
     public void addVictimCMSPersonDetails(String personType, DataTable dataTable){
         String caseUrn = context.get("caseUrn");
+        Map<String, String> personTypePersonNameMap = context.get("personTypePersonNameMap");
+        String victimWitnessFullName = personTypePersonNameMap.get(personType);
         pages.vcaHomePage.searchVictimCase(caseUrn);
-        pages.vcaVictimDetailsPage.navigateVictimDetailsPage();
+        pages.vcaVictimDetailsPage.navigateVictimDetailsPage(caseUrn, victimWitnessFullName);
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+
+        for (Map<String, String> row : rows) {
+
+            switch(row.get("cmsField")){
+                case "Date of birth":
+//                    pages.vcaVictimDetailsPage.addDateOfBirth(row.get("value"),row.get("justification"));
+                    System.out.println(row.get("value"));
+                    System.out.println(row.get("justification"));
+                    break;
+                case "Gender":
+                    System.out.println(row.get("value"));
+                    System.out.println(row.get("justification"));
+                    break;
+                case "Address":
+                    System.out.println(row.get("value"));
+                    System.out.println(row.get("justification"));
+                    break;
+                case "Telephone number":
+                    System.out.println(row.get("value"));
+                    System.out.println(row.get("justification"));
+                    break;
+                case "Email address":
+                    System.out.println(row.get("value"));
+                    System.out.println(row.get("justification"));
+                    break;
+                default:
+                    System.out.println("Specified cmsField does not exist");
+
+            }
+
+
+
+
+        }
+
+
+
+
 
 
     }
@@ -109,6 +150,7 @@ public class VictimCaseAppUiStepDefinition {
     public void addVictimVCAPersonDetails(String victimType, DataTable dataTable){
         String caseUrn = context.get("caseUrn");
         pages.vcaHomePage.searchVictimCase(caseUrn);
+
 
 
     }

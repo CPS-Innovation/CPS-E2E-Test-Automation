@@ -35,10 +35,9 @@ Feature: VCA-API-S1_S2:- Add personal and contact details for all category types
     When the following "victimWitness" personal details are added to CMS
       | cmsField         | justification     |
       | Date of birth    | Add Date of Birth |
-      | Gender           | Gender change     |
-      | Address          | Address Change    |
-      | Telephone number | address Change    |
-      | Email address    | email address     |
+      | Address          | Add Address       |
+      | Telephone number | Add Telephone     |
+      | Email address    | Add email address |
 #    When the following "victimWitness" personal details are added in VCA
 #      | field                               | value |
 #      | Preferred name                      |       |

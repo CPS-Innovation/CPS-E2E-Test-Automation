@@ -109,25 +109,16 @@ public class VictimCaseAppUiStepDefinition {
 
             switch(row.get("cmsField")){
                 case "Date of birth":
-//                    pages.vcaVictimDetailsPage.addDateOfBirth(row.get("value"),row.get("justification"));
-
-                    System.out.println(row.get("justification"));
-                    break;
-                case "Gender":
-                    System.out.println(row.get("value"));
-                    System.out.println(row.get("justification"));
+                    pages.vcaVictimDetailsPage.addDateOfBirth(row.get("justification"));
                     break;
                 case "Address":
-                    System.out.println(row.get("value"));
-                    System.out.println(row.get("justification"));
+                    pages.vcaVictimDetailsPage.addAddress(row.get("justification"));
                     break;
                 case "Telephone number":
-                    System.out.println(row.get("value"));
-                    System.out.println(row.get("justification"));
+                    pages.vcaVictimDetailsPage.addTelephone(row.get("justification"));
                     break;
                 case "Email address":
-                    System.out.println(row.get("value"));
-                    System.out.println(row.get("justification"));
+                    pages.vcaVictimDetailsPage.addEmail(victimWitnessFullName, row.get("justification"));
                     break;
                 default:
                     System.out.println("Specified cmsField does not exist");

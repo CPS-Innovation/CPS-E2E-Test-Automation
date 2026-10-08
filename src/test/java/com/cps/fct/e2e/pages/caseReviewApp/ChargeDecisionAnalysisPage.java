@@ -73,7 +73,7 @@ public class ChargeDecisionAnalysisPage extends BasePage {
     private static final String RADIO_ROLE_NO = "role=radio[name='No']";
     private static final String RADIO_ROLE_NOT_AT_THIS_TIME = "role=radio[name='Not at this time']";
     private static final String DECISION_HEADER = "Charging decision";
-    private static final String DECISION_TYPE_QUESTION = "What is your decision for";
+    private static final String DECISION_TYPE_QUESTION = "What is your charging decision for";
     private static final String DECISION_CODE_QUESTION = "Select a decision code";
     private static final String NFA_REASON_QUESTION = "What is your reason for no further action?";
     private static final String OUTCOME_REASON_QUESTION = "Was undermining, unused material a key factor in the outcome of the case?";
@@ -1242,7 +1242,12 @@ public class ChargeDecisionAnalysisPage extends BasePage {
     }
 
     private void startChargingDecisionForDefendant(String defendantName) {
-        waitForTextInLocator("h1", DECISION_HEADER);
+        waitUntilBusyIndicatorsAreGone();
+        waitForChargingDecisionStartOrQuestion();
+
+        if (isDecisionTypeQuestionVisible()) {
+            return;
+        }
 
         if (defendantName != null && !defendantName.isBlank()) {
             selectDefendantForChargingDecision(defendantName);
@@ -1253,6 +1258,48 @@ public class ChargeDecisionAnalysisPage extends BasePage {
                 ACTION_CHARGE_DECISION_CLEANUP_ENDPOINT,
                 this::clickSaveAndContinueButton
         );
+    }
+
+    private void waitForChargingDecisionStartOrQuestion() {
+        page.waitForCondition(() -> isHeadingTextExactlyVisible(DECISION_HEADER)
+                || isHeadingTextVisible(DECISION_TYPE_QUESTION));
+    }
+
+    private boolean isDecisionTypeQuestionVisible() {
+        return isHeadingTextVisible(DECISION_TYPE_QUESTION);
+    }
+
+    private boolean isHeadingTextVisible(String headingText) {
+        try {
+            return page.locator("h1")
+                    .filter(new Locator.FilterOptions().setHasText(headingText))
+                    .first()
+                    .isVisible();
+        } catch (PlaywrightException exception) {
+            if (isGenuineLocatorError(exception)) {
+                throw exception;
+            }
+            return false;
+        }
+    }
+
+    private boolean isHeadingTextExactlyVisible(String headingText) {
+        try {
+            String expectedHeadingText = normalizeText(headingText);
+            Locator headings = page.locator("h1");
+            for (int index = 0; index < headings.count(); index++) {
+                Locator heading = headings.nth(index);
+                if (heading.isVisible() && normalizeText(heading.innerText()).equals(expectedHeadingText)) {
+                    return true;
+                }
+            }
+            return false;
+        } catch (PlaywrightException exception) {
+            if (isGenuineLocatorError(exception)) {
+                throw exception;
+            }
+            return false;
+        }
     }
 
     private void completeChargingDecisionDetails(Map<String, String> decisionChargingData) {

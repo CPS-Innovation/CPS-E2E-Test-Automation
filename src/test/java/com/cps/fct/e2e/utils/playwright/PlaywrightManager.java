@@ -23,6 +23,16 @@ public class PlaywrightManager {
     private static final String CLOSE_BROWSER_PROPERTY = "closeBrowser";
     private static final String KEEP_BROWSER_OPEN_SECONDS_PROPERTY = "keepBrowserOpenSeconds";
     private static final String PAUSE_BEFORE_CLOSE_PROPERTY = "pauseBeforeClose";
+    private static final int MAX_BROWSER_CONSOLE_ERRORS_TO_ATTACH = 20;
+    private static final List<String> NOISY_BROWSER_CONSOLE_ERROR_FRAGMENTS = List.of(
+            "fa-app-insights-proxy-staging.azurewebsites.net/v2/track",
+            "violates the following Content Security Policy directive",
+            "Fetch API cannot load https://fa-app-insights-proxy-staging.azurewebsites.net/v2/track",
+            "https://graph.microsoft.com/v1.0/me?$select=department,jobTitle",
+            "auth getMe failed",
+            "initialiseUserData Unexpected error fetching user data",
+            "Call to /api/global-components/user-data returned non-ok status code: 401"
+    );
 
     private Playwright playwright;
     private Browser browser;
@@ -152,16 +162,17 @@ public class PlaywrightManager {
         } catch (Exception e) {
             System.err.println("Error during teardown: " + e.getMessage());
         } finally {
+            boolean shouldKeepBrowserOpen = false;
             if (hasBrowserSession()) {
                 pauseBeforeCloseIfRequested();
-                if (keepBrowserOpenIfRequested()) {
-                    return;
-                }
+                shouldKeepBrowserOpen = keepBrowserOpenIfRequested();
             }
-            if (playwrightContext != null) playwrightContext.detachVirtualWebAuthnAuthenticator();
-            if (browserContext != null) browserContext.close();
-            if (browser != null) browser.close();
-            if (playwright != null) playwright.close();
+            if (!shouldKeepBrowserOpen) {
+                if (playwrightContext != null) playwrightContext.detachVirtualWebAuthnAuthenticator();
+                if (browserContext != null) browserContext.close();
+                if (browser != null) browser.close();
+                if (playwright != null) playwright.close();
+            }
         }
     }
 
@@ -251,13 +262,31 @@ public class PlaywrightManager {
     }
 
     private void attachBrowserConsoleErrors(Scenario scenario) {
-        if (browserConsoleErrors.isEmpty()) {
+        List<String> relevantConsoleErrors = browserConsoleErrors.stream()
+                .filter(error -> !isNoisyBrowserConsoleError(error))
+                .distinct()
+                .limit(MAX_BROWSER_CONSOLE_ERRORS_TO_ATTACH)
+                .toList();
+
+        if (relevantConsoleErrors.isEmpty()) {
+            if (!browserConsoleErrors.isEmpty()) {
+                System.err.println("Browser console errors suppressed as known environment noise: "
+                        + browserConsoleErrors.size());
+            }
             return;
         }
 
-        String errorLog = String.join(System.lineSeparator(), browserConsoleErrors);
+        String errorLog = String.join(System.lineSeparator(), relevantConsoleErrors);
         scenario.attach(errorLog.getBytes(), "text/plain", "Browser Console Errors");
-        System.err.println("Browser console errors:" + System.lineSeparator() + errorLog);
+        System.err.println("Browser console errors attached: " + relevantConsoleErrors.size()
+                + " relevant"
+                + (browserConsoleErrors.size() > relevantConsoleErrors.size()
+                ? ", " + (browserConsoleErrors.size() - relevantConsoleErrors.size()) + " suppressed"
+                : ""));
+    }
+
+    private boolean isNoisyBrowserConsoleError(String error) {
+        return NOISY_BROWSER_CONSOLE_ERROR_FRAGMENTS.stream().anyMatch(error::contains);
     }
 
 }

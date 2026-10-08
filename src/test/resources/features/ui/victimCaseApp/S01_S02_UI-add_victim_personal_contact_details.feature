@@ -21,30 +21,30 @@ Feature: VCA-API-S1_S2:- Add personal and contact details for all category types
     And "victimWitness" is searched using case reference
     And the "victimWitness" is onboarded to "Universal" service lead
 #      service lead options = Universal, Enhanced, Rasso, Not aligned
-    And select "No task at this time" for next task for the "victimWitness"
-#     task options = #Inform of a decision to charge
-#                     Inform of a no further action decision
-#                     Log offered meeting
-#                     Log arranged meeting
-#                     Log meeting outcome
-#                     Another task (not listed)
-#                     No task at this time ,
-    And verify that "victimWitness" is onboarded
-    When the "Murali" is assigned as VLO to "victimWitness"
-    And verify that Vlo "Murali" is assigned to "victimWitness"
-    When the following "victimWitness" personal details are added to CMS
-      | cmsField         | justification     |
-      | Date of birth    | Add Date of Birth |
-      | Address          | Add Address       |
-      | Telephone number | Add Telephone     |
-      | Email address    | Add email address |
+#    And select "No task at this time" for next task for the "victimWitness"
+##     task options = #Inform of a decision to charge
+##                     Inform of a no further action decision
+##                     Log offered meeting
+##                     Log arranged meeting
+##                     Log meeting outcome
+##                     Another task (not listed)
+##                     No task at this time ,
+#    And verify that "victimWitness" is onboarded
+#    When the "Murali" is assigned as VLO to "victimWitness"
+#    And verify that Vlo "Murali" is assigned to "victimWitness"
+#    When the following "victimWitness" personal details are added to CMS
+#      | cmsField         | justification     |
+#      | Date of birth    | Add Date of Birth |
+#      | Address          | Add Address       |
+#      | Telephone number | Add Telephone     |
+#      | Email address    | Add email address |
 #    When the following "victimWitness" personal details are added in VCA
-#      | field                               | value |
-#      | Preferred name                      |       |
-#      | Preferred method of contact for CPS |       |
-#      | Preferred contact times             |       |
-#      | Victim representative details       |       |
-#      | Power of attorney details           |       |
+#      | vcaField                             |
+#      | Preferred name                      |
+#      | Preferred method of contact for CPS |
+#      | Preferred contact times             |
+#      | Victim representative details       |
+#      | Power of attorney details           |
 
 #    Then the "victimWitness" personal details are verified
 

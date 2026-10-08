@@ -3,11 +3,28 @@
 Feature: sample
 
   Scenario: Sample
-    Given create new case using "CM01" for type "single suspect multiple offence"
-
+    Given create new case using "CM01" for type "single suspect single offence"
     And add "victim" using "LM04" for the case
     And add "victim intimidated" using "LM04" for the case
     And add "victim vulnerable" using "LM04" for the case
+    And add "victim witness" using "LM04" for the case
+    And add "victim witness intimidated" using "LM04" for the case
+    And add "victim witness vulnerable" using "LM04" for the case
+    And add "witness" using "LM04" for the case
+    And add "witness intimidated" using "LM04" for the case
+    And add "witness vulnerable" using "LM04" for the case
+
+    Then the "victim" details are available in CMS
+    Then the "victimIntimidated" details are available in CMS
+    Then the "victimVulnerable" details are available in CMS
+    Then the "victimWitness" details are available in CMS
+    Then the "victimWitnessIntimidated" details are available in CMS
+    Then the "victimWitnessVulnerable" details are available in CMS
+    Then the "witness" details are available in CMS
+    Then the "witnessIntimidated" details are available in CMS
+    Then the "witnessVulnerable" details are available in CMS
+
+
 #
 #    And add "witness" using "LM04" for the case
 #    And add "witness child" using "LM04" for the case

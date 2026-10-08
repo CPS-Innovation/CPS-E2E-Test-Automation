@@ -47,6 +47,7 @@ public class VcaVictimDetailsPage extends BasePage {
 
     }
 
+
     public void addDateOfBirth(String justification){
 
         clickLinkByName("Enter date of birth");
@@ -94,7 +95,6 @@ public class VcaVictimDetailsPage extends BasePage {
 
     public void addEmail(String victimWitnessFullName, String justification){
 
-
         String victimWitnessSurname = victimWitnessFullName.substring(0, victimWitnessFullName.indexOf(",")).trim();
         String victimWitnessFirstName = victimWitnessFullName.substring(victimWitnessFullName.indexOf(",")+1).trim();
 
@@ -114,10 +114,23 @@ public class VcaVictimDetailsPage extends BasePage {
         assertThat(page.getByText(
                 Pattern.compile("Success\\s*Email address updated.")))
                 .isVisible();
+    }
+
+    public void addPreferredName(String victimWitnessFirstName){
+
+        clickLinkByName("Enter preferred name");
+//        waitForText("What is " +victimWitnessFirstName+ " "+victimWitnessSurname+"’s email address? (optional)");
+
+
+        page.pause();
 
     }
 
+    public void addPreferredCPSMoc(){
 
+
+
+    }
 
 
 

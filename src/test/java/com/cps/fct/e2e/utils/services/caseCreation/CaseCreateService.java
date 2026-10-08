@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.cps.fct.e2e.utils.common.JsonUtils.extractFromJson;
 import static com.cps.fct.e2e.utils.common.JsonUtils.extractFromJsonToList;
 import static java.lang.String.format;
 
@@ -255,10 +256,11 @@ public class CaseCreateService extends BaseService {
 
 
         Map<String, List<String>> witnessMapIds = new HashMap<>();
-        Map<String, List<String>> victimWitnessMapIds = new HashMap<>();
-        Map<String, List<String>> victimMapIds = new HashMap<>();
+        Map<String, List<String>> idWitnessNameMap = new HashMap<>();
 
+        Map<String, List<String>> victimWitnessMapIds = new HashMap<>();
         Map<String, List<String>> idVictimWitnessNameMap = new HashMap<>();
+
 
         witnessMapIds.put("witness", witnessId);
         witnessMapIds.put("witnessChild", witnessChildId);
@@ -289,16 +291,16 @@ public class CaseCreateService extends BaseService {
         context.set("witnessMapIds", witnessMapIds);
         context.set("victimWitnessMapIds", victimWitnessMapIds);
 
-        idVictimWitnessNameMap.put(String.valueOf(witnessId), witnessName);
-        idVictimWitnessNameMap.put(String.valueOf(witnessChildId), witnessChildName);
-        idVictimWitnessNameMap.put(String.valueOf(witnessExpertId), witnessExpertName);
-        idVictimWitnessNameMap.put(String.valueOf(witnessInterpreterId), witnessInterpreterName);
-        idVictimWitnessNameMap.put(String.valueOf(witnessIntimidatedId), witnessIntimidatedName);
-        idVictimWitnessNameMap.put(String.valueOf(witnessPoliceId), witnessPoliceName);
-        idVictimWitnessNameMap.put(String.valueOf(witnessPrisonerId), witnessPrisonerName);
-        idVictimWitnessNameMap.put(String.valueOf(witnessProfessionalId), witnessProfessionalName);
-        idVictimWitnessNameMap.put(String.valueOf(witnessVulnerableId), witnessVulnerableName);
-        idVictimWitnessNameMap.put(String.valueOf(witnessSpecialId),witnessSpecialName);
+        idWitnessNameMap.put(String.valueOf(witnessId), witnessName);
+        idWitnessNameMap.put(String.valueOf(witnessChildId), witnessChildName);
+        idWitnessNameMap.put(String.valueOf(witnessExpertId), witnessExpertName);
+        idWitnessNameMap.put(String.valueOf(witnessInterpreterId), witnessInterpreterName);
+        idWitnessNameMap.put(String.valueOf(witnessIntimidatedId), witnessIntimidatedName);
+        idWitnessNameMap.put(String.valueOf(witnessPoliceId), witnessPoliceName);
+        idWitnessNameMap.put(String.valueOf(witnessPrisonerId), witnessPrisonerName);
+        idWitnessNameMap.put(String.valueOf(witnessProfessionalId), witnessProfessionalName);
+        idWitnessNameMap.put(String.valueOf(witnessVulnerableId), witnessVulnerableName);
+        idWitnessNameMap.put(String.valueOf(witnessSpecialId),witnessSpecialName);
 
         idVictimWitnessNameMap.put(String.valueOf(victimWitnessId), victimWitnessName);
         idVictimWitnessNameMap.put(String.valueOf(victimWitnessChildId), victimWitnessChildName);
@@ -316,9 +318,42 @@ public class CaseCreateService extends BaseService {
         idVictimWitnessNameMap.put(String.valueOf(victimVulnerableId), victimWitnessVulnerableName);
 
         context.set("idVictimWitnessNameMap", idVictimWitnessNameMap);
-
+        context.set("idWitnessNameMap", idWitnessNameMap);
 
     }
+
+    public HttpResponseWrapper victimWitnessFirstnameSurname(String caseId, String victimWitnessId) {
+        return service.sendRequest(getVictimWitnessFirstnameSurnameRequestParams(caseId, victimWitnessId));
+    }
+
+    private HttpClientBuilder getVictimWitnessFirstnameSurnameRequestParams(String caseId, String victimWitnessId) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/cases/%s/victim-witnesses/%s", caseId,victimWitnessId))
+                .addHeaders(ddeiHeaders())
+                .method("GET")
+                .resourceName("victimWitnessFirstnameSurname")
+                .build();
+    }
+
+    public String victimWitnessFirstnameAndSurname(HttpResponseWrapper response){
+        String body = response.getBody();
+        String firstName = extractFromJson(body,"$.firstNames");
+        String surName = extractFromJson(body,"$.firstNames");
+        return firstName;
+        return surName;
+
+    }
+
+
+
+
+
+
+
+
+
+
 
 
 }

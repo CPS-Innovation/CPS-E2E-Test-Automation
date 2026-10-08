@@ -59,13 +59,30 @@ public class VcaHomePage extends BasePage {
         return victimWitnessFullName;
     }
 
+    public String getVictimSurname(String victimWitnessFullName) {
+        String victimWitnessSurname = victimWitnessFullName.substring(0, victimWitnessFullName.indexOf(",")).trim();
+        victimWitnessSurname = victimWitnessSurname.substring(0, 1).toUpperCase()
+                + victimWitnessSurname.substring(1).toLowerCase();
+        return victimWitnessSurname;
+    }
+
+    public String getVictimFirstname(String victimWitnessFullName) {
+
+        String victimWitnessFirstName = victimWitnessFullName.substring(victimWitnessFullName.indexOf(",")+1).trim();
+        victimWitnessFirstName = victimWitnessFirstName.substring(0, 1).toUpperCase()
+                + victimWitnessFirstName.substring(1).toLowerCase();
+        return victimWitnessFirstName;
+    }
+
+
+
     public void onboardVictim(String PersonFullName, String service) {
         onboardPage(PersonFullName);
         selectServiceLead(service);
         clickButton("Save and continue");
         verifyOnboard(PersonFullName);
         clickButton("Confirm details");
-        logger.info("Victim  VCA");
+        logger.info("Victim VCA");
     }
 
     private void onboardPage(String PersonFullName) {
@@ -94,7 +111,6 @@ public class VcaHomePage extends BasePage {
 
     private void verifyOnboard(String PersonFullName) {
         String victimFirstname = PersonFullName.substring(PersonFullName.indexOf(",") + 1).trim();
-
         assertThat(page.getByText(
                 Pattern.compile("Success\\s*You onboarded " + victimFirstname)))
                 .isVisible();
@@ -122,7 +138,6 @@ public class VcaHomePage extends BasePage {
     }
 
     public void assignVloToVictim(String vloName, String personFullName) {
-//        System.out.println(vloName +"---------"+victimFullName);
         assertThat(page.getByRole(
                 AriaRole.LINK,
                 new Page.GetByRoleOptions().setName(personFullName))).isVisible();
@@ -132,8 +147,6 @@ public class VcaHomePage extends BasePage {
         assertThat(page.getByText(
                 Pattern.compile("Success\\s*You changed the victim")))
                 .isVisible();
-//        verifyAssignVloSuccessMessage(vloName, victimFullName);
-
     }
 
     public void verifyAssignedVlo(String vloName) {
@@ -167,6 +180,24 @@ public class VcaHomePage extends BasePage {
         assertThat(option).isVisible();
         option.click();
     }
+
+
+    public void getVictimWitnessFirstLastName( String victimWitnessFullName){
+
+
+        String victimWitnessSurname = victimWitnessFullName.substring(0, victimWitnessFullName.indexOf(",")).trim();
+        String victimWitnessFirstName = victimWitnessFullName.substring(victimWitnessFullName.indexOf(",")+1).trim();
+
+        victimWitnessSurname = victimWitnessSurname.substring(0, 1).toUpperCase()
+                + victimWitnessSurname.substring(1).toLowerCase();
+
+        victimWitnessFirstName = victimWitnessFirstName.substring(0, 1).toUpperCase()
+                + victimWitnessFirstName.substring(1).toLowerCase();
+
+    }
+
+
+
 
 
     public void verifyAssignVloSuccessMessage(String vloName, String victimFullName ){

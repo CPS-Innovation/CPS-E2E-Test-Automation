@@ -1,0 +1,46 @@
+{
+  "WitnessStatement": {
+    "CaseId": "{{DCF_CaseId}}",
+    "ItemId": "{{LM05_itemId}}",
+    "PTIURN": {
+      "Force": "{{DCF_Force}}",
+      "Unit": "{{DCF_Unit}}",
+      "Number": "{{CM01_PTIURN_Number}}",
+      "Year": "{{DCF_Year}}"
+    },
+    "MaterialId": "{{LM05_MaterialId}}",
+    "Material": {
+      "MaterialClassification": [
+        {
+          "ClassificationType": "Transmission",
+          "ClassificationCode": "Media",
+          "ClassificationValue": {
+            "ClassificationValueText": "Document"
+          }
+        },
+        {
+          "ClassificationType": "Purpose",
+          "ClassificationCode": "Statement Type",
+          "ClassificationValue": {
+            "ClassificationValueText": "Witness Statement"
+          }
+        }
+      ],
+      "WitnessId": "{{LM04_VictimWitnessRef_1}}",
+      "WitnessStatement": {
+        "StatementNumber": 1,
+        "StatementDateTime": "2025-02-14T18:04:20+00:00"
+      }
+    },
+    "DigitalRepresentation": {
+      "Attachment": {
+        "Document": "VGhpcyBpcyBhIHRlc3QgZmlsZSBpbiB0ZXh0IGZvcm1hdA==",
+        "FileName": "Simple Little Text File.txt"
+      }
+    },
+    "PoliceMaterialStatus": {
+      "DisclosureStatus": "Evidence",
+      "Rebuttable": false
+    }
+  }
+}

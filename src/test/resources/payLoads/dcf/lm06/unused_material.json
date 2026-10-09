@@ -1,0 +1,33 @@
+{
+  "CaseMaterial": {
+    "CaseId": "{{DCF_CaseId}}",
+    "ItemId": "{{LM06_Unused_itemId}}",
+    "PTIURN": {
+      "Force": "{{DCF_Force}}",
+      "Unit": "{{DCF_Unit}}",
+      "Number": "{{CM01_PTIURN_Number}}",
+      "Year": "{{DCF_Year}}"
+    },
+    "MaterialId": "{{LM06_Unused_MaterialId}}",
+    "Material": {
+      "MaterialClassification": [
+        {
+          "ClassificationType": "Purpose",
+          "ClassificationCode": "Material Type",
+          "ClassificationValue": {
+            "ClassificationValueText": "Physical Object"
+          }
+        }
+      ],
+      "Title": "Small bag containing herbal cannabis",
+      "Reference": "BR/2",
+      "ProducedByWitnessId": "{{LM04_Victim_Vulnerable}}",
+      "RelatedParticipantId": "{{LM04_Victim_Intimidated}}"
+    },
+    "PoliceMaterialStatus": {
+      "DisclosureStatus": "Unused - Disclosure Not Yet Considered",
+      "Rebuttable": false,
+      "Description": "Small bag containing herbal cannabis"
+    }
+  }
+}

@@ -5,6 +5,7 @@ import com.cps.fct.e2e.pages.PageObjects;
 import com.cps.fct.e2e.utils.common.EnvConfig;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
 import com.cps.fct.e2e.utils.common.SecurePassCode;
+import com.cps.fct.e2e.utils.playwright.PlaywrightManager;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
@@ -16,17 +17,18 @@ import java.util.Map;
 
 public class VictimCaseAppUiStepDefinition {
 
-    @Inject
-    private PageObjects pages;
-    @Inject
-    private ScenarioContext context;
+    @Inject private PageObjects pages;
+    @Inject private ScenarioContext context;
+    @Inject private PlaywrightManager playwrightManager;
+
 
     public VictimCaseAppUiStepDefinition() {
     }
 
     @Given("VLO login to victim case application")
     public void newVloLogIntoVca() {
-
+        playwrightManager.setUpBrowser(null);
+        pages.useCurrentPage();
         pages.vcaLoginPage.loginIntoVca(
                 pages.appsLoginPage.vcaUsername(), pages.appsLoginPage.vcaPassword()
         );
@@ -71,20 +73,11 @@ public class VictimCaseAppUiStepDefinition {
     public void onboardVictim(String personType, String ServiceType) {
         Map<String, List<String>> victimWitnessIds = context.get("victimWitnessMapIds");
         Map<String, String> personTypePersonNameMap = context.get("personTypePersonNameMap");
-        Map<String, String> personNameSurnameMap = context.get ("personNameSurnameMap");
-        Map<String, String> personNameFirstnameMap = context.get ("personNameFirstnameMap");
         String personFullName = personTypePersonNameMap.get(personType);
-        String surName = personNameSurnameMap.get(personFullName);
-        String firstName = personNameFirstnameMap.get(personFullName);
-        System.out.println(personFullName);
-        System.out.println(surName);
-        System.out.println(firstName);
 
-
-//        for (String id : victimWitnessIds.get(personType)) {
-////            pages.vcaHomePage.onboardVictim(personFullName, ServiceType);
-//            pages.vcaHomePage.onboardVictim(personFullName, ServiceType);
-//        }
+        for (String id : victimWitnessIds.get(personType)) {
+            pages.vcaHomePage.onboardVictim(personFullName, ServiceType);
+        }
 
     }
 

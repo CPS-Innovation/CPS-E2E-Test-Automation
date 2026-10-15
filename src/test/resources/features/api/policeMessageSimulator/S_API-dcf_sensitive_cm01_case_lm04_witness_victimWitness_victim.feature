@@ -1,4 +1,4 @@
-@regression @pms_api_regression @PMS_API_S20 @PMS_API_S21 @PMS_API_S22 @PMS_API_S
+@regression @DCF_pms_api_regression @PMS_API_S20 @PMS_API_S21 @PMS_API_S22 @PMS_API_S
 
 Feature: PMS-API-S20-S21-S22-S4:- Create DCF case with
   1. single suspect with single offence case using CM01

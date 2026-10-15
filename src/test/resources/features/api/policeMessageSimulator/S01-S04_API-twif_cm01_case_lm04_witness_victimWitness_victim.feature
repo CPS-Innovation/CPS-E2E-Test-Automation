@@ -1,4 +1,4 @@
-@regression @pms_api_regression @PMS_API_S1 @PMS_API_S2 @PMS_API_S3 @PMS_API_S4
+@regression @TWIF_pms_api_regression @PMS_API_S1 @PMS_API_S2 @PMS_API_S3 @PMS_API_S4
 
 Feature: PMS-API-S1-S2-S3-S4:- Create TWIF case with
   1. single suspect with single offence case using CM01
@@ -13,9 +13,9 @@ Feature: PMS-API-S1-S2-S3-S4:- Create TWIF case with
   and add witness, victimWitness and victim to the case. (FCT2-21808)
 
     Given create new case using "CM01" for type "single suspect single offence"
-#    And add "victim" using "LM04" for the case
+    And add "victim" using "LM04" for the case
     And add "victim witness" using "LM04" for the case
-#    And add "witness" using "LM04" for the case
+    And add "witness" using "LM04" for the case
 
   @S2_TWIF_CM01_SS_MO_LM04_W_VW_V
   Scenario: TWIF - Create case with single suspect with multiple offence

@@ -11,6 +11,7 @@ import lombok.*;
 public class TelephoneCommunication {
 
     private int JourneyType;
+    private String DecisionToChargeContextGuid;
     private String PhoneNumber;
     private int CallDirection;
     private String DateOfContact;

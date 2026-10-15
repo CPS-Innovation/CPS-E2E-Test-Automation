@@ -90,7 +90,7 @@ public class VictimService extends BaseService {
 
         Map<String, List<String>> witnessMapIds = new HashMap<>();
         Map<String, List<String>> victimWitnessMapIds = new HashMap<>();
-        Map<String, List<String>> victimMapIds = new HashMap<>();
+//        Map<String, List<String>> victimMapIds = new HashMap<>();
 
         witnessMapIds.put("witness", witnessId);
         witnessMapIds.put("witnessChild", witnessChildId);
@@ -114,13 +114,13 @@ public class VictimService extends BaseService {
         victimWitnessMapIds.put("victimWitnessIntimidated", victimWitnessIntimidatedId);
         victimWitnessMapIds.put("victimWitnessSpecial", victimWitnessSpecialId);
 
-        victimMapIds.put("victim", victimId);
-        victimMapIds.put("victimVulnerable", victimVulnerableId);
-        victimMapIds.put("victimIntimidated", victimIntimidatedId);
+        victimWitnessMapIds.put("victim", victimId);
+        victimWitnessMapIds.put("victimVulnerable", victimVulnerableId);
+        victimWitnessMapIds.put("victimIntimidated", victimIntimidatedId);
 
         context.set("witnessMapIds", witnessMapIds);
         context.set("victimWitnessMapIds", victimWitnessMapIds);
-        context.set("victimMapIds", victimMapIds);
+//        context.set("victimMapIds", victimMapIds);
 
     }
 
@@ -663,6 +663,29 @@ public class VictimService extends BaseService {
                 .build();
     }
 
+    public String addNoFurtherActionGuid(String guid, String requestBody) {
+        HttpResponseWrapper responseWrapper = service.sendRequest(addNoFurtherActionGuidParams(guid, requestBody));
+        String noFurtherActionContextGuid = JsonPath.read(responseWrapper.getBody(), "$.value.noFurtherActionContextGuid");
+        assertThat(noFurtherActionContextGuid)
+                .withFailMessage("No Further Action Context Guid was not returned from the API response")
+                .isNotNull();
+        return noFurtherActionContextGuid;
+    }
+
+    private HttpClientBuilder addNoFurtherActionGuidParams(String guid, String requestBody) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("DDEI_HOST"))
+                .endpoint(format("/api/victims/%s/no-further-action", guid))
+                .addHeaders(ddeiHeaders())
+                .method("POST")
+                .body(requestBody)
+                .resourceName("addNoFurtherActionGuid")
+                .build();
+    }
+
+
+
+
 
     public Integer getActiveTask(String guid, int taskType) {
         HttpResponseWrapper responseWrapper = service.sendRequest(getActiveTaskRequestParams(guid, taskType));
@@ -698,17 +721,17 @@ public class VictimService extends BaseService {
                 .build();
     }
 
-    public void addFollowUpComms(String guid, String decisionToChargeContextGuid, String followUpMethod, String requestBody) {
-        service.sendRequest(addFollowUpCommsRequestParams(guid, decisionToChargeContextGuid, followUpMethod, requestBody));
+    public void addFollowUpComms(String guid, String decisionContextGuid, String followUpMethod, String requestBody) {
+        service.sendRequest(addFollowUpCommsRequestParams(guid, decisionContextGuid, followUpMethod, requestBody));
     }
 
-    private HttpClientBuilder addFollowUpCommsRequestParams(String guid, String decisionToChargeContextGuid, String followUpMethod, String requestBody) {
+    private HttpClientBuilder addFollowUpCommsRequestParams(String guid, String decisionContextGuid, String followUpMethod, String requestBody) {
         String communicationType =
                 "post".equals(followUpMethod) ? "letter" : followUpMethod;
         return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("DDEI_HOST"))
                 .endpoint(format("/api/victims/%s/victim-communication/%s", guid, communicationType))
-                .addQueryParam("contextGuid", decisionToChargeContextGuid)
+                .addQueryParam("contextGuid", decisionContextGuid)
                 .addHeaders(ddeiHeaders())
                 .method("POST")
                 .body(requestBody)
@@ -716,14 +739,15 @@ public class VictimService extends BaseService {
                 .build();
     }
 
-    public void addFirstCallAttemptSms(String guid, String requestBody) {
-        service.sendRequest(addFirstCallAttemptSmsRequestParams(guid, requestBody));
+    public void addFirstCallAttemptSms(String guid, String decisionContextGuid, String requestBody) {
+        service.sendRequest(addFirstCallAttemptSmsRequestParams(guid, decisionContextGuid, requestBody));
     }
 
-    private HttpClientBuilder addFirstCallAttemptSmsRequestParams(String guid, String requestBody) {
+    private HttpClientBuilder addFirstCallAttemptSmsRequestParams(String guid, String decisionContextGuid, String requestBody) {
         return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("DDEI_HOST"))
                 .endpoint(format("/api/victims/%s/victim-communication/telephone", guid))
+                .addQueryParam("contextGuid", decisionContextGuid)
                 .addHeaders(ddeiHeaders())
                 .method("PATCH")
                 .body(requestBody)
@@ -731,14 +755,15 @@ public class VictimService extends BaseService {
                 .build();
     }
 
-    public void addSmsSendDetails(String guid, String requestBody) {
-        service.sendRequest(addSmsSendDetailsRequestParams(guid, requestBody));
+    public void addSmsSendDetails(String guid, String decisionContextGuid, String requestBody) {
+        service.sendRequest(addSmsSendDetailsRequestParams(guid, decisionContextGuid, requestBody));
     }
 
-    private HttpClientBuilder addSmsSendDetailsRequestParams(String guid, String requestBody) {
+    private HttpClientBuilder addSmsSendDetailsRequestParams(String guid, String decisionContextGuid, String requestBody) {
         return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("DDEI_HOST"))
                 .endpoint(format("/api/victims/%s/victim-communication/sms", guid))
+                .addQueryParam("contextGuid", decisionContextGuid)
                 .addHeaders(ddeiHeaders())
                 .method("POST")
                 .body(requestBody)
@@ -775,17 +800,17 @@ public class VictimService extends BaseService {
                 .build();
     }
 
-    public HttpResponseWrapper getFollowupComms(String guid, String followUpMethod, int journeyTypeCode, String decisionToChargeContextGuid, int commsAttempt) {
-        return service.sendRequest(getFollowupCommsRequestParams(guid, followUpMethod, journeyTypeCode, decisionToChargeContextGuid, commsAttempt));
+    public HttpResponseWrapper getFollowupComms(String guid, String followUpMethod, int journeyTypeCode, String decisionContextGuid, int commsAttempt) {
+        return service.sendRequest(getFollowupCommsRequestParams(guid, followUpMethod, journeyTypeCode, decisionContextGuid, commsAttempt));
     }
 
-    private HttpClientBuilder getFollowupCommsRequestParams(String guid, String followUpMethod, int journeyTypeCode, String decisionToChargeContextGuid, int commsAttempt) {
+    private HttpClientBuilder getFollowupCommsRequestParams(String guid, String followUpMethod, int journeyTypeCode, String decisionContextGuid, int commsAttempt) {
         String communicationType =
                 "post".equals(followUpMethod) ? "letter" : followUpMethod;
         return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("DDEI_HOST"))
                 .endpoint(format("/api/victims/%s/victim-communication/%s/%s/%s", guid, communicationType, journeyTypeCode,commsAttempt))
-                .addQueryParam("contextGuid", decisionToChargeContextGuid)
+                .addQueryParam("contextGuid", decisionContextGuid)
                 .addHeaders(ddeiHeaders())
                 .method("GET")
                 .resourceName("getFollowupComms")

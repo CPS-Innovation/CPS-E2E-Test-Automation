@@ -618,11 +618,11 @@ public class VictimCaseAppApiStepDefinition {
 
         Map<Integer, String> meetingDetailsGuidMap = context.get("meetingDetailsGuidMap");
         Map<Integer, MeetingLogged> meetingLoggedDetailsMap = context.get("meetingLoggedDetailsMap");
-        Map<Integer, Map<String, String>> meetingTypeAttendeesGuidsMap = context.get("meetingTypeAttendeesGuidsMap");
+//        Map<Integer, Map<String, String>> meetingTypeAttendeesGuidsMap = context.get("meetingTypeAttendeesGuidsMap");
         Map<Integer, String> meetingAttendeesDetailsMap = context.get("meetingAttendeesDetailsMap");
 
         for (Integer meetingTypeCodeKey : meetingLoggedDetailsMap.keySet()) {
-            String meetingDetailsGuid = meetingDetailsGuidMap.get(meetingTypeCodeKey);
+//            String meetingDetailsGuid = meetingDetailsGuidMap.get(meetingTypeCodeKey);
             MeetingLogged meetingLogged = meetingLoggedDetailsMap.get(meetingTypeCodeKey);
 
             if (meetingLogged.getMeetingMethod() != 2) {

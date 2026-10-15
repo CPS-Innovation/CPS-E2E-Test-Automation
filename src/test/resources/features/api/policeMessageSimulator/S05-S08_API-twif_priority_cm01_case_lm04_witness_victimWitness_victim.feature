@@ -1,4 +1,4 @@
-@regression @pms_api_regression @PMS_API_S5 @PMS_API_S6 @PMS_API_S7 @PMS_API_S8
+@regression @TWIF_pms_api_regression @PMS_API_S5 @PMS_API_S6 @PMS_API_S7 @PMS_API_S8
 
 Feature: PMS-API-S5-S6-S7-S8:- Create TWIF priority case with
   1. single suspect with single offence priority case using CM01

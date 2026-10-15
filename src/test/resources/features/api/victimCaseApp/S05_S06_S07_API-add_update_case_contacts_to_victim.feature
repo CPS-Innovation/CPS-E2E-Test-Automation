@@ -13,7 +13,11 @@ Feature: VCA-API-S5_S6_S7:- Add and update cps-contacts to victims
 
 
   @addCpsContactToVictim
+<<<<<<<< HEAD:src/test/resources/features/api/victimCaseApp/S05_S06_S07_API-add_update_case_contacts_to_victim.feature
   Scenario: Add contacts to victims and then verify the contacts. (FCT2-15288 & FCT2-15290 & FCT2-15291)
+========
+  Scenario: Add contacts to victims and then verify the contacts. (FCT2-15288 & FCT2-15290)
+>>>>>>>> 6aca73a9d25cc0d9b2e2453fb50aae44012b5097:src/test/resources/features/api/victimCaseApp/S5_S6_S7_API-add_update_case_contacts_to_victim.feature
     Given victim details are available in VCA
     And the "victim" is onboarded as "Universal" service lead in VCA
     And the Victim liaison officer is assigned to "victim" in VCA
@@ -25,7 +29,11 @@ Feature: VCA-API-S5_S6_S7:- Add and update cps-contacts to victims
     Then the added cps-contacts for "victim" are verified
 
   @updateCpsContactToVictim
+<<<<<<<< HEAD:src/test/resources/features/api/victimCaseApp/S05_S06_S07_API-add_update_case_contacts_to_victim.feature
   Scenario: Update the existing cps-contacts for victims and then verify. (FCT2-15288 & FCT2-15290 & FCT2-15291)
+========
+  Scenario: Update the existing cps-contacts for victims and then verify. (FCT2-15291)
+>>>>>>>> 6aca73a9d25cc0d9b2e2453fb50aae44012b5097:src/test/resources/features/api/victimCaseApp/S5_S6_S7_API-add_update_case_contacts_to_victim.feature
     Given victim details are available in VCA
     And the "victim" is onboarded as "Universal" service lead in VCA
     And the Victim liaison officer is assigned to "victim" in VCA

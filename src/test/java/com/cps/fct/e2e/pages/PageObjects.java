@@ -50,6 +50,12 @@ public class PageObjects {
         decisionAnalysisPage.useCurrentPage();
         actionPlanPage.useCurrentPage();
         completeSubmissionPage.useCurrentPage();
+//        appsLoginPage.useCurrentPage();
+        vcaLoginPage.useCurrentPage();
+        vcaHomePage.useCurrentPage();
+        vcaVictimDetailsPage.useCurrentPage();
+
+
     }
 
 }

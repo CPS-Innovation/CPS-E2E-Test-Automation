@@ -813,6 +813,9 @@ public class VictimCaseAppApiStepDefinition {
         Map<String, String> idGuidMap = context.get("idGuidMap");
         Map<String, List<String>> victimMapIds = context.get("victimMapIds");
 
+        Map<Integer, String> decisionToChargeContextGuidMap = new HashMap<>();
+        context.set("decisionToChargeContextGuidMap", decisionToChargeContextGuidMap);
+
         Map<Integer, TelephoneCommunication> teleCommsListMap = new HashMap<>();
         context.set("teleCommsListMap", teleCommsListMap);
 
@@ -821,14 +824,18 @@ public class VictimCaseAppApiStepDefinition {
         for (String id : victimMapIds.get(victimType)) {
             for (Map<String, String> row : rows) {
                 JourneyType journeyTypeCode = JourneyType.fromString(row.get("journeyType"));
+                DecisionToCharge decisionToCharge = deciToCharge();
+                String decisionToChargeContextGuid = victimService.addDecisionToChargeGuid(idGuidMap.get(id),convertObjectToString(decisionToCharge));
                 String informVictim = row.get("informVictim");
                 CommunicationDirection callDirection = CommunicationDirection.fromString(row.get("callDirection"));
                 String notes = row.get("notes");
-                TelephoneCommunication firstCall = firstTeleCall(journeyTypeCode.getValue(), informVictim, callDirection.getValue(), notes, days);
-                victimService.addCallAttempt(idGuidMap.get(id), convertObjectToString(firstCall));
+                TelephoneCommunication firstCall = firstTeleCall(journeyTypeCode.getValue(), decisionToChargeContextGuid,informVictim, callDirection.getValue(), notes, days);
+                victimService.addCallAttempt(idGuidMap.get(id), decisionToChargeContextGuid, convertObjectToString(firstCall));
                 teleCommsListMap.put(journeyTypeCode.getValue(), firstCall);
+                decisionToChargeContextGuidMap.put(journeyTypeCode.getValue(),decisionToChargeContextGuid);
             }
             context.set("communicationListMap", teleCommsListMap);
+            context.set("decisionToChargeContextGuidMap",decisionToChargeContextGuidMap);
         }
     }
 
@@ -837,6 +844,8 @@ public class VictimCaseAppApiStepDefinition {
         Map<String, String> idGuidMap = context.get("idGuidMap");
         Map<String, List<String>> victimMapIds = context.get("victimMapIds");
 
+        Map<Integer, String> decisionToChargeContextGuidMap = context.get("decisionToChargeContextGuidMap");
+
         Map<String, FollowUpCommunication> followUpCommsListMap = new HashMap<>();
         context.set("followUpCommsListMap", followUpCommsListMap);
 
@@ -844,10 +853,11 @@ public class VictimCaseAppApiStepDefinition {
         for (String id : victimMapIds.get(victimType)) {
             for (Map<String, String> row : rows) {
                 JourneyType journeyTypeCode = JourneyType.fromString(row.get("journeyType"));
+                String decisionToChargeContextGuid = decisionToChargeContextGuidMap.get(journeyTypeCode.getValue());
                 String followUpMethod = row.get("followUpMethod").toLowerCase(Locale.ROOT);
                 String notes = row.get("notes");
                 FollowUpCommunication finalFollow = finalFollowUp(journeyTypeCode.getValue(), notes, followUpMethod);
-                victimService.addFollowUpComms(idGuidMap.get(id), followUpMethod, convertObjectToString(finalFollow));
+                victimService.addFollowUpComms(idGuidMap.get(id), decisionToChargeContextGuid,followUpMethod, convertObjectToString(finalFollow));
                 followUpCommsListMap.put(followUpMethod, finalFollow);
             }
             context.set("followUpCommsListMap", followUpCommsListMap);
@@ -860,6 +870,7 @@ public class VictimCaseAppApiStepDefinition {
         Map<String, List<String>> victimMapIds = context.get("victimMapIds");
         Map<Integer, TelephoneCommunication> teleCommsListMap = context.get("teleCommsListMap");
         Map<String, FollowUpCommunication> followUpCommsListMap = context.get("followUpCommsListMap");
+        Map<Integer, String> decisionToChargeContextGuidMap = context.get("decisionToChargeContextGuidMap");
 
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
 
@@ -867,7 +878,7 @@ public class VictimCaseAppApiStepDefinition {
             for (Map<String, String> row : rows) {
                 JourneyType journeyTypeCode = JourneyType.fromString(row.get("journeyType"));
                 TelephoneCommunication teleComms = teleCommsListMap.get(journeyTypeCode.getValue());
-
+                String decisionToChargeContextGuid = decisionToChargeContextGuidMap.get(journeyTypeCode.getValue());
                 String callAttempt = row.get("callAttempt").toLowerCase(Locale.ROOT);
                 int callAttemptNo = 0;
                 String smsSent = row.get("smsSent").toLowerCase(Locale.ROOT);
@@ -910,13 +921,13 @@ public class VictimCaseAppApiStepDefinition {
                         System.out.println("Invalid call attempt");
                 }
 
-                HttpResponseWrapper responseTeleComms = victimService.getTeleComms(idGuidMap.get(id), journeyTypeCode.getValue(), commsTellAttempt);
+                HttpResponseWrapper responseTeleComms = victimService.getTeleComms(idGuidMap.get(id), journeyTypeCode.getValue(), decisionToChargeContextGuid, commsTellAttempt);
                 VictimCaseAppAssertions.assertTeleComms(teleComms, responseTeleComms);
 
                 String followUpMethod = row.get("followUpMethod").toLowerCase(Locale.ROOT);
                 FollowUpCommunication followupComms = followUpCommsListMap.get(followUpMethod);
 
-                HttpResponseWrapper responseFollowupComms = victimService.getFollowupComms(idGuidMap.get(id), followUpMethod, journeyTypeCode.getValue(), commsFollowAttempt);
+                HttpResponseWrapper responseFollowupComms = victimService.getFollowupComms(idGuidMap.get(id), followUpMethod, journeyTypeCode.getValue(), decisionToChargeContextGuid, commsFollowAttempt);
                 VictimCaseAppAssertions.assertFollowupComms(followupComms, responseFollowupComms);
             }
         }
@@ -927,6 +938,10 @@ public class VictimCaseAppApiStepDefinition {
         int days = 3;
         Map<String, String> idGuidMap = context.get("idGuidMap");
         Map<String, List<String>> victimMapIds = context.get("victimMapIds");
+
+        Map<Integer, String> decisionToChargeContextGuidMap = new HashMap<>();
+        context.set("decisionToChargeContextGuidMap", decisionToChargeContextGuidMap);
+
         Map<Integer, TelephoneCommunication> teleCommsListMap = new HashMap<>();
         context.set("teleCommsListMap", teleCommsListMap);
 
@@ -935,11 +950,15 @@ public class VictimCaseAppApiStepDefinition {
         for (String id : victimMapIds.get(victimType)) {
             for (Map<String, String> row : rows) {
                 JourneyType journeyTypeCode = JourneyType.fromString(row.get("journeyType"));
+
+                DecisionToCharge decisionToCharge = deciToCharge();
+                String decisionToChargeContextGuid = victimService.addDecisionToChargeGuid(idGuidMap.get(id),convertObjectToString(decisionToCharge));
+
                 String informVictim = row.get("informVictim");
                 CommunicationDirection callDirection = CommunicationDirection.fromString(row.get("callDirection"));
                 String notes = row.get("notes");
-                TelephoneCommunication firstCall = firstTeleCall(journeyTypeCode.getValue(), informVictim, callDirection.getValue(), notes, days);
-                victimService.addCallAttempt(idGuidMap.get(id), convertObjectToString(firstCall));
+                TelephoneCommunication firstCall = firstTeleCall(journeyTypeCode.getValue(), decisionToChargeContextGuid, informVictim, callDirection.getValue(), notes, days);
+                victimService.addCallAttempt(idGuidMap.get(id), decisionToChargeContextGuid,convertObjectToString(firstCall));
                 String smsSent = row.get("smsSent").toLowerCase(Locale.ROOT);
                 TelephoneCommunication smsSentStatus = firstCallSmsStatus(journeyTypeCode.getValue(), informVictim, callDirection.getValue(), notes, days, smsSent);
                 victimService.addFirstCallAttemptSms(idGuidMap.get(id), convertObjectToString(smsSentStatus));
@@ -951,8 +970,10 @@ public class VictimCaseAppApiStepDefinition {
 
                 }
                 teleCommsListMap.put(journeyTypeCode.getValue(), smsSentStatus);
+                decisionToChargeContextGuidMap.put(journeyTypeCode.getValue(),decisionToChargeContextGuid);
             }
             context.set("teleCommsListMap", teleCommsListMap);
+            context.set("decisionToChargeContextGuidMap",decisionToChargeContextGuidMap);
         }
     }
 
@@ -963,16 +984,18 @@ public class VictimCaseAppApiStepDefinition {
         Map<String, String> idGuidMap = context.get("idGuidMap");
         Map<String, List<String>> victimMapIds = context.get("victimMapIds");
         Map<Integer, TelephoneCommunication> teleCommsListMap = context.get("teleCommsListMap");
+        Map<Integer, String> decisionToChargeContextGuidMap = context.get("decisionToChargeContextGuidMap");
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
 
         for (String id : victimMapIds.get(victimType)) {
             for (Map<String, String> row : rows) {
                 JourneyType journeyTypeCode = JourneyType.fromString(row.get("journeyType"));
+                String decisionToChargeContextGuid = decisionToChargeContextGuidMap.get(journeyTypeCode.getValue());
                 String informVictim = row.get("informVictim");
                 CommunicationDirection callDirection = CommunicationDirection.fromString(row.get("callDirection"));
                 String notes = row.get("notes");
-                TelephoneCommunication secondCall = firstTeleCall(journeyTypeCode.getValue(), informVictim, callDirection.getValue(), notes, days);
-                victimService.addCallAttempt(idGuidMap.get(id), convertObjectToString(secondCall));
+                TelephoneCommunication secondCall = firstTeleCall(journeyTypeCode.getValue(), decisionToChargeContextGuid, informVictim, callDirection.getValue(), notes, days);
+                victimService.addCallAttempt(idGuidMap.get(id), decisionToChargeContextGuid,convertObjectToString(secondCall));
                 teleCommsListMap.put(journeyTypeCode.getValue(), secondCall);
             }
             context.set("communicationListMap", teleCommsListMap);
@@ -985,17 +1008,19 @@ public class VictimCaseAppApiStepDefinition {
         Map<String, String> idGuidMap = context.get("idGuidMap");
         Map<String, List<String>> victimMapIds = context.get("victimMapIds");
         Map<Integer, TelephoneCommunication> teleCommsListMap = context.get("teleCommsListMap");
+        Map<Integer, String> decisionToChargeContextGuidMap = context.get("decisionToChargeContextGuidMap");
 
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
 
         for (String id : victimMapIds.get(victimType)) {
             for (Map<String, String> row : rows) {
                 JourneyType journeyTypeCode = JourneyType.fromString(row.get("journeyType"));
+                String decisionToChargeContextGuid = decisionToChargeContextGuidMap.get(journeyTypeCode.getValue());
                 String informVictim = row.get("informVictim");
                 CommunicationDirection callDirection = CommunicationDirection.fromString(row.get("callDirection"));
                 String notes = row.get("notes");
-                TelephoneCommunication secondCall = firstTeleCall(journeyTypeCode.getValue(), informVictim, callDirection.getValue(), notes, days);
-                victimService.addCallAttempt(idGuidMap.get(id), convertObjectToString(secondCall));
+                TelephoneCommunication secondCall = firstTeleCall(journeyTypeCode.getValue(), decisionToChargeContextGuid, informVictim, callDirection.getValue(), notes, days);
+                victimService.addCallAttempt(idGuidMap.get(id), decisionToChargeContextGuid, convertObjectToString(secondCall));
                 teleCommsListMap.put(journeyTypeCode.getValue(), secondCall);
             }
             context.set("teleCommsListMap", teleCommsListMap);
@@ -1009,16 +1034,19 @@ public class VictimCaseAppApiStepDefinition {
         Map<String, List<String>> victimMapIds = context.get("victimMapIds");
         Map<Integer, TelephoneCommunication> teleCommsListMap = context.get("teleCommsListMap");
 
+        Map<Integer, String> decisionToChargeContextGuidMap = context.get("decisionToChargeContextGuidMap");
+
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
 
         for (String id : victimMapIds.get(victimType)) {
             for (Map<String, String> row : rows) {
                 JourneyType journeyTypeCode = JourneyType.fromString(row.get("journeyType"));
+                String decisionToChargeContextGuid = decisionToChargeContextGuidMap.get(journeyTypeCode.getValue());
                 String informVictim = row.get("informVictim");
                 CommunicationDirection callDirection = CommunicationDirection.fromString(row.get("callDirection"));
                 String notes = row.get("notes");
-                TelephoneCommunication thirdCall = firstTeleCall(journeyTypeCode.getValue(), informVictim, callDirection.getValue(), notes, days);
-                victimService.addCallAttempt(idGuidMap.get(id), convertObjectToString(thirdCall));
+                TelephoneCommunication thirdCall = firstTeleCall(journeyTypeCode.getValue(), decisionToChargeContextGuid, informVictim, callDirection.getValue(), notes, days);
+                victimService.addCallAttempt(idGuidMap.get(id), decisionToChargeContextGuid, convertObjectToString(thirdCall));
                 teleCommsListMap.put(journeyTypeCode.getValue(), thirdCall);
             }
             context.set("communicationListMap", teleCommsListMap);
@@ -1032,16 +1060,18 @@ public class VictimCaseAppApiStepDefinition {
         Map<String, List<String>> victimMapIds = context.get("victimMapIds");
         Map<Integer, TelephoneCommunication> teleCommsListMap = context.get("teleCommsListMap");
 
+        Map<Integer, String> decisionToChargeContextGuidMap = context.get("decisionToChargeContextGuidMap");
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
 
         for (String id : victimMapIds.get(victimType)) {
             for (Map<String, String> row : rows) {
                 JourneyType journeyTypeCode = JourneyType.fromString(row.get("journeyType"));
+                String decisionToChargeContextGuid = decisionToChargeContextGuidMap.get(journeyTypeCode.getValue());
                 String informVictim = row.get("informVictim");
                 CommunicationDirection callDirection = CommunicationDirection.fromString(row.get("callDirection"));
                 String notes = row.get("notes");
-                TelephoneCommunication thirdCall = firstTeleCall(journeyTypeCode.getValue(), informVictim, callDirection.getValue(), notes, days);
-                victimService.addCallAttempt(idGuidMap.get(id), convertObjectToString(thirdCall));
+                TelephoneCommunication thirdCall = firstTeleCall(journeyTypeCode.getValue(), decisionToChargeContextGuid, informVictim, callDirection.getValue(), notes, days);
+                victimService.addCallAttempt(idGuidMap.get(id), decisionToChargeContextGuid, convertObjectToString(thirdCall));
                 teleCommsListMap.put(journeyTypeCode.getValue(), thirdCall);
             }
             context.set("teleCommsListMap", teleCommsListMap);
@@ -1053,16 +1083,18 @@ public class VictimCaseAppApiStepDefinition {
         Map<String, String> idGuidMap = context.get("idGuidMap");
         Map<String, List<String>> victimMapIds = context.get("victimMapIds");
         Map<String, FollowUpCommunication> followUpCommsListMap = context.get("followUpCommsListMap");
+        Map<Integer, String> decisionToChargeContextGuidMap = context.get("decisionToChargeContextGuidMap");
 
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
 
         for (String id : victimMapIds.get(victimType)) {
             for (Map<String, String> row : rows) {
                 JourneyType journeyTypeCode = JourneyType.fromString(row.get("journeyType"));
+                String decisionToChargeContextGuid = decisionToChargeContextGuidMap.get(journeyTypeCode.getValue());
                 String followUpMethod = row.get("followUpMethod").toLowerCase(Locale.ROOT);
                 FollowUpCommunication followupComms = followUpCommsListMap.get(followUpMethod);
                 int commsAttempt = 1;
-                HttpResponseWrapper responseFollowupComms = victimService.getFollowupComms(idGuidMap.get(id), followUpMethod, journeyTypeCode.getValue(), commsAttempt);
+                HttpResponseWrapper responseFollowupComms = victimService.getFollowupComms(idGuidMap.get(id), followUpMethod, journeyTypeCode.getValue(), decisionToChargeContextGuid, commsAttempt);
                 VictimCaseAppAssertions.assertFollowupComms(followupComms, responseFollowupComms);
             }
         }

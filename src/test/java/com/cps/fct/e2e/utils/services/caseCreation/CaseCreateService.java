@@ -338,8 +338,8 @@ public class CaseCreateService extends BaseService {
 
     public String victimWitnessFirstnameAndSurname(HttpResponseWrapper response){
         String body = response.getBody();
-        String firstname = extractFromJson(body,"$.firstNames");
-        String surname = extractFromJson(body,"$.firstNames");
+        String firstname = extractFromJson(body,".firstNames");
+        String surname = extractFromJson(body,".surname");
         return firstname + " " + surname;
     }
 

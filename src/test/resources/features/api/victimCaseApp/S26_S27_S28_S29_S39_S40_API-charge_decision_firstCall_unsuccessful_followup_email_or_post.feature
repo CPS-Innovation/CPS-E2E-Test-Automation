@@ -37,12 +37,12 @@ Feature: VCA-API-S26-S27-S28-S29-S39:- Log charge decision communication where f
     And the Victim liaison officer is assigned to "victim" in VCA
     When the first telephone call attempt is un-successful to inform victim with following details for "victim" in VCA
       | journeyType                            | informVictim | callDirection | notes                  | smsSent |
-      | Inform of a no further action decision | No           | Inbound       | Telephone call - Notes | Yes     |
+      | Inform of a decision to charge | No           | Inbound       | Telephone call - Notes | Yes     |
       #  journeyType :- Inform of a no further action decision or #  Inform of a decision to charge
     And follow up as below for "victim" in VCA
       | journeyType                            | followUpMethod | notes        |
-      | Inform of a no further action decision | Post           | Post - Notes |
+      | Inform of a decision to charge | Post           | Post - Notes |
       #  followUpMethod :- Email or Post
     Then verify the charge decision telephone and followup communication for "victim" in VCA
       | journeyType                            | followUpMethod | callAttempt | smsSent |
-      | Inform of a no further action decision | Post           | first       | Yes     |
+      | Inform of a decision to charge | Post           | first       | Yes     |

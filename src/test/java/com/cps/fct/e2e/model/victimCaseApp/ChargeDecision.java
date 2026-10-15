@@ -8,9 +8,10 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class DecisionToCharge {
+public class ChargeDecision {
 
     private String DecisionToChargeContextGuid;
+    private String NoFurtherActionContextGuid;
     private String CreatedBy;
     private String LastModifiedBy;
 

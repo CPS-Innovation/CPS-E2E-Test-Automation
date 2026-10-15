@@ -139,8 +139,6 @@ public class CaseCreateApiStepDefinition {
         HttpResponseWrapper responseVictimWitnessDetails = caseCreateService.victimWitnessDetailsList(context.get("caseId"));
         caseCreateService.victimWitnessDetails(responseVictimWitnessDetails, context);
 
-
-
         switch(personType){
             case "witness","witnessChild","witnessExpert","witnessInterpreter","witnessIntimidated","witnessPolice",
                  "witnessPrisoner","witnessProfessional","witnessVulnerable":
@@ -171,8 +169,6 @@ public class CaseCreateApiStepDefinition {
                 HttpResponseWrapper responseVictimWitnessName = caseCreateService.victimWitnessFirstnameSurname(context.get("caseId"),victimWitnessId);
                 caseCreateService.victimWitnessFirstnameAndSurname(responseVictimWitnessName);
 
-
-
                 personTypePersonNameMap.put(personType, victimWitnessNameVcaFormat);
                 context.set("personTypePersonNameMap", personTypePersonNameMap);
                 break;
@@ -197,7 +193,7 @@ public class CaseCreateApiStepDefinition {
         HttpResponseWrapper responseVictimWitnessIds = victimService.victimWitnessList(context.get("caseId"));
         victimService.victimWitnessIds(responseVictimWitnessIds, context);
 
-        Map<String, List<String>> victimWitnessMapIds = context.get("victimMapIds");
+        Map<String, List<String>> victimWitnessMapIds = context.get("victimWitnessMapIds");
 
 //        String vicWitnessId = String.valueOf(victimWitnessId.get(personType));
 //        System.out.println("Created --" +personType + "-- Id --- is = " + vicWitnessId );
@@ -217,7 +213,7 @@ public class CaseCreateApiStepDefinition {
 
 //        switch (personType) {
 //            case "victim":
-//                Map<String, List<String>> victimMapIds = context.get("victimMapIds");
+//                Map<String, List<String>> victimMapIds = context.get("victimWitnessMapIds");
 //                String victimIdDetails = String.valueOf(victimMapIds.get(personType));
 //                System.out.println(victimIdDetails);
 //

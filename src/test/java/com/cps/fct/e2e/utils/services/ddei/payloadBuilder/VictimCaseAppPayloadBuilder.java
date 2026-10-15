@@ -531,13 +531,18 @@ public class VictimCaseAppPayloadBuilder {
                 .build();
     }
 
-    public static DecisionToCharge deciToCharge() {
-        return DecisionToCharge.builder()
+    public static ChargeDecision deciToCharge() {
+        return ChargeDecision.builder()
                 .DecisionToChargeContextGuid(uuid())
                 .CreatedBy("deciToChargeGuid")
                 .build();
     }
-
+    public static ChargeDecision noFurtherAction() {
+        return ChargeDecision.builder()
+                .NoFurtherActionContextGuid(uuid())
+                .CreatedBy("noFurtherActionGuid")
+                .build();
+    }
 
 }
 

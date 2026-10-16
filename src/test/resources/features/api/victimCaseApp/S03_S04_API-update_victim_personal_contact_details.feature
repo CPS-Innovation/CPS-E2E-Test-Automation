@@ -8,7 +8,7 @@ Feature: VCA-API-S3_S4:- Update existing victim personal and contact details and
 
   Background: Create cases with multi defendant with multi charge with victim personal and contact details.
   with empty personal and contact details.
-    Given create new case using "CM01" for type "single defendant multiple offence"
+    Given create new case using "CM01" for type "single suspect multiple offence"
     And add "victim" using "LM04" for the case
 
 #---------------Victim Person----------------------#

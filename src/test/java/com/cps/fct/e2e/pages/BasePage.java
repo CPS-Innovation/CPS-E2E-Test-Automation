@@ -196,6 +196,9 @@ public abstract class BasePage {
         return page.locator("role=" + ROLE_TEXTBOX + "[name='" + name + "']");
     }
 
+    public Locator getTextboxById(String name) {
+        return page.locator("#" + name);
+    }
 
     public void checkRadioByName(String name) {
         final String ROLE_RADIO = "radio";
@@ -207,7 +210,14 @@ public abstract class BasePage {
         page.locator("role=" + ROLE_LINK + "[name='" + name + "']").click();
     }
 
+    public void clickTabByName(String name) {
+        final String ROLE_TAB = "tab";
+        page.locator("role=" + ROLE_TAB + "[name='" + name + "']").click();
+    }
 
+    public Locator getRadioButtonById(String id) {
+        return page.locator("#" + id);
+    }
 
     public Locator getButtonByName(String name) {
         final String ROLE_BUTTON = "button";
@@ -237,6 +247,30 @@ public abstract class BasePage {
         page.waitForSelector("text='" + expectedText + "'",
                 new Page.WaitForSelectorOptions().setTimeout(DEFAULT_TIMEOUT_MILLIS));
     }
+
+    protected Locator waitForButtonToAppear(String expectedText) {
+        Locator button = page.getByRole(
+                AriaRole.BUTTON,
+                new Page.GetByRoleOptions().setName(expectedText)
+        );
+        button.waitFor(new Locator.WaitForOptions()
+                .setState(WaitForSelectorState.VISIBLE)
+                .setTimeout(DEFAULT_TIMEOUT_MILLIS));
+        return button;
+    }
+
+    protected Locator waitForHeadingToAppear(String expectedText) {
+        Locator heading = page.getByRole(
+                AriaRole.HEADING,
+                new Page.GetByRoleOptions().setName(expectedText)
+        );
+        heading.waitFor(new Locator.WaitForOptions()
+                .setState(WaitForSelectorState.VISIBLE)
+                .setTimeout(DEFAULT_TIMEOUT_MILLIS));
+        return heading;
+    }
+
+
 
 
     public void assertUrlContains(Page page, String expectedQueryString) {

@@ -33,6 +33,13 @@ public class PayloadBuilderForLM04 extends JsonReplacer {
         initialLM04Map.put("{{TWIF_ThirdLevel}}", cm01Map.get("TWIF_ThirdLevel"));
         initialLM04Map.put("{{TWIF_BottomLevel}}", cm01Map.get("TWIF_BottomLevel"));
 
+        initialLM04Map.put("{{TWIF_Priority_Force}}", cm01Map.get("TWIF_Priority_Force"));
+        initialLM04Map.put("{{TWIF_Priority_Unit}}", cm01Map.get("TWIF_Priority_Unit"));
+        initialLM04Map.put("{{TWIF_Priority_TopLevel}}", cm01Map.get("TWIF_Priority_TopLevel"));
+        initialLM04Map.put("{{TWIF_Priority_SecondLevel}}", cm01Map.get("TWIF_Priority_SecondLevel"));
+        initialLM04Map.put("{{TWIF_Priority_ThirdLevel}}", cm01Map.get("TWIF_Priority_ThirdLevel"));
+        initialLM04Map.put("{{TWIF_Priority_BottomLevel}}", cm01Map.get("TWIF_Priority_BottomLevel"));
+
         initialLM04Map.put("{{LM04_itemId}}", generateUppercaseAlphaNumeric(12));
         initialLM04Map.put("{{LM04_PTIURN_Number}}", cm01Map.get("CM01_PTIURN_Number"));
         initialLM04Map.put("{{FirstName}}", firstName());
@@ -41,6 +48,13 @@ public class PayloadBuilderForLM04 extends JsonReplacer {
         initialLM04Map.put("{{AddressLin1}}", buildingNumber());
         initialLM04Map.put("{{AddressLin2}}", streetAddress());
         initialLM04Map.put("{{AddressLin3}}", cityName());
+        initialLM04Map.put("{{PostCode}}", ukPostCode());
+        initialLM04Map.put("{{MobileNumber}}", mobilePhone());
+        initialLM04Map.put("{{HomePhone}}", homePhone());
+        initialLM04Map.put("{{Email}}", email());
+        initialLM04Map.put("{{ChildDoB}}", childDateOfBirth());
+        initialLM04Map.put("{{AdultDoB}}", adultDateOfBirth());
+
         initialLM04Map.put("{{LM04_CaseOffenceId}}", cm01Map.get("CM01_CaseOffenceId"));
         initialLM04Map.put("{{LM04_Con_ShoulderNo}}", cm01Map.get("CM01_Con_ShoulderNo"));
 

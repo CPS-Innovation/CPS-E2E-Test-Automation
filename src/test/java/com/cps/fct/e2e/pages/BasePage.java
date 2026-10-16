@@ -186,6 +186,10 @@ public abstract class BasePage {
         getTextboxByName(name).fill(input);
     }
 
+    public void enterTextById(String id, String input) {
+        getTextboxById(id).fill(input);
+    }
+
     public void clickButton(String name) {
         getButtonByName(name).click();
     }

@@ -39,12 +39,13 @@ Feature: VCA-API-S1_S2:- Add personal and contact details for all category types
       | Telephone number | Add Telephone     |
       | Email address    | Add email address |
     When the following "victimWitness" personal details are added in VCA
-      | vcaField                             |
-      | Preferred name                      |
-      | Preferred method of contact for CPS |
-      | Preferred contact times             |
-      | Victim representative details       |
-      | Power of attorney details           |
+      | vcaField                            | value       |
+      | Preferred name                      |             |
+      | Preferred method of contact for CPS | Home phone  |
+      #Home phone #Mobile #Email #Post #Via police #Via Independant Sexual Violence Adviser (ISVA)
+      | Preferred contact times             | 10am to 4pm |
+      | Victim representative details       |             |
+      | Power of attorney details           |             |
 
 #    Then the "victimWitness" personal details are verified
 

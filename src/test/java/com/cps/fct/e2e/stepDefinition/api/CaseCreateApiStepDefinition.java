@@ -136,6 +136,9 @@ public class CaseCreateApiStepDefinition {
         Map<String, String> personTypePersonNameMap = new HashMap<>();
         context.set("personTypePersonNameMap", personTypePersonNameMap);
 
+        Map<String, String> personTypeFirstSureNameMap = new HashMap<>();
+        context.set("personTypeFirstSureNameMap", personTypeFirstSureNameMap);
+
         HttpResponseWrapper responseVictimWitnessDetails = caseCreateService.victimWitnessDetailsList(context.get("caseId"));
         caseCreateService.victimWitnessDetails(responseVictimWitnessDetails, context);
 
@@ -145,40 +148,42 @@ public class CaseCreateApiStepDefinition {
                 Map<String, List<String>> witnessIds = context.get("witnessMapIds");
                 String witnessId = String.valueOf(witnessIds.get(personType));
                 witnessId = witnessId.replace("[", "").replace("]", "");
-                System.out.println("Created --" + personType + "-- Id --- is = " + witnessId );
                 Map<String, List<String>> idWitnessNameMap = context.get("idWitnessNameMap");
                 String witnessName = String.valueOf(idWitnessNameMap.get(witnessId));
-                System.out.println("Person Id --" + witnessId + "-- FullName --- is = " + witnessName );
                 String witnessNameVcaFormat = witnessName.substring(1, witnessName.indexOf(",")).toUpperCase()
                         + witnessName.substring(witnessName.indexOf(","), witnessName.length() - 1);
-                System.out.println(witnessNameVcaFormat);
+                witnessId = witnessId.replace("[", "").replace("]", "");
+                HttpResponseWrapper responseWitnessName = caseCreateService.victimWitnessFirstnameSurname(context.get("caseId"),witnessId);
+                String witnessFirstSureName = caseCreateService.victimWitnessFirstnameAndSurname(responseWitnessName);
+                System.out.println(witnessFirstSureName);
                 personTypePersonNameMap.put(personType, witnessNameVcaFormat);
+                personTypeFirstSureNameMap.put(personType,witnessFirstSureName);
                 context.set("personTypePersonNameMap", personTypePersonNameMap);
+                context.set("personTypeFirstSureNameMap", personTypeFirstSureNameMap);
                 break;
             case "victim","victimIntimidated","victimVulnerable","victimWitness","victimWitnessChild","victimWitnessExpert","victimWitnessInterpreter","victimWitnessIntimidated",
                  "victimWitnessPolice","victimWitnessPrisoner","victimWitnessProfessional","victimWitnessVulnerable":
                 Map<String, List<String>> victimWitnessIds = context.get("victimWitnessMapIds");
                 String victimWitnessId = String.valueOf(victimWitnessIds.get(personType));//
-                System.out.println("Created --" + personType + "-- Id --- is = " + victimWitnessId );
+//                System.out.println("Created --" + personType + "-- Id --- is = " + victimWitnessId );
                 Map<String, List<String>> idvictimWitnessNameMap = context.get("idVictimWitnessNameMap");
                 String victimWitnessName = String.valueOf(idvictimWitnessNameMap.get(victimWitnessId));
-                System.out.println("Person Id --" + victimWitnessId + "-- FullName --- is = " + victimWitnessName );
+//                System.out.println("Person Id --" + victimWitnessId + "-- FullName --- is = " + victimWitnessName );
                 String victimWitnessNameVcaFormat = victimWitnessName.substring(1, victimWitnessName.indexOf(",")).toUpperCase()
                         + victimWitnessName.substring(victimWitnessName.indexOf(","), victimWitnessName.length() - 1);
-                System.out.println(victimWitnessNameVcaFormat);
-
+//                System.out.println(victimWitnessNameVcaFormat);
                 victimWitnessId = victimWitnessId.replace("[", "").replace("]", "");
                 HttpResponseWrapper responseVictimWitnessName = caseCreateService.victimWitnessFirstnameSurname(context.get("caseId"),victimWitnessId);
-                String firstSureName = caseCreateService.victimWitnessFirstnameAndSurname(responseVictimWitnessName);
-                System.out.println(firstSureName);
-
+                String victimWitnessFirstSureName = caseCreateService.victimWitnessFirstnameAndSurname(responseVictimWitnessName);
+                System.out.println(victimWitnessFirstSureName);
                 personTypePersonNameMap.put(personType, victimWitnessNameVcaFormat);
+                personTypeFirstSureNameMap.put(personType,victimWitnessFirstSureName);
                 context.set("personTypePersonNameMap", personTypePersonNameMap);
+                context.set("personTypeFirstSureNameMap", personTypeFirstSureNameMap);
                 break;
 
             default : System.out.println("Person Type is not specified");
         }
-
 
     }
 

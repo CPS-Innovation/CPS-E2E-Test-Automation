@@ -154,24 +154,24 @@ public class VictimCaseAppUiStepDefinition {
     @When("the following {string} personal details are added in VCA")
     public void addVictimVCAPersonDetails(String personType, DataTable dataTable){
         String caseUrn = context.get("caseUrn");
-        Map<String, String> personTypePersonNameMap = context.get("personTypePersonNameMap");
-        String victimWitnessFullName = personTypePersonNameMap.get(personType);
+        Map<String, String> personTypeFirstSureNameMap = context.get("personTypeFirstSureNameMap");
+        String victimWitnessFirstSureName = personTypeFirstSureNameMap.get(personType);
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
 
         for (Map<String, String> row : rows) {
             switch(row.get("vcaField")){
                 case "Preferred name":
-                    pages.vcaVictimDetailsPage.addPreferredName(victimWitnessFullName);
+                    pages.vcaVictimDetailsPage.addPreferredName(victimWitnessFirstSureName);
                     break;
                 case "Preferred method of contact for CPS":
-                    pages.vcaVictimDetailsPage.addPreferredCPSMoc();
+                    pages.vcaVictimDetailsPage.addPreferredCPSMoc(victimWitnessFirstSureName, row.get("value"));
                     break;
-//                case "Preferred contact times":
-//                    pages.vcaVictimDetailsPage.addPreferredContact();
-//                    break;
-//                case "Victim representative details":
-//                    pages.vcaVictimDetailsPage.addVictimRepresentative();
-//                    break;
+                case "Preferred contact times":
+                    pages.vcaVictimDetailsPage.addPreferredContact(victimWitnessFirstSureName, row.get("value"));
+                    break;
+                case "Victim representative details":
+                    pages.vcaVictimDetailsPage.addVictimRepresentative(victimWitnessFirstSureName);
+                    break;
 //                case "Power of attorney details":
 //                    pages.vcaVictimDetailsPage.addPowerOfAttorney();
 //                    break;

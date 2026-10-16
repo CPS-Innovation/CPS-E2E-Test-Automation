@@ -116,23 +116,69 @@ public class VcaVictimDetailsPage extends BasePage {
                 .isVisible();
     }
 
-    public void addPreferredName(String victimWitnessFirstName){
-
+    public void addPreferredName(String victimWitnessFirstSureName){
         clickLinkByName("Enter preferred name");
-//        waitForText("What is " +victimWitnessFirstName+ " "+victimWitnessSurname+"’s email address? (optional)");
+        waitForText("What is " +victimWitnessFirstSureName+ "’s preferred name?");
+        enterTextById("b6-Input_PreferredName",firstName());
+        getButtonByName("Save and continue").click();
+        assertThat(page.getByText(
+                Pattern.compile("Success\\s*Preferred name updated.")))
+                .isVisible();
+    }
 
+    public void addPreferredCPSMoc(String victimWitnessFirstSureName, String preferredMethod){
+        clickLinkByName("Select preferred method of contact for CPS");
+        waitForText("What is " +victimWitnessFirstSureName+ "’s preferred method of contact?");
+        switch (preferredMethod) {
+            case "Home phone":
+                getRadioButtonById("b17-RadioButtonHomePhone").click();
+                break;
+            case "Mobile":
+                getRadioButtonById("b17-RadioButtonMobile").click();
+                break;
+            case "Email":
+                getRadioButtonById("b17-RadioButtonEmail").click();
+                break;
+            case "Post":
+                getRadioButtonById("b17-RadioButtonPost").click();
+                break;
+            case "Via police":
+                getRadioButtonById("b17-RadioButtonViaPolice").click();
+                break;
+//            case "Via Independant Sexual Violence Adviser (ISVA)":
+//                getRadioButtonById("b17-RadioButtonViaISVA").click();
+//                break;
+            default:
+                System.out.println("Specified preferred method of contact does not exist");
 
+        }
+        getButtonByName("Save and continue").click();
+        assertThat(page.getByText(
+                Pattern.compile("Success\\s*Preferred method of contact updated")))
+                .isVisible();
+    }
+
+    public void addPreferredContact(String victimWitnessFirstSureName, String preferredContactTime){
+        clickLinkByName("Enter contact times");
+        waitForText("What are " +victimWitnessFirstSureName+ "’s preferred contact times?");
+        enterTextById("b18-Input_PreferredContactTimes",preferredContactTime);
+        getButtonByName("Save and continue").click();
+        assertThat(page.getByText(
+                Pattern.compile("Success\\s*You changed the preferred contact times for "+victimWitnessFirstSureName+ " to "+preferredContactTime+".")))
+                .isVisible();
         page.pause();
-
     }
 
-    public void addPreferredCPSMoc(){
-
-
-
+    public void addVictimRepresentative(String victimWitnessFirstSureName){
+//        clickLinkByName("Enter contact times");
+//        waitForText("Victim representative details");
+////        enterTextById("b18-Input_PreferredContactTimes",preferredContactTime);
+//        getButtonByName("Save and continue").click();
+//        assertThat(page.getByText(
+//                Pattern.compile("Success\\s*You changed the preferred contact times for "+victimWitnessFirstSureName+ " to "+preferredContactTime+".")))
+//                .isVisible();
+//        page.pause();
     }
-
-
 
 
 }

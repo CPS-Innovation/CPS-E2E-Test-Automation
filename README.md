@@ -168,6 +168,18 @@ mvn clean test -Dcucumber.filter.tags="@ui and @api"
 mvn clean test -Dcucumber.filter.tags="not @ui" // not ui tests
 ```
 
+#### Run a specific test and keep the browser open
+```
+mvn test "-Dcucumber.filter.tags=@CR_UI_16401" "-DcloseBrowser=false"
+```
+
+Stop the test process manually when finished inspecting the browser. In IntelliJ, use the red Stop button. In a terminal, press `Ctrl + C`.
+
+#### Run all VCA tests and close the browser
+```
+mvn test "-Dcucumber.filter.tags=@vca_api_regression"
+```
+
 #### Run all API and UI tests with 2 retries
 
 ```

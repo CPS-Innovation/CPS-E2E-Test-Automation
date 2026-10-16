@@ -27,7 +27,14 @@ public class PageObjects {
     @Inject
     public CompleteSubmissionPage completeSubmissionPage;
 
-
-
+    public void useCurrentPage() {
+        loginPage.useCurrentPage();
+        caseIdSearchPage.useCurrentPage();
+        caseReviewPage.useCurrentPage();
+        selectTestPage.useCurrentPage();
+        decisionAnalysisPage.useCurrentPage();
+        actionPlanPage.useCurrentPage();
+        completeSubmissionPage.useCurrentPage();
+    }
 
 }

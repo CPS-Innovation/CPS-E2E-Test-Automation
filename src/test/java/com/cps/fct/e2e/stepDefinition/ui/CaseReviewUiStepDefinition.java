@@ -5,6 +5,7 @@ import com.cps.fct.e2e.utils.common.EnvConfig;
 import com.cps.fct.e2e.utils.common.FakerUtils;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
 import com.cps.fct.e2e.utils.common.SecurePassCode;
+import com.cps.fct.e2e.utils.playwright.PlaywrightManager;
 import com.jayway.jsonpath.JsonPath;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
@@ -95,6 +96,7 @@ public class CaseReviewUiStepDefinition {
     private static final String NOT_AT_THIS_TIME_VALUE = "Not at this time";
 
     @Inject private PageObjects pages;
+    @Inject private PlaywrightManager playwrightManager;
 
 
     public CaseReviewUiStepDefinition() {
@@ -104,6 +106,8 @@ public class CaseReviewUiStepDefinition {
 
     @Given("I login to case review app")
     public void loginToCaseReviewApp() throws InterruptedException {
+        playwrightManager.setUpBrowser(null);
+        pages.useCurrentPage();
         pages.loginPage.loginIntoCaseReview(caseReviewUsername(), caseReviewPassword());
     }
 

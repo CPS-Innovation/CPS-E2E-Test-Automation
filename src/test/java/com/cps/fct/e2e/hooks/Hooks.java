@@ -65,11 +65,6 @@ public class Hooks {
         }
 
         isUIScenario = scenario.getSourceTagNames().contains("@ui");
-        if (isUIScenario) {
-            playwrightManager.setUpBrowser(scenario);
-
-        }
-
     }
 
     @After

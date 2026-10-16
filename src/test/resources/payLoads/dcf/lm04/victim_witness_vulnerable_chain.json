@@ -1,0 +1,74 @@
+{
+  "WitnessOrVictim": {
+    "CaseId": "{{DCF_CaseId}}",
+    "ItemId": "{{LM04_itemId}}",
+    "PTIURN": {
+      "Force": "{{DCF_Force}}",
+      "Unit": "{{DCF_Unit}}",
+      "Number": "{{LM04_PTIURN_Number}}",
+      "Year": "{{DCF_Year}}"
+    },
+    "UpdateStatus": {
+      "VersionId": "1",
+      "UpdateReasonType": "Create",
+      "UpdateReason": "Need to create witness"
+    },
+    "VictimWitness": {
+      "Person": {
+        "UniqueId": "{{LM04_Victim_Vulnerable}}",
+        "Name": {
+          "Title": "Mr",
+          "GivenName": "Simon",
+          "FamilyName": "{{Surname}}"
+        },
+        "ContactDetails": {
+          "Address": {
+            "AddressLine": [
+              "{{AddressLin1}}",
+              "{{AddressLin2}}",
+              "{{AddressLin3}}"
+            ],
+            "Postcode": "NE1 1AB",
+            "Country": "UK"
+          },
+          "ContactNumber": [
+            {
+              "Number": {
+                "TelNationalNumber": "07111111111"
+              },
+              "TypeOfNumber": "mobile"
+            }
+          ],
+          "Email": "{{Email}}"
+        },
+        "DateOfBirth": "2012-09-03",
+        "PersonClassification": [
+          {
+            "ClassificationType": "TypeOfWitness",
+            "ClassificationCode": "Vulnerable",
+            "ClassificationValue": {
+              "ClassificationValueFlag": true
+            }
+          }
+        ]
+      },
+      "TypeOfPerson": "VictimWitness",
+      "DateOfBirth": "1970-08-03",
+      "WitnessAndVictim": {
+        "Witness": {
+          "Occupation": "Civilian",
+          "WarnedByPolice": false
+        },
+        "Victim": {
+          "XOffenceId": [
+            "{{LM04_CaseOffenceId}}"
+          ],
+          "VPSStatus": {
+            "ResponseToVPSOffer": "Accepted",
+            "SchemeExplained": false
+          }
+        }
+      }
+    }
+  }
+}

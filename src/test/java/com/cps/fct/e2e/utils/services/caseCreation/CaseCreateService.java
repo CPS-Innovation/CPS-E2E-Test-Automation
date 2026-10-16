@@ -6,6 +6,7 @@ import com.cps.fct.e2e.utils.common.JsonUtils;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
 import com.cps.fct.e2e.utils.httpClient.HttpClientBuilder;
 import com.cps.fct.e2e.utils.httpClient.HttpResponseWrapper;
+import com.cps.fct.e2e.utils.services.caseCreation.payloadBuilders.PayloadBuilderForCaseMessage;
 import com.cps.fct.e2e.utils.services.caseCreation.payloadBuilders.PayloadBuilderForCM01;
 import com.cps.fct.e2e.utils.services.caseCreation.payloadBuilders.PayloadBuilderForLM04;
 import com.cps.fct.e2e.utils.services.BaseService;
@@ -28,6 +29,9 @@ public class CaseCreateService extends BaseService{
     @Inject
     PayloadBuilderForLM04 LM04;
 
+    @Inject
+    PayloadBuilderForCaseMessage caseMessageBuilder;
+
     public HttpResponseWrapper cm01WithCaseDetails(File caseFile, String messageType, ScenarioContext context) throws IOException {
         String payloadForDefendantAndCharge = Files.readString(caseFile.toPath());
         String modifiedRequestJson = CM01.generateCM01PayloadWithValues(payloadForDefendantAndCharge, context);
@@ -37,12 +41,10 @@ public class CaseCreateService extends BaseService{
         private HttpResponseWrapper sendCM01 (String payload, String messageType) {
         return service.sendRequest(createCase(payload, messageType));
     }
-        private HttpClientBuilder createCase(String payloadInString, String messageType) {
-            String caseType = context.get("caseType");
-            String caseTypeLowerCase = caseType.toLowerCase();
+    private HttpClientBuilder createCase(String payloadInString, String messageType) {
             return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("CASE_CREATE_API"))
-                .endpoint(format("/api/%s/cm01", caseTypeLowerCase))
+                .endpoint(caseMessageEndpoint("cm01"))
                 .addHeaders(caseCreateHeaders())
                 .body(payloadInString)
                 .method("POST")
@@ -93,12 +95,9 @@ public class CaseCreateService extends BaseService{
     }
 
     private HttpClientBuilder createVictimWitness(String payloadInString, String messageType) {
-        String caseType = context.get("caseType");
-        String caseTypeLowerCase = caseType.toLowerCase();
         return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("CASE_CREATE_API"))
-                .endpoint("/api/dcf/lm04")
-                .endpoint(format("/api/%s/lm04", caseTypeLowerCase))
+                .endpoint(caseMessageEndpoint("lm04"))
                 .addHeaders(caseCreateHeaders())
                 .body(payloadInString)
                 .method("POST")
@@ -113,6 +112,36 @@ public class CaseCreateService extends BaseService{
         context.set("case",caseResponse);
         context.set("lm04Success", caseResponse.isSuccess());
         context.set("lm04RequestId", caseResponse.getRequestId());
+    }
+
+    public HttpResponseWrapper sendCaseMessage(String payload, String messageType) {
+        return service.sendRequest(createCaseMessage(payload, messageType));
+    }
+
+    public HttpResponseWrapper caseMessage(File caseMessageFile, String messageType, ScenarioContext context)
+            throws IOException {
+        String payload = Files.readString(caseMessageFile.toPath());
+        String modifiedRequestJson = caseMessageBuilder.generatePayloadWithValues(payload, messageType, context);
+        context.set("modified" + messageType.toUpperCase() + "RequestPayload", modifiedRequestJson);
+        return sendCaseMessage(modifiedRequestJson, messageType);
+    }
+
+    private HttpClientBuilder createCaseMessage(String payloadInString, String messageType) {
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("CASE_CREATE_API"))
+                .endpoint(caseMessageEndpoint(messageType))
+                .addHeaders(caseCreateHeaders())
+                .body(payloadInString)
+                .method("POST")
+                .retry(TRANSIENT_REQUEST_RETRIES)
+                .retryDelay(TRANSIENT_REQUEST_RETRY_DELAY_MILLIS)
+                .resourceName(messageType)
+                .build();
+    }
+
+    private String caseMessageEndpoint(String messageType) {
+        String caseType = context.get("caseType");
+        return format("/api/%s/%s", caseType.toLowerCase(), messageType.toLowerCase());
     }
 
 }

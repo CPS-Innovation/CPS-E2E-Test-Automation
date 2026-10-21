@@ -1,4 +1,4 @@
-@regression @vca_api_regression @VCA_API_S13 @VCA_API_S14 @VCA_API_S54
+@regression @api_vca_regression @VCA_API_S13 @VCA_API_S14 @VCA_API_S54
 
 Feature: VCA-API-S15-S51-S53:- Cancel the arranged accepted offered meeting to victim with details.
   As a Victim Liaison Officer

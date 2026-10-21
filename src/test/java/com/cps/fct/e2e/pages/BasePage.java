@@ -142,11 +142,10 @@ public abstract class BasePage {
 
     public void selectDropdownByValue(String selector, String value) {
         page.selectOption(selector, new SelectOption().setValue(value));
-
     }
 
-    public void selectDropdownByLabel(String selector, String label) {
-        page.selectOption(selector, new SelectOption().setLabel(label));
+    public void selectDropdownByLabel(Locator dropdown, String label) {
+        dropdown.selectOption(new SelectOption().setLabel(label));
     }
 
     public void selectDropdownByIndex(String selector, int index) {
@@ -186,6 +185,14 @@ public abstract class BasePage {
         getTextboxByName(name).fill(input);
     }
 
+    public void enterTextByLocator(Locator locator,String input) {
+        locator.fill(input);
+    }
+    public void selectTextByLocator(Locator locator) {
+        locator.click();
+    }
+
+
     public void enterTextById(String id, String input) {
         getTextboxById(id).fill(input);
     }
@@ -213,6 +220,18 @@ public abstract class BasePage {
         final String ROLE_LINK = "link";
         page.locator("role=" + ROLE_LINK + "[name='" + name + "']").click();
     }
+
+    public void clickTextLink( Page page, String rowSelector, String keySelector, String textToFind, String linkName) {
+        Locator row = page.locator(rowSelector)
+                .filter(new Locator.FilterOptions()
+                        .setHas(page.locator(keySelector)
+                                .getByText(textToFind,
+                                        new Locator.GetByTextOptions().setExact(true))
+                        )
+                );
+        row.getByRole(AriaRole.LINK, new Locator.GetByRoleOptions().setName(linkName)).click();
+    }
+
 
     public void clickTabByName(String name) {
         final String ROLE_TAB = "tab";

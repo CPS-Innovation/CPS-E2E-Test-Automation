@@ -1,4 +1,4 @@
-@regression @vca_api_regression @VCA_API_S52
+@regression @api_vca_regression @VCA_API_S52
 
 Feature: VCA-API-S52:- Offer meetings via meeting methods to victims
   As a Victim Liaison Officer

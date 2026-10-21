@@ -1,4 +1,4 @@
-@regression @vca_api_regression @VCA_API_S58
+@regression @api_vca_regression @VCA_API_S58
 
 Feature: VCA-API-S58:- Add case Charging type
   As a Victim Liaison Officer

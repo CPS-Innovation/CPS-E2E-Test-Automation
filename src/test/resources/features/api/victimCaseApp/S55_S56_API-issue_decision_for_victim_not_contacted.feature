@@ -1,4 +1,4 @@
-@regression @vca_api_regression @VCA_API_S55 @VCA_API_S56
+@regression @api_vca_regression @VCA_API_S55 @VCA_API_S56
 
 Feature: VCA-API-S55-S56:- Issue decision communications when victim not contacted with a reason for victims.
   As a Victim Liaison Officer

@@ -1,4 +1,4 @@
-@regression @vca_api_regression @VCA_API_S48
+@regression @api_vca_regression @VCA_API_S48
 
 Feature: VCA-API-S48:- CMS contacts are verified of victims
   As a Victim Liaison Officer

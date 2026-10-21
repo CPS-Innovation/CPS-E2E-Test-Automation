@@ -8,6 +8,7 @@ import com.cps.fct.e2e.utils.common.SecurePassCode;
 import com.cps.fct.e2e.utils.playwright.PlaywrightManager;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.picocontainer.annotations.Inject;
 
@@ -17,9 +18,12 @@ import java.util.Map;
 
 public class VictimCaseAppUiStepDefinition {
 
-    @Inject private PageObjects pages;
-    @Inject private ScenarioContext context;
-    @Inject private PlaywrightManager playwrightManager;
+    @Inject
+    private PageObjects pages;
+    @Inject
+    private ScenarioContext context;
+    @Inject
+    private PlaywrightManager playwrightManager;
 
 
     public VictimCaseAppUiStepDefinition() {
@@ -112,15 +116,15 @@ public class VictimCaseAppUiStepDefinition {
     }
 
     @When("verify that Vlo {string} is assigned to {string}")
-    public void verifyAssignedVlo(String vloName, String personType){
-                String caseUrn = context.get("caseUrn");
+    public void verifyAssignedVlo(String vloName, String personType) {
+        String caseUrn = context.get("caseUrn");
 //        String caseUrn = "05AQ7242526";
         pages.vcaHomePage.searchVictimCase(caseUrn);
         pages.vcaHomePage.verifyAssignedVlo(vloName);
     }
 
     @When("the following {string} personal details are added to CMS")
-    public void addVictimCMSPersonDetails(String personType, DataTable dataTable){
+    public void addVictimCMSPersonDetails(String personType, DataTable dataTable) {
         String caseUrn = context.get("caseUrn");
 
         Map<String, String> personTypePersonNameMap = context.get("personTypePersonNameMap");
@@ -132,7 +136,7 @@ public class VictimCaseAppUiStepDefinition {
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
 
         for (Map<String, String> row : rows) {
-            switch(row.get("cmsField")){
+            switch (row.get("cmsField")) {
                 case "Date of birth":
                     pages.vcaVictimDetailsPage.addDateOfBirth(row.get("justification"));
                     break;
@@ -149,17 +153,23 @@ public class VictimCaseAppUiStepDefinition {
                     System.out.println("Specified cms field does not exist");
             }
         }
+        pages.vcaVictimDetailsPage.navigateVictimHomePage();
     }
 
     @When("the following {string} personal details are added in VCA")
-    public void addVictimVCAPersonDetails(String personType, DataTable dataTable){
+    public void addVictimVCAPersonDetails(String personType, DataTable dataTable) {
         String caseUrn = context.get("caseUrn");
+        Map<String, String> personTypePersonNameMap = context.get("personTypePersonNameMap");
+        String victimWitnessFullName = personTypePersonNameMap.get(personType);
         Map<String, String> personTypeFirstSureNameMap = context.get("personTypeFirstSureNameMap");
         String victimWitnessFirstSureName = personTypeFirstSureNameMap.get(personType);
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
 
+        pages.vcaHomePage.searchVictimCase(caseUrn);
+        pages.vcaVictimDetailsPage.navigateVictimDetailsPage(caseUrn, victimWitnessFullName);
+
         for (Map<String, String> row : rows) {
-            switch(row.get("vcaField")){
+            switch (row.get("vcaField")) {
                 case "Preferred name":
                     pages.vcaVictimDetailsPage.addPreferredName(victimWitnessFirstSureName);
                     break;
@@ -172,16 +182,128 @@ public class VictimCaseAppUiStepDefinition {
                 case "Victim representative details":
                     pages.vcaVictimDetailsPage.addVictimRepresentative(victimWitnessFirstSureName);
                     break;
-//                case "Power of attorney details":
-//                    pages.vcaVictimDetailsPage.addPowerOfAttorney();
-//                    break;
+                case "Power of attorney details":
+                    pages.vcaVictimDetailsPage.addPowerOfAttorney(victimWitnessFirstSureName);
+                    break;
                 default:
                     System.out.println("Specified vca field does not exist");
             }
         }
+        pages.vcaVictimDetailsPage.navigateVictimHomePage();
+    }
 
+    @Then("the {string} personal details are verified")
+    public void verifyVictimDetail(String personType) {
+        String caseUrn = context.get("caseUrn");
+        Map<String, String> personTypePersonNameMap = context.get("personTypePersonNameMap");
+        String victimWitnessFullName = personTypePersonNameMap.get(personType);
+        pages.vcaHomePage.searchVictimCase(caseUrn);
+        pages.vcaVictimDetailsPage.navigateVictimDetailsPage(caseUrn, victimWitnessFullName);
+        pages.vcaVictimDetailsPage.verifyVictimDetail(victimWitnessFullName);
 
     }
+
+    @When("the {string} forename and surname are updated with {string} to CMS")
+    public void updateForenameSurname(String personType, String justification){
+        String caseUrn = context.get("caseUrn");
+        Map<String, List<String>> victimWitnessIds = context.get("victimWitnessMapIds");
+
+        Map<String, String> personTypePersonNameMap = context.get("personTypePersonNameMap");
+        String victimWitnessFullName = personTypePersonNameMap.get(personType);
+
+        Map<String, String> personTypeFirstSureNameMap = context.get("personTypeFirstSureNameMap");
+        pages.vcaHomePage.searchVictimCase(caseUrn);
+        pages.vcaVictimDetailsPage.navigateVictimDetailsPage(caseUrn, victimWitnessFullName);
+        for (String id : victimWitnessIds.get(personType)) {
+            String newFirstSureName = pages.vcaVictimDetailsPage.updateFirstAndLastName(justification);
+            int spaceIndex = newFirstSureName.lastIndexOf(" ");
+
+//            String victimWitnessNameVcaFormat = newFirstSureName.substring(newFirstSureName.indexOf(" ") + 1).toUpperCase()
+//                    + ", " + newFirstSureName.substring(0, newFirstSureName.indexOf(" "));
+
+            String victimWitnessNameVcaFormat = newFirstSureName.substring(spaceIndex + 1).toUpperCase()
+                    + ", " + newFirstSureName.substring(0, spaceIndex);
+            personTypePersonNameMap.put(personType, victimWitnessNameVcaFormat);
+            personTypeFirstSureNameMap.put(personType,newFirstSureName);
+            context.set("personTypePersonNameMap", personTypePersonNameMap);
+            context.set("personTypeFirstSureNameMap", personTypeFirstSureNameMap);
+        }
+        pages.vcaVictimDetailsPage.navigateVictimHomePage();
+    }
+
+    @When("the following {string} personal details are updated to CMS")
+    public void updateVictimCMSPersonDetails(String personType, DataTable dataTable) {
+        String caseUrn = context.get("caseUrn");
+
+        Map<String, String> personTypePersonNameMap = context.get("personTypePersonNameMap");
+        String victimWitnessFullName = personTypePersonNameMap.get(personType);
+
+        Map<String, String> personTypeFirstSureNameMap = context.get("personTypeFirstSureNameMap");
+        String victimWitnessFirstSureName = personTypeFirstSureNameMap.get(personType);
+
+        pages.vcaHomePage.searchVictimCase(caseUrn);
+        pages.vcaVictimDetailsPage.navigateVictimDetailsPage(caseUrn, victimWitnessFullName);
+
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+
+        for (Map<String, String> row : rows) {
+            switch (row.get("cmsField")) {
+                case "Date of birth":
+                    pages.vcaVictimDetailsPage.updateDateOfBirth(row.get("justification"));
+                    break;
+                case "Gender":
+                    pages.vcaVictimDetailsPage.updateGender(victimWitnessFirstSureName, row.get("justification"));
+                    break;
+                case "Address":
+                    pages.vcaVictimDetailsPage.updateAddress(victimWitnessFirstSureName,row.get("justification"));
+                    break;
+                case "Telephone number":
+                    pages.vcaVictimDetailsPage.updateTelephone(victimWitnessFirstSureName,row.get("justification"));
+                    break;
+                case "Email address":
+                    pages.vcaVictimDetailsPage.updateEmail(victimWitnessFirstSureName, row.get("justification"));
+                    break;
+                default:
+                    System.out.println("Specified cms field does not exist");
+            }
+        }
+    }
+
+    @When("the following {string} personal details are updated in VCA")
+    public void updateVictimVCAPersonDetails(String personType, DataTable dataTable) {
+
+        Map<String, String> personTypeFirstSureNameMap = context.get("personTypeFirstSureNameMap");
+        String victimWitnessFirstSureName = personTypeFirstSureNameMap.get(personType);
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+
+        for (Map<String, String> row : rows) {
+            switch (row.get("vcaField")) {
+                case "Preferred name":
+                    pages.vcaVictimDetailsPage.updatePreferredName(victimWitnessFirstSureName);
+                    break;
+                case "Preferred correspondence language":
+                    pages.vcaVictimDetailsPage.updatePreferredLanguage(victimWitnessFirstSureName,row.get("value"));
+                    break;
+                case "Preferred method of contact for CPS":
+                    pages.vcaVictimDetailsPage.updatePreferredCPSMoc(victimWitnessFirstSureName, row.get("value"));
+                    break;
+                case "Preferred contact times":
+                    pages.vcaVictimDetailsPage.updatePreferredContactTime(victimWitnessFirstSureName, row.get("value"));
+                    break;
+                case "Victim representative details":
+                    pages.vcaVictimDetailsPage.updateVictimRepresentative(victimWitnessFirstSureName);
+                    break;
+                case "Power of attorney details":
+                    pages.vcaVictimDetailsPage.updatePowerOfAttorney(victimWitnessFirstSureName);
+                    break;
+                default:
+                    System.out.println("Specified vca field does not exist");
+            }
+        }
+        pages.vcaVictimDetailsPage.navigateVictimHomePage();
+    }
+
+
 
 
 

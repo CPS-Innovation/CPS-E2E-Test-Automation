@@ -1,4 +1,4 @@
-@regression @vca_api_regression @VCA_API_S9
+@regression @api_vca_regression @VCA_API_S9
 
 Feature: VCA-API-S9:- Add category type for victim and verify wm01u message
   As a Victim Liaison Officer

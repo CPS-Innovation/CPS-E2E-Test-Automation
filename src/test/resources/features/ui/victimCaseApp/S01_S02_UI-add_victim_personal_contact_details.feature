@@ -1,6 +1,6 @@
-@regression @vca_ui @VCA_UI_S1 @VCA_UI_S2
+@regression @ui_vca_regression @VCA_UI_S1 @VCA_UI_S2
 
-Feature: VCA-API-S1_S2:- Add personal and contact details for all category types of victims and victims witness and verify wm01u message
+Feature: VCA-UI-S1_S2:- UI Flow - Add personal and contact details for victims or victimWitness person and verify wm01u message
   As a Victim Liaison Officer
   I want to add personal and contact details for all category types of victims and victims witness
   Added information is reflected in CMS and VCA database
@@ -11,10 +11,12 @@ Feature: VCA-API-S1_S2:- Add personal and contact details for all category types
 
     Given create new case using "CM01" for type "single suspect multiple offence"
     And add "victim witness without personal data" using "LM04" for the case
-    And the "victimWitness" details are available in CMS
+#    And the "victimWitness" details are available in CMS
+    And the "victimWitness" person details are available in CMS
 
   @ui @addPersonalAndContactDetailsForVictim
-  Scenario: Add victim title, preferred name, date of birth, gender, ethnicity, disability or access needs and previous convictions details
+  Scenario: Add Date of birth, Address, Telephone number, Email address, Preferred name,
+  Preferred method of contact for CPS, Preferred contact times, Victim representative details, Power of attorney details  details
   and verify that newly added details are sent in wm01u message. (FCT2-15283 & FCT2-15284)
 
     Given VLO login to victim case application
@@ -46,12 +48,4 @@ Feature: VCA-API-S1_S2:- Add personal and contact details for all category types
       | Preferred contact times             | 10am to 4pm |
       | Victim representative details       |             |
       | Power of attorney details           |             |
-
-#    Then the "victimWitness" personal details are verified
-
-
-
-
-
-
-#    And I login to case review app
+    Then the "victimWitness" personal details are verified

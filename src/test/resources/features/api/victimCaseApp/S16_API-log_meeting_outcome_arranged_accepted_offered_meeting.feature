@@ -1,4 +1,4 @@
-@regression @vca_api_regression @VCA_API_S16
+@regression @api_vca_regression @VCA_API_S16
 
 Feature: VCA-API-S16:- Log the meeting outcome of conducted arranged accepted offered meeting to victim with details.
   As a Victim Liaison Officer

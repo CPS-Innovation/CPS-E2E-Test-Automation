@@ -1,4 +1,4 @@
-@regression @vca_api_regression @VCA_API_S57
+@regression @api_vca_regression @VCA_API_S57
 
 Feature: VCA-API-S57:- Create task to log communication for victims in Victim Case Application.
   As a Victim Liaison Officer

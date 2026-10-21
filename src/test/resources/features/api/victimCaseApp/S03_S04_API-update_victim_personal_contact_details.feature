@@ -1,4 +1,4 @@
-@regression @vca_api_regression @VCA_API_S3 @VCA_API_S4
+@regression @api_vca_regression @VCA_API_S3 @VCA_API_S4
 
 Feature: VCA-API-S3_S4:- Update existing victim personal and contact details and verify wm01u
   As a Victim Liaison Officer
@@ -7,7 +7,7 @@ Feature: VCA-API-S3_S4:- Update existing victim personal and contact details and
   Verify wm01u message is sent to police system
 
   Background: Create cases with multi defendant with multi charge with victim personal and contact details.
-  with empty personal and contact details.
+  with personal and contact details.
     Given create new case using "CM01" for type "single suspect multiple offence"
     And add "victim" using "LM04" for the case
 

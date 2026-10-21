@@ -177,7 +177,7 @@ Stop the test process manually when finished inspecting the browser. In IntelliJ
 
 #### Run all VCA tests and close the browser
 ```
-mvn test "-Dcucumber.filter.tags=@vca_api_regression"
+mvn test "-Dcucumber.filter.tags=@api_vca_regression"
 ```
 
 #### Run all API and UI tests with 2 retries

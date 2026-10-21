@@ -476,6 +476,7 @@ public class VcaVictimDetailsPage extends BasePage {
         enterTextByLocator(page.locator("#Input_Victimrepresentativetelephon"), mobilePhone());
         enterTextByLocator(page.locator("#Input_Victimrepresentativeemail"), email());
         getButtonByName("Save and continue").click();
+        waitUntilSpinnersAreGone("Loading, please wait");
         assertThat(page.getByText(
                 Pattern.compile("Success\\s*You changed the victim representative details for " +victimWitnessFirstSureName)))
                 .isVisible();

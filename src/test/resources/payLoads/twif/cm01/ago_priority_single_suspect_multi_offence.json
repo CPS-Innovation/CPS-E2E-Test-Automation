@@ -2,16 +2,16 @@
   "PreChargeDecisionRequest": {
     "ItemId": "{{CM01_itemId}}",
     "PTIURN": {
-      "Force": "{{TWIF_Force_Priority}}",
-      "Unit": "{{TWIF_Unit_Priority}}",
+      "Force": "{{TWIF_Priority_Force}}",
+      "Unit": "{{TWIF_Priority_Unit}}",
       "Number": "{{CM01_PTIURN_Number}}",
-      "Year": "{{TWIF_Year_Priority}}"
+      "Year": "{{TWIF_Year}}"
     },
     "CPSUnit": {
-      "TopLevel": "{{TWIF_TopLevel_Priority}}",
-      "SecondLevel": "{{TWIF_SecondLevel_Priority}}",
-      "ThirdLevel": "{{TWIF_ThirdLevel_Priority}}",
-      "BottomLevel": "{{TWIF_BottomLevel_Priority}}"
+      "TopLevel": "{{TWIF_Priority_TopLevel}}",
+      "SecondLevel": "{{TWIF_Priority_SecondLevel}}",
+      "ThirdLevel": "{{TWIF_Priority_ThirdLevel}}",
+      "BottomLevel": "{{TWIF_Priority_BottomLevel}}"
     },
     "OperationName": "{{CM01_OperationName}}",
     "CaseClassification": [
@@ -56,9 +56,9 @@
           }
         ],
         "ASN": {
-          "Year": "{{TWIF_Year_Priority}}",
-          "Force": "{{TWIF_Force_Priority}}",
-          "Unit": "{{TWIF_Unit_Priority}}",
+          "Year": "{{TWIF_Year}}",
+          "Force": "{{TWIF_Priority_Force}}",
+          "Unit": "{{TWIF_Priority_Unit}}",
           "System": "00",
           "Number": "{{CM01_ASN_Number}}",
           "CheckCharacter": "W"

@@ -1,0 +1,196 @@
+{
+  "CaseStatus": {
+    "CaseId": "{{DCF_CaseId}}",
+    "ItemId": "{{CJ05_itemId}}",
+    "PTIURN": {
+      "Force": "{{DCF_Force}}",
+      "Unit": "{{DCF_Unit}}",
+      "Number": "{{CM01_PTIURN_Number}}",
+      "Year": "{{DCF_Year}}"
+    },
+    "InformationSubmitted": {
+      "Reason": "Provide Charging Decision",
+      "Certification": [
+        {
+          "CertificationType": "Lines of Enquiry",
+          "CertifierComments": "All enquiries complete at this stage. Nothing further to add.",
+          "WhenCertified": "2025-02-19T10:59:34+00:00",
+          "CertifierName": "#{{CM01_Con_ShoulderNo}} Danika Abshire"
+        },
+        {
+          "CertificationType": "Disclosure",
+          "CertifierComments": "No additional comments to make.",
+          "WhenCertified": "2025-02-19T11:01:11+00:00",
+          "CertifierName": "#{{CM01_Con_ShoulderNo}} Danika Abshire"
+        },
+        {
+          "CertificationType": "Code Test",
+          "CertifierComments": "Full code test passed. No further comments.",
+          "WhenCertified": "2025-02-19T11:16:55+00:00",
+          "CertifierName": "#{{CM01_Ser_ShoulderNo}} Luke Klocko"
+        },
+        {
+          "CertificationType": "File Quality",
+          "CertifierComments": "File reviewed and meets the required standards for submission.",
+          "WhenCertified": "2025-02-19T11:18:33+00:00",
+          "CertifierName": "#{{CM01_Ser_ShoulderNo}} Luke Klocko"
+        }
+      ],
+      "FactualSummary": {
+        "Paragraphs": [
+          {
+            "ItemHeading": {
+              "ClassificationType": "Police Narrative",
+              "ClassificationCode": "Factual Summary",
+              "ClassificationValue": {
+                "ClassificationValueText": "Summary of Circumstances of Offence(s)"
+              }
+            },
+            "ItemText": "Narrative text for Summary of Circumstances of Offence(s)"
+          },
+          {
+            "ItemHeading": {
+              "ClassificationType": "Police Narrative",
+              "ClassificationCode": "Factual Summary",
+              "ClassificationValue": {
+                "ClassificationValueText": "Injuries"
+              }
+            },
+            "ItemText": "Description of injuries: bruising to left cheek. Medical treatment was not required.",
+            "PersonUniqueId": "{{LM04_VictimWitnessRef_1}}"
+          }
+        ]
+      },
+      "CITP": {
+        "Paragraphs": [
+          {
+            "ItemHeading": {
+              "ClassificationType": "Police Narrative",
+              "ClassificationCode": "Confidential Information",
+              "ClassificationValue": {
+                "ClassificationValueText": "Reasonable Lines of Enquiry"
+              }
+            },
+            "ItemText": "Narrative text for Reasonable Lines of Enquiry"
+          }
+        ]
+      }
+    },
+    "StatusChanged": {
+      "CaseClassification": [
+        {
+          "ClassificationType": "Case Monitoring",
+          "ClassificationCode": "Pre Charge Decision",
+          "ClassificationValue": {
+            "ClassificationValueFlag": true
+          }
+        },
+        {
+          "ClassificationType": "Case Monitoring",
+          "ClassificationCode": "Not Guilty Anticipated Plea",
+          "ClassificationValue": {
+            "ClassificationValueFlag": true
+          }
+        }
+      ],
+      "CaseStatus": "Monitoring Code Change",
+      "ChangeOfStatusDetails": {}
+    },
+    "CaseContacts": [
+      {
+        "UniqueId": "{{CM01_Ser_PersonId}}",
+        "Name": {
+          "Title": "PC",
+          "GivenName": "Luke",
+          "FamilyName": "Klocko"
+        },
+        "Officer": {
+          "PoliceOfficerRank": "Sergeant",
+          "ShoulderNumber": "{{CM01_Ser_ShoulderNo}}"
+        },
+        "ContactDetails": {
+          "Address": {
+            "AddressLine": [
+              "62755",
+              "07788 Murazik Plaza",
+              "Feilburgh"
+            ],
+            "Postcode": "NE1 1AB",
+            "Country": "UK"
+          },
+          "ContactNumber": [
+            {
+              "Number": {
+                "TelNationalNumber": "01910000001"
+              },
+              "TypeOfNumber": "work"
+            }
+          ],
+          "Email": "police.sergeant@police-station.uk",
+          "ContactPreferences": {
+            "PreferredMethod": "Email"
+          }
+        },
+        "PersonClassification": [
+          {
+            "ClassificationType": "RoleInCase",
+            "ClassificationCode": "Role",
+            "ClassificationValue": {
+              "ClassificationValueText": "Supervising Officer"
+            }
+          }
+        ]
+      },
+      {
+        "UniqueId": "{{CM01_Con_PersonId}}",
+        "Officer": {
+          "PoliceOfficerRank": "Constable",
+          "ShoulderNumber": "{{CM01_Con_ShoulderNo}}"
+        },
+        "Name": {
+          "GivenName": "Danika",
+          "FamilyName": "Abshire"
+        },
+        "ContactDetails": {
+          "Address": {
+            "AddressLine": [
+              "62755",
+              "07788 Murazik Plaza",
+              "Feilburgh"
+            ],
+            "Postcode": "NE1 1AB",
+            "Country": "UK"
+          },
+          "ContactNumber": [
+            {
+              "Number": {
+                "TelNationalNumber": "01910000002"
+              },
+              "TypeOfNumber": "work"
+            }
+          ],
+          "Email": "police.constable@police-station.uk",
+          "ContactPreferences": {
+            "PreferredMethod": "Work Tel"
+          }
+        },
+        "PersonClassification": [
+          {
+            "ClassificationType": "RoleInCase",
+            "ClassificationCode": "Role",
+            "ClassificationValue": {
+              "ClassificationValueText": "Officer In Case"
+            }
+          },
+          {
+            "ClassificationType": "RoleInCase",
+            "ClassificationCode": "Role",
+            "ClassificationValue": {
+              "ClassificationValueText": "Disclosure Officer"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

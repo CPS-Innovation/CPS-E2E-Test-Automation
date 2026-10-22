@@ -5,7 +5,7 @@ Feature: CR-UI-S2_S14 - CC Initial PCD Review
   So that I can submit the review with the correct analysis, monitoring codes, action plan outcome and MG3 document.
 
   Background: Case Creation
-    Given create new case using "CM01" for type "single suspect multi offence"
+    Given create new case using "CM01" for type "single suspect multiple offence"
     And precharge the "CC" triage case for "5Day" PCD review
 
 

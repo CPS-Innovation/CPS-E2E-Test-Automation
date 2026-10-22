@@ -32,6 +32,11 @@ public class FakerUtils {
         return faker.name().lastName().toUpperCase() + ", " + faker.name().firstName();
     }
 
+    public static String randomOperationName(int length) {
+        return faker.regexify("[A-Z]{"+length+"}");
+    }
+
+
     public static String firstName() {
         return faker.name().firstName();
     }
@@ -85,16 +90,23 @@ public class FakerUtils {
         return dob.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
-    public static LocalDate childDateOfBirth() {
+    public static String adultDateOfBirth() {
+        Date dob = faker.date().birthday();
+        return String.valueOf(dob.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+    }
+
+    public static String childDateOfBirth() {
         LocalDate today = LocalDate.now();
-        LocalDate latestDob = today.minusYears(8).minusDays(1);
-        LocalDate earliestDob = today.minusYears(16);
+        LocalDate latestDob = today.minusYears(6).minusDays(1);
+        LocalDate earliestDob = today.minusYears(17);
 
         long minDay = earliestDob.toEpochDay();
         long maxDay = latestDob.toEpochDay();
         long randomDay = faker.number().numberBetween(minDay, maxDay);
-        return LocalDate.ofEpochDay(randomDay);
+        return String.valueOf(LocalDate.ofEpochDay(randomDay));
     }
+
+
 
     public static String email() {
         return faker.internet().emailAddress();
@@ -157,6 +169,15 @@ public class FakerUtils {
                 .toString();
     }
 
+    public static String generateUppercaseValue(int length) {
+        String CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        SecureRandom RANDOM = new SecureRandom();
+        return RANDOM.ints(length, 0, CHARS.length())
+                .mapToObj(CHARS::charAt)
+                .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
+                .toString();
+    }
+
     public static String defaultDate() {
         return "1900-01-01";
     }
@@ -165,6 +186,16 @@ public class FakerUtils {
         return LocalDate.now()
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
+
+    public static String todayDateDay() {
+        return LocalDate.now()
+                .format(DateTimeFormatter.ofPattern("dd"));
+    }
+    public static String todayDateMonth() {
+        return LocalDate.now()
+                .format(DateTimeFormatter.ofPattern("MM"));
+    }
+
 
     public static String todayMinusFiveDays() {
         return LocalDate.now()
@@ -184,9 +215,10 @@ public class FakerUtils {
     }
 
 
-    public static String yearYY() {
-        int year = random.nextInt(2025 - 2020 + 1) + 2020; // Random year between 2010 and 2025
-        return String.format("%02d", year % 100);
+    public static String yearTill2005() {
+        int year = random.nextInt(2005 - 1975 ) + 1975; // Random year between 2010 and 2025
+//        return String.format("%02d", year % 100);
+        return String.valueOf(year);
     }
 
 

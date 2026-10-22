@@ -14,7 +14,7 @@
       "BottomLevel": "{{DCF_BottomLevel}}",
       "LiteralValue": null
     },
-    "OperationName": "Custody and Charging Officers",
+    "OperationName": "{{CM01_OperationName}}",
     "CaseClassification": [
       {
         "ClassificationType": "Case Monitoring",
@@ -67,11 +67,11 @@
             "Particulars": {
               "Address": {
                 "AddressLine": [
-                  "62755",
-                  "07788 Murazik Plaza",
-                  "Feilburgh"
+                  "{{Offence1_BuildingNo}}",
+                  "{{Offence1_StreetAddress}}",
+                  "{{Offence1_City}}"
                 ],
-                "Postcode": "ZZ1 XX2",
+                "Postcode": "{{Offence1_PostCode}}",
                 "Country": "UK"
               }
             },
@@ -88,8 +88,8 @@
             },
             "Description": "OF 61 102 - Attempt to assault a person thereby occasioning them actual bodily harm",
             "Category": "Summary Only",
-            "FromDate": "2019-02-10",
-            "ToDate": "2019-03-01"
+            "FromDate": "{{ProposedChargeFromDate}}",
+            "ToDate": "{{ProposedChargeToDate}}"
           }
         ],
         "Person": {
@@ -97,38 +97,39 @@
             "PolicePreChargeRemandStatus": "Released Under Investigation",
             "ProposedRemandAfterCharge": "Summons"
           },
-          "UniqueId": "{{CM01_Def_PersonId}}",
+          "UniqueId": "{{CM01_Suspect1_Id}}",
           "Name": {
-            "GivenName": "Chidi",
-            "FamilyName": "{{DEF_Surname}}"
+            "GivenName": "{{Suspect1_GivenName}}",
+            "FamilyName": "{{Suspect1_SurName}}"
           },
-          "DateOfBirth": "1992-09-08",
+          "DateOfBirth": "{{Suspect1_DoB}}",
           "ContactDetails": {
             "Address": {
               "AddressLine": [
-                "62755",
-                "07788 Murazik Plaza",
-                "Feilburgh"
+                "{{Suspect1_BuildingNo}}",
+                "{{Suspect1_StreetAddress}}",
+                "{{Suspect1_City}}"
               ],
-              "Postcode": "NE1 1BB",
+              "Postcode": "{{Suspect1_PostCode}}",
               "Country": "UK"
             },
             "ContactNumber": [
               {
                 "Number": {
-                  "TelNationalNumber": "07935706937"
+                  "TelNationalNumber": "{{Suspect1_Mobile}}"
                 },
                 "TypeOfNumber": "mobile"
               },
               {
                 "Number": {
-                  "TelNationalNumber": "01173613697"
+                  "TelNationalNumber": "{{Suspect1_HomePhone}}"
                 },
                 "TypeOfNumber": "home"
               }
             ],
-            "Email": "marquis.herman@gmail.com"
+            "Email": "{{Suspect1_Email}}"
           },
+
           "PersonClassification": [
             {
               "ClassificationType": "StatusInformation",
@@ -140,40 +141,40 @@
           ]
         },
         "ASN": {
-          "Year": "26",
-          "Force": "45",
-          "Unit": "AA",
+          "Year": "{{DCF_Year}}",
+          "Force": "{{DCF_Force}}",
+          "Unit": "{{DCF_Unit}}",
           "System": "00",
           "Number": "{{CM01_ASN_Number}}",
           "CheckCharacter": "B"
         },
         "DefenceSolicitor": {
-          "Firm": "Stamm-Langosh",
+          "Firm": "{{Defender_Solicitor_Company}}",
           "UniqueId": "{{CM01_SolicitorId}}",
           "Name": {
             "Title": "Mr",
-            "GivenName": "Mabel",
-            "FamilyName": "Effertz"
+            "GivenName": "{{Solicitor_FirstName}}",
+            "FamilyName": "{{Solicitor_lastName}}"
           },
           "ContactDetails": {
             "Address": {
               "AddressLine": [
-                "62755",
-                "07788 Murazik Plaza",
-                "Feilburgh"
+                "{{Solicitor_Building_number}}",
+                "{{Solicitor_Street_Address}}",
+                "{{Solicitor_City}}"
               ],
-              "Postcode": "NE1 1AB",
+              "Postcode": "{{Solicitor_Postcode}}",
               "Country": "UK"
             },
             "ContactNumber": [
               {
                 "Number": {
-                  "TelNationalNumber": "01312345678"
+                  "TelNationalNumber": "{{Solicitor_HomePhone}}"
                 },
                 "TypeOfNumber": "work"
               }
             ],
-            "Email": "marquetta.konopelski@yahoo.com"
+            "Email": "{{Solicitor_email}}"
           }
         },
         "VersionId": "1"
@@ -183,9 +184,8 @@
       {
         "UniqueId": "{{CM01_Ser_PersonId}}",
         "Name": {
-          "Title": "PC",
-          "GivenName": "Luke",
-          "FamilyName": "Klocko"
+          "GivenName": "{{PoliceOfficer_GivenName}}",
+          "FamilyName": "{{PoliceOfficer_SurName}}"
         },
         "Officer": {
           "PoliceOfficerRank": "Sergeant",
@@ -194,17 +194,17 @@
         "ContactDetails": {
           "Address": {
             "AddressLine": [
-              "62755",
-              "07788 Murazik Plaza",
-              "Feilburgh"
+              "{{PoliceStation_Building_number}}",
+              "{{PoliceStation_Street_Address}}",
+              "{{PoliceStation_City}}"
             ],
-            "Postcode": "NE1 1AB",
+            "Postcode": "{{PoliceStation_Postcode}}",
             "Country": "UK"
           },
           "ContactNumber": [
             {
               "Number": {
-                "TelNationalNumber": "01910000001"
+                "TelNationalNumber": "{{PoliceStation_PhoneNo}}"
               },
               "TypeOfNumber": "work"
             }
@@ -231,23 +231,23 @@
           "ShoulderNumber": "{{CM01_Con_ShoulderNo}}"
         },
         "Name": {
-          "GivenName": "Danika",
-          "FamilyName": "Abshire"
+          "GivenName": "{{PoliceOfficer2_GivenName}}",
+          "FamilyName": "{{PoliceOfficer2_Surname}}"
         },
         "ContactDetails": {
           "Address": {
             "AddressLine": [
-              "62755",
-              "07788 Murazik Plaza",
-              "Feilburgh"
+              "{{PoliceStation_Building_number}}",
+              "{{PoliceStation_Street_Address}}",
+              "{{PoliceStation_City}}"
             ],
-            "Postcode": "NE1 1AB",
+            "Postcode": "{{PoliceStation_Postcode}}",
             "Country": "UK"
           },
           "ContactNumber": [
             {
               "Number": {
-                "TelNationalNumber": "01910000002"
+                "TelNationalNumber": "{{PoliceStation_PhoneNo}}"
               },
               "TypeOfNumber": "work"
             }

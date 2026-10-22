@@ -1,11 +1,12 @@
 @regression @caseReview @ui
+#  needs rerun
 Feature: CR-UI-S24 - CC Initial PCD Review for Priority NFS Complaint
   As a prosecutor lawyer,
   I want to complete CC initial 28 day PCD reviews for Full Code test
   So that I can submit the review with the correct analysis, monitoring codes, action plan outcome and MG3 document.
 
   Background: Case Creation
-    Given create new case using "CM01" for type "priority multi suspect single offence"
+    Given create new case using "CM01" for type "priority multiple suspect single offence"
     And precharge the RED "CC" triage case for "NFS Non Compliant" PCD review
 
 
@@ -24,8 +25,6 @@ Feature: CR-UI-S24 - CC Initial PCD Review for Priority NFS Complaint
     And I choose DG compliant as Yes
     When I make charging decision for the multi defendants as following:
       | decision type             | decision code                                              | reason | out come of case | offence category | charge code decision |
-      | No further action         | K - No prosecution - Evidential                            | D81    | D80              | Robbery          |                      |
-      | No further action         | K - No prosecution - Evidential                            | D81    | D80              | Robbery          |                      |
       | No further action         | K - No prosecution - Evidential                            | D81    | D80              | Robbery          |                      |
       | No further action         | K - No prosecution - Evidential                            | D81    | D80              | Robbery          |                      |
 

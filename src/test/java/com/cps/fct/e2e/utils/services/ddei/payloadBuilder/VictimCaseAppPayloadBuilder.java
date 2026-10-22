@@ -469,9 +469,10 @@ public class VictimCaseAppPayloadBuilder {
     }
 
 
-    public static TelephoneCommunication firstTeleCall(int journeyType, String callOutcome, int callDirection, String notes, int days) {
+    public static TelephoneCommunication firstTeleCall(int journeyType, String decisionToChargeContextGuid,String callOutcome, int callDirection, String notes, int days) {
         return TelephoneCommunication.builder()
                 .JourneyType(journeyType)
+                .DecisionToChargeContextGuid(decisionToChargeContextGuid)
                 .PhoneNumber("")
                 .CallDirection(callDirection)
                 .DateOfContact(UTCDateTimeInPastBy(days))
@@ -530,15 +531,18 @@ public class VictimCaseAppPayloadBuilder {
                 .build();
     }
 
-
-
-
-
-
-
-
-
-
+    public static ChargeDecision deciToCharge() {
+        return ChargeDecision.builder()
+                .DecisionToChargeContextGuid(uuid())
+                .CreatedBy("deciToChargeGuid")
+                .build();
+    }
+    public static ChargeDecision noFurtherAction() {
+        return ChargeDecision.builder()
+                .NoFurtherActionContextGuid(uuid())
+                .CreatedBy("noFurtherActionGuid")
+                .build();
+    }
 
 }
 

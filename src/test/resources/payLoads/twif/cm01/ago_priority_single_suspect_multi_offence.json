@@ -2,18 +2,18 @@
   "PreChargeDecisionRequest": {
     "ItemId": "{{CM01_itemId}}",
     "PTIURN": {
-      "Force": "{{TWIF_Force_Priority}}",
-      "Unit": "{{TWIF_Unit_Priority}}",
+      "Force": "{{TWIF_Priority_Force}}",
+      "Unit": "{{TWIF_Priority_Unit}}",
       "Number": "{{CM01_PTIURN_Number}}",
-      "Year": "{{TWIF_Year_Priority}}"
+      "Year": "{{TWIF_Year}}"
     },
     "CPSUnit": {
-      "TopLevel": "{{TWIF_TopLevel_Priority}}",
-      "SecondLevel": "{{TWIF_SecondLevel_Priority}}",
-      "ThirdLevel": "{{TWIF_ThirdLevel_Priority}}",
-      "BottomLevel": "{{TWIF_BottomLevel_Priority}}"
+      "TopLevel": "{{TWIF_Priority_TopLevel}}",
+      "SecondLevel": "{{TWIF_Priority_SecondLevel}}",
+      "ThirdLevel": "{{TWIF_Priority_ThirdLevel}}",
+      "BottomLevel": "{{TWIF_Priority_BottomLevel}}"
     },
-    "OperationName": "TWIF Case Operator",
+    "OperationName": "{{CM01_OperationName}}",
     "CaseClassification": [
       {
         "ClassificationType": "CaseMonitoring",
@@ -41,7 +41,7 @@
               "{{DEF_Street_Address}}",
               "{{DEF_City}}"
             ],
-            "Postcode": "NE1 1BB",
+            "Postcode": "{{PostCode}}",
             "Country": "UK"
           },
           "PoliceRemandStatus": "Custody"
@@ -56,9 +56,9 @@
           }
         ],
         "ASN": {
-          "Year": "{{TWIF_Year_Priority}}",
-          "Force": "{{TWIF_Force_Priority}}",
-          "Unit": "{{TWIF_Unit_Priority}}",
+          "Year": "{{TWIF_Year}}",
+          "Force": "{{TWIF_Priority_Force}}",
+          "Unit": "{{TWIF_Priority_Unit}}",
           "System": "00",
           "Number": "{{CM01_ASN_Number}}",
           "CheckCharacter": "W"
@@ -74,9 +74,9 @@
           "ContactDetails": {
             "Address": {
               "AddressLine": [
-                "{{Soli_Building_number}}",
-                "{{Soli_Street_Address}}",
-                "{{Soli_City}}"
+                "{{Solicitor_Building_number}}",
+                "{{Solicitor_Street_Address}}",
+                "{{Solicitor_City}}"
               ],
               "Postcode": "AA1 1BB",
               "Country": "UK"
@@ -84,7 +84,7 @@
             "ContactNumber": [
               {
                 "Number": {
-                  "TelNationalNumber": "{{Soli_HomePhone}}"
+                  "TelNationalNumber": "{{Solicitor_HomePhone}}"
                 },
                 "TypeOfNumber": "work"
               }
@@ -113,7 +113,7 @@
                   "{{DEF_Street_Address}}",
                   "{{DEF_City}}"
                 ],
-                "Postcode": "NE1 1BB",
+                "Postcode": "{{PostCode}}",
                 "Country": "UK"
               }
             }
@@ -138,7 +138,7 @@
                   "{{DEF_Street_Address}}",
                   "{{DEF_City}}"
                 ],
-                "Postcode": "NE1 1BB",
+                "Postcode": "{{PostCode}}",
                 "Country": "UK"
               }
             }

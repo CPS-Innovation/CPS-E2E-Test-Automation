@@ -126,12 +126,16 @@ public class PlaywrightManager {
             return;
         }
 
-        String caseReviewUrl = EnvConfig.getEnv("CASE_REVIEW_URL");
-        if (caseReviewUrl == null || caseReviewUrl.isBlank()) {
+        grantLocalNetworkAccessForUrl(EnvConfig.getEnv("CASE_REVIEW_URL"));
+        grantLocalNetworkAccessForUrl(EnvConfig.getEnv("VICTIM_CASE_APP_URL"));
+    }
+
+    private void grantLocalNetworkAccessForUrl(String appUrl) {
+        if (appUrl == null || appUrl.isBlank()) {
             return;
         }
 
-        URI uri = URI.create(caseReviewUrl);
+        URI uri = URI.create(appUrl);
         String origin = uri.getScheme() + "://" + uri.getHost();
         if (uri.getPort() != -1) {
             origin += ":" + uri.getPort();

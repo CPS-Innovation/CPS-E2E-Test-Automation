@@ -104,6 +104,7 @@ public class CaseReviewUiStepDefinition {
 
 
 
+
     @Given("I login to case review app")
     public void loginToCaseReviewApp() throws InterruptedException {
         playwrightManager.setUpBrowser(null);
@@ -453,7 +454,7 @@ public class CaseReviewUiStepDefinition {
                 .toList());
 
         if (decisionChargingData.size() != expectedDefendantCount) {
-            throw new IllegalArgumentException("Multi-defendant charging decision table must contain "
+            throw new IllegalArgumentException("Multi-defendant charging decision table in your feature file must contain "
                     + expectedDefendantCount + " row(s), but contained " + decisionChargingData.size() + ".");
         }
 

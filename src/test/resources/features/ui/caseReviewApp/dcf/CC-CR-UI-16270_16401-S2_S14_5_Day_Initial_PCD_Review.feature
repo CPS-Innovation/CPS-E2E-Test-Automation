@@ -1,4 +1,4 @@
-@regression @caseReview @ui
+@regression @dcf @ui
 Feature: CR-UI-S2_S14 - CC Initial PCD Review
   As a prosecutor lawyer,
   I want to complete CC initial 5 day PCD reviews for Full Code and Early Advice

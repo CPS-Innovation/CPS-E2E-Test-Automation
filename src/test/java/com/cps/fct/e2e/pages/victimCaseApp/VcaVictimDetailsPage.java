@@ -38,17 +38,7 @@ public class VcaVictimDetailsPage extends BasePage {
     }
 
     private static final Logger logger =
-            LoggerFactory.getLogger(VcaHomePage.class);
-
-    public void navigateVictimDetailsPage(String caseUrn, String victimWitnessFullName){
-
-        waitUntilSpinnersAreGone("Loading, please wait");
-        clickLinkByName(victimWitnessFullName);
-        waitForHeadingToAppear(victimWitnessFullName);
-        waitForText("Case URN: "+caseUrn);
-        clickTabByName("Victim Details");
-
-    }
+            LoggerFactory.getLogger(VcaVictimDetailsPage.class);
 
 
     public void addDateOfBirth(String justification){
@@ -124,6 +114,7 @@ public class VcaVictimDetailsPage extends BasePage {
         waitForText("What is " +victimWitnessFirstSureName+ "’s preferred name?");
         enterTextById("b6-Input_PreferredName",firstName());
         getButtonByName("Save and continue").click();
+        waitUntilSpinnersAreGone("Loading, please wait");
         assertThat(page.getByText(
                 Pattern.compile("Success\\s*Preferred name updated.")))
                 .isVisible();
@@ -156,6 +147,7 @@ public class VcaVictimDetailsPage extends BasePage {
 
         }
         getButtonByName("Save and continue").click();
+        waitUntilSpinnersAreGone("Loading, please wait");
         assertThat(page.getByText(
                 Pattern.compile("Success\\s*Preferred method of contact updated")))
                 .isVisible();
@@ -166,6 +158,7 @@ public class VcaVictimDetailsPage extends BasePage {
         waitForText("What are " +victimWitnessFirstSureName+ "’s preferred contact times?");
         enterTextById("b18-Input_PreferredContactTimes",preferredContactTime);
         getButtonByName("Save and continue").click();
+        waitUntilSpinnersAreGone("Loading, please wait");
         assertThat(page.getByText(
                 Pattern.compile("Success\\s*You changed the preferred contact times for "+victimWitnessFirstSureName+ " to "+preferredContactTime+".")))
                 .isVisible();
@@ -180,6 +173,7 @@ public class VcaVictimDetailsPage extends BasePage {
         enterTextByLocator(page.locator("#Input_Victimrepresentativetelephon"), mobilePhone());
         enterTextByLocator(page.locator("#Input_Victimrepresentativeemail"), email());
         getButtonByName("Save and continue").click();
+        waitUntilSpinnersAreGone("Loading, please wait");
         assertThat(page.getByText(
                 Pattern.compile("Success\\s*You changed the victim representative details for " +victimWitnessFirstSureName)))
                 .isVisible();
@@ -194,16 +188,12 @@ public class VcaVictimDetailsPage extends BasePage {
         enterTextByLocator(page.locator("#Input_PowerofAttorneytelephonenumb"), mobilePhone());
         enterTextByLocator(page.locator("#Input_PowerofAttorneyemail"), email());
         getButtonByName("Save and continue").click();
+        waitUntilSpinnersAreGone("Loading, please wait");
         assertThat(page.getByText(
                 Pattern.compile("Success\\s*You changed the power of attorney details for " +victimWitnessFirstSureName)))
                 .isVisible();
     }
 
-    public void navigateVictimHomePage(){
-        clickLinkByName("Victims");
-        waitUntilSpinnersAreGone("Loading, please wait");
-        waitForText("Victims");
-    }
 
     public void verifyVictimDetail(String victimWitnessFullName){
         assertThat(page.locator("#b31-b3-Value")).hasText(victimWitnessFullName);

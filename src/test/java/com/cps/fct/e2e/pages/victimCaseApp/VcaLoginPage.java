@@ -85,7 +85,8 @@ public class VcaLoginPage extends BasePage {
 
     private void waitForVictimCaseAppHomePage(){
 //        waitForElementVisible("#PaginationResults",LOGIN_TIMEOUT_MILLIS);
-        waitUntilSpinnersAreGone();
+//        waitUntilSpinnersAreGone();
+        waitUntilSpinnersAreGone("Loading, please wait");
         waitForElementVisible("#PaginationResults",LOGIN_TIMEOUT_MILLIS);
 
     }

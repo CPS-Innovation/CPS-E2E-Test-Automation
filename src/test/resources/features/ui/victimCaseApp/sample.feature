@@ -1,4 +1,4 @@
-@regression @ui_vca_regression @VCA_UI_S1 @VCA_UI_S2
+@sample
 
 
 Feature: Sample

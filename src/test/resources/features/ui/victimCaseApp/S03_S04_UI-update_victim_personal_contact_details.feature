@@ -1,6 +1,6 @@
 @regression @ui_vca_regression @VCA_UI_S3 @VCA_UI_S4
 
-Feature: VCA-UI-S1_S2:- UI Flow - Update existing personal and contact details for victims or victimWitness person and verify wm01u message
+Feature: VCA-UI-S3_S4:- UI Flow - Update existing personal and contact details for victims or victimWitness person and verify wm01u message
   As a Victim Liaison Officer
   I want to update personal and contact details for victim or victimWitness person
   Update information is reflected in CMS and VCA database

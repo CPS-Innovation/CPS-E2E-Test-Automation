@@ -192,6 +192,10 @@ public abstract class BasePage {
         locator.click();
     }
 
+    public String getTextByLocator(Locator locator) {
+        return locator.innerText();
+    }
+
 
     public void enterTextById(String id, String input) {
         getTextboxById(id).fill(input);

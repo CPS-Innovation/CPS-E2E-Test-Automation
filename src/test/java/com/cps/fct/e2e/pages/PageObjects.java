@@ -1,6 +1,7 @@
 package com.cps.fct.e2e.pages;
 
 import com.cps.fct.e2e.pages.caseReviewApp.*;
+import com.cps.fct.e2e.pages.victimCaseApp.VcaCaseContactPage;
 import com.cps.fct.e2e.pages.victimCaseApp.VcaHomePage;
 import com.cps.fct.e2e.pages.victimCaseApp.VcaLoginPage;
 import com.cps.fct.e2e.pages.AppsLoginPage;
@@ -42,6 +43,9 @@ public class PageObjects {
     @Inject
     public VcaVictimDetailsPage vcaVictimDetailsPage;
 
+    @Inject
+    public VcaCaseContactPage vcaCaseContactPage;
+
     public void useCurrentPage() {
         loginPage.useCurrentPage();
         caseIdSearchPage.useCurrentPage();
@@ -54,6 +58,7 @@ public class PageObjects {
         vcaLoginPage.useCurrentPage();
         vcaHomePage.useCurrentPage();
         vcaVictimDetailsPage.useCurrentPage();
+        vcaCaseContactPage.useCurrentPage();
 
 
     }

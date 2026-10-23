@@ -74,8 +74,6 @@ public class VcaHomePage extends BasePage {
         return victimWitnessFirstName;
     }
 
-
-
     public void onboardVictim(String PersonFullName, String service) {
         onboardPage(PersonFullName);
         selectServiceLead(service);
@@ -181,31 +179,26 @@ public class VcaHomePage extends BasePage {
         option.click();
     }
 
-
-    public void getVictimWitnessFirstLastName( String victimWitnessFullName){
-
-
-        String victimWitnessSurname = victimWitnessFullName.substring(0, victimWitnessFullName.indexOf(",")).trim();
-        String victimWitnessFirstName = victimWitnessFullName.substring(victimWitnessFullName.indexOf(",")+1).trim();
-
-        victimWitnessSurname = victimWitnessSurname.substring(0, 1).toUpperCase()
-                + victimWitnessSurname.substring(1).toLowerCase();
-
-        victimWitnessFirstName = victimWitnessFirstName.substring(0, 1).toUpperCase()
-                + victimWitnessFirstName.substring(1).toLowerCase();
-
+    public void navigateVictimHomePage(){
+        clickLinkByName("Victims");
+        waitUntilSpinnersAreGone("Loading, please wait");
+        waitForText("Victims");
+    }
+    public void navigateVictimDetailsTab(String caseUrn, String victimWitnessFullName){
+        waitUntilSpinnersAreGone("Loading, please wait");
+        clickLinkByName(victimWitnessFullName);
+        waitForHeadingToAppear(victimWitnessFullName);
+        waitForText("Case URN: "+caseUrn);
+        clickTabByName("Victim Details");
+        waitUntilSpinnersAreGone("Loading, please wait");
     }
 
-
-
-
-
-    public void verifyAssignVloSuccessMessage(String vloName, String victimFullName ){
-        Locator message = page.locator("#b4-MessageText");
-        assertThat(message).containsText("victim liaison officer");
-        assertThat(message).containsText(vloName);
-        assertThat(message).containsText(victimFullName);
-
+    public void navigateCaseContactsTab(String caseUrn, String victimWitnessFullName){
+        waitUntilSpinnersAreGone("Loading, please wait");
+        clickLinkByName(victimWitnessFullName);
+        waitForHeadingToAppear(victimWitnessFullName);
+        waitForText("Case URN: "+caseUrn);
+        clickTabByName("Case Contacts");
+        waitUntilSpinnersAreGone("Loading, please wait");
     }
-
 }

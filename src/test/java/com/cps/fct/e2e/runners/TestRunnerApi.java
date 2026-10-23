@@ -26,8 +26,8 @@ import static io.cucumber.junit.platform.engine.Constants.OBJECT_FACTORY_PROPERT
 //@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@caseReview" )
 //@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@api_vca_regression")
 //@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@TWIF_pms_api_regression")
-//@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@ui_vca_regression")
-@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@ui_vca_regression or @api_vca_regression" )
+@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@ui_vca_regression")
+//@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@ui_vca_regression or @api_vca_regression" )
 
 
 

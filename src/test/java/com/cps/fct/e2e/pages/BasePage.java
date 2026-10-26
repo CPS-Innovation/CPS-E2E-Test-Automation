@@ -116,6 +116,15 @@ public abstract class BasePage {
         }
     }
 
+    public void selectCheckbox(String text) {
+        Locator checkbox = page.getByRole(
+                AriaRole.CHECKBOX, new Page.GetByRoleOptions().setName(text));
+        if (!checkbox.isChecked()) {
+            checkbox.check();
+        }
+    }
+
+
     public void uncheckCheckbox(String selector) {
         Locator checkbox = page.locator(selector);
         if (checkbox.isChecked()) {
@@ -236,6 +245,16 @@ public abstract class BasePage {
         row.getByRole(AriaRole.LINK, new Locator.GetByRoleOptions().setName(linkName)).click();
     }
 
+    public void selectTableOnName( Page page, String tableSelector, String keySelector, String textToFind) {
+        Locator table = page.locator(tableSelector)
+                .filter(new Locator.FilterOptions()
+                        .setHas(page.locator(keySelector)
+                                .getByText(textToFind,
+                                        new Locator.GetByTextOptions().setExact(true))
+                        )
+                );
+
+    }
 
     public void clickTabByName(String name) {
         final String ROLE_TAB = "tab";
@@ -513,12 +532,13 @@ public abstract class BasePage {
     }
 
 
-    public void clickOkSectionLink(String selector) {
-        Locator link = page.locator(selector);
+    public void clickSelectOnAriaRole(Page page, AriaRole role, String expectedTexts) {
 
-        link.waitFor(new Locator.WaitForOptions()
-                .setState(WaitForSelectorState.VISIBLE));// optional timeout in milliseconds
+        Locator link = page.getByRole(role,
+                new Page.GetByRoleOptions().setName(expectedTexts));
+
         link.click();
+
     }
 
 

@@ -184,6 +184,7 @@ public class VcaHomePage extends BasePage {
         waitUntilSpinnersAreGone("Loading, please wait");
         waitForText("Victims");
     }
+
     public void navigateVictimDetailsTab(String caseUrn, String victimWitnessFullName){
         waitUntilSpinnersAreGone("Loading, please wait");
         clickLinkByName(victimWitnessFullName);
@@ -201,4 +202,17 @@ public class VcaHomePage extends BasePage {
         clickTabByName("Case Contacts");
         waitUntilSpinnersAreGone("Loading, please wait");
     }
+
+    public void navigateCommunicationsTab(String caseUrn, String victimWitnessFullName){
+        waitUntilSpinnersAreGone("Loading, please wait");
+        clickLinkByName(victimWitnessFullName);
+        waitForHeadingToAppear(victimWitnessFullName);
+        waitForText("Case URN: "+caseUrn);
+        clickTabByName("Communications");
+        waitUntilSpinnersAreGone("Loading, please wait");
+    }
+
+
+
+
 }

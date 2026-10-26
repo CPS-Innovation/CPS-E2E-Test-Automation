@@ -12,9 +12,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.picocontainer.annotations.Inject;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class VictimCaseAppUiStepDefinition {
 
@@ -345,6 +343,7 @@ public class VictimCaseAppUiStepDefinition {
         pages.vcaHomePage.navigateVictimHomePage();
 
     }
+
     @When("update following case contacts of {string} in VCA application")
     public void updateCaseContact(String personType, DataTable dataTable) {
         String caseUrn = context.get("caseUrn");
@@ -376,7 +375,7 @@ public class VictimCaseAppUiStepDefinition {
 
 
     @Then("{string} case contacts are verified in VCA application")
-    public void verifyUpdatedCaseContacts(String personType){
+    public void verifyUpdatedCaseContacts(String personType) {
         String caseUrn = context.get("caseUrn");
         Map<String, String> personTypePersonNameMap = context.get("personTypePersonNameMap");
         String victimWitnessFullName = personTypePersonNameMap.get(personType);
@@ -386,8 +385,88 @@ public class VictimCaseAppUiStepDefinition {
         pages.vcaCaseContactPage.verifyUpdatedCaseContact();
         pages.vcaHomePage.navigateVictimHomePage();
 
-
-
     }
+
+    @When("the following category type is added to {string} in VCA application")
+    public void addNewCategory(String personType, DataTable dataTable) {
+        String caseUrn = context.get("caseUrn");
+        Map<String, String> personTypePersonNameMap = context.get("personTypePersonNameMap");
+        String victimWitnessFullName = personTypePersonNameMap.get(personType);
+
+        Map<String, String> personTypeFirstSureNameMap = context.get("personTypeFirstSureNameMap");
+        String victimWitnessFirstSureName = personTypeFirstSureNameMap.get(personType);
+
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+
+        pages.vcaHomePage.searchVictimCase(caseUrn);
+        pages.vcaHomePage.navigateVictimDetailsTab(caseUrn, victimWitnessFullName);
+
+        for (Map<String, String> row : rows) {
+            pages.vcaVictimDetailsPage.addCategory(victimWitnessFirstSureName, row.get("categoryType"));
+        }
+        pages.vcaHomePage.navigateVictimHomePage();
+    }
+
+    @Then("{string} category types are verified in summary details in VCA application")
+    public void verifyCategoryTypes(String personType, DataTable dataTable) {
+        String caseUrn = context.get("caseUrn");
+        Map<String, String> personTypePersonNameMap = context.get("personTypePersonNameMap");
+        String victimWitnessFullName = personTypePersonNameMap.get(personType);
+
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+        Set<String> categoryTypes = new LinkedHashSet<>();
+
+        pages.vcaHomePage.searchVictimCase(caseUrn);
+        pages.vcaHomePage.navigateVictimDetailsTab(caseUrn, victimWitnessFullName);
+
+        for (Map<String, String> row : rows) {
+            String categoryType = row.get("categoryType");
+            categoryTypes.addAll(Arrays.asList(categoryType.split(",")));
+        }
+
+        String newCategoryTypes = String.join(", ", categoryTypes).toLowerCase(Locale.ROOT);
+        pages.vcaVictimDetailsPage.verifyCategoryType(newCategoryTypes);
+        pages.vcaHomePage.navigateVictimHomePage();
+    }
+
+    @When("the following meeting types are not offered to {string} in VCA application")
+    public void meetingNotOffered(String personType, DataTable dataTable) {
+        String caseUrn = context.get("caseUrn");
+        Map<String, String> personTypePersonNameMap = context.get("personTypePersonNameMap");
+        String victimWitnessFullName = personTypePersonNameMap.get(personType);
+
+        Map<String, String> personTypeFirstSureNameMap = context.get("personTypeFirstSureNameMap");
+        String victimWitnessFirstSureName = personTypeFirstSureNameMap.get(personType);
+
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+
+        pages.vcaHomePage.searchVictimCase(caseUrn);
+        pages.vcaHomePage.navigateCommunicationsTab(caseUrn, victimWitnessFullName);
+
+        for (Map<String, String> row : rows) {
+            pages.vcaCommunicationsPage.navigateMeetings();
+            pages.vcaCommunicationsPage.logMeetingNotOffered(victimWitnessFirstSureName, row.get("meetingType"), row.get("notOfferedReason"));
+        }
+        pages.vcaHomePage.navigateVictimHomePage();
+    }
+
+    @Then("the following not offered meetings to {string} are verified in VCA application")
+    public void verifyNotOfferedMeeting(String personType, DataTable dataTable) {
+        String caseUrn = context.get("caseUrn");
+        Map<String, String> personTypePersonNameMap = context.get("personTypePersonNameMap");
+        String victimWitnessFullName = personTypePersonNameMap.get(personType);
+
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+
+        pages.vcaHomePage.searchVictimCase(caseUrn);
+        pages.vcaHomePage.navigateCommunicationsTab(caseUrn, victimWitnessFullName);
+
+        for (Map<String, String> row : rows) {
+            pages.vcaCommunicationsPage.navigateMeetings();
+            pages.vcaCommunicationsPage.verifyMeetingNotOffered(row.get("meetingType"), row.get("notOfferedReason"));
+        }
+        pages.vcaHomePage.navigateVictimHomePage();
+    }
+
 
 }

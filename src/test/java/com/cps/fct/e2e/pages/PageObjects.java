@@ -1,11 +1,8 @@
 package com.cps.fct.e2e.pages;
 
 import com.cps.fct.e2e.pages.caseReviewApp.*;
-import com.cps.fct.e2e.pages.victimCaseApp.VcaCaseContactPage;
-import com.cps.fct.e2e.pages.victimCaseApp.VcaHomePage;
-import com.cps.fct.e2e.pages.victimCaseApp.VcaLoginPage;
+import com.cps.fct.e2e.pages.victimCaseApp.*;
 import com.cps.fct.e2e.pages.AppsLoginPage;
-import com.cps.fct.e2e.pages.victimCaseApp.VcaVictimDetailsPage;
 import org.picocontainer.annotations.Inject;
 
 public class PageObjects {
@@ -46,6 +43,9 @@ public class PageObjects {
     @Inject
     public VcaCaseContactPage vcaCaseContactPage;
 
+    @Inject
+    public VcaCommunicationsPage vcaCommunicationsPage;
+
     public void useCurrentPage() {
         loginPage.useCurrentPage();
         caseIdSearchPage.useCurrentPage();
@@ -59,6 +59,7 @@ public class PageObjects {
         vcaHomePage.useCurrentPage();
         vcaVictimDetailsPage.useCurrentPage();
         vcaCaseContactPage.useCurrentPage();
+        vcaCommunicationsPage.useCurrentPage();
 
 
     }

@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 
 import static com.cps.fct.e2e.utils.common.FakerUtils.*;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
+import static io.restassured.RestAssured.expect;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
@@ -84,53 +85,46 @@ public class VcaCommunicationsPage extends BasePage {
 
         switch (meetingType) {
             case "Other":
-                Locator meetingOtherTable = page.locator("div.govuk-summary-card")
-                        .filter(new Locator.FilterOptions()
-                                .setHas(page.locator("h2.govuk-summary-card__title")
-                                        .getByText("Other CPS meeting",
-                                                new Locator.GetByTextOptions().setExact(true))));
-                Locator  meetingOtherRow = meetingOtherTable.locator("div.govuk-summary-list__row")
-                        .filter(new Locator.FilterOptions().setHasText("Has a meeting been offered"));
-                String otherMeetingOffered = meetingOtherRow.locator("dd.govuk-summary-list__value").innerText();
+                String otherMeetingOffered = readTableRowCell(page,
+                        "div.govuk-summary-card", "h2.govuk-summary-card__title","Other CPS meeting",
+                        "div.govuk-summary-list__row","Has a meeting been offered","dd.govuk-summary-list__value")
+                        .innerText();
 
-                Locator  meetingOtherReason = meetingOtherTable.locator("div.govuk-summary-list__row")
-                        .filter(new Locator.FilterOptions().setHasText("Why was a meeting not offered"));
-                String otherMeetingReason = meetingOtherReason.locator("dd.govuk-summary-list__value").innerText();
+                String otherMeetingReason = readTableRowCell(page,
+                        "div.govuk-summary-card", "h2.govuk-summary-card__title","Other CPS meeting",
+                        "div.govuk-summary-list__row","Why was a meeting not offered","dd.govuk-summary-list__value")
+                        .innerText();
 
                 assertEquals("No", otherMeetingOffered);
                 assertEquals(notOfferedReason, otherMeetingReason);
                 break;
 
             case "Inform victim about charging decision":
-                Locator meetingInformVictimTable = page.locator("div.govuk-summary-card")
-                        .filter(new Locator.FilterOptions()
-                                .setHas(page.locator("h2.govuk-summary-card__title")
-                                        .getByText("Charging decision meeting",
-                                                new Locator.GetByTextOptions().setExact(true))));
-                Locator  meetingInformVictimRow = meetingInformVictimTable.locator("div.govuk-summary-list__row")
-                        .filter(new Locator.FilterOptions().setHasText("Has a meeting been offered"));
-                String informVictimRowOffered = meetingInformVictimRow.locator("dd.govuk-summary-list__value").innerText();
+                String informVictimRowOffered = readTableRowCell(page,
+                        "div.govuk-summary-card", "h2.govuk-summary-card__title","Charging decision meeting",
+                        "div.govuk-summary-list__row","Has a meeting been offered","dd.govuk-summary-list__value")
+                        .innerText();
 
-                Locator  meetingInformVictimReason = meetingInformVictimTable.locator("div.govuk-summary-list__row")
-                        .filter(new Locator.FilterOptions().setHasText("Why was a meeting not offered"));
-                String informVictimReason = meetingInformVictimReason.locator("dd.govuk-summary-list__value").innerText();
+                String informVictimReason = readTableRowCell(page,
+                        "div.govuk-summary-card", "h2.govuk-summary-card__title","Charging decision meeting",
+                        "div.govuk-summary-list__row","Why was a meeting not offered","dd.govuk-summary-list__value")
+                        .innerText();
+
                 assertEquals("No", informVictimRowOffered);
                 assertEquals(notOfferedReason, informVictimReason);
                 break;
 
             case "CPS pre-trial meeting":
-                Locator meetingPreTrialTable = page.locator("div.govuk-summary-card")
-                        .filter(new Locator.FilterOptions()
-                                .setHas(page.locator("h2.govuk-summary-card__title")
-                                                .getByText("CPS pre-trial meeting",
-                                                        new Locator.GetByTextOptions().setExact(true))));
-                Locator  meetingPreTrialRow = meetingPreTrialTable.locator("div.govuk-summary-list__row")
-                        .filter(new Locator.FilterOptions().setHasText("Has a meeting been offered"));
-                String preTrialOffered = meetingPreTrialRow.locator("dd.govuk-summary-list__value").innerText();
+                String preTrialOffered = readTableRowCell(page,
+                        "div.govuk-summary-card", "h2.govuk-summary-card__title","CPS pre-trial meeting",
+                        "div.govuk-summary-list__row","Has a meeting been offered","dd.govuk-summary-list__value")
+                        .innerText();
 
-                Locator  meetingPreTrialReason = meetingPreTrialTable.locator("div.govuk-summary-list__row")
-                        .filter(new Locator.FilterOptions().setHasText("Why was a meeting not offered"));
-                String preTrialReason = meetingPreTrialReason.locator("dd.govuk-summary-list__value").innerText();
+                String preTrialReason = readTableRowCell(page,
+                        "div.govuk-summary-card", "h2.govuk-summary-card__title","CPS pre-trial meeting",
+                        "div.govuk-summary-list__row","Why was a meeting not offered","dd.govuk-summary-list__value")
+                        .innerText();
+
                 assertEquals("No", preTrialOffered);
                 assertEquals(notOfferedReason, preTrialReason);
                 break;

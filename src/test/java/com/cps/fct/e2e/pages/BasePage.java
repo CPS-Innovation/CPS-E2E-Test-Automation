@@ -245,15 +245,16 @@ public abstract class BasePage {
         row.getByRole(AriaRole.LINK, new Locator.GetByRoleOptions().setName(linkName)).click();
     }
 
-    public void selectTableOnName( Page page, String tableSelector, String keySelector, String textToFind) {
+    public Locator readTableRowCell( Page page, String tableSelector, String tableKey, String tableText,String rowSelector,String rowText, String cellKey) {
         Locator table = page.locator(tableSelector)
                 .filter(new Locator.FilterOptions()
-                        .setHas(page.locator(keySelector)
-                                .getByText(textToFind,
-                                        new Locator.GetByTextOptions().setExact(true))
-                        )
-                );
+                        .setHas(page.locator(tableKey)
+                                .getByText(tableText,
+                                        new Locator.GetByTextOptions().setExact(true))));
 
+        Locator  row = table.locator(rowSelector)
+                .filter(new Locator.FilterOptions().setHasText(rowText));
+        return row.locator(cellKey);
     }
 
     public void clickTabByName(String name) {

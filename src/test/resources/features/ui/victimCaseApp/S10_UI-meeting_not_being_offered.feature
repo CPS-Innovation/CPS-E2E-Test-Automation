@@ -24,12 +24,12 @@ Feature: VCA-UI-S10:- Meetings of different types are not offered to victim or v
     And the "Murali" is assigned as VLO to "victimWitness"
     And verify that Vlo "Murali" is assigned to "victimWitness"
     When the following meeting types are not offered to "victimWitness" in VCA application
-      | meetingType           | notOfferedReason                           |
-      | CPS pre-trial meeting | CPS pre-trial meeting - Not Offered reason |
+      | meetingType                           | notOfferedReason                                           |
+      | CPS pre-trial meeting                 | CPS pre-trial meeting - Not Offered reason                 |
       | Inform victim about charging decision | Inform victim about charging decision - Not Offered reason |
       | Other                                 | Other CPS meeting -  Not Offered reason                    |
     Then the following not offered meetings to "victimWitness" are verified in VCA application
-      | meetingType           | notOfferedReason                           |
-      | CPS pre-trial meeting | CPS pre-trial meeting - Not Offered reason |
+      | meetingType                           | notOfferedReason                                           |
+      | CPS pre-trial meeting                 | CPS pre-trial meeting - Not Offered reason                 |
       | Inform victim about charging decision | Inform victim about charging decision - Not Offered reason |
       | Other                                 | Other CPS meeting -  Not Offered reason                    |

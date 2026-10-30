@@ -4,25 +4,17 @@ import com.cps.fct.e2e.pages.BasePage;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
 import com.cps.fct.e2e.utils.playwright.PlaywrightContext;
 import com.microsoft.playwright.Locator;
-import org.picocontainer.annotations.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
-
 import static com.cps.fct.e2e.utils.common.FakerUtils.*;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class VcaCaseContactPage extends BasePage {
-
-//    @Inject
-//    private ScenarioContext context;
 
     private final ScenarioContext scenarioContext;
 
@@ -47,15 +39,12 @@ public class VcaCaseContactPage extends BasePage {
         enterTextByLocator(page.locator("#Input_Telephone2"),mobilePhone());
         getButtonByName("Continue").click();
         waitUntilSpinnersAreGone("Loading, please wait");
-
         Locator row = page.locator("tr.govuk-table__row")
                 .filter(new Locator.FilterOptions().setHasText("Family Liaison Officer"));
-
         assertThat(row).isVisible();
         assertThat(row.locator("td[data-header='Name']")).not().hasText("");
         assertThat(row.locator("td[data-header='Email']")).not().hasText("");
         assertThat(row.locator("td[data-header='Telephone']")).not().hasText("");
-
     }
 
     public void addIndependentSexualVA(){
@@ -78,6 +67,7 @@ public class VcaCaseContactPage extends BasePage {
         getButtonByName("Continue").click();
         waitUntilSpinnersAreGone("Loading, please wait");
         waitForTextToAppear("Contacts");
+
         Locator row = page.locator("tr.govuk-table__row")
                 .filter(new Locator.FilterOptions().setHasText("Independent Sexual Violence Adviser (ISVA)"));
 
@@ -120,7 +110,6 @@ public class VcaCaseContactPage extends BasePage {
     }
 
     public void verifyCaseContact(){
-
         Locator familyLiaisonOfficer = page.locator("tr.govuk-table__row")
                 .filter(new Locator.FilterOptions().setHasText("Family Liaison Officer"));
 
@@ -136,7 +125,6 @@ public class VcaCaseContactPage extends BasePage {
         assertThat(independentSexualVA.locator("td[data-header='Email']")).not().hasText("");
         assertThat(independentSexualVA.locator("td[data-header='Telephone']")).not().hasText("");
 
-
         Locator independentDomesticVA = page.locator("tr.govuk-table__row")
                 .filter(new Locator.FilterOptions().setHasText("Independent Domestic Violence Adviser (IDVA)"));
 
@@ -144,7 +132,6 @@ public class VcaCaseContactPage extends BasePage {
         assertThat(independentDomesticVA.locator("td[data-header='Address']")).not().hasText("");
         assertThat(independentDomesticVA.locator("td[data-header='Email']")).not().hasText("");
         assertThat(independentDomesticVA.locator("td[data-header='Telephone']")).not().hasText("");
-
     }
 
     public void updateFamilyLiaisonOfficer(){
@@ -180,7 +167,6 @@ public class VcaCaseContactPage extends BasePage {
         assertThat(row.locator("td[data-header='Name']")).not().hasText("");
         assertThat(row.locator("td[data-header='Email']")).not().hasText("");
         assertThat(row.locator("td[data-header='Telephone']")).not().hasText("");
-
     }
 
     public void updateIndependentSexualVA(){
@@ -273,7 +259,6 @@ public class VcaCaseContactPage extends BasePage {
 
     public void verifyUpdatedCaseContact(){
         waitUntilSpinnersAreGone("Loading, please wait");
-
 //        Family Liaison Officer
         Map<String, List<String>> familyLiaisonOfficerMapDetails = scenarioContext.get("familyLiaisonOfficerMapDetails");
         List<String> familyLiaisonOfficerDetails = familyLiaisonOfficerMapDetails.get("FamilyLiaisonOfficer");
@@ -327,9 +312,7 @@ public class VcaCaseContactPage extends BasePage {
         assertNotEquals(oldIDVAEmail, newIDVAEmail);
         String newIDVATelephone = IndependentDomesticViolenceAdviser.locator("td[data-header='Telephone']").innerText();
         assertNotEquals(oldIDVATelephone, newIDVATelephone);
-
     }
-
 
 
 

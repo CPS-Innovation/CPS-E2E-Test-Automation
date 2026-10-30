@@ -1,6 +1,5 @@
 package com.cps.fct.e2e.pages.victimCaseApp;
 
-import com.cps.fct.e2e.pages.AppsLoginPage;
 import com.cps.fct.e2e.pages.BasePage;
 import com.cps.fct.e2e.pages.PageObjects;
 import com.cps.fct.e2e.pages.caseReviewApp.LoginPage;
@@ -28,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class VcaHomePage extends BasePage {
 
-    private ScenarioContext context;
+//    private ScenarioContext context;
 
     public VcaHomePage(PlaywrightContext context) {
         super(context);
@@ -39,16 +38,13 @@ public class VcaHomePage extends BasePage {
 
     private static final int LOGIN_TIMEOUT_MILLIS = 25_000;
 
-    //        page.pause();
-
     public void searchVictimCase(String caseUrn) {
         getRadioButtonById("RadioButtonCaseRef-input").click();
         enterText("Case reference", caseUrn);
         getButtonByName("Search").click();
         waitUntilSpinnersAreGone("Loading, please wait");
-        waitForTextToAppear(caseUrn);
+        waitForTableToAppear(page,"div.govuk-summary-list",caseUrn);
     }
-
 
     public String getVictimFullName(String caseUrn, String victimWitnessName) {
         waitForTextToAppear(caseUrn);
@@ -67,34 +63,40 @@ public class VcaHomePage extends BasePage {
     }
 
     public String getVictimFirstname(String victimWitnessFullName) {
-
-        String victimWitnessFirstName = victimWitnessFullName.substring(victimWitnessFullName.indexOf(",")+1).trim();
+        String victimWitnessFirstName = victimWitnessFullName.substring(victimWitnessFullName.indexOf(",") + 1).trim();
         victimWitnessFirstName = victimWitnessFirstName.substring(0, 1).toUpperCase()
                 + victimWitnessFirstName.substring(1).toLowerCase();
         return victimWitnessFirstName;
     }
 
-    public void onboardVictim(String PersonFullName, String service) {
-        onboardPage(PersonFullName);
+    public void onboardVictim(String personFullName, String service) {
+        waitUntilSpinnersAreGone("Loading, please wait");
+        navigateToOnboardPage(personFullName);
         selectServiceLead(service);
         clickButton("Save and continue");
-        verifyOnboard(PersonFullName);
+        verifyOnboard(personFullName);
         clickButton("Confirm details");
         logger.info("Victim VCA");
     }
 
-    private void onboardPage(String PersonFullName) {
-        String victimSurname = PersonFullName.substring(0, PersonFullName.indexOf(",")).trim();
-        Locator onboardLink = page.getByRole(
-                AriaRole.LINK,
-                new Page.GetByRoleOptions().setName("Onboard onboard " + victimSurname + ",")
-        );
-        onboardLink.waitFor(new Locator.WaitForOptions()
-                .setState(WaitForSelectorState.VISIBLE));
-        onboardLink.click();
+    public void navigateToOnboardPage(String personFullName) {
+        Locator summaryList = page.locator("div.govuk-summary-list")
+                .filter(new Locator.FilterOptions()
+                .setHas(page.locator("h2")
+                .getByText(personFullName,
+                        new Locator.GetByTextOptions().setExact(true))));
+        Locator serviceRow = summaryList.locator("div.govuk-summary-list__row")
+                .filter(new Locator.FilterOptions()
+                        .setHas(page.locator("dt.govuk-summary-list__key")
+                                .getByText("Service",
+                                        new Locator.GetByTextOptions().setExact(true))));
+                serviceRow.getByRole(AriaRole.LINK,
+                new Locator.GetByRoleOptions().setName("Onboard onboard "+personFullName).setExact(true)
+        ).click();
+        waitUntilSpinnersAreGone("Loading, please wait");
     }
 
-    private void selectServiceLead(String serviceLead) {
+    public void selectServiceLead(String serviceLead) {
         if (Objects.equals(serviceLead, "Not aligned")) {
             serviceLead = "Not aligned to a service";
         }
@@ -104,10 +106,9 @@ public class VcaHomePage extends BasePage {
         selectServiceLead.waitFor(new Locator.WaitForOptions()
                 .setState(WaitForSelectorState.VISIBLE));
         selectServiceLead.click();
-
     }
 
-    private void verifyOnboard(String PersonFullName) {
+    public void verifyOnboard(String PersonFullName) {
         String victimFirstname = PersonFullName.substring(PersonFullName.indexOf(",") + 1).trim();
         assertThat(page.getByText(
                 Pattern.compile("Success\\s*You onboarded " + victimFirstname)))
@@ -122,7 +123,6 @@ public class VcaHomePage extends BasePage {
         clickButton("Continue");
         waitForText("Check the task details");
         waitForButtonToAppear("Confirm and create").click();
-
     }
 
     public void verifyVictimOnboard(String victimFullName) {
@@ -139,7 +139,7 @@ public class VcaHomePage extends BasePage {
         assertThat(page.getByRole(
                 AriaRole.LINK,
                 new Page.GetByRoleOptions().setName(personFullName))).isVisible();
-        clickOnChangeForVLO();
+        clickOnChangeForVLO(personFullName);
         selectVloFromList(vloName);
         waitForButtonToAppear("Save and continue").click();
         assertThat(page.getByText(
@@ -147,25 +147,37 @@ public class VcaHomePage extends BasePage {
                 .isVisible();
     }
 
-    public void verifyAssignedVlo(String vloName) {
-        Locator vlOfficerRow = page.locator(".govuk-summary-list__row")
-                .filter(new Locator.FilterOptions().setHas(page.locator("dt.govuk-summary-list__key")
-                                .filter(new Locator.FilterOptions().setHasText("Victim liaison officer"))));
+    public void verifyAssignedVlo(String vloName, String personFullName) {
 
-        assertThat(vlOfficerRow).containsText(vloName);
+        Locator summaryList = page.locator("div.govuk-summary-list")
+                .filter(new Locator.FilterOptions()
+                        .setHas(page.locator("h2")
+                                .getByText(personFullName,
+                                        new Locator.GetByTextOptions().setExact(true))));
+        Locator victimLiaisonOfficerRow = summaryList.locator("div.govuk-summary-list__row")
+                .filter(new Locator.FilterOptions()
+                        .setHas(page.locator("dt.govuk-summary-list__key")
+                                .getByText("Victim liaison officer",
+                                        new Locator.GetByTextOptions().setExact(true))));
+        assertThat(victimLiaisonOfficerRow).containsText(vloName);
     }
 
 
-    public void clickOnChangeForVLO() {
-
-        Locator officerRow = page.locator(".govuk-summary-list__row")
-                .filter(new Locator.FilterOptions().setHas(page.locator("dt.govuk-summary-list__key")
-                                .filter(new Locator.FilterOptions().setHasText("Victim liaison officer")))
-                        .setHasText("Unassigned"));
-
-        assertThat(officerRow).containsText("Unassigned");
-        officerRow.getByRole(AriaRole.LINK, new Locator.GetByRoleOptions().setName("Change"))
-                .click();
+    public void clickOnChangeForVLO(String personFullName) {
+        Locator summaryList = page.locator("div.govuk-summary-list")
+                .filter(new Locator.FilterOptions()
+                        .setHas(page.locator("h2")
+                                .getByText(personFullName,
+                                        new Locator.GetByTextOptions().setExact(true))));
+        Locator victimLiaisonOfficerRow = summaryList.locator("div.govuk-summary-list__row")
+                .filter(new Locator.FilterOptions()
+                        .setHas(page.locator("dt.govuk-summary-list__key")
+                                .getByText("Victim liaison officer",
+                                        new Locator.GetByTextOptions().setExact(true))));
+        victimLiaisonOfficerRow.getByRole(AriaRole.LINK,
+                new Locator.GetByRoleOptions().setName("Change").setExact(true)
+        ).click();
+        waitUntilSpinnersAreGone("Loading, please wait");
     }
 
     public void selectVloFromList(String vloName) {
@@ -173,46 +185,44 @@ public class VcaHomePage extends BasePage {
         searchInput.clear();
         searchInput.fill(vloName);
         Locator option = page.getByRole(AriaRole.OPTION,
-                new Page.GetByRoleOptions().setName(Pattern.compile(".*, "+vloName+".*"))
+                new Page.GetByRoleOptions().setName(Pattern.compile(".*, " + vloName + ".*"))
         );
         assertThat(option).isVisible();
         option.click();
     }
 
-    public void navigateVictimHomePage(){
+    public void navigateVictimHomePage() {
         clickLinkByName("Victims");
         waitUntilSpinnersAreGone("Loading, please wait");
         waitForText("Victims");
     }
 
-    public void navigateVictimDetailsTab(String caseUrn, String victimWitnessFullName){
+    public void navigateVictimDetailsTab(String caseUrn, String victimWitnessFullName) {
         waitUntilSpinnersAreGone("Loading, please wait");
         clickLinkByName(victimWitnessFullName);
         waitForHeadingToAppear(victimWitnessFullName);
-        waitForText("Case URN: "+caseUrn);
+        waitForText("Case URN: " + caseUrn);
         clickTabByName("Victim Details");
         waitUntilSpinnersAreGone("Loading, please wait");
     }
 
-    public void navigateCaseContactsTab(String caseUrn, String victimWitnessFullName){
+    public void navigateCaseContactsTab(String caseUrn, String victimWitnessFullName) {
         waitUntilSpinnersAreGone("Loading, please wait");
         clickLinkByName(victimWitnessFullName);
         waitForHeadingToAppear(victimWitnessFullName);
-        waitForText("Case URN: "+caseUrn);
+        waitForText("Case URN: " + caseUrn);
         clickTabByName("Case Contacts");
         waitUntilSpinnersAreGone("Loading, please wait");
     }
 
-    public void navigateCommunicationsTab(String caseUrn, String victimWitnessFullName){
+    public void navigateCommunicationsTab(String caseUrn, String victimWitnessFullName) {
         waitUntilSpinnersAreGone("Loading, please wait");
         clickLinkByName(victimWitnessFullName);
         waitForHeadingToAppear(victimWitnessFullName);
-        waitForText("Case URN: "+caseUrn);
+        waitForText("Case URN: " + caseUrn);
         clickTabByName("Communications");
         waitUntilSpinnersAreGone("Loading, please wait");
     }
-
-
 
 
 }

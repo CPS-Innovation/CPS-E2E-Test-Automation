@@ -30,7 +30,7 @@ public abstract class BasePage {
     protected Page page;
     private final PlaywrightContext context;
 
-    public BasePage(PlaywrightContext context ) {
+    public BasePage(PlaywrightContext context) {
         this.context = context;
         this.page = context.getPage();
     }
@@ -67,7 +67,6 @@ public abstract class BasePage {
         page.locator(selector).scrollIntoViewIfNeeded();
     }
 
-    // ---------- Validations ----------
     public boolean isVisible(String selector) {
         return page.locator(selector).isVisible();
     }
@@ -88,7 +87,6 @@ public abstract class BasePage {
         return page.locator(selector).getAttribute(attribute).equals(value);
     }
 
-    // ---------- Element Handling ----------
     public Locator getElement(String selector) {
         return page.locator(selector);
     }
@@ -101,7 +99,6 @@ public abstract class BasePage {
         return page.locator(selector).count();
     }
 
-    // ---------- Iterate and Select ----------
     public void selectFromList(String listSelector, String itemText) {
         Locator dropdown = page.locator(listSelector);
         dropdown.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
@@ -124,7 +121,6 @@ public abstract class BasePage {
         }
     }
 
-
     public void uncheckCheckbox(String selector) {
         Locator checkbox = page.locator(selector);
         if (checkbox.isChecked()) {
@@ -132,7 +128,6 @@ public abstract class BasePage {
         }
     }
 
-    // ---------- Advanced Delegator Methods ----------
     public void waitForElement(String selector, int timeoutMs) {
         page.waitForSelector(selector, new Page.WaitForSelectorOptions().setTimeout(timeoutMs));
     }
@@ -194,9 +189,10 @@ public abstract class BasePage {
         getTextboxByName(name).fill(input);
     }
 
-    public void enterTextByLocator(Locator locator,String input) {
+    public void enterTextByLocator(Locator locator, String input) {
         locator.fill(input);
     }
+
     public void selectTextByLocator(Locator locator) {
         locator.click();
     }
@@ -205,7 +201,6 @@ public abstract class BasePage {
         return locator.innerText();
     }
 
-
     public void enterTextById(String id, String input) {
         getTextboxById(id).fill(input);
     }
@@ -213,7 +208,6 @@ public abstract class BasePage {
     public void clickButton(String name) {
         getButtonByName(name).click();
     }
-
 
     public Locator getTextboxByName(String name) {
         final String ROLE_TEXTBOX = "textbox";
@@ -234,7 +228,7 @@ public abstract class BasePage {
         page.locator("role=" + ROLE_LINK + "[name='" + name + "']").click();
     }
 
-    public void clickTextLink( Page page, String rowSelector, String keySelector, String textToFind, String linkName) {
+    public void clickTextLink(Page page, String rowSelector, String keySelector, String textToFind, String linkName) {
         Locator row = page.locator(rowSelector)
                 .filter(new Locator.FilterOptions()
                         .setHas(page.locator(keySelector)
@@ -245,16 +239,36 @@ public abstract class BasePage {
         row.getByRole(AriaRole.LINK, new Locator.GetByRoleOptions().setName(linkName)).click();
     }
 
-    public Locator readTableRowCell( Page page, String tableSelector, String tableKey, String tableText,String rowSelector,String rowText, String cellKey) {
+    public Locator readTableRowCell(Page page, String tableSelector, String tableKey, String tableText, String rowSelector, String rowText, String cellKey) {
         Locator table = page.locator(tableSelector)
                 .filter(new Locator.FilterOptions()
                         .setHas(page.locator(tableKey)
                                 .getByText(tableText,
                                         new Locator.GetByTextOptions().setExact(true))));
 
-        Locator  row = table.locator(rowSelector)
+        Locator row = table.locator(rowSelector)
                 .filter(new Locator.FilterOptions().setHasText(rowText));
         return row.locator(cellKey);
+    }
+
+    public Locator selectTableButton(Page page, String tableSelector, String tableKey, String tableText, String buttonKey, String buttonName) {
+        Locator table = page.locator(tableSelector)
+                .filter(new Locator.FilterOptions()
+                        .setHas(page.locator(tableKey)
+                                .getByText(tableText,
+                                        new Locator.GetByTextOptions().setExact(true))));
+        return table.locator(buttonKey)
+                .filter(new Locator.FilterOptions().setHasText(buttonName));
+    }
+
+    public Locator selectTableLink(Page page, String tableSelector, String tableKey, String tableText, String tableLinkSelector, String linkName) {
+        Locator table = page.locator(tableSelector)
+                .filter(new Locator.FilterOptions()
+                        .setHas(page.locator(tableKey)
+                                .getByText(tableText,
+                                        new Locator.GetByTextOptions().setExact(true))));
+        return table.locator(tableLinkSelector)
+                .filter(new Locator.FilterOptions().setHasText(linkName));
     }
 
     public void clickTabByName(String name) {
@@ -271,12 +285,10 @@ public abstract class BasePage {
         return page.locator("role=" + ROLE_BUTTON + "[name='" + name + "']");
     }
 
-
     public BasePage waitForDomContentLoaded() {
         page.waitForLoadState(LoadState.DOMCONTENTLOADED);
         return this;
     }
-
 
     protected void waitUntilLoadingIndicatorIsGone() {
         page.getByRole(AriaRole.STATUS).waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.HIDDEN));
@@ -317,9 +329,6 @@ public abstract class BasePage {
         return heading;
     }
 
-
-
-
     public void assertUrlContains(Page page, String expectedQueryString) {
         String currentUrl = page.url();
         Assertions.assertThat(currentUrl)
@@ -327,12 +336,11 @@ public abstract class BasePage {
                 .contains(expectedQueryString);
     }
 
-
     public void assertElementTextPresent(String selector) {
         Assertions.assertThat(page.locator(selector).isVisible()).isTrue();
     }
 
-    public void waitForTextInLocator( String selector, String expectedText) {
+    public void waitForTextInLocator(String selector, String expectedText) {
         page.waitForCondition(() -> {
             try {
                 String actualText = page.locator(selector).innerText();
@@ -346,19 +354,18 @@ public abstract class BasePage {
         });
     }
 
-        public void waitForText(String expectedText) {
-            page.waitForCondition(() -> {
-                try {
-                    return page.content().contains(expectedText);
-                } catch (PlaywrightException e) {
-                    if (isGenuineLocatorError(e)) {
-                        throw e;
-                    }
-                    return false;
+    public void waitForText(String expectedText) {
+        page.waitForCondition(() -> {
+            try {
+                return page.content().contains(expectedText);
+            } catch (PlaywrightException e) {
+                if (isGenuineLocatorError(e)) {
+                    throw e;
                 }
-            });
-        }
-
+                return false;
+            }
+        });
+    }
 
     public void selectComboBoxByVisibleText(String expectedText) {
         Locator comboBox = page.getByRole(AriaRole.COMBOBOX);
@@ -372,14 +379,23 @@ public abstract class BasePage {
                 return;
             }
         }
-
     }
-        public void waitForElement(Page page, AriaRole role, String expectedTexts) {
+
+    public void waitForElement(Page page, AriaRole role, String expectedTexts) {
         Locator locator = page.getByRole(
                 role,
                 new Page.GetByRoleOptions().setName(expectedTexts)
         );
         locator.waitFor(new Locator.WaitForOptions().setTimeout(DEFAULT_TIMEOUT_MILLIS));
+    }
+
+    public void waitForTableToAppear(Page page, String tableList, String expectedText) {
+        Locator table = page.locator(tableList).first();
+
+        table.waitFor(new Locator.WaitForOptions()
+                .setState(WaitForSelectorState.ATTACHED)
+                .setTimeout(DEFAULT_TIMEOUT_MILLIS));
+        assertThat(table).containsText(expectedText);
     }
 
 
@@ -388,7 +404,6 @@ public abstract class BasePage {
         locator.waitFor(new Locator.WaitForOptions().setTimeout(DEFAULT_TIMEOUT_MILLIS));
         assertThat(locator).containsText(expectedText);
     }
-
 
     protected void waitUntilSpinnersAreGone(String... spinnerTexts) {
         for (String text : spinnerTexts) {
@@ -534,34 +549,10 @@ public abstract class BasePage {
 
 
     public void clickSelectOnAriaRole(Page page, AriaRole role, String expectedTexts) {
-
         Locator link = page.getByRole(role,
                 new Page.GetByRoleOptions().setName(expectedTexts));
-
         link.click();
-
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

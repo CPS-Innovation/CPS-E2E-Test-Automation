@@ -66,6 +66,7 @@ public class VcaLoginPage extends BasePage {
         usernameField.fill(username, new Locator.FillOptions().setTimeout(SHORT_TIMEOUT_MILLIS));
         passwordField.fill(password, new Locator.FillOptions().setTimeout(SHORT_TIMEOUT_MILLIS));
         clickSignInButton();
+        waitForTextToAppear("Victim Case Application");
         waitForTextToAppear("Victims");
         return true;
     }
@@ -84,11 +85,8 @@ public class VcaLoginPage extends BasePage {
     }
 
     private void waitForVictimCaseAppHomePage(){
-//        waitForElementVisible("#PaginationResults",LOGIN_TIMEOUT_MILLIS);
-//        waitUntilSpinnersAreGone();
         waitUntilSpinnersAreGone("Loading, please wait");
         waitForElementVisible("#PaginationResults",LOGIN_TIMEOUT_MILLIS);
-
     }
 
 }

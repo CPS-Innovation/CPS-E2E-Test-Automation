@@ -261,6 +261,9 @@ public class CaseCreateService extends BaseService {
         Map<String, List<String>> victimWitnessMapIds = new HashMap<>();
         Map<String, List<String>> idVictimWitnessNameMap = new HashMap<>();
 
+        Map<String, List<String>> victimWitnessMapFullNames = new HashMap<>();
+        Map<String, List<String>> victimWitnessMapFirstSureNames = new HashMap<>();
+
 
         witnessMapIds.put("witness", witnessId);
         witnessMapIds.put("witnessChild", witnessChildId);

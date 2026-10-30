@@ -39,12 +39,8 @@ public class VcaVictimDetailsPage extends BasePage {
     private static final Logger logger =
             LoggerFactory.getLogger(VcaVictimDetailsPage.class);
 
-    public void victimDetailsPagePause() {
-        page.pause();
-    }
 
     public void addDateOfBirth(String justification) {
-
         clickLinkByName("Enter date of birth");
         enterText("Day", todayDateDay());
         enterText("Month", todayDateMonth());
@@ -56,7 +52,6 @@ public class VcaVictimDetailsPage extends BasePage {
         assertThat(page.getByText(
                 Pattern.compile("Success\\s*Date of birth updated.")))
                 .isVisible();
-
     }
 
     public void addAddress(String justification) {
@@ -89,7 +84,6 @@ public class VcaVictimDetailsPage extends BasePage {
     }
 
     public void addEmail(String victimWitnessFullName, String justification) {
-
         String victimWitnessSurname = victimWitnessFullName.substring(0, victimWitnessFullName.indexOf(",")).trim();
         String victimWitnessFirstName = victimWitnessFullName.substring(victimWitnessFullName.indexOf(",") + 1).trim();
 
@@ -103,7 +97,7 @@ public class VcaVictimDetailsPage extends BasePage {
         waitForText("What is " + victimWitnessFirstName + " " + victimWitnessSurname + "’s email address? (optional)");
         enterText("What is " + victimWitnessFirstName + " " + victimWitnessSurname + "’s email address? (optional)", email());
 
-        page.locator("textarea").fill("justification");
+        page.locator("textarea").fill(justification);
         getButtonByName("Save and continue").click();
         waitUntilSpinnersAreGone("Loading, please wait");
         assertThat(page.getByText(
@@ -196,7 +190,6 @@ public class VcaVictimDetailsPage extends BasePage {
                 .isVisible();
     }
 
-
     public void verifyVictimDetail(String victimWitnessFullName) {
         assertThat(page.locator("#b31-b3-Value")).hasText(victimWitnessFullName);
 
@@ -229,16 +222,12 @@ public class VcaVictimDetailsPage extends BasePage {
 
     }
 
-
     public String updateFirstAndLastName(String justification) {
-
         clickTextLink(page, "div.govuk-summary-list__row", "#b31-b3-Key", "Full name", "Change");
-
         waitForText("Name and title");
         selectDropdownByLabel(page.getByLabel("Title (optional)"), "Mr");
         String firstname = firstName();
         String surname = lastName();
-
         enterText("Forename", firstname);
         enterText("Surname", surname);
         enterText("Why are you changing this information?", justification);
@@ -248,18 +237,10 @@ public class VcaVictimDetailsPage extends BasePage {
                 Pattern.compile("Success\\s*Name and title updated.")))
                 .isVisible();
         return firstname + " " + surname;
-
     }
 
     public void updateDateOfBirth(String justification) {
-
-//        Locator row = page.locator("div.govuk-summary-list__row")
-//                .filter(new Locator.FilterOptions()
-//                        .setHas(page.locator("#b31-b5-Key")
-//                                .getByText("Date of birth", new Locator.GetByTextOptions().setExact(true))));
-//        row.getByRole(AriaRole.LINK, new Locator.GetByRoleOptions().setName("Change")).click();
         clickTextLink(page, "div.govuk-summary-list__row", "#b31-b5-Key", "Date of birth", "Change");
-
         enterText("Day", todayDateDay());
         enterText("Month", todayDateMonth());
         enterText("Year", yearTill2005());
@@ -269,17 +250,9 @@ public class VcaVictimDetailsPage extends BasePage {
         assertThat(page.getByText(
                 Pattern.compile("Success\\s*Date of birth updated.")))
                 .isVisible();
-
     }
 
     public void updateGender(String victimWitnessFirstSureName, String justification) {
-
-//        Locator row = page.locator("div.govuk-summary-list__row")
-//                .filter(new Locator.FilterOptions()
-//                        .setHas(page.locator("#b31-b8-Key")
-//                                .getByText("Gender", new Locator.GetByTextOptions().setExact(true))));
-//        row.getByRole(AriaRole.LINK, new Locator.GetByRoleOptions().setName("Change")).click();
-
         clickTextLink(page, "div.govuk-summary-list__row", "#b31-b8-Key", "Gender", "Change");
         waitForText("What is " + victimWitnessFirstSureName + "’s gender? (optional)");
         getRadioButtonById("b9-RadioButton_Male-input").click();
@@ -290,15 +263,7 @@ public class VcaVictimDetailsPage extends BasePage {
                 .isVisible();
     }
 
-
     public void updateAddress(String victimWitnessFirstSureName, String justification) {
-
-//        Locator row = page.locator("div.govuk-summary-list__row")
-//                .filter(new Locator.FilterOptions()
-//                        .setHas(page.locator("#b31-b21-Key")
-//                                .getByText("Address", new Locator.GetByTextOptions().setExact(true))));
-//        row.getByRole(AriaRole.LINK, new Locator.GetByRoleOptions().setName("Change")).click();
-
         clickTextLink(page, "div.govuk-summary-list__row", "#b31-b21-Key", "Address", "Change");
         waitForText("What is " + victimWitnessFirstSureName + "’s address?");
         waitForText("Address line 1");
@@ -317,12 +282,6 @@ public class VcaVictimDetailsPage extends BasePage {
     }
 
     public void updateTelephone(String victimWitnessFirstSureName, String justification) {
-
-//        Locator row = page.locator("div.govuk-summary-list__row").filter(new Locator.FilterOptions()
-//                        .setHas(page.locator("#b31-b23-Key")
-//                        .getByText("Telephone number", new Locator.GetByTextOptions().setExact(true))));
-//        row.getByRole(AriaRole.LINK, new Locator.GetByRoleOptions().setName("Change")).click();
-
         clickTextLink(page, "div.govuk-summary-list__row", "#b31-b23-Key", "Telephone number", "Change");
         waitForText(victimWitnessFirstSureName + "'s telephone numbers");
         waitForText("Home (optional)");
@@ -338,17 +297,9 @@ public class VcaVictimDetailsPage extends BasePage {
     }
 
     public void updateEmail(String victimWitnessFirstSureName, String justification) {
-
-//        Locator row = page.locator("div.govuk-summary-list__row").filter(new Locator.FilterOptions()
-//                .setHas(page.locator("#b31-b25-Key")
-//                        .getByText("Email address", new Locator.GetByTextOptions().setExact(true))));
-//        row.getByRole(AriaRole.LINK, new Locator.GetByRoleOptions().setName("Change")).click();
-
         clickTextLink(page, "div.govuk-summary-list__row", "#b31-b25-Key", "Email address", "Change");
-
         waitForText("What is " + victimWitnessFirstSureName + "’s email address? (optional)");
         enterTextById("b8-Input_Email", email());
-
         page.locator("textarea").fill("justification");
         getButtonByName("Save and continue").click();
         waitUntilSpinnersAreGone("Loading, please wait");
@@ -358,13 +309,7 @@ public class VcaVictimDetailsPage extends BasePage {
     }
 
     public void updatePreferredName(String victimWitnessFirstSureName) {
-
-//        Locator row = page.locator("div.govuk-summary-list__row").filter(new Locator.FilterOptions()
-//                .setHas(page.locator("#b31-b4-Key")
-//                        .getByText("Preferred name", new Locator.GetByTextOptions().setExact(true))));
-//        row.getByRole(AriaRole.LINK, new Locator.GetByRoleOptions().setName("Change")).click();
         clickTextLink(page, "div.govuk-summary-list__row", "#b31-b4-Key", "Preferred name", "Change");
-
         waitForText("What is " + victimWitnessFirstSureName + "’s preferred name?");
         enterTextById("b6-Input_PreferredName", firstName());
         getButtonByName("Save and continue").click();
@@ -374,17 +319,8 @@ public class VcaVictimDetailsPage extends BasePage {
     }
 
     public void updatePreferredLanguage(String victimWitnessFirstSureName, String preferredLanguage) {
-
-//        Locator row = page.locator("div.govuk-summary-list__row").filter(new Locator.FilterOptions()
-//                .setHas(page.locator("#b31-b26-Key")
-//                        .getByText("Preferred name", new Locator.GetByTextOptions().setExact(true))));
-//        row.getByRole(AriaRole.LINK, new Locator.GetByRoleOptions().setName("Change")).click();
         clickTextLink(page, "div.govuk-summary-list__row", "#b31-b26-Key", "Preferred correspondence language", "Change");
-
-//        page.pause();
-//        waitForText("What is "+victimWitnessFirstSureName+"’s");
         waitForText("English");
-
         switch (preferredLanguage) {
             case "English":
                 getRadioButtonById("b15-RadioButton_English-input").click();
@@ -406,14 +342,7 @@ public class VcaVictimDetailsPage extends BasePage {
     }
 
     public void updatePreferredCPSMoc(String victimWitnessFirstSureName, String preferredMethod) {
-
-//        Locator row = page.locator("div.govuk-summary-list__row").filter(new Locator.FilterOptions()
-//                .setHas(page.locator("#b31-b4-Key")
-//                        .getByText("Preferred name", new Locator.GetByTextOptions().setExact(true))));
-//        row.getByRole(AriaRole.LINK, new Locator.GetByRoleOptions().setName("Change")).click();
-
         clickTextLink(page, "div.govuk-summary-list__row", "#b31-b28-Key", "Preferred method of contact for CPS", "Change");
-
         waitForText("What is " + victimWitnessFirstSureName + "’s preferred method of contact?");
         switch (preferredMethod) {
             case "Home phone":
@@ -443,13 +372,10 @@ public class VcaVictimDetailsPage extends BasePage {
         assertThat(page.getByText(
                 Pattern.compile("Success\\s*Preferred method of contact updated")))
                 .isVisible();
-
     }
 
     public void updatePreferredContactTime(String victimWitnessFirstSureName, String preferredContactTime) {
-
         clickTextLink(page, "div.govuk-summary-list__row", "#b31-b31-Key", "Preferred contact times ", "Change");
-
         waitForText("What are " + victimWitnessFirstSureName + "’s preferred contact times?");
         enterTextById("b18-Input_PreferredContactTimes", preferredContactTime);
         getButtonByName("Save and continue").click();
@@ -459,9 +385,7 @@ public class VcaVictimDetailsPage extends BasePage {
     }
 
     public void updateVictimRepresentative(String victimWitnessFirstSureName) {
-
         clickTextLink(page, "div.govuk-summary-list__row", "#b31-b32-Key", "Victim representative details", "Change");
-
         waitForText("Victim representative details");
         selectTextByLocator(page.locator("#Input_VictimrepresentativeFirstnam"));
         enterTextByLocator(page.locator("#Input_VictimrepresentativeFirstnam"), firstnameSurname());
@@ -475,9 +399,7 @@ public class VcaVictimDetailsPage extends BasePage {
     }
 
     public void updatePowerOfAttorney(String victimWitnessFirstSureName) {
-
         clickTextLink(page, "div.govuk-summary-list__row", "#b31-b34-Key", "Power of attorney details", "Change");
-
         waitForText("Power of attorney details");
         waitForText("Name");
         selectTextByLocator(page.locator("#Input_PowerofAttorneyFirstName"));
@@ -491,12 +413,9 @@ public class VcaVictimDetailsPage extends BasePage {
                 .isVisible();
     }
 
-
     public void addCategory(String victimWitnessFirstSureName, String categoryType) {
-
         clickTextLink(page, "div.govuk-summary-list__row", "#b31-b6-Key", "Category", "Change");
         waitUntilSpinnersAreGone("Loading, please wait");
-
         waitForText("What is " + victimWitnessFirstSureName);
         selectCheckbox(categoryType);
         getButtonByName("Save and Continue").click();
@@ -504,19 +423,15 @@ public class VcaVictimDetailsPage extends BasePage {
         assertThat(page.getByText(
                 Pattern.compile("Success\\s*Victim or witness category updated.")))
                 .isVisible();
-
     }
 
     public void verifyCategoryType(String newCategoryTypes){
-
         Locator row = page.locator("div.govuk-summary-list__row")
                 .filter(new Locator.FilterOptions()
                         .setHas(page.locator("#b31-b6-Key")
                                 .getByText("Category",
                                         new Locator.GetByTextOptions().setExact(true))));
-
         String categories = row.locator("#b31-b6-Value").innerText();
-
         for (String value : newCategoryTypes.split(",")) {
             assertTrue(java.util.Arrays.stream(categories.split(","))
                             .map(String::trim)
@@ -524,7 +439,6 @@ public class VcaVictimDetailsPage extends BasePage {
                     "Expected value not found: " + value.trim()
             );
         }
-
     }
 
 

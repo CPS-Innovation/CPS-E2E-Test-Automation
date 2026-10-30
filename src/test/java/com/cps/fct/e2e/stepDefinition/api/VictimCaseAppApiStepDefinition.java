@@ -274,6 +274,7 @@ public class VictimCaseAppApiStepDefinition {
             CategoryType categoryTypeCode = CategoryType.fromString(row.get("categoryType"));
             categoryValues.addAll(Arrays.asList(categoryTypeCode.getValue().split(",")));
         }
+
         String allCategoryValues = String.join(",", categoryValues);
 
         for (String id : victimMapIds.get(victimType)) {
@@ -290,7 +291,6 @@ public class VictimCaseAppApiStepDefinition {
         Map<String, List<String>> victimMapIds = context.get("victimWitnessMapIds");
         Map<String, VictimCmsDetails> victimDetailsToCmsMap = context.get("victimDetailsToCmsMap");
         for (String id : victimMapIds.get(victimType)) {
-
             VictimCmsDetails victimCmsDetails = victimDetailsToCmsMap.get(id);
             HttpResponseWrapper response = victimService.getVictimDetailsFromCMS(context.get("caseId"));
             VictimCaseAppAssertions.assertCategoryList(id, victimCmsDetails, response);
@@ -390,8 +390,8 @@ public class VictimCaseAppApiStepDefinition {
 
         for (String id : victimMapIds.get(victimType)) {
             for (Map<String, String> row : rows) {
-                MeetingType meetingTypeCode = MeetingType.fromString(row.get("meetingType")); //Enum
-                OfferMethod meetingResponseMethodCode = OfferMethod.fromString(row.get("offerResponseMethod")); //Enum
+                MeetingType meetingTypeCode = MeetingType.fromString(row.get("meetingType"));
+                OfferMethod meetingResponseMethodCode = OfferMethod.fromString(row.get("offerResponseMethod"));
                 String meetingContextGuid = meetingContextGuidMap.get(meetingTypeCode.getValue());
                 Meetings meetingResponse = meetingOfferResponse(meetingTypeCode.getValue(), meetingResponseMethodCode.getValue(), meetingContextGuid, row.get("offerResponse"));
                 victimService.addMeetingOfferedResponse(idGuidMap.get(id), convertObjectToString(meetingResponse));

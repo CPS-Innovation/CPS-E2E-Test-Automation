@@ -17,10 +17,7 @@ import org.picocontainer.annotations.Inject;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class CaseCreateApiStepDefinition {
 
@@ -127,6 +124,11 @@ public class CaseCreateApiStepDefinition {
                     + responseWrapper.getBody());
         }
 
+        Map<String, List<String>> personTypePersonNameMap = new HashMap<>();
+        context.set("personTypePersonNameMap", personTypePersonNameMap);
+
+        Map<String, List<String>> personTypeFirstSureNameMap = new HashMap<>();
+        context.set("personTypeFirstSureNameMap", personTypeFirstSureNameMap);
     }
 
     @When("the {string} details are available in CMS")
@@ -191,11 +193,14 @@ public class CaseCreateApiStepDefinition {
     public void lm04VictimWitnessDetailsInCMS(String personType) {
         service.createCmsAuthToken(context);
 
-        Map<String, String> personTypePersonNameMap = new HashMap<>();
-        context.set("personTypePersonNameMap", personTypePersonNameMap);
+        Map<String, List<String>> personTypePersonNameMap = context.get("personTypePersonNameMap");
+        Map<String, List<String>> personTypeFirstSureNameMap = context.get("personTypeFirstSureNameMap");
 
-        Map<String, String> personTypeFirstSureNameMap = new HashMap<>();
-        context.set("personTypeFirstSureNameMap", personTypeFirstSureNameMap);
+//        Map<String, String> personTypePersonNameMap = new HashMap<>();
+//        context.set("personTypePersonNameMap", personTypePersonNameMap);
+//
+//        Map<String, String> personTypeFirstSureNameMap = new HashMap<>();
+//        context.set("personTypeFirstSureNameMap", personTypeFirstSureNameMap);
 
         HttpResponseWrapper responseVictimWitnessDetails = caseCreateService.victimWitnessDetailsList(context.get("caseId"));
         caseCreateService.victimWitnessDetails(responseVictimWitnessDetails, context);
@@ -208,15 +213,13 @@ public class CaseCreateApiStepDefinition {
                 witnessId = witnessId.replace("[", "").replace("]", "");
                 HttpResponseWrapper responseWitnessName = caseCreateService.victimWitnessFirstnameSurname(context.get("caseId"),witnessId);
                 String witnessFirstSureName = caseCreateService.victimWitnessFirstnameAndSurname(responseWitnessName);
-                System.out.println(witnessFirstSureName);
-
-                int witnessSpaceIndex = witnessFirstSureName.lastIndexOf(" ");
+                System.out.println("Person FirstSureName == "+ witnessFirstSureName);
+                  int witnessSpaceIndex = witnessFirstSureName.lastIndexOf(" ");
                 String witnessNameVcaFormat = witnessFirstSureName.substring(witnessSpaceIndex + 1).toUpperCase()
                         + ", " + witnessFirstSureName.substring(0, witnessSpaceIndex);
-
-                System.out.println(witnessFirstSureName);
-                personTypePersonNameMap.put(personType, witnessNameVcaFormat);
-                personTypeFirstSureNameMap.put(personType,witnessFirstSureName);
+                System.out.println("Person Link in VCA == "+ witnessNameVcaFormat);
+                personTypePersonNameMap.put(personType, Collections.singletonList(witnessNameVcaFormat));
+                personTypeFirstSureNameMap.put(personType, Collections.singletonList(witnessFirstSureName));
                 context.set("personTypePersonNameMap", personTypePersonNameMap);
                 context.set("personTypeFirstSureNameMap", personTypeFirstSureNameMap);
                 break;
@@ -227,17 +230,16 @@ public class CaseCreateApiStepDefinition {
                 victimWitnessId = victimWitnessId.replace("[", "").replace("]", "");
                 HttpResponseWrapper responseVictimWitnessName = caseCreateService.victimWitnessFirstnameSurname(context.get("caseId"),victimWitnessId);
                 String victimWitnessFirstSureName = caseCreateService.victimWitnessFirstnameAndSurname(responseVictimWitnessName);
-                System.out.println("Full Name ==="+ victimWitnessFirstSureName);
+                System.out.println("Person FirstSureName == "+ victimWitnessFirstSureName);
                 int victimWitnessSpaceIndex = victimWitnessFirstSureName.lastIndexOf(" ");
                 String victimWitnessNameVcaFormat = victimWitnessFirstSureName.substring(victimWitnessSpaceIndex + 1).toUpperCase()
                         + ", " + victimWitnessFirstSureName.substring(0, victimWitnessSpaceIndex);
-                System.out.println("Name in VCA UI formate ==="+ victimWitnessNameVcaFormat);
-                personTypePersonNameMap.put(personType, victimWitnessNameVcaFormat);
-                personTypeFirstSureNameMap.put(personType,victimWitnessFirstSureName);
+                System.out.println("Person FUllName == "+ victimWitnessNameVcaFormat);
+                personTypePersonNameMap.put(personType, Collections.singletonList(victimWitnessNameVcaFormat));
+                personTypeFirstSureNameMap.put(personType, Collections.singletonList(victimWitnessFirstSureName));
                 context.set("personTypePersonNameMap", personTypePersonNameMap);
                 context.set("personTypeFirstSureNameMap", personTypeFirstSureNameMap);
                 break;
-
             default : System.out.println("Person Type is not specified");
         }
 

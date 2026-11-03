@@ -46,6 +46,10 @@ public class PageObjects {
     @Inject
     public VcaCommunicationsPage vcaCommunicationsPage;
 
+    @Inject
+    public VcaMeetingsPage vcaMeetingsPage;
+    public VcaMeetingsPage VcaMeetingsPage;
+
     public void useCurrentPage() {
         loginPage.useCurrentPage();
         caseIdSearchPage.useCurrentPage();
@@ -60,6 +64,7 @@ public class PageObjects {
         vcaVictimDetailsPage.useCurrentPage();
         vcaCaseContactPage.useCurrentPage();
         vcaCommunicationsPage.useCurrentPage();
+        vcaMeetingsPage.useCurrentPage();
 
 
     }

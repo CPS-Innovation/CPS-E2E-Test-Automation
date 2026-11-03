@@ -10,6 +10,7 @@ import io.cucumber.java.en.When;
 import org.picocontainer.annotations.Inject;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class VictimCaseAppUiStepDefinition {
 
@@ -487,19 +488,19 @@ public class VictimCaseAppUiStepDefinition {
 
     @When("the meeting is offered and meeting response is logged for {string} in VCA application")
     public void offerMeetingTypeMethod(String personType, DataTable dataTable) {
-        String caseUrn = context.get("caseUrn");
+//        String caseUrn = context.get("caseUrn");
 
-        Map<String, List<String>> personTypePersonNameMap = context.get("personTypePersonNameMap");
-        String personFullName = String.valueOf(personTypePersonNameMap.get(personType));
-        personFullName = personFullName.replace("[", "").replace("]", "");
+//        Map<String, List<String>> personTypePersonNameMap = context.get("personTypePersonNameMap");
+//        String personFullName = String.valueOf(personTypePersonNameMap.get(personType));
+//        personFullName = personFullName.replace("[", "").replace("]", "");
+//
+//        Map<String, List<String>> personTypeFirstSureNameMap = context.get("personTypeFirstSureNameMap");
+//        String personFirstLastName = String.valueOf(personTypeFirstSureNameMap.get(personType));
+//        personFirstLastName = personFirstLastName.replace("[", "").replace("]", "");
 
-        Map<String, List<String>> personTypeFirstSureNameMap = context.get("personTypeFirstSureNameMap");
-        String personFirstLastName = String.valueOf(personTypeFirstSureNameMap.get(personType));
-        personFirstLastName = personFirstLastName.replace("[", "").replace("]", "");
-
-//        String caseUrn = "05AQ3891626";
-//        String personFullName = "BALISTRERI, Daryl";
-//        String personFirstLastName = "Daryl Balistreri";
+        String caseUrn = "05AQ9052926";
+        String personFullName = "KLEIN, Alise";
+        String personFirstLastName = "Alise Klein";
 
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
         pages.vcaHomePage.searchVictimCase(caseUrn);
@@ -535,6 +536,53 @@ public class VictimCaseAppUiStepDefinition {
         }
         pages.vcaHomePage.navigateVictimHomePage();
     }
+
+
+    @When("the {string} arranged because {string} it and meeting method is {string} at {string} in {string} and {string} as chair person with attendees for {string} in VCA application")
+    public void arrangeMeetingMethod(String meetingType, String meetingSource, String meetingMethod, String locationType, String locationName,
+                                     String chairPerson, String personType, DataTable dataTable) {
+//        String caseUrn = context.get("caseUrn");
+//
+//        Map<String, List<String>> personTypePersonNameMap = context.get("personTypePersonNameMap");
+//        String personFullName = String.valueOf(personTypePersonNameMap.get(personType));
+//        personFullName = personFullName.replace("[", "").replace("]", "");
+//
+//        Map<String, List<String>> personTypeFirstSureNameMap = context.get("personTypeFirstSureNameMap");
+//        String personFirstLastName = String.valueOf(personTypeFirstSureNameMap.get(personType));
+//        personFirstLastName = personFirstLastName.replace("[", "").replace("]", "");
+
+        String caseUrn = "05AQ9052926";
+        String personFullName = "KLEIN, Alise";
+        String personFirstLastName = "Alise Klein";
+
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+        pages.vcaHomePage.searchVictimCase(caseUrn);
+        pages.vcaHomePage.navigateCommunicationsTab(caseUrn, personFullName);
+
+        List<String> meetingAttendeesRoles = rows.stream()
+                .map(row -> row.get("meetingAttendeesRoles"))
+                .collect(Collectors.toList());
+
+
+            pages.vcaCommunicationsPage.navigateMeetings();
+//            pages.vcaCommunicationsPage.logMeetingOffered(personFirstLastName, row.get("meetingType"), row.get("offerMethod"));
+//            pages.vcaCommunicationsPage.logMeetingResponse(row.get("meetingType"), row.get("meetingResponse"), row.get("meetingResponseMethod"));
+            pages.vcaCommunicationsPage.arrangeMeetings(personFirstLastName, meetingType, meetingSource ,meetingMethod, locationType, locationName);
+//            pages.vcaCommunicationsPage.selectAttendeesAndChairperson(chairPerson, meetingAttendeesRoles);
+
+
+        pages.vcaHomePage.navigateVictimHomePage();
+    }
+
+
+
+
+
+
+
+
+
+
 
 
 }

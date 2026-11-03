@@ -5,11 +5,15 @@ import com.cps.fct.e2e.utils.common.ScenarioContext;
 import com.cps.fct.e2e.utils.playwright.PlaywrightContext;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.options.AriaRole;
+import org.picocontainer.annotations.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.cps.fct.e2e.pages.*;
 
 import java.util.*;
 import java.util.regex.Pattern;
+
+import static com.cps.fct.e2e.utils.common.DateTimeUtils.*;
 
 import static com.cps.fct.e2e.utils.common.FakerUtils.*;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
@@ -23,6 +27,8 @@ public class VcaCommunicationsPage extends BasePage {
         super(context);
         this.scenarioContext = scenarioContext;
     }
+    @Inject
+    private PageObjects pages;
 
     private static final Logger logger =
             LoggerFactory.getLogger(VcaCommunicationsPage.class);
@@ -658,5 +664,51 @@ public class VcaCommunicationsPage extends BasePage {
         }
     }
 
+    public void arrangeMeetings(String personFirstLastName, String meetingType, String meetingSource ,
+                                String meetingMethod, String locationType, String locationName) {
+        waitUntilSpinnersAreGone("Loading, please wait");
+        waitForText("Communications");
+        waitForElement(page, AriaRole.TAB, "Meetings");
+        clickSelectOnAriaRole(page, AriaRole.TAB, "Meetings");
+        pages.VcaMeetingsPage.selectAcceptedMeetingType(meetingType);
+        waitUntilSpinnersAreGone("Loading, please wait");
+        waitForText("How was the meeting arranged?");
+        pages.VcaMeetingsPage.selectMeetingSource(personFirstLastName, meetingSource);
+        getButtonByName("Continue").click();
+        waitForText("When will the meeting take place?");
+        enterText("Date",todayMinusThreeDays());
+        enterText("Hour",utcHourNow());
+        enterText("Minutes",utcMinuteNow());
+        getButtonByName("Continue").click();
+        waitForText("How will the meeting take place?");
+        pages.VcaMeetingsPage.selectMeetingMethod(meetingMethod,locationType,locationName);
+        getButtonByName("Continue").click();
+
+
+
+
+
+
+
+
+
+        }
+
+
+
+
+
+
 
 }
+
+
+
+
+
+
+
+
+
+
+

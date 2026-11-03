@@ -215,6 +215,12 @@ public class FakerUtils {
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 
+    public static String todayMinusThreeDays() {
+        return LocalDate.now()
+                .minusDays(3)
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
+
     public static String uniqueId() {
         String pattern = "??-#-??-#";
         return faker.bothify(pattern).toUpperCase();

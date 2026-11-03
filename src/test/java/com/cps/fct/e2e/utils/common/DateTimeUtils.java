@@ -46,6 +46,16 @@ public class DateTimeUtils {
         return now.format(UTC_TIME_NOW);
     }
 
+    public static String utcHourNow() {
+        return String.format("%02d",
+                ZonedDateTime.now(ZoneOffset.UTC).getHour());
+    }
+
+    public static String utcMinuteNow() {
+        return String.format("%02d",
+                ZonedDateTime.now(ZoneOffset.UTC).getMinute());
+    }
+
     public static String UTCTimeHrsMinsNow() {
         ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
         return now.format(UTC_TIME_HRS_MINS);

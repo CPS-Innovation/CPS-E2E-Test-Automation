@@ -106,6 +106,38 @@ public abstract class BasePage {
         dropdown.selectOption(new SelectOption().setLabel(itemText));
     }
 
+
+    public void selectFromDropDownList(String listSelector, String itemText) {
+
+        Locator list = page.locator(listSelector);
+
+        list.waitFor(
+                new Locator.WaitForOptions()
+                        .setState(WaitForSelectorState.VISIBLE)
+        );
+
+        Locator option = list.getByRole(
+                AriaRole.OPTION,
+                new Locator.GetByRoleOptions()
+                        .setName(itemText)
+                        .setExact(true)
+        );
+
+        option.scrollIntoViewIfNeeded();
+        option.click();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
     public void checkCheckbox(String selector) {
         Locator checkbox = page.locator(selector);
         if (!checkbox.isChecked()) {

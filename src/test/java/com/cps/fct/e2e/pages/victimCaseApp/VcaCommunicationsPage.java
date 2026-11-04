@@ -4,6 +4,7 @@ import com.cps.fct.e2e.pages.BasePage;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
 import com.cps.fct.e2e.utils.playwright.PlaywrightContext;
 import com.microsoft.playwright.Locator;
+import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import org.picocontainer.annotations.Inject;
 import org.slf4j.Logger;
@@ -16,6 +17,7 @@ import java.util.regex.Pattern;
 import static com.cps.fct.e2e.utils.common.DateTimeUtils.*;
 
 import static com.cps.fct.e2e.utils.common.FakerUtils.*;
+import static com.cps.fct.e2e.utils.common.FakerUtils.todayMinusThreeDays;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -23,12 +25,13 @@ public class VcaCommunicationsPage extends BasePage {
 
     private final ScenarioContext scenarioContext;
 
-    public VcaCommunicationsPage(PlaywrightContext context, ScenarioContext scenarioContext) {
+    private final VcaMeetingsPage  vcaMeetingsPage;
+
+    public VcaCommunicationsPage(PlaywrightContext context, ScenarioContext scenarioContext,VcaMeetingsPage  vcaMeetingsPage) {
         super(context);
         this.scenarioContext = scenarioContext;
+        this.vcaMeetingsPage = vcaMeetingsPage;
     }
-    @Inject
-    private PageObjects pages;
 
     private static final Logger logger =
             LoggerFactory.getLogger(VcaCommunicationsPage.class);
@@ -670,32 +673,41 @@ public class VcaCommunicationsPage extends BasePage {
         waitForText("Communications");
         waitForElement(page, AriaRole.TAB, "Meetings");
         clickSelectOnAriaRole(page, AriaRole.TAB, "Meetings");
-        pages.VcaMeetingsPage.selectAcceptedMeetingType(meetingType);
+        vcaMeetingsPage.selectAcceptedMeetingType(meetingType);
         waitUntilSpinnersAreGone("Loading, please wait");
         waitForText("How was the meeting arranged?");
-        pages.VcaMeetingsPage.selectMeetingSource(personFirstLastName, meetingSource);
+        vcaMeetingsPage.selectMeetingSource(personFirstLastName, meetingSource);
         getButtonByName("Continue").click();
         waitForText("When will the meeting take place?");
-        enterText("Date",todayMinusThreeDays());
-        enterText("Hour",utcHourNow());
-        enterText("Minutes",utcMinuteNow());
+        enterTextByLocator(page.locator("#b10-Input_Date"), todayMinusThreeDays());
+        enterTextByLocator(page.locator("#Input_Hour"), utcHourNow());
+        enterTextByLocator(page.locator("#Input_Minutes"), utcMinuteNow());
         getButtonByName("Continue").click();
         waitForText("How will the meeting take place?");
-        pages.VcaMeetingsPage.selectMeetingMethod(meetingMethod,locationType,locationName);
+        vcaMeetingsPage.selectMeetingMethod(meetingMethod,locationType,locationName);
         getButtonByName("Continue").click();
+        waitForText("Who should attend the meeting?");
+        }
 
 
+    public void selectAttendeesAndChairperson( List<String> meetingAttendeesRoles, String chairPerson){
+        waitForText("Who should attend the meeting?");
+        vcaMeetingsPage.selectMeetingAttendees(meetingAttendeesRoles);
+        waitForText("Who will lead the meeting?");
+        vcaMeetingsPage.selectChairPerson(chairPerson);
+        waitForText("Support needs");
+        page.pause();
+    }
 
-
-
-
-
-
-
+    public void selectSupportNeeds(List<String> meetingSupportNeeds){
+        waitForText("Support needs");
+        for (String support : meetingSupportNeeds) {
+            System.out.println(support);
         }
 
 
 
+    }
 
 
 

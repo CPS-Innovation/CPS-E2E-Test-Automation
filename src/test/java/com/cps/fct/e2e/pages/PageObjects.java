@@ -48,7 +48,6 @@ public class PageObjects {
 
     @Inject
     public VcaMeetingsPage vcaMeetingsPage;
-    public VcaMeetingsPage VcaMeetingsPage;
 
     public void useCurrentPage() {
         loginPage.useCurrentPage();

@@ -46,7 +46,7 @@ public class CucumberObjectFactory implements ObjectFactory {
         delegate.addClass(VcaVictimDetailsPage.class);
         delegate.addClass(VcaCaseContactPage.class);
         delegate.addClass(VcaCommunicationsPage.class);
-        delegate.addClass(VcaMeetingsPage.class);
+//        delegate.addClass(VcaMeetingsPage.class);
         addedAllPageClass();
     }
 

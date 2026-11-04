@@ -218,15 +218,15 @@ public class VictimCaseAppUiStepDefinition {
         pages.vcaHomePage.searchVictimCase(caseUrn);
         pages.vcaHomePage.navigateVictimDetailsTab(caseUrn, personFullName);
 
-            String newFirstSureName = pages.vcaVictimDetailsPage.updateFirstAndLastName(justification);
-            int spaceIndex = newFirstSureName.lastIndexOf(" ");
+        String newFirstSureName = pages.vcaVictimDetailsPage.updateFirstAndLastName(justification);
+        int spaceIndex = newFirstSureName.lastIndexOf(" ");
 
-            String newPersonFullName = newFirstSureName.substring(spaceIndex + 1).toUpperCase()
-                    + ", " + newFirstSureName.substring(0, spaceIndex);
-            personTypePersonNameMap.put(personType, Collections.singletonList(newPersonFullName));
-            personTypeFirstSureNameMap.put(personType, newFirstSureName);
-            context.set("personTypePersonNameMap", personTypePersonNameMap);
-            context.set("personTypeFirstSureNameMap", personTypeFirstSureNameMap);
+        String newPersonFullName = newFirstSureName.substring(spaceIndex + 1).toUpperCase()
+                + ", " + newFirstSureName.substring(0, spaceIndex);
+        personTypePersonNameMap.put(personType, Collections.singletonList(newPersonFullName));
+        personTypeFirstSureNameMap.put(personType, newFirstSureName);
+        context.set("personTypePersonNameMap", personTypePersonNameMap);
+        context.set("personTypeFirstSureNameMap", personTypeFirstSureNameMap);
 
         pages.vcaHomePage.navigateVictimHomePage();
     }
@@ -498,9 +498,9 @@ public class VictimCaseAppUiStepDefinition {
 //        String personFirstLastName = String.valueOf(personTypeFirstSureNameMap.get(personType));
 //        personFirstLastName = personFirstLastName.replace("[", "").replace("]", "");
 
-        String caseUrn = "05AQ9052926";
-        String personFullName = "KLEIN, Alise";
-        String personFirstLastName = "Alise Klein";
+        String caseUrn = "05AQ3156326";
+        String personFullName = "BARROWS, Jung";
+        String personFirstLastName = "Jung Barrows";
 
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
         pages.vcaHomePage.searchVictimCase(caseUrn);
@@ -551,9 +551,9 @@ public class VictimCaseAppUiStepDefinition {
 //        String personFirstLastName = String.valueOf(personTypeFirstSureNameMap.get(personType));
 //        personFirstLastName = personFirstLastName.replace("[", "").replace("]", "");
 
-        String caseUrn = "05AQ9052926";
-        String personFullName = "KLEIN, Alise";
-        String personFirstLastName = "Alise Klein";
+        String caseUrn = "05AQ3156326";
+        String personFullName = "BARROWS, Jung";
+        String personFirstLastName = "Jung Barrows";
 
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
         pages.vcaHomePage.searchVictimCase(caseUrn);
@@ -563,26 +563,18 @@ public class VictimCaseAppUiStepDefinition {
                 .map(row -> row.get("meetingAttendeesRoles"))
                 .collect(Collectors.toList());
 
+        List<String> meetingSupportNeeds = rows.stream()
+                .map(row -> row.get("supportNeeds"))
+                .toList();
 
-            pages.vcaCommunicationsPage.navigateMeetings();
-//            pages.vcaCommunicationsPage.logMeetingOffered(personFirstLastName, row.get("meetingType"), row.get("offerMethod"));
-//            pages.vcaCommunicationsPage.logMeetingResponse(row.get("meetingType"), row.get("meetingResponse"), row.get("meetingResponseMethod"));
-            pages.vcaCommunicationsPage.arrangeMeetings(personFirstLastName, meetingType, meetingSource ,meetingMethod, locationType, locationName);
-//            pages.vcaCommunicationsPage.selectAttendeesAndChairperson(chairPerson, meetingAttendeesRoles);
+        pages.vcaCommunicationsPage.navigateMeetings();
+        pages.vcaCommunicationsPage.arrangeMeetings(personFirstLastName, meetingType, meetingSource, meetingMethod, locationType, locationName);
+        pages.vcaCommunicationsPage.selectAttendeesAndChairperson(meetingAttendeesRoles, chairPerson);
+        pages.vcaCommunicationsPage.selectSupportNeeds(meetingSupportNeeds);
 
 
-        pages.vcaHomePage.navigateVictimHomePage();
+//        pages.vcaHomePage.navigateVictimHomePage();
     }
-
-
-
-
-
-
-
-
-
-
 
 
 }

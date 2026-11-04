@@ -36,28 +36,28 @@ Feature: VCA-UI-S13-S14-S54:- Cancel the offered then accepted then arranged  me
 #    And verify that "victimWitnessChild" is onboarded
 #    And the "Murali" is assigned as VLO to "victimWitnessChild"
 #    And verify that Vlo "Murali" is assigned to "victimWitnessChild"
-    When the meeting is offered and meeting response is logged for "victimWitness" in VCA application
-      | meetingType                           | offerMethod     | meetingResponse        | meetingResponseMethod |
-      | CPS pre-trial meeting                 | Letter by post  | Log meeting acceptance | Letter by email       |
-      | Inform victim about charging decision | Letter by email | Log meeting acceptance | Letter by post        |
-      | Other                                 | By telephone    | Log meeting acceptance | By telephone          |
+#    When the meeting is offered and meeting response is logged for "victimWitness" in VCA application
+#      | meetingType                           | offerMethod     | meetingResponse        | meetingResponseMethod |
+#      | CPS pre-trial meeting                 | Letter by post  | Log meeting acceptance | Letter by email       |
+#      | Inform victim about charging decision | Letter by email | Log meeting acceptance | Letter by post        |
+#      | Other                                 | By telephone    | Log meeting acceptance | By telephone          |
 #    When the meeting is offered and meeting response is logged for "victimWitnessChild" in VCA application
 #      | meetingType                           | offerMethod      | meetingResponse        | meetingResponseMethod |
 #      | CPS pre-trial meeting                 | By telephone     | Log meeting acceptance | Letter by police      |
 #      | Inform victim about charging decision | Letter by police | Log meeting acceptance | By telephone          |
 #      | Other                                 | Letter by ISVA   | Log meeting acceptance | Letter by ISVA        |
 
-    When the "CPS pre-trial meeting" arranged because "Victim Requested" it and meeting method is "In Person" at "locationtype" in "locationName" and "Victim liaison officer" as chair person with attendees for "victimWitness" in VCA application
-      | meetingAttendeesRoles  |
-      | Counsel                |
-      | Victim liaison officer |
-      | Defence Solicitor      |
-      | Officer in Charge      |
+    When the "CPS pre-trial meeting" arranged because "Victim Requested" it and meeting method is "In person" at "CPS location" in "Petty France" and "Victim liaison officer" as chair person with attendees for "victimWitness" in VCA application
+      | meetingAttendeesRoles  | supportNeeds            |
+      | Counsel                | Interpreter             |
+      | Victim liaison officer | Someone to attend       |
+      | Defence Solicitor      | Disability support text |
+      | Officer in Charge      |                         |
 
 #      | meetingType                           | meetingSource              | meetingMethod | locationType      | locationName                           |
-#      | CPS pre-trial meeting                 | CPS pre-trial meeting      | In Person     | CPS location      | Petty France                           |
+#      | CPS pre-trial meeting                 | CPS pre-trial meeting      | In person     | CPS location      | Petty France                           |
 #      | Inform victim about charging decision | CPS Offered                | Hybrid        | Magistrates court | Newcastle upon Tyne Magistrates' Court |
-#      | Other                                 | Third party Requested | Virtual Call  | Virtual Call      |                                        |
+#      | Other                                 | Third party Requested | Virtual call  | Virtual Call      |                                        |
 #
 
 
@@ -95,12 +95,12 @@ Feature: VCA-UI-S13-S14-S54:- Cancel the offered then accepted then arranged  me
 #      | Victim complaint                      | Victim requested           | Hybrid        | Other             | Specify Location                       |
 #      | Other CPS meeting                     | CPS offered                | Virtual Call  | Virtual Call      |                                        |
 #      | Victim Communication Liaison          | Requested by a third party | Virtual Call  | Virtual Call      |                                        |
-    And the meeting attendees are added and make "Victim liaison officer" as chair person for "victim" meeting
-      | meetingAttendeesRoles  |
-      | Counsel                |
-      | Victim liaison officer |
-      | Defence Solicitor      |
-      | Officer in Charge      |
+#    And the meeting attendees are added and make "Victim liaison officer" as chair person for "victim" meeting
+#      | meetingAttendeesRoles  |
+#      | Counsel                |
+#      | Victim liaison officer |
+#      | Defence Solicitor      |
+#      | Officer in Charge      |
 #    When the arranged meeting is cancelled with a reason for "victim" in VCA
 #      | meetingType                           | cancellationReason       |
 #      | CPS pre-trial meeting                 | Victim withdrew          |

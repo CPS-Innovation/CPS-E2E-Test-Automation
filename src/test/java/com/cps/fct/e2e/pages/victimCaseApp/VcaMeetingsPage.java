@@ -85,7 +85,6 @@ public class VcaMeetingsPage extends BasePage {
                 getButtonByName("Continue").click();
                 waitForText("Where will the meeting take place?");
                 selectLocation(locationType, locationName);
-                page.pause();
                 break;
             case "virtual call":
                 getRadioButtonById("MeetingMethod_VirtualCall").click();
@@ -108,15 +107,12 @@ public class VcaMeetingsPage extends BasePage {
                 getRadioButtonById("CPSLocation").click();
                 waitForText("Which CPS location will the meeting be held?");
                 getElement("#b16-Input_SearchText").click();
-                page.pause();
                 selectFromDropDownList("[role='listbox']",locationName );
-                page.pause();
                 break;
             case "magistrates' court":
                 clickSelectOnAriaRole(page, AriaRole.RADIO, locationType);
                 waitForText("Which Magistrates' court will the meeting be held?");
                 selectDropdownByValue("div.cps_dropdown",locationName);
-
                 break;
             case "crown court":
                 break;
@@ -126,7 +122,6 @@ public class VcaMeetingsPage extends BasePage {
                 break;
             default:
                 System.out.println("Specified location type does not exist");
-
         }
 
     }
@@ -134,7 +129,24 @@ public class VcaMeetingsPage extends BasePage {
     public void selectMeetingAttendees(List<String> meetingAttendeesRoles){
         for (String role : meetingAttendeesRoles) {
             System.out.println(role);
+            switch (role.trim().toLowerCase()){
+                case "defence firm":
+                    selectCheckboxContainText("Defence firm");
+                case "defence solicitor":
+                    selectCheckboxContainText("Defence Solicitor");
+                case "officer in charge":
+                    selectCheckboxContainText("Officer in Charge");
+                case "victim liaison officer":
+                    selectCheckboxContainText("Victim Liaison Officer");
+                case "counsel":
+                    selectCheckboxContainText("Counsel");
+                default:
+                    System.out.println("Specified meeting attendee is not is standard list");
+            }
+            getButtonByName("Continue").click();
+            waitForText("Who will lead the meeting?");
         }
+
     }
 
     public void selectChairPerson (String chairPerson){

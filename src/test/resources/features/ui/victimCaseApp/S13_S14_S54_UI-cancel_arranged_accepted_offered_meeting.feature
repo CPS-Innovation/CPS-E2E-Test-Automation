@@ -49,11 +49,13 @@ Feature: VCA-UI-S13-S14-S54:- Cancel the offered then accepted then arranged  me
 
     When the "CPS pre-trial meeting" arranged because "Victim Requested" it and meeting method is "In person" at "CPS location" in "Petty France" and "Victim liaison officer" as chair person with attendees for "victimWitness" in VCA application
       | meetingAttendeesRoles  | supportNeeds            |
-      | Counsel                | Interpreter             |
+      | Defence firm           | Interpreter             |
       | Victim liaison officer | Someone to attend       |
       | Defence Solicitor      | Disability support text |
+      | Defence firm           |                         |
       | Officer in Charge      |                         |
 
+#  Counsel
 #      | meetingType                           | meetingSource              | meetingMethod | locationType      | locationName                           |
 #      | CPS pre-trial meeting                 | CPS pre-trial meeting      | In person     | CPS location      | Petty France                           |
 #      | Inform victim about charging decision | CPS Offered                | Hybrid        | Magistrates court | Newcastle upon Tyne Magistrates' Court |

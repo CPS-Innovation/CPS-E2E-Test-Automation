@@ -14,6 +14,7 @@ import org.assertj.core.api.Assertions;
 
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
@@ -128,16 +129,6 @@ public abstract class BasePage {
     }
 
 
-
-
-
-
-
-
-
-
-
-
     public void checkCheckbox(String selector) {
         Locator checkbox = page.locator(selector);
         if (!checkbox.isChecked()) {
@@ -148,6 +139,17 @@ public abstract class BasePage {
     public void selectCheckbox(String text) {
         Locator checkbox = page.getByRole(
                 AriaRole.CHECKBOX, new Page.GetByRoleOptions().setName(text));
+        if (!checkbox.isChecked()) {
+            checkbox.check();
+        }
+    }
+
+    public void selectCheckboxContainText(String text) {
+        Locator checkbox = page.getByRole(
+                AriaRole.CHECKBOX,
+                new Page.GetByRoleOptions()
+                        .setName(Pattern.compile(Pattern.quote(text)))
+        );
         if (!checkbox.isChecked()) {
             checkbox.check();
         }

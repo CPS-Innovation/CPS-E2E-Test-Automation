@@ -687,6 +687,7 @@ public class VcaCommunicationsPage extends BasePage {
         vcaMeetingsPage.selectMeetingMethod(meetingMethod,locationType,locationName);
         getButtonByName("Continue").click();
         waitForText("Who should attend the meeting?");
+
         }
 
 

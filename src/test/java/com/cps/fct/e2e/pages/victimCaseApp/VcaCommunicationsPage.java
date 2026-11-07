@@ -25,14 +25,15 @@ public class VcaCommunicationsPage extends BasePage {
 
     private final ScenarioContext scenarioContext;
 
-    private final VcaMeetingsPage  vcaMeetingsPage;
+    private final VcaMeetingsPage vcaMeetingsPage;
 
-    public VcaCommunicationsPage(PlaywrightContext context, ScenarioContext scenarioContext,VcaMeetingsPage  vcaMeetingsPage) {
+    public VcaCommunicationsPage(PlaywrightContext context, ScenarioContext scenarioContext, VcaMeetingsPage vcaMeetingsPage) {
         super(context);
         this.scenarioContext = scenarioContext;
         this.vcaMeetingsPage = vcaMeetingsPage;
     }
 
+    private static final int WAIT_FOR_MILLIS = 10_000;
     private static final Logger logger =
             LoggerFactory.getLogger(VcaCommunicationsPage.class);
 
@@ -667,7 +668,7 @@ public class VcaCommunicationsPage extends BasePage {
         }
     }
 
-    public void arrangeMeetings(String personFirstLastName, String meetingType, String meetingSource ,
+    public void arrangeMeetings(String personFirstLastName, String meetingType, String meetingSource,
                                 String meetingMethod, String locationType, String locationName) {
         waitUntilSpinnersAreGone("Loading, please wait");
         waitForText("Communications");
@@ -684,36 +685,100 @@ public class VcaCommunicationsPage extends BasePage {
         enterTextByLocator(page.locator("#Input_Minutes"), utcMinuteNow());
         getButtonByName("Continue").click();
         waitForText("How will the meeting take place?");
-        vcaMeetingsPage.selectMeetingMethod(meetingMethod,locationType,locationName);
+        vcaMeetingsPage.selectMeetingMethod(meetingMethod, locationType, locationName);
         getButtonByName("Continue").click();
         waitForText("Who should attend the meeting?");
+    }
 
-        }
-
-
-    public void selectAttendeesAndChairperson( List<String> meetingAttendeesRoles, String chairPerson){
+    public void selectAttendeesAndChairperson(List<String> meetingAttendeesRoles, String chairPerson) {
         waitForText("Who should attend the meeting?");
         vcaMeetingsPage.selectMeetingAttendees(meetingAttendeesRoles);
         waitForText("Who will lead the meeting?");
-        vcaMeetingsPage.selectChairPerson(chairPerson);
+        checkRadioContainName(chairPerson);
+        getButtonByName("Continue").click();
         waitForText("Support needs");
-        page.pause();
     }
 
-    public void selectSupportNeeds(List<String> meetingSupportNeeds){
+    public void selectSupportNeeds(List<String> meetingSupportNeeds, String personFirstLastName) {
         waitForText("Support needs");
-        for (String support : meetingSupportNeeds) {
-            System.out.println(support);
+        boolean needsInterpreter = meetingSupportNeeds != null &&
+                meetingSupportNeeds.stream()
+                        .anyMatch(support -> support.equalsIgnoreCase("Interpreter"));
+        boolean needsSomeoneToAttend = meetingSupportNeeds != null &&
+                meetingSupportNeeds.stream()
+                        .anyMatch(support -> support.equalsIgnoreCase("Someone to attend"));
+
+        waitForText("Will " + personFirstLastName + " need an interpreter?");
+        if (needsInterpreter) {
+            getRadioButtonById("RadioButtonYes-input").click();
+        } else {
+            getRadioButtonById("RadioButtonNo-input").click();
         }
 
+        waitForText("Will " + personFirstLastName + " need someone to attend for support?");
+        if (needsSomeoneToAttend) {
+            getRadioButtonById("RadioButtonYes2-input").click();
+        } else {
+            getRadioButtonById("RadioButtonNo2-input").click();
+        }
 
-
+        enterText(
+                "Disability support or adjustment needs (optional)",
+                "Disability support Text" );
+        getButtonByName("Continue").click();
+        waitForText("Check your answers before confirming details");
     }
 
+
+    public void confirmArrangedMeeting(String meetingType) {
+        waitForText("Check your answers before confirming details");
+        getButtonByName("Confirm details").click();
+        waitUntilSpinnersAreGone("Loading, please wait");
+        waitForText("Communications");
+        waitForElement(page, AriaRole.TAB, "Meetings");
+        clickSelectOnAriaRole(page, AriaRole.TAB, "Meetings");
+        vcaMeetingsPage.verifyArrangedMeeting(meetingType);
+    }
+
+    public void cancelArrangedMeeting(String personFirstLastName, String meetingType, String cancellationReason){
+        waitUntilSpinnersAreGone("Loading, please wait");
+        vcaMeetingsPage.cancelMeeting(meetingType);
+        enterTextInLocator("#b6-Input_Date",todayMinusNoOfDays(1));
+        enterTextInLocator("#Input_Hour",utcHourNow());
+        enterTextInLocator("#Input_Minutes",utcMinuteNow());
+        getButtonByName("Continue").click();
+        waitForText("What is the reason for cancelling the meeting?");
+        vcaMeetingsPage.selectCancellationReason(personFirstLastName,cancellationReason);
+        getButtonByName("Continue").click();
+        waitUntilSpinnersAreGone("Loading, please wait");
+        waitUntilTabAppear("Communications");
+        waitUntilSpinnersAreGone("Loading, please wait");
+    }
+
+    public void confirmCancelledMeeting(String meetingType){
+        waitUntilSpinnersAreGone("Loading, please wait");
+        waitForElement(page, AriaRole.TAB, "Meetings");
+        clickSelectOnAriaRole(page, AriaRole.TAB, "Meetings");
+        navigateMeetings();
+        vcaMeetingsPage.verifyCancelledMeeting(meetingType);
+    }
+
+    public void verifyCancelledMeetingDetails(String personFirstLastName, String meetingType, String cancellationReason){
+        waitUntilSpinnersAreGone("Loading, please wait");
+        waitForElement(page, AriaRole.TAB, "Meetings");
+        clickSelectOnAriaRole(page, AriaRole.TAB, "Meetings");
+        vcaMeetingsPage.verifyCancelledMeetingDetails(personFirstLastName, meetingType,cancellationReason);
+
+    }
 
 
 
 }
+
+
+
+
+
 
 
 

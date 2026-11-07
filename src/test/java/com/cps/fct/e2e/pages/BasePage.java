@@ -16,7 +16,9 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import static com.cps.fct.e2e.utils.common.FakerUtils.email;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public abstract class BasePage {
 
@@ -91,6 +93,9 @@ public abstract class BasePage {
     public Locator getElement(String selector) {
         return page.locator(selector);
     }
+    public Locator getElementById(String id) {
+        return page.locator("#" + id);
+    }
 
     public List<Locator> getElements(String selector) {
         return page.locator(selector).all();
@@ -128,7 +133,6 @@ public abstract class BasePage {
         option.click();
     }
 
-
     public void checkCheckbox(String selector) {
         Locator checkbox = page.locator(selector);
         if (!checkbox.isChecked()) {
@@ -145,10 +149,8 @@ public abstract class BasePage {
     }
 
     public void selectCheckboxContainText(String text) {
-        Locator checkbox = page.getByRole(
-                AriaRole.CHECKBOX,
-                new Page.GetByRoleOptions()
-                        .setName(Pattern.compile(Pattern.quote(text)))
+        Locator checkbox = page.locator(
+                "input[type='checkbox'][aria-label*='" + text + "']"
         );
         if (!checkbox.isChecked()) {
             checkbox.check();
@@ -227,6 +229,12 @@ public abstract class BasePage {
         locator.fill(input);
     }
 
+    public void enterTextInLocator(String selector, String input) {
+        page.locator(selector).fill(input);
+    }
+
+
+
     public void selectTextByLocator(Locator locator) {
         locator.click();
     }
@@ -255,6 +263,14 @@ public abstract class BasePage {
     public void checkRadioByName(String name) {
         final String ROLE_RADIO = "radio";
         page.locator("role=" + ROLE_RADIO + "[name='" + name + "']").check();
+    }
+
+    public void checkRadioContainName(String name) {
+        Locator radio = page.locator("input[type='radio'][value*='" + name + "']" );
+        radio.waitFor();
+        if (!radio.isChecked()) {
+            radio.check();
+        }
     }
 
     public void clickLinkByName(String name) {
@@ -308,6 +324,21 @@ public abstract class BasePage {
     public void clickTabByName(String name) {
         final String ROLE_TAB = "tab";
         page.locator("role=" + ROLE_TAB + "[name='" + name + "']").click();
+    }
+
+    public void waitUntilTabAppear(String name) {
+        final String ROLE_TAB = "tab";
+        Locator tab = page.locator("role=" + ROLE_TAB + "[name='" + name + "']");
+        int maxAttempts = 10;
+        int attempt = 0;
+        while (attempt < maxAttempts) {
+            if (tab.isVisible()) {
+                return;
+            }
+            page.waitForTimeout(1000);
+            attempt++;
+        }
+        throw new RuntimeException("Tab '" + name + "' did not appear after " + maxAttempts + " seconds");
     }
 
     public Locator getRadioButtonById(String id) {
@@ -445,6 +476,10 @@ public abstract class BasePage {
         }
     }
 
+    public void assertContains(String expected, String actual) {
+        assertTrue(actual.contains(expected),
+                "Expected '" + actual + "' to contain '" + expected + "'");
+    }
 
     /**
      * Tells a genuine locator/selector bug apart from an expected transient condition while polling.

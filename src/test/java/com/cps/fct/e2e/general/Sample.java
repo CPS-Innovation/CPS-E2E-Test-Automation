@@ -15,7 +15,11 @@ public class Sample {
 //        System.out.println("Hello World");
 
 
-        System.out.println(yearTill2005());
+//        todayMinusNoOfDays(1);
+//todayMinusThreeDays();
+//        String date = todayMinusNoOfDays(1);
+
+        System.out.println(convertDateMonthYear(todayMinusNoOfDays(1)));
     }
 
 

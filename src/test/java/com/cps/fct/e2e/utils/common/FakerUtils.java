@@ -202,9 +202,15 @@ public class FakerUtils {
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 
+    public static String todayMinusNoOfDays(int NoOfDays) {
+        return LocalDate.now()
+                .minusDays(NoOfDays)
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));   
+    }
+
     public static String convertDateMonthYear(String date) {
         DateTimeFormatter outputFormatter =
-                DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.UK);
+                DateTimeFormatter.ofPattern("d MMMM yyyy", Locale.UK);
 
         return LocalDate.parse(date).format(outputFormatter);
     }

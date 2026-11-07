@@ -488,19 +488,19 @@ public class VictimCaseAppUiStepDefinition {
 
     @When("the meeting is offered and meeting response is logged for {string} in VCA application")
     public void offerMeetingTypeMethod(String personType, DataTable dataTable) {
-//        String caseUrn = context.get("caseUrn");
+        String caseUrn = context.get("caseUrn");
 
-//        Map<String, List<String>> personTypePersonNameMap = context.get("personTypePersonNameMap");
-//        String personFullName = String.valueOf(personTypePersonNameMap.get(personType));
-//        personFullName = personFullName.replace("[", "").replace("]", "");
-//
-//        Map<String, List<String>> personTypeFirstSureNameMap = context.get("personTypeFirstSureNameMap");
-//        String personFirstLastName = String.valueOf(personTypeFirstSureNameMap.get(personType));
-//        personFirstLastName = personFirstLastName.replace("[", "").replace("]", "");
+        Map<String, List<String>> personTypePersonNameMap = context.get("personTypePersonNameMap");
+        String personFullName = String.valueOf(personTypePersonNameMap.get(personType));
+        personFullName = personFullName.replace("[", "").replace("]", "");
 
-        String caseUrn = "05AQ3156326";
-        String personFullName = "BARROWS, Jung";
-        String personFirstLastName = "Jung Barrows";
+        Map<String, List<String>> personTypeFirstSureNameMap = context.get("personTypeFirstSureNameMap");
+        String personFirstLastName = String.valueOf(personTypeFirstSureNameMap.get(personType));
+        personFirstLastName = personFirstLastName.replace("[", "").replace("]", "");
+
+//        String caseUrn = "05AQ3163526";
+//        String personFullName = "BARTON, Shaun";
+//        String personFirstLastName = "Shaun Barton";
 
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
         pages.vcaHomePage.searchVictimCase(caseUrn);
@@ -541,19 +541,19 @@ public class VictimCaseAppUiStepDefinition {
     @When("the {string} arranged because {string} it and meeting method is {string} at {string} in {string} and {string} as chair person with attendees for {string} in VCA application")
     public void arrangeMeetingMethod(String meetingType, String meetingSource, String meetingMethod, String locationType, String locationName,
                                      String chairPerson, String personType, DataTable dataTable) {
-//        String caseUrn = context.get("caseUrn");
-//
-//        Map<String, List<String>> personTypePersonNameMap = context.get("personTypePersonNameMap");
-//        String personFullName = String.valueOf(personTypePersonNameMap.get(personType));
-//        personFullName = personFullName.replace("[", "").replace("]", "");
-//
-//        Map<String, List<String>> personTypeFirstSureNameMap = context.get("personTypeFirstSureNameMap");
-//        String personFirstLastName = String.valueOf(personTypeFirstSureNameMap.get(personType));
-//        personFirstLastName = personFirstLastName.replace("[", "").replace("]", "");
+        String caseUrn = context.get("caseUrn");
 
-        String caseUrn = "05AQ3156326";
-        String personFullName = "BARROWS, Jung";
-        String personFirstLastName = "Jung Barrows";
+        Map<String, List<String>> personTypePersonNameMap = context.get("personTypePersonNameMap");
+        String personFullName = String.valueOf(personTypePersonNameMap.get(personType));
+        personFullName = personFullName.replace("[", "").replace("]", "");
+
+        Map<String, List<String>> personTypeFirstSureNameMap = context.get("personTypeFirstSureNameMap");
+        String personFirstLastName = String.valueOf(personTypeFirstSureNameMap.get(personType));
+        personFirstLastName = personFirstLastName.replace("[", "").replace("]", "");
+
+//        String caseUrn = "05AQ3163526";
+//        String personFullName = "BARTON, Shaun";
+//        String personFirstLastName = "Shaun Barton";
 
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
         pages.vcaHomePage.searchVictimCase(caseUrn);
@@ -565,16 +565,72 @@ public class VictimCaseAppUiStepDefinition {
 
         List<String> meetingSupportNeeds = rows.stream()
                 .map(row -> row.get("supportNeeds"))
+                .filter(Objects::nonNull)
+                .map(String::trim)
+                .filter(value -> !value.isEmpty())
                 .toList();
 
         pages.vcaCommunicationsPage.navigateMeetings();
         pages.vcaCommunicationsPage.arrangeMeetings(personFirstLastName, meetingType, meetingSource, meetingMethod, locationType, locationName);
         pages.vcaCommunicationsPage.selectAttendeesAndChairperson(meetingAttendeesRoles, chairPerson);
-        pages.vcaCommunicationsPage.selectSupportNeeds(meetingSupportNeeds);
+        pages.vcaCommunicationsPage.selectSupportNeeds(meetingSupportNeeds,personFirstLastName);
+        pages.vcaCommunicationsPage.confirmArrangedMeeting(meetingType);
+        pages.vcaHomePage.navigateVictimHomePage();
 
-
-//        pages.vcaHomePage.navigateVictimHomePage();
     }
 
+    @When("cancel the arranged meeting with the cancellation reason for {string} in VCA application")
+    public void cancelArrangedMeeting(String personType, DataTable dataTable){
+
+        String caseUrn = context.get("caseUrn");
+
+        Map<String, List<String>> personTypePersonNameMap = context.get("personTypePersonNameMap");
+        String personFullName = String.valueOf(personTypePersonNameMap.get(personType));
+        personFullName = personFullName.replace("[", "").replace("]", "");
+
+        Map<String, List<String>> personTypeFirstSureNameMap = context.get("personTypeFirstSureNameMap");
+        String personFirstLastName = String.valueOf(personTypeFirstSureNameMap.get(personType));
+        personFirstLastName = personFirstLastName.replace("[", "").replace("]", "");
+
+//        String caseUrn = "05AQ6377926";
+//        String personFullName = "HERMANN, Evan";
+//        String personFirstLastName = "Evan Hermann";
+
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+        pages.vcaHomePage.searchVictimCase(caseUrn);
+        pages.vcaHomePage.navigateCommunicationsTab(caseUrn, personFullName);
+        pages.vcaCommunicationsPage.navigateMeetings();
+        for (Map<String, String> row : rows) {
+            pages.vcaCommunicationsPage.cancelArrangedMeeting(personFirstLastName, row.get("meetingType"), row.get("cancellationReason"));
+            pages.vcaCommunicationsPage.confirmCancelledMeeting( row.get("meetingType"));
+            pages.vcaCommunicationsPage.navigateMeetings();
+        }
+        pages.vcaHomePage.navigateVictimHomePage();
+    }
+
+    @Then("verify the cancelled meeting details for {string} in VCA application")
+    public void verifyCancelledMeetingDetails(String personType, DataTable dataTable){
+        String caseUrn = context.get("caseUrn");
+        Map<String, List<String>> personTypePersonNameMap = context.get("personTypePersonNameMap");
+        String personFullName = String.valueOf(personTypePersonNameMap.get(personType));
+        personFullName = personFullName.replace("[", "").replace("]", "");
+
+        Map<String, List<String>> personTypeFirstSureNameMap = context.get("personTypeFirstSureNameMap");
+        String personFirstLastName = String.valueOf(personTypeFirstSureNameMap.get(personType));
+        personFirstLastName = personFirstLastName.replace("[", "").replace("]", "");
+
+//        String caseUrn = "05AQ6377926";
+//        String personFullName = "HERMANN, Evan";
+//        String personFirstLastName = "Evan Hermann";
+
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+        pages.vcaHomePage.searchVictimCase(caseUrn);
+        pages.vcaHomePage.navigateCommunicationsTab(caseUrn, personFullName);
+        pages.vcaCommunicationsPage.navigateMeetings();
+        for (Map<String, String> row : rows) {
+            pages.vcaCommunicationsPage.verifyCancelledMeetingDetails(personFirstLastName, row.get("meetingType"), row.get("cancellationReason"));
+        }
+        pages.vcaHomePage.navigateVictimHomePage();
+    }
 
 }

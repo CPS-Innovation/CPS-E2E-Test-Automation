@@ -771,6 +771,12 @@ public class VcaCommunicationsPage extends BasePage {
 
     }
 
+    public void verifyArrangedMeetingDetails(String personFirstLastName, String meetingType, String meetingRequest, String meetingMethod, String locationName, String chairPerson){
+        waitUntilSpinnersAreGone("Loading, please wait");
+        waitForElement(page, AriaRole.TAB, "Meetings");
+        clickSelectOnAriaRole(page, AriaRole.TAB, "Meetings");
+        vcaMeetingsPage.verifyArrangedMeetingDetails(personFirstLastName, meetingType, meetingRequest, meetingMethod, locationName, chairPerson);
+    }
 
 
 }

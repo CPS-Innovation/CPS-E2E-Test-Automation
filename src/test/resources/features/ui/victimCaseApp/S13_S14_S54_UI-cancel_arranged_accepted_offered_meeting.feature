@@ -1,6 +1,6 @@
 @regression @ui_vca_regression @VCA_UI_S13 @VCA_UI_S14 @VCA_UI_S54
 
-Feature: VCA-UI-S13-S14-S54:- Cancel the offered then accepted then arranged  meeting.
+Feature: VCA-UI-S13-S14-S54:- Cancel the offered then accepted then arranged victim or victimWitness meeting.
   As a Victim Liaison Officer
   I want to record the cancellation details for arranged victim or victimWitness meeting.
   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -46,42 +46,42 @@ Feature: VCA-UI-S13-S14-S54:- Cancel the offered then accepted then arranged  me
       | CPS pre-trial meeting                 | By telephone     | Log meeting acceptance | Letter by police      |
       | Inform victim about charging decision | Letter by police | Log meeting acceptance | By telephone          |
       | Other                                 | Letter by ISVA   | Log meeting acceptance | Letter by ISVA        |
-    When the "CPS pre-trial meeting" arranged because "CPS Offered" it and meeting method is "In person" at "CPS location" in "Petty France" and "Victim Liaison Officer" as chair person with attendees for "victimWitness" in VCA application
+    When the "CPS pre-trial meeting" meeting type is arranged because "CPS Offered" it and meeting method is "In person" at "CPS location" in "Petty France" and "Victim Liaison Officer" as chair person with attendees for "victimWitness" in VCA application
       | meetingAttendeesRoles  | supportNeeds      |
       | Defence firm           | Interpreter       |
       | Victim liaison officer | Someone to attend |
       | Defence Solicitor      |                   |
       | Counsel                |                   |
       | Officer in Charge      |                   |
-    When the "Inform victim about charging decision" arranged because "Victim Requested" it and meeting method is "Virtual call" at "Virtual call" in "Virtual call" and "Counsel" as chair person with attendees for "victimWitness" in VCA application
+    When the "Inform victim about charging decision" meeting type is arranged because "Victim Requested" it and meeting method is "Virtual call" at "Virtual call" in "Virtual call" and "Counsel" as chair person with attendees for "victimWitness" in VCA application
       | meetingAttendeesRoles  | supportNeeds |
       | Defence firm           | Interpreter  |
       | Victim liaison officer |              |
       | Defence Solicitor      |              |
       | Counsel                |              |
       | Officer in Charge      |              |
-    When the "Other" arranged because "Third party requested" it and meeting method is "Hybrid" at "Magistrates court" in "Newcastle upon Tyne Magistrates' Court" and "Officer in Charge" as chair person with attendees for "victimWitness" in VCA application
+    When the "Other" meeting type is arranged because "Third party requested" it and meeting method is "Hybrid" at "Magistrates court" in "Newcastle upon Tyne Magistrates' Court" and "Officer in Charge" as chair person with attendees for "victimWitness" in VCA application
       | meetingAttendeesRoles  | supportNeeds      |
       | Defence firm           | Someone to attend |
       | Victim liaison officer |                   |
       | Defence Solicitor      |                   |
       | Counsel                |                   |
       | Officer in Charge      |                   |
-    When the "CPS pre-trial meeting" arranged because "Victim Requested" it and meeting method is "In person" at "Crown court" in "Newcastle upon Tyne Crown Court" and "Defence firm" as chair person with attendees for "victimWitnessChild" in VCA application
+    When the "CPS pre-trial meeting" meeting type is arranged because "Victim Requested" it and meeting method is "In person" at "Crown court" in "Newcastle upon Tyne Crown Court" and "Defence firm" as chair person with attendees for "victimWitnessChild" in VCA application
       | meetingAttendeesRoles  | supportNeeds      |
       | Defence firm           | Interpreter       |
       | Victim liaison officer | Someone to attend |
       | Defence Solicitor      |                   |
       | Counsel                |                   |
       | Officer in Charge      |                   |
-    When the "Inform victim about charging decision" arranged because "Third party requested" it and meeting method is "Hybrid" at "Police station" in "Northumbria" and "Defence Solicitor" as chair person with attendees for "victimWitnessChild" in VCA application
+    When the "Inform victim about charging decision" meeting type is arranged because "Third party requested" it and meeting method is "Hybrid" at "Police station" in "Northumbria" and "Defence Solicitor" as chair person with attendees for "victimWitnessChild" in VCA application
       | meetingAttendeesRoles  | supportNeeds |
       | Defence firm           | Interpreter  |
       | Victim liaison officer |              |
       | Defence Solicitor      |              |
       | Counsel                |              |
       | Officer in Charge      |              |
-    When the "Other" arranged because "Victim Requested" it and meeting method is "In person" at "Other" in "Other Location text" and "Victim Liaison Officer" as chair person with attendees for "victimWitnessChild" in VCA application
+    When the "Other" meeting type is arranged because "Victim Requested" it and meeting method is "In person" at "Other" in "Other Location text" and "Victim Liaison Officer" as chair person with attendees for "victimWitnessChild" in VCA application
       | meetingAttendeesRoles  | supportNeeds      |
       | Defence firm           | Someone to attend |
       | Victim liaison officer |                   |

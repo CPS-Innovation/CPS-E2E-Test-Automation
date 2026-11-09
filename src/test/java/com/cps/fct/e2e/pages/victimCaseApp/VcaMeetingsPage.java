@@ -105,44 +105,44 @@ public class VcaMeetingsPage extends BasePage {
 
     public void selectLocation(String locationType, String locationName) {
         waitForText("Where will the meeting take place?");
-        switch (locationType.trim().toLowerCase()){
+        switch (locationType.trim().toLowerCase()) {
             case "cps location":
                 getRadioButtonById("CPSLocation").click();
                 waitForText("Which CPS location will the meeting be held?");
                 getElement("#b16-Input_SearchText").click();
-                selectFromDropDownList("[role='listbox']",locationName );
+                selectFromDropDownList("[role='listbox']", locationName);
                 break;
             case "magistrates court":
                 clickSelectOnAriaRole(page, AriaRole.RADIO, "Magistrates' court");
                 waitForText("Which Magistrates' court will the meeting be held?");
                 getElementById("b18-b1-Input_SearchText").click();
-                selectFromDropDownList("[role='listbox']",locationName );
+                selectFromDropDownList("[role='listbox']", locationName);
                 break;
             case "crown court":
                 clickSelectOnAriaRole(page, AriaRole.RADIO, "Crown court");
                 waitForText("Which Crown court will the meeting be held?");
                 getElementById("b20-b1-Input_SearchText").click();
-                selectFromDropDownList("[role='listbox']",locationName );
+                selectFromDropDownList("[role='listbox']", locationName);
                 break;
             case "police station":
                 clickSelectOnAriaRole(page, AriaRole.RADIO, "Police station");
                 waitForText("Which Crown court will the meeting be held?");
                 getElementById("b22-b1-Input_SearchText").click();
-                selectFromDropDownList("[role='listbox']",locationName );
+                selectFromDropDownList("[role='listbox']", locationName);
                 break;
             case "other":
                 clickSelectOnAriaRole(page, AriaRole.RADIO, "Other");
                 waitForText("Where will the meeting be held?");
-                enterTextById("b24-TextArea_TextEntry", locationName );
+                enterTextById("b24-TextArea_TextEntry", locationName);
                 break;
             default:
                 System.out.println("Specified location type does not exist");
         }
     }
 
-    public void selectMeetingAttendees(List<String> meetingAttendeesRoles){
+    public void selectMeetingAttendees(List<String> meetingAttendeesRoles) {
         for (String role : meetingAttendeesRoles) {
-            switch (role.trim().toLowerCase()){
+            switch (role.trim().toLowerCase()) {
                 case "defence firm":
                     selectCheckboxContainText("Defence firm");
                 case "defence solicitor":
@@ -186,7 +186,7 @@ public class VcaMeetingsPage extends BasePage {
 
     }
 
-    public void cancelMeeting(String meetingType){
+    public void cancelMeeting(String meetingType) {
         waitForText("Communications");
         waitForElement(page, AriaRole.TAB, "Meetings");
         clickSelectOnAriaRole(page, AriaRole.TAB, "Meetings");
@@ -229,10 +229,10 @@ public class VcaMeetingsPage extends BasePage {
         }
     }
 
-    public void selectCancellationReason(String personFirstLastName, String cancellationReason){
-        switch (cancellationReason.trim().toLowerCase()){
+    public void selectCancellationReason(String personFirstLastName, String cancellationReason) {
+        switch (cancellationReason.trim().toLowerCase()) {
             case "victim withdrew":
-                waitForText(personFirstLastName+" withdrew");
+                waitForText(personFirstLastName + " withdrew");
                 getRadioButtonById("Withdrew").click();
                 break;
             case "meeting created in error":
@@ -251,14 +251,14 @@ public class VcaMeetingsPage extends BasePage {
                 waitForText("Other");
                 getRadioButtonById("Other").click();
                 waitForText("Provide details");
-                enterTextById("b10-TextArea_TextEntry", "Other Reason" );
+                enterTextById("b10-TextArea_TextEntry", "Other Reason");
                 break;
             default:
                 System.out.println("Specified cancellation reason type does not exist");
         }
     }
 
-    public void verifyCancelledMeeting(String meetingType){
+    public void verifyCancelledMeeting(String meetingType) {
         switch (meetingType.trim().toLowerCase()) {
             case "cps pre-trial meeting":
                 waitUntilSpinnersAreGone("Loading, please wait");
@@ -287,7 +287,7 @@ public class VcaMeetingsPage extends BasePage {
 
     }
 
-    public void verifyCancelledMeetingDetails(String personFirstLastName, String meetingType, String cancellationReason){
+    public void verifyCancelledMeetingDetails(String personFirstLastName, String meetingType, String cancellationReason) {
 
         if ("Victim withdrew".equals(cancellationReason)) {
             cancellationReason = personFirstLastName + " withdrew";
@@ -307,12 +307,12 @@ public class VcaMeetingsPage extends BasePage {
                         "div.govuk-summary-list__row", "Date and time meeting was cancelled", "dd.govuk-summary-list__value")
                         .innerText();
                 String preTrialMeetingCancelDate = preTrialMeetingCancelDateTime.split(" at ")[0];
-                assertContains(convertDateMonthYear(todayMinusNoOfDays(1)),preTrialMeetingCancelDate);
+                assertContains(convertDateMonthYear(todayMinusNoOfDays(1)), preTrialMeetingCancelDate);
                 String preTrialMeetingCancelReason = readTableRowCell(page,
                         "div.govuk-summary-card", "h2.govuk-summary-card__title", "CPS pre-trial meeting cancelled",
                         "div.govuk-summary-list__row", "Reason", "dd.govuk-summary-list__value")
                         .innerText();
-                assertEquals(cancellationReason,preTrialMeetingCancelReason);
+                assertEquals(cancellationReason, preTrialMeetingCancelReason);
                 break;
             case "inform victim about charging decision":
                 waitUntilSpinnersAreGone("Loading, please wait");
@@ -325,12 +325,12 @@ public class VcaMeetingsPage extends BasePage {
                         "div.govuk-summary-list__row", "Date and time meeting was cancelled", "dd.govuk-summary-list__value")
                         .innerText();
                 String chargeDecisionMeetingCancelDate = chargeDecisionMeetingCancelDateTime.split(" at ")[0];
-                assertContains(convertDateMonthYear(todayMinusNoOfDays(1)),chargeDecisionMeetingCancelDate);
+                assertContains(convertDateMonthYear(todayMinusNoOfDays(1)), chargeDecisionMeetingCancelDate);
                 String chargeDecisionMeetingCancelReason = readTableRowCell(page,
                         "div.govuk-summary-card", "h2.govuk-summary-card__title", "Charging decision meeting cancelled",
                         "div.govuk-summary-list__row", "Reason", "dd.govuk-summary-list__value")
                         .innerText();
-                assertEquals(cancellationReason,chargeDecisionMeetingCancelReason);
+                assertEquals(cancellationReason, chargeDecisionMeetingCancelReason);
                 break;
             case "other":
                 waitUntilSpinnersAreGone("Loading, please wait");
@@ -343,12 +343,12 @@ public class VcaMeetingsPage extends BasePage {
                         "div.govuk-summary-list__row", "Date and time meeting was cancelled", "dd.govuk-summary-list__value")
                         .innerText();
                 String otherMeetingCancelDate = otherMeetingCancelDateTime.split(" at ")[0];
-                assertContains(convertDateMonthYear(todayMinusNoOfDays(1)),otherMeetingCancelDate);
+                assertContains(convertDateMonthYear(todayMinusNoOfDays(1)), otherMeetingCancelDate);
                 String otherMeetingCancelReason = readTableRowCell(page,
                         "div.govuk-summary-card", "h2.govuk-summary-card__title", "Other CPS meeting cancelled",
                         "div.govuk-summary-list__row", "Reason", "dd.govuk-summary-list__value")
                         .innerText();
-                assertEquals(cancellationReason,otherMeetingCancelReason);
+                assertEquals(cancellationReason, otherMeetingCancelReason);
                 break;
             default:
                 System.out.println("Specified meeting type does not exist");
@@ -356,6 +356,80 @@ public class VcaMeetingsPage extends BasePage {
     }
 
 
+    public void verifyArrangedMeetingDetails(String personFirstLastName, String meetingType, String meetingRequest, String meetingMethod, String locationName, String chairPerson) {
+
+        String meetingRequestType = null;
+        if ("CPS Offered".equals(meetingRequest)) {
+            meetingRequestType = "CPS offered and " + personFirstLastName + " accepted";
+        } else if ("Victim Requested".equals(meetingRequest)) {
+            meetingRequestType = personFirstLastName + " requested it";
+        } else if ("Third party requested".equals(meetingRequest)) {
+            meetingRequestType = "Requested by a third party";
+        }
+
+        chairPerson = "(Meeting lead) " + chairPerson;
+        waitUntilSpinnersAreGone("Loading, please wait");
+
+        switch (meetingType.trim().toLowerCase()) {
+            case "cps pre-trial meeting":
+                meetingType = "CPS pre-trial meeting";
+                assertValues(meetingType, meetingRequestType, meetingMethod, locationName, chairPerson);
+                break;
+            case "inform victim about charging decision":
+                meetingType = "Charging decision meeting";
+                assertValues(meetingType, meetingRequestType, meetingMethod, locationName, chairPerson);
+                break;
+            case "other":
+                meetingType = "Other CPS meeting";
+                assertValues(meetingType, meetingRequestType, meetingMethod, locationName, chairPerson);
+                break;
+            default:
+                System.out.println("Specified meeting type does not exist");
+        }
+
+    }
+
+    public void assertValues(String meetingType, String meetingRequestType, String meetingMethod, String locationName, String chairPerson) {
+        assertThat(readTableRowCell(page,
+                "div.govuk-summary-card", "h2.govuk-summary-card__title", meetingType + " arranged",
+                "div.govuk-summary-list__row", "Date and time", "dd.govuk-summary-list__value"))
+                .isVisible();
+
+        String meetingsArrangedDateTime = readTableRowCell(page,
+                "div.govuk-summary-card", "h2.govuk-summary-card__title", meetingType + " arranged",
+                "div.govuk-summary-list__row", "Date and time", "dd.govuk-summary-list__value")
+                .innerText();
+        String meetingArrangedDate = meetingsArrangedDateTime.split(" at ")[0];
+        assertContains(convertDateMonthYear(todayMinusThreeDays()), meetingArrangedDate);
+
+        String meetingsRequestBy = readTableRowCell(page,
+                "div.govuk-summary-card", "h2.govuk-summary-card__title", meetingType + " arranged",
+                "div.govuk-summary-list__row", "How was meeting arranged", "dd.govuk-summary-list__value")
+                .innerText();
+        assertEquals(meetingRequestType, meetingsRequestBy);
+
+        String meetingsMethod = readTableRowCell(page,
+                "div.govuk-summary-card", "h2.govuk-summary-card__title", meetingType + " arranged",
+                "div.govuk-summary-list__row", "How meeting will take place", "dd.govuk-summary-list__value")
+                .innerText();
+        assertEquals(meetingMethod, meetingsMethod);
+
+        if (!"Virtual call".equalsIgnoreCase(locationName)) {
+            String meetingsLocation = readTableRowCell(page,
+                    "div.govuk-summary-card", "h2.govuk-summary-card__title", meetingType + " arranged",
+                    "div.govuk-summary-list__row", "Location", "dd.govuk-summary-list__value")
+                    .innerText();
+            assertEquals(locationName, meetingsLocation);
+        }
+
+//        String meetingsAttendees = readTableRowCell(page,
+//                "div.govuk-summary-card", "h2.govuk-summary-card__title", meetingType + " arranged",
+//                "div.govuk-summary-list__row", "Attendees", "dd.govuk-summary-list__value")
+//                .innerText();
+//        System.out.println("Meeting Inner Text in Attendees = "+meetingsAttendees);
+//        assertContains(chairPerson, meetingsAttendees);
+
+    }
 
 
 }

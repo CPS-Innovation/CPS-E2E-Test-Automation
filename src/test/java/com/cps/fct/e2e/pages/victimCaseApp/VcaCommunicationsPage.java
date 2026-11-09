@@ -778,6 +778,21 @@ public class VcaCommunicationsPage extends BasePage {
         vcaMeetingsPage.verifyArrangedMeetingDetails(personFirstLastName, meetingType, meetingRequest, meetingMethod, locationName, chairPerson);
     }
 
+    public void conductArrangedMeeting(String personFirstLastName, String meetingType, String meetingTookPlace,
+                                       List<String> meetingAttendeesRoles, String meetingLedBy, String agreeToResearch, String meetingNotes,
+                                       String meetingNotesSent, String actionsAgreed){
+
+        waitUntilSpinnersAreGone("Loading, please wait");
+        waitForText("Communications");
+        waitForElement(page, AriaRole.TAB, "Meetings");
+        clickSelectOnAriaRole(page, AriaRole.TAB, "Meetings");
+        vcaMeetingsPage.selectArrangedMeetingType(meetingType);
+        vcaMeetingsPage.logArrangedMeetingTime(meetingTookPlace);
+        vcaMeetingsPage.logArrangedMeetingAttendeesLedBy(personFirstLastName,meetingAttendeesRoles, meetingLedBy);
+        vcaMeetingsPage.logArrangedMeetingAction(personFirstLastName, agreeToResearch, meetingNotes, meetingNotesSent, actionsAgreed);
+        vcaMeetingsPage.confirmLogArrangedMeetingDetails();
+        vcaMeetingsPage.verifyMeetingOutcome(meetingType);
+    }
 
 }
 

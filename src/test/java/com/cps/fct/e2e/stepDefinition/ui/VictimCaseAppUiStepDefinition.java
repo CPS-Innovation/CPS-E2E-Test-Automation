@@ -599,6 +599,7 @@ public class VictimCaseAppUiStepDefinition {
         pages.vcaHomePage.searchVictimCase(caseUrn);
         pages.vcaHomePage.navigateCommunicationsTab(caseUrn, personFullName);
         pages.vcaCommunicationsPage.navigateMeetings();
+
         for (Map<String, String> row : rows) {
             pages.vcaCommunicationsPage.cancelArrangedMeeting(personFirstLastName, row.get("meetingType"), row.get("cancellationReason"));
             pages.vcaCommunicationsPage.confirmCancelledMeeting(row.get("meetingType"));
@@ -656,7 +657,38 @@ public class VictimCaseAppUiStepDefinition {
             pages.vcaCommunicationsPage.verifyArrangedMeetingDetails(personFirstLastName, row.get("meetingType"), row.get("meetingRequest"), row.get("meetingMethod"), row.get("locationName"), row.get("chairPerson"));
         }
         pages.vcaHomePage.navigateVictimHomePage();
+    }
 
+    @When("the arranged meeting is conducted with following details for {string} in VCA application")
+    public void conductArrangedMeeting(String personType, DataTable dataTable){
+        String caseUrn = context.get("caseUrn");
+        Map<String, List<String>> personTypePersonNameMap = context.get("personTypePersonNameMap");
+        String personFullName = String.valueOf(personTypePersonNameMap.get(personType));
+        personFullName = personFullName.replace("[", "").replace("]", "");
+
+        Map<String, List<String>> personTypeFirstSureNameMap = context.get("personTypeFirstSureNameMap");
+        String personFirstLastName = String.valueOf(personTypeFirstSureNameMap.get(personType));
+        personFirstLastName = personFirstLastName.replace("[", "").replace("]", "");
+
+//        String caseUrn = "05AQ5634026";
+//        String personFullName = "WIEGAND, See";
+//        String personFirstLastName = "See Wiegand";
+
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+        pages.vcaHomePage.searchVictimCase(caseUrn);
+        pages.vcaHomePage.navigateCommunicationsTab(caseUrn, personFullName);
+        pages.vcaCommunicationsPage.navigateMeetings();
+
+        List<String> meetingAttendeesRoles = rows.stream()
+                .map(row -> row.get("meetingAttendees"))
+                .collect(Collectors.toList());
+
+        for (Map<String, String> row : rows) {
+            pages.vcaCommunicationsPage.conductArrangedMeeting(personFirstLastName, row.get("meetingType"), row.get("meetingTookPlace"),
+                             meetingAttendeesRoles,row.get("meetingLedBy"), row.get("agreeToResearch"), row.get("meetingNotes"), row.get("meetingNotesSent"),
+                            row.get("actionsAgreed"));
+        }
+        pages.vcaHomePage.navigateVictimHomePage();
     }
 
 

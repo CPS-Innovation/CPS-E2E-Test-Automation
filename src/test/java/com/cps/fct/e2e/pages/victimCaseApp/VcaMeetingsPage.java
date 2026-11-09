@@ -355,7 +355,6 @@ public class VcaMeetingsPage extends BasePage {
         }
     }
 
-
     public void verifyArrangedMeetingDetails(String personFirstLastName, String meetingType, String meetingRequest, String meetingMethod, String locationName, String chairPerson) {
 
         String meetingRequestType = null;
@@ -428,6 +427,151 @@ public class VcaMeetingsPage extends BasePage {
 //                .innerText();
 //        System.out.println("Meeting Inner Text in Attendees = "+meetingsAttendees);
 //        assertContains(chairPerson, meetingsAttendees);
+
+    }
+
+    public void selectArrangedMeetingType(String meetingType) {
+        switch (meetingType.trim().toLowerCase()) {
+            case "cps pre-trial meeting":
+                selectTableButton(page, "div.govuk-summary-card", "h2.govuk-summary-card__title",
+                        "CPS pre-trial meeting arranged",
+                        "button.govuk-button", "Log meeting outcome")
+                        .click();
+                break;
+            case "inform victim about charging decision":
+                selectTableButton(page, "div.govuk-summary-card", "h2.govuk-summary-card__title",
+                        "Charging decision meeting arranged",
+                        "button.govuk-button", "Log meeting outcome")
+                        .click();
+                break;
+            case "other":
+                selectTableButton(page, "div.govuk-summary-card", "h2.govuk-summary-card__title",
+                        "Other CPS meeting arranged",
+                        "button.govuk-button", "Log meeting outcome")
+                        .click();
+                break;
+            default:
+                System.out.println("Specified meeting type does not exist");
+        }
+    }
+
+
+    public void logArrangedMeetingTime(String meetingTookPlace) {
+        waitUntilSpinnersAreGone("Loading, please wait");
+        waitForText("Did the meeting take place?");
+
+        if ("Yes".equalsIgnoreCase(meetingTookPlace)) {
+            getRadioButtonById("RadioButton3-input").click();
+        } else {
+            System.out.println("Meeting took place is entered as NO ");
+        }
+        getButtonByName("Continue").click();
+        waitForText("How long did the meeting last?");
+        enterTextInLocator("#Input_Hour", utcHourNow());
+        enterTextInLocator("#Input_Minutes", utcMinuteNow());
+        getButtonByName("Continue").click();
+        waitForText("Who attended the meeting?");
+    }
+
+    public void logArrangedMeetingAttendeesLedBy(String personFirstLastName, List<String> meetingAttendeesRoles, String meetingLedBy) {
+        waitForText("Who attended the meeting?");
+
+        for (String role : meetingAttendeesRoles) {
+            switch (role.trim().toLowerCase()) {
+                case "defence firm":
+                    selectCheckboxContainText("Defence firm");
+                case "defence solicitor":
+                    selectCheckboxContainText("Defence Solicitor");
+                case "officer in charge":
+                    selectCheckboxContainText("Officer in Charge");
+                case "victim liaison officer":
+                    selectCheckboxContainText("Victim Liaison Officer");
+                case "counsel":
+                    selectCheckboxContainText("Counsel");
+                case "victim":
+                    selectCheckboxContainText("Victim (" + personFirstLastName + ")");
+            }
+        }
+        getButtonByName("Continue").click();
+        waitForText("Who led the meeting?");
+        checkRadioContainName(meetingLedBy);
+        getButtonByName("Continue").click();
+        waitForText("Did " + personFirstLastName + " agree to be contacted for research?");
+    }
+
+    public void logArrangedMeetingAction(String personFirstLastName, String agreeToResearch, String meetingNotes,
+                                         String meetingNotesSent, String actionsAgreed) {
+        waitForText("Did " + personFirstLastName + " agree to be contacted for research?");
+
+        if ("Yes".equalsIgnoreCase(agreeToResearch)) {
+            getRadioButtonById("ContactForResearch_Yes").click();
+        } else if ("No".equalsIgnoreCase(agreeToResearch)) {
+            getRadioButtonById("ContactForResearch_No").click();
+        } else if ("Question Not Asked".equalsIgnoreCase(agreeToResearch)) {
+            getRadioButtonById("ContactForResearch_DidNotAsk").click();
+        }
+        getButtonByName("Continue").click();
+        waitForText("Have the meeting notes been sent to the Officer in Charge (OIC)?");
+
+        if ("Yes".equalsIgnoreCase(meetingNotes)) {
+            getRadioButtonById("NotesToOIC_Yes").click();
+        } else if ("No".equalsIgnoreCase(meetingNotes)) {
+            getRadioButtonById("NotesToOIC_No").click();
+        }
+        getButtonByName("Continue").click();
+        waitForText("Have the meeting notes been sent to " + personFirstLastName + "?");
+
+        if ("Yes".equalsIgnoreCase(meetingNotes)) {
+            getRadioButtonById("NotesToVictim_Yes").click();
+        } else if ("No".equalsIgnoreCase(meetingNotes)) {
+            getRadioButtonById("NotesToVictim_No").click();
+        }
+        getButtonByName("Continue").click();
+        waitForText("Were any actions agreed?");
+
+        if ("Yes".equalsIgnoreCase(meetingNotes)) {
+            getRadioButtonById("Yes").click();
+            waitForText("What actions were agreed?");
+            enterTextById("b38-TextArea_TextEntry", "Action Agreed Data Entered");
+        } else if ("No".equalsIgnoreCase(meetingNotes)) {
+            getRadioButtonById("No").click();
+        }
+        getButtonByName("Continue").click();
+        waitForText("Check your answers before confirming details");
+    }
+
+    public void confirmLogArrangedMeetingDetails() {
+        waitForText("Check your answers before confirming details");
+        getButtonByName("Log meeting outcome").click();
+        waitUntilSpinnersAreGone("Loading, please wait");
+        waitForText("Communications");
+        waitForElement(page, AriaRole.TAB, "Meetings");
+        clickSelectOnAriaRole(page, AriaRole.TAB, "Meetings");
+    }
+
+    public void verifyMeetingOutcome(String meetingType) {
+        switch (meetingType.trim().toLowerCase()) {
+            case "cps pre-trial meeting":
+                assertThat(readTableRowCell(page,
+                        "div.govuk-summary-card", "h2.govuk-summary-card__title", "CPS pre-trial meeting outcome logged",
+                        "div.govuk-summary-list__row", "Duration of the meeting", "dd.govuk-summary-list__value"))
+                        .isVisible();
+                break;
+            case "inform victim about charging decision":
+                assertThat(readTableRowCell(page,
+                        "div.govuk-summary-card", "h2.govuk-summary-card__title", "Charging decision meeting outcome logged",
+                        "div.govuk-summary-list__row", "Duration of the meeting", "dd.govuk-summary-list__value"))
+                        .isVisible();
+                break;
+            case "other":
+                assertThat(readTableRowCell(page,
+                        "div.govuk-summary-card", "h2.govuk-summary-card__title", "Other CPS meeting outcome logged",
+                        "div.govuk-summary-list__row", "Duration of the meeting", "dd.govuk-summary-list__value"))
+                        .isVisible();
+                break;
+            default:
+                System.out.println("Specified meeting type is not arranged");
+        }
 
     }
 

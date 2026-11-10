@@ -1,9 +1,9 @@
 {
-  "Force": "62",
-  "Unit": "AC",
+  "Force": "45",
+  "Unit": "EP",
   "Year": "26",
   "TopLevel": "A",
-  "SecondLevel": "62",
-  "ThirdLevel": "AC",
+  "SecondLevel": "45",
+  "ThirdLevel": "AA",
   "BottomLevel": "00"
 }

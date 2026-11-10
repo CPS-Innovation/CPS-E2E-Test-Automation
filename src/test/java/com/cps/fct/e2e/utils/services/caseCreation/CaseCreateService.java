@@ -6,6 +6,7 @@ import com.cps.fct.e2e.utils.common.JsonUtils;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
 import com.cps.fct.e2e.utils.httpClient.HttpClientBuilder;
 import com.cps.fct.e2e.utils.httpClient.HttpResponseWrapper;
+import com.cps.fct.e2e.utils.services.caseCreation.payloadBuilders.PayloadBuilderForCaseMessage;
 import com.cps.fct.e2e.utils.services.caseCreation.payloadBuilders.PayloadBuilderForCM01;
 import com.cps.fct.e2e.utils.services.caseCreation.payloadBuilders.PayloadBuilderForLM04;
 import com.cps.fct.e2e.utils.services.BaseService;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import static com.cps.fct.e2e.utils.common.JsonUtils.extractFromJson;
@@ -32,6 +34,9 @@ public class CaseCreateService extends BaseService {
 
     @Inject
     PayloadBuilderForLM04 LM04;
+
+    @Inject
+    PayloadBuilderForCaseMessage caseMessageBuilder;
 
     public HttpResponseWrapper cm01WithCaseDetails(File caseFile, String messageType, ScenarioContext context) throws IOException {
         String payloadForDefendantAndCharge = Files.readString(caseFile.toPath());
@@ -104,7 +109,6 @@ public class CaseCreateService extends BaseService {
         String caseTypeLowerCase = caseType.toLowerCase();
         return new HttpClientBuilder.Builder()
                 .baseUri(EnvConfig.get("CASE_CREATE_API"))
-                .endpoint("/api/dcf/lm04")
                 .endpoint(format("/api/%s/lm04", caseTypeLowerCase))
                 .addHeaders(caseCreateHeaders())
                 .body(payloadInString)
@@ -122,6 +126,32 @@ public class CaseCreateService extends BaseService {
         context.set("lm04RequestId", caseResponse.getRequestId());
     }
 
+
+    public HttpResponseWrapper sendCaseMessage(String payload, String messageType) {
+        return service.sendRequest(createCaseMessage(payload, messageType));
+    }
+
+    public HttpResponseWrapper caseMessage(File caseMessageFile, String messageType, ScenarioContext context)
+            throws IOException {
+        String payload = Files.readString(caseMessageFile.toPath());
+        String modifiedRequestJson = caseMessageBuilder.generatePayloadWithValues(payload, messageType, context);
+        context.set("modified" + messageType.toUpperCase(Locale.ROOT) + "RequestPayload", modifiedRequestJson);
+        return sendCaseMessage(modifiedRequestJson, messageType);
+    }
+
+    private HttpClientBuilder createCaseMessage(String payloadInString, String messageType) {
+        String caseType = context.get("caseType");
+        return new HttpClientBuilder.Builder()
+                .baseUri(EnvConfig.get("CASE_CREATE_API"))
+                .endpoint(format("/api/%s/%s", caseType.toLowerCase(Locale.ROOT), messageType.toLowerCase(Locale.ROOT)))
+                .addHeaders(caseCreateHeaders())
+                .body(payloadInString)
+                .method("POST")
+                .retry(TRANSIENT_REQUEST_RETRIES)
+                .retryDelay(TRANSIENT_REQUEST_RETRY_DELAY_MILLIS)
+                .resourceName(messageType)
+                .build();
+    }
 
     public HttpResponseWrapper victimWitnessDetailsList(String caseId) {
         return service.sendRequest(getVictimWitnessDetailsListFromCmsRequestParams(caseId));

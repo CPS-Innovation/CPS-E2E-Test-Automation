@@ -26,8 +26,6 @@ Feature: CR-UI-S23 - MC Initial PCD Review for Priority NFS Complaint
       | decision type | decision code                          | reason | out come of case | offence category | charge code decision |
       | Charge        | A - Charge and request evidential file | D81    | D80              | Robbery          | Accept               |
       | Charge        | A - Charge and request evidential file | D81    | D80              | Robbery          | Accept               |
-      | Charge        | A - Charge and request evidential file | D81    | D80              | Robbery          | Accept               |
-      | Charge        | A - Charge and request evidential file | D81    | D80              | Robbery          | Accept               |
 
     And I continue without action plan
     And I submit the charging decision as following

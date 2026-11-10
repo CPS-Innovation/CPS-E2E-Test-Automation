@@ -94,89 +94,32 @@ Feature: VCA-UI-S16:- Log the conducted arranged meeting outcome of victim or vi
       | Inform victim about charging decision | Yes              | Counsel                | Counsel                | No                 | No           | No               | No            |
       | Other                                 | Yes              | Officer in Charge      | Officer in Charge      | Question Not Asked | Yes          | Yes              | Yes           |
     When the arranged meeting is conducted with following details for "victimWitnessChild" in VCA application
-      | meetingType                           | meetingTookPlace | meetingAttendees  | meetingLedBy           | agreeToResearch    | meetingNotes | meetingNotesSent | actionsAgreed |
-      | CPS pre-trial meeting                 | Yes              | Defence firm      | Victim Liaison Officer | Yes                | Yes          | Yes              | Yes           |
-      | Inform victim about charging decision | Yes              | Defence Solicitor | Counsel                | No                 | No           | No               | No            |
-      | Other                                 | Yes              | Counsel           | Officer in Charge      | Question Not Asked | Yes          | Yes              | Yes           |
+      | meetingType                           | meetingTookPlace | meetingAttendees  | meetingLedBy      | agreeToResearch    | meetingNotes | meetingNotesSent | actionsAgreed |
+      | CPS pre-trial meeting                 | Yes              | Defence firm      | Defence firm      | No                 | No           | No               | No            |
+      | Inform victim about charging decision | Yes              | Defence Solicitor | Defence Solicitor | Question Not Asked | No           | No               | No            |
+      | Other                                 | Yes              | Victim            | Victim            | No                 | No           | Yes              | Yes           |
+    Then verify the logged meeting outcome details for "victimWitness" in VCA application
+      | meetingType                           | agreeToResearch    | meetingNotes | meetingNotesSent | actionsAgreed |
+      | CPS pre-trial meeting                 | Yes                | Yes          | Yes              | Yes           |
+      | Inform victim about charging decision | No                 | No           | No               | No            |
+      | Other                                 | Question Not Asked | Yes          | Yes              | Yes           |
+    Then verify the logged meeting outcome details for "victimWitnessChild" in VCA application
+      | meetingType                           | agreeToResearch    | meetingNotes | meetingNotesSent | actionsAgreed |
+      | CPS pre-trial meeting                 | No                 | No           | No               | No            |
+      | Inform victim about charging decision | Question Not Asked | No           | No               | No            |
+      | Other                                 | No                 | No           | Yes              | Yes           |
 
-#  meetingType :- 1.#CPS pre-trial meeting  2.#Inform victim about charging decision 3.#Other
-#  meetingSource :- 1.#CPS Offered 2.#Victim Requested 3.#Third party requested
-#  meetingMethod :- 1.#In person 2.#Virtual call 3.#Hybrid
-# NOTE:- Enter #Virtual call as locationType and locationName for 2.#Virtual call meetingMethod
-# NOTE:- locationType and locationName is required for 1.#In person and 3.#Hybrid meetingMethod
-#  locationType :- 1.#CPS location  2.#Magistrates court 3.#Crown court 4.#Police station 5.#other
-#  locationName - Enter location Name as equal to defined list
+#   #meetingType :- 1.#CPS pre-trial meeting  2.#Inform victim about charging decision 3.#Other
+#   #meetingSource :- 1.#CPS Offered 2.#Victim Requested 3.#Third party requested
+#   #meetingMethod :- 1.#In person 2.#Virtual call 3.#Hybrid
+#     #NOTE:- Enter #Virtual call as locationType and locationName for 2.#Virtual call meetingMethod
+#     #NOTE:- locationType and locationName is required for 1.#In person and 3.#Hybrid meetingMethod
+#   #locationType :- 1.#CPS location  2.#Magistrates court 3.#Crown court 4.#Police station 5.#other
+#   #locationName - Enter location Name as equal to defined list
 #                  #exmaple :- 1.#CPS location == Petty France
 #                              2.#Magistrates court == Newcastle upon Tyne Magistrates' Court
 #                              3.#Crown court == Newcastle upon Tyne Crown Court
 #                              4.#Police station == Northumbria
 #                              5.#Other == Other Location text
-#      #offerMethod  = #Letter by post #Letter by email #Letter by police #Letter by ISVA #By telephone
-#      #ResponseMethod  = #Letter by post #Letter by email #Letter by police #Letter by ISVA #By telephone
-
-
-
-
-
-
-
-
-
-
-
-
-#  Background: Create cases with single defendant with multi charge with victim and witness
-#    Given create new case using "CM01" for type "single suspect multiple offence"
-#    And add "victim" using "LM04" for the case
-#
-#  @meetingOutcome
-#  Scenario: Victim accepts an offered meeting for different meeting types. (FCT2-16226)
-#    Given victim details are available in VCA
-#    And the "victim" is onboarded as "Universal" service lead in VCA
-#    And the Victim liaison officer is assigned to "victim" in VCA
-#    And the following meetings are offered using following methods to "victim" in VCA
-#      | meetingType                           | offerMethod     |
-#      | CPS pre-trial meeting                 | Letter by post  |
-#      | Inform victim about charging decision | Letter by email |
-#      | Other CPS meeting                     | By telephone    |
-##      | Victim Communication Liaison          | Letter by police |
-##      | Victims Right to Review               | Letter by ISVA   |
-##      | Victim complaint                      | By telephone     |
-#
-#    And the following offered meeting response from "victim" is recorded in VCA
-#      | meetingType                           | offerResponseMethod | offerResponse |
-#      | CPS pre-trial meeting                 | Letter by email     | Accepted      |
-#      | Inform victim about charging decision | Letter by post      | Accepted      |
-#      | Other CPS meeting                     | By telephone        | Accepted      |
-##      | Victims Right to Review               | Letter by post      | Accepted      |
-##      | Victim complaint                      | By telephone        | Accepted      |
-##      | Victim Communication Liaison          | Letter by police    | Accepted      |
-#    And the accepted meeting is arranged using following for "victim" in VCA
-#      | meetingType                           | meetingSource    | meetingMethod | locationType      | locationName                           |
-#      | CPS pre-trial meeting                 | Victim Requested | In Person     | CPS location      | Petty France                           |
-#      | Inform victim about charging decision | CPS Offered      | Hybrid        | Magistrates court | Newcastle upon Tyne Magistrates' Court |
-#      | Other CPS meeting                     | CPS offered      | Virtual Call  | Virtual Call      |                                        |
-##      | Victims Right to Review               | Requested by a Third party | In Person     | Crown court       | Newcastle upon Tyne Crown Court        |
-##      | Victim complaint                      | Victim requested           | Hybrid        | Other             | Specify Location                       |
-##      | Victim Communication Liaison          | Requested by a third party | Virtual Call  | Virtual Call      |                                        |
-#    And the meeting attendees are added and make "Victim liaison officer" as chair person for "victim" meeting
-#      | meetingAttendeesRoles  |
-#      | Counsel                |
-#      | Victim liaison officer |
-#      | Defence Solicitor      |
-#      | Officer in Charge      |
-#    When the arranged meeting is conducted with following details and logged for "victim" in VCA
-#      | meetingType                           | meetingDuration    | agreedToResearch   | noteToOci | noteToVictim | proposedActions |
-#      | CPS pre-trial meeting                 | 1 hours 59 minutes | Yes                | Yes       | Yes          | Take Action     |
-#      | Inform victim about charging decision | 2 hours 00 minutes | No                 | No        | No           | No              |
-#      | Other CPS meeting                     | 0 hours 10 minutes | Question not asked | No        | Yes          | Take Action     |
-##      | Victims Right to Review               | 0 hours 30 minutes  | Question not asked | No        | Yes          | Take Action     |
-##      | Victim complaint                      | 0 hours 59 minutes  | No                 | Yes       | No           | Take Action     |
-##      | Victim Communication Liaison          | 10 hours 59 minutes | Yes                | No        | No           | No              |
-#    And the following attendees attended the meeting lead by "Counsel"
-#      | logAttendeesRoles      |
-#      | Counsel                |
-#      | Victim liaison officer |
-#      | Defence Solicitor      |
-#      | Officer in Charge      |
-#    Then the logged meeting details are verified for "victim" in VCA
+#   #offerMethod  = #Letter by post #Letter by email #Letter by police #Letter by ISVA #By telephone
+#   #ResponseMethod  = #Letter by post #Letter by email #Letter by police #Letter by ISVA #By telephone

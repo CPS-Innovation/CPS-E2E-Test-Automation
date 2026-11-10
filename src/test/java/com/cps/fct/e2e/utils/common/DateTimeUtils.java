@@ -32,7 +32,7 @@ public class DateTimeUtils {
     }
 
     public static String UTCDatePastThreeMonths() {
-        LocalDate futureDate = today.plusDays(90);
+        LocalDate futureDate = today.minusDays(90);
         return futureDate.format(formatter);
     }
 

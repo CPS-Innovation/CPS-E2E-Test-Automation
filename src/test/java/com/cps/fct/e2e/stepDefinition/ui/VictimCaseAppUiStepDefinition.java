@@ -670,9 +670,9 @@ public class VictimCaseAppUiStepDefinition {
         String personFirstLastName = String.valueOf(personTypeFirstSureNameMap.get(personType));
         personFirstLastName = personFirstLastName.replace("[", "").replace("]", "");
 
-//        String caseUrn = "05AQ5634026";
-//        String personFullName = "WIEGAND, See";
-//        String personFirstLastName = "See Wiegand";
+//        String caseUrn = "05AQ5807126";
+//        String personFullName = "BECHTELAR, Nickolas";
+//        String personFirstLastName = "Nickolas Bechtelar";
 
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
         pages.vcaHomePage.searchVictimCase(caseUrn);
@@ -684,12 +684,34 @@ public class VictimCaseAppUiStepDefinition {
                 .collect(Collectors.toList());
 
         for (Map<String, String> row : rows) {
-            pages.vcaCommunicationsPage.conductArrangedMeeting(personFirstLastName, row.get("meetingType"), row.get("meetingTookPlace"),
+            pages.vcaCommunicationsPage.conductArrangedMeeting(personFullName, personFirstLastName, row.get("meetingType"), row.get("meetingTookPlace"),
                              meetingAttendeesRoles,row.get("meetingLedBy"), row.get("agreeToResearch"), row.get("meetingNotes"), row.get("meetingNotesSent"),
                             row.get("actionsAgreed"));
         }
         pages.vcaHomePage.navigateVictimHomePage();
     }
 
+    @Then("verify the logged meeting outcome details for {string} in VCA application")
+    public void verifyLoggedMeeting(String personType, DataTable dataTable) {
+        String caseUrn = context.get("caseUrn");
+        Map<String, List<String>> personTypePersonNameMap = context.get("personTypePersonNameMap");
+        String personFullName = String.valueOf(personTypePersonNameMap.get(personType));
+        personFullName = personFullName.replace("[", "").replace("]", "");
+
+//        String caseUrn = "05AQ5807126";
+//        String personFullName = "BECHTELAR, Nickolas";
+//        String personFirstLastName = "Nickolas Bechtelar";
+
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+        pages.vcaHomePage.searchVictimCase(caseUrn);
+        pages.vcaHomePage.navigateCommunicationsTab(caseUrn, personFullName);
+        pages.vcaCommunicationsPage.navigateMeetings();
+
+        for (Map<String, String> row : rows) {
+            pages.vcaCommunicationsPage.verifyLoggedMeeting(row.get("meetingType"), row.get("agreeToResearch"),
+                    row.get("meetingNotes"), row.get("meetingNotesSent"), row.get("actionsAgreed"));
+        }
+        pages.vcaHomePage.navigateVictimHomePage();
+    }
 
 }

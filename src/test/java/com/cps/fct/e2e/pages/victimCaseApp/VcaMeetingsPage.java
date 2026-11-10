@@ -473,28 +473,44 @@ public class VcaMeetingsPage extends BasePage {
         waitForText("Who attended the meeting?");
     }
 
-    public void logArrangedMeetingAttendeesLedBy(String personFirstLastName, List<String> meetingAttendeesRoles, String meetingLedBy) {
+    public void logArrangedMeetingAttendeesLedBy(String personFullName, String personFirstLastName, List<String> meetingAttendeesRoles, String meetingLedBy) {
         waitForText("Who attended the meeting?");
-
+        System.out.println(meetingAttendeesRoles);
         for (String role : meetingAttendeesRoles) {
             switch (role.trim().toLowerCase()) {
                 case "defence firm":
-                    selectCheckboxContainText("Defence firm");
+                    selectCheckboxContainText("Defence firm (");
+                    break;
                 case "defence solicitor":
-                    selectCheckboxContainText("Defence Solicitor");
+                    selectCheckboxContainText("Defence Solicitor (");
+                    break;
                 case "officer in charge":
-                    selectCheckboxContainText("Officer in Charge");
+                    selectCheckboxContainText("Officer in Charge (");
+                    break;
                 case "victim liaison officer":
                     selectCheckboxContainText("Victim Liaison Officer");
+                    break;
                 case "counsel":
                     selectCheckboxContainText("Counsel");
+                    break;
                 case "victim":
-                    selectCheckboxContainText("Victim (" + personFirstLastName + ")");
+                    selectCheckboxContainText("Victim (");
+                    break;
+                default:
+                    System.out.println("Meeting attendees role does not exist");
             }
         }
         getButtonByName("Continue").click();
         waitForText("Who led the meeting?");
-        checkRadioContainName(meetingLedBy);
+        if ("Victim".equalsIgnoreCase(meetingLedBy)) {
+            checkRadioContainName("Victim (");
+        } else if ("Victim Liaison Officer".equalsIgnoreCase(meetingLedBy)) {
+            checkRadioContainName("Victim Liaison Officer");
+        } else if ("Officer in Charge".equalsIgnoreCase(meetingLedBy)) {
+            checkRadioContainName("Officer in Charge (");
+        } else {
+            checkRadioContainName(meetingLedBy);
+        }
         getButtonByName("Continue").click();
         waitForText("Did " + personFirstLastName + " agree to be contacted for research?");
     }
@@ -521,19 +537,19 @@ public class VcaMeetingsPage extends BasePage {
         getButtonByName("Continue").click();
         waitForText("Have the meeting notes been sent to " + personFirstLastName + "?");
 
-        if ("Yes".equalsIgnoreCase(meetingNotes)) {
+        if ("Yes".equalsIgnoreCase(meetingNotesSent)) {
             getRadioButtonById("NotesToVictim_Yes").click();
-        } else if ("No".equalsIgnoreCase(meetingNotes)) {
+        } else if ("No".equalsIgnoreCase(meetingNotesSent)) {
             getRadioButtonById("NotesToVictim_No").click();
         }
         getButtonByName("Continue").click();
         waitForText("Were any actions agreed?");
 
-        if ("Yes".equalsIgnoreCase(meetingNotes)) {
+        if ("Yes".equalsIgnoreCase(actionsAgreed)) {
             getRadioButtonById("Yes").click();
             waitForText("What actions were agreed?");
             enterTextById("b38-TextArea_TextEntry", "Action Agreed Data Entered");
-        } else if ("No".equalsIgnoreCase(meetingNotes)) {
+        } else if ("No".equalsIgnoreCase(actionsAgreed)) {
             getRadioButtonById("No").click();
         }
         getButtonByName("Continue").click();
@@ -572,7 +588,65 @@ public class VcaMeetingsPage extends BasePage {
             default:
                 System.out.println("Specified meeting type is not arranged");
         }
+    }
 
+    public void verifyLoggedMeetingDetails(String meetingType, String agreeToResearch, String meetingNotes,
+                                           String meetingNotesSent, String actionsAgreed) {
+        switch (meetingType.trim().toLowerCase()) {
+            case "cps pre-trial meeting":
+                meetingType = "CPS pre-trial meeting";
+                assertLoggedMeetingValues(meetingType, agreeToResearch, meetingNotes, meetingNotesSent, actionsAgreed);
+                break;
+            case "inform victim about charging decision":
+                meetingType = "Charging decision meeting";
+                assertLoggedMeetingValues(meetingType, agreeToResearch, meetingNotes, meetingNotesSent, actionsAgreed);
+                break;
+            case "other":
+                meetingType = "Other CPS meeting";
+                assertLoggedMeetingValues(meetingType, agreeToResearch, meetingNotes, meetingNotesSent, actionsAgreed);
+                break;
+            default:
+                System.out.println("Specified meeting type does not exist");
+        }
+    }
+
+    public void assertLoggedMeetingValues(String meetingType, String agreeToResearch, String meetingNotes,
+                                          String meetingNotesSent, String actionsAgreed) {
+        if ("Question Not Asked".equalsIgnoreCase(agreeToResearch)) {
+            agreeToResearch = "Did not ask";
+        }
+        if ("Yes".equalsIgnoreCase(actionsAgreed)) {
+            actionsAgreed = "Action Agreed Data Entered";
+        }
+
+        assertThat(readTableRowCell(page,
+                "div.govuk-summary-card", "h2.govuk-summary-card__title", meetingType + " outcome logged",
+                "div.govuk-summary-list__row", "Duration of the meeting", "dd.govuk-summary-list__value"))
+                .isVisible();
+
+        String actualAgreeToResearch = readTableRowCell(page,
+                "div.govuk-summary-card", "h2.govuk-summary-card__title", meetingType + " outcome logged",
+                "div.govuk-summary-list__row", "Agreed to research", "dd.govuk-summary-list__value")
+                .innerText();
+        assertEquals(agreeToResearch, actualAgreeToResearch);
+
+        String actualMeetingNotes = readTableRowCell(page,
+                "div.govuk-summary-card", "h2.govuk-summary-card__title", meetingType + " outcome logged",
+                "div.govuk-summary-list__row", "Meeting notes to OIC", "dd.govuk-summary-list__value")
+                .innerText();
+        assertEquals(meetingNotes, actualMeetingNotes);
+
+        String actualMeetingNotesSent = readTableRowCell(page,
+                "div.govuk-summary-card", "h2.govuk-summary-card__title", meetingType + " outcome logged",
+                "div.govuk-summary-list__row", "Meeting notes to victim", "dd.govuk-summary-list__value")
+                .innerText();
+        assertEquals(meetingNotesSent, actualMeetingNotesSent);
+
+        String actualActionsAgreed = readTableRowCell(page,
+                "div.govuk-summary-card", "h2.govuk-summary-card__title", meetingType + " outcome logged",
+                "div.govuk-summary-list__row", "Actions agreed", "dd.govuk-summary-list__value")
+                .innerText();
+        assertEquals(actionsAgreed, actualActionsAgreed);
     }
 
 

@@ -6,13 +6,14 @@ Feature: CR-UI-S2_S14 - CC Initial PCD Review
 
   Background: Case Creation
     Given create new case using "CM01" for type "single suspect single offence"
-    And add "victim witness key" using "LM04" for the case
-    And add "victim witness vulnerable chain" using "LM04" for the case
-    And add "victim witness intimidated chain" using "LM04" for the case
-    And add "witness statement" using "LM05" for the case
-    And add "unused material" using "LM06" for the case
-    And add "case document" using "LM07" for the case
+    And add "victim witness key" using "LM04" for the case without waiting
+    And add "victim witness vulnerable chain" using "LM04" for the case without waiting
+    And add "victim witness intimidated chain" using "LM04" for the case without waiting
+    And add "witness statement" using "LM05" for the case without waiting
+    And add "unused material" using "LM06" for the case without waiting
+    And add "case document" using "LM07" for the case without waiting
     And add "provide charging decision" using "CJ05" for the case
+    And precharge the "MC" triage case for "28Day" PCD review
 
 
 
@@ -20,7 +21,7 @@ Feature: CR-UI-S2_S14 - CC Initial PCD Review
   Scenario: 5 days PCD review of CC test type full code with 14 days action plan
     Given I login to case review app
     And Search the case "URN"
-    When I start "5 day PCD Review"
+    When I start "28 day PCD Review"
     And select test as "Full Code Test"
     And I complete the pre-charge analysis details with:
       | field                       | value                               |

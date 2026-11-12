@@ -167,13 +167,12 @@ public class CaseCreateApiStepDefinition {
                  "victimWitnessPolice","victimWitnessPrisoner","victimWitnessProfessional","victimWitnessVulnerable":
                 Map<String, List<String>> victimWitnessIds = context.get("victimWitnessMapIds");
                 String victimWitnessId = String.valueOf(victimWitnessIds.get(personType));//
-//                System.out.println("Created --" + personType + "-- Id --- is = " + victimWitnessId );
                 Map<String, List<String>> idvictimWitnessNameMap = context.get("idVictimWitnessNameMap");
                 String victimWitnessName = String.valueOf(idvictimWitnessNameMap.get(victimWitnessId));
-//                System.out.println("Person Id --" + victimWitnessId + "-- FullName --- is = " + victimWitnessName );
+
                 String victimWitnessNameVcaFormat = victimWitnessName.substring(1, victimWitnessName.indexOf(",")).toUpperCase()
                         + victimWitnessName.substring(victimWitnessName.indexOf(","), victimWitnessName.length() - 1);
-//                System.out.println(victimWitnessNameVcaFormat);
+
                 victimWitnessId = victimWitnessId.replace("[", "").replace("]", "");
                 HttpResponseWrapper responseVictimWitnessName = caseCreateService.victimWitnessFirstnameSurname(context.get("caseId"),victimWitnessId);
                 String victimWitnessFirstSureName = caseCreateService.victimWitnessFirstnameAndSurname(responseVictimWitnessName);
@@ -195,12 +194,6 @@ public class CaseCreateApiStepDefinition {
 
         Map<String, List<String>> personTypePersonNameMap = context.get("personTypePersonNameMap");
         Map<String, List<String>> personTypeFirstSureNameMap = context.get("personTypeFirstSureNameMap");
-
-//        Map<String, String> personTypePersonNameMap = new HashMap<>();
-//        context.set("personTypePersonNameMap", personTypePersonNameMap);
-//
-//        Map<String, String> personTypeFirstSureNameMap = new HashMap<>();
-//        context.set("personTypeFirstSureNameMap", personTypeFirstSureNameMap);
 
         HttpResponseWrapper responseVictimWitnessDetails = caseCreateService.victimWitnessDetailsList(context.get("caseId"));
         caseCreateService.victimWitnessDetails(responseVictimWitnessDetails, context);

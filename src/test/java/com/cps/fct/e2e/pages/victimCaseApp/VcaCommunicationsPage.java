@@ -3,10 +3,7 @@ package com.cps.fct.e2e.pages.victimCaseApp;
 import com.cps.fct.e2e.pages.BasePage;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
 import com.cps.fct.e2e.utils.playwright.PlaywrightContext;
-import com.microsoft.playwright.Locator;
-import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
-import org.picocontainer.annotations.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.cps.fct.e2e.pages.*;
@@ -15,11 +12,10 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 import static com.cps.fct.e2e.utils.common.DateTimeUtils.*;
-
 import static com.cps.fct.e2e.utils.common.FakerUtils.*;
 import static com.cps.fct.e2e.utils.common.FakerUtils.todayMinusThreeDays;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 public class VcaCommunicationsPage extends BasePage {
 
@@ -197,7 +193,7 @@ public class VcaCommunicationsPage extends BasePage {
                 waitUntilSpinnersAreGone("Loading, please wait");
                 waitForText("Communications");
                 waitForElement(page, AriaRole.TAB, "Meetings");
-                vcaMeetingsPage.assertOfferNoResponse(meetingType, meetingResponseMethod, offerMethod);
+                vcaMeetingsPage.assertOfferNoResponse(meetingType, offerMethod);
                 break;
             default:
                 System.out.println("Specified response type does not exist");

@@ -1,30 +1,15 @@
 package com.cps.fct.e2e.pages.victimCaseApp;
 
-import com.cps.fct.e2e.pages.AppsLoginPage;
 import com.cps.fct.e2e.pages.BasePage;
-import com.cps.fct.e2e.pages.PageObjects;
-import com.cps.fct.e2e.pages.caseReviewApp.LoginPage;
-import com.cps.fct.e2e.utils.common.EnvConfig;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
 import com.cps.fct.e2e.utils.playwright.PlaywrightContext;
 import com.microsoft.playwright.Locator;
-import com.microsoft.playwright.Page;
-import com.microsoft.playwright.PlaywrightException;
-import com.microsoft.playwright.options.AriaRole;
-import com.microsoft.playwright.options.LoadState;
-import com.microsoft.playwright.options.WaitForSelectorState;
-import org.picocontainer.annotations.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
 import java.util.regex.Pattern;
 
 import static com.cps.fct.e2e.utils.common.FakerUtils.*;
 import static com.cps.fct.e2e.utils.common.FakerUtils.firstnameSurname;
-import static com.cps.fct.e2e.utils.common.JsonUtils.extractFromJson;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -251,7 +236,7 @@ public class VcaVictimDetailsPage extends BasePage {
                 .isVisible();
     }
 
-    public void updateGender(String victimWitnessFirstSureName, String justification) {
+    public void updateGender(String victimWitnessFirstSureName) {
         clickTextLink(page, "div.govuk-summary-list__row", "#b31-b8-Key", "Gender", "Change");
         waitForText("What is " + victimWitnessFirstSureName + "’s gender? (optional)");
         getRadioButtonById("b9-RadioButton_Male-input").click();

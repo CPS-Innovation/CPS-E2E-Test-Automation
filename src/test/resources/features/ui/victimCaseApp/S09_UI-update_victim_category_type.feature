@@ -13,7 +13,6 @@ Feature: VCA-UI-S9:- Add category type to victim or victimWitness and verify wm0
 
   @ui @addNewCategoryToVictim
   Scenario: Add new category to victim or victimWitness and verify that update details are sent in wm01u message. (FCT2-15837)
-
     Given VLO login to victim case application
     And "victimWitnessChild" is searched using case reference
     And the "victimWitnessChild" is onboarded to "Universal" service lead

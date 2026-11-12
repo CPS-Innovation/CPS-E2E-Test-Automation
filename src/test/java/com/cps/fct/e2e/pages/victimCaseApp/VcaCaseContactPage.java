@@ -6,10 +6,12 @@ import com.cps.fct.e2e.utils.playwright.PlaywrightContext;
 import com.microsoft.playwright.Locator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import static com.cps.fct.e2e.utils.common.FakerUtils.*;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -18,7 +20,7 @@ public class VcaCaseContactPage extends BasePage {
 
     private final ScenarioContext scenarioContext;
 
-    public VcaCaseContactPage(PlaywrightContext context,  ScenarioContext scenarioContext) {
+    public VcaCaseContactPage(PlaywrightContext context, ScenarioContext scenarioContext) {
         super(context);
         this.scenarioContext = scenarioContext;
     }
@@ -26,7 +28,7 @@ public class VcaCaseContactPage extends BasePage {
     private static final Logger logger =
             LoggerFactory.getLogger(VcaCaseContactPage.class);
 
-    public void addFamilyLiaisonOfficer(){
+    public void addFamilyLiaisonOfficer() {
         clickLinkByName("Add Family Liaison Officer");
         waitForText("Add Family Liaison Officer");
 
@@ -34,9 +36,9 @@ public class VcaCaseContactPage extends BasePage {
         String surName = lastName().toUpperCase();
 
         selectTextByLocator(page.locator("#Input_Full_Name"));
-        enterTextByLocator(page.locator("#Input_Full_Name"), surName+", "+firstName);
-        enterTextByLocator(page.locator("#Input_Email2"),email());
-        enterTextByLocator(page.locator("#Input_Telephone2"),mobilePhone());
+        enterTextByLocator(page.locator("#Input_Full_Name"), surName + ", " + firstName);
+        enterTextByLocator(page.locator("#Input_Email2"), email());
+        enterTextByLocator(page.locator("#Input_Telephone2"), mobilePhone());
         getButtonByName("Continue").click();
         waitUntilSpinnersAreGone("Loading, please wait");
         Locator row = page.locator("tr.govuk-table__row")
@@ -47,13 +49,13 @@ public class VcaCaseContactPage extends BasePage {
         assertThat(row.locator("td[data-header='Telephone']")).not().hasText("");
     }
 
-    public void addIndependentSexualVA(){
+    public void addIndependentSexualVA() {
         clickLinkByName("Add Independent Sexual Violence Adviser (ISVA)");
         waitForText("Add Independent Sexual");
         String firstName = firstName();
         String surName = lastName().toUpperCase();
         selectTextByLocator(page.locator("#Input_Full_Name"));
-        enterTextByLocator(page.locator("#Input_Full_Name"), surName+", "+firstName);
+        enterTextByLocator(page.locator("#Input_Full_Name"), surName + ", " + firstName);
         enterTextByLocator(page.locator("#Input_AddressLine1"), buildingNumber());
         enterTextByLocator(page.locator("#Input_AddressLine2"), streetName());
         enterTextByLocator(page.locator("#Input_AddressLine3"), streetName());
@@ -62,8 +64,8 @@ public class VcaCaseContactPage extends BasePage {
         enterTextByLocator(page.locator("#Input_Postcode"), ukPostCode());
         enterTextByLocator(page.locator("#Input_City"), cityName());
         enterTextByLocator(page.locator("#Input_Country"), countyName());
-        enterTextByLocator(page.locator("#Input_Email2"),email());
-        enterTextByLocator(page.locator("#Input_Telephone2"),mobilePhone());
+        enterTextByLocator(page.locator("#Input_Email2"), email());
+        enterTextByLocator(page.locator("#Input_Telephone2"), mobilePhone());
         getButtonByName("Continue").click();
         waitUntilSpinnersAreGone("Loading, please wait");
         waitForTextToAppear("Contacts");
@@ -78,13 +80,13 @@ public class VcaCaseContactPage extends BasePage {
         assertThat(row.locator("td[data-header='Telephone']")).not().hasText("");
     }
 
-    public void addIndependentDomesticVA(){
+    public void addIndependentDomesticVA() {
         clickLinkByName("Add Independent Domestic Violence Adviser (IDVA)");
         waitForText("Add Independent Domestic");
         String firstName = firstName();
         String surName = lastName().toUpperCase();
         selectTextByLocator(page.locator("#Input_Full_Name"));
-        enterTextByLocator(page.locator("#Input_Full_Name"), surName+", "+firstName);
+        enterTextByLocator(page.locator("#Input_Full_Name"), surName + ", " + firstName);
         enterTextByLocator(page.locator("#Input_AddressLine1"), buildingNumber());
         enterTextByLocator(page.locator("#Input_AddressLine2"), streetName());
         enterTextByLocator(page.locator("#Input_AddressLine3"), streetName());
@@ -93,8 +95,8 @@ public class VcaCaseContactPage extends BasePage {
         enterTextByLocator(page.locator("#Input_Postcode"), ukPostCode());
         enterTextByLocator(page.locator("#Input_City"), cityName());
         enterTextByLocator(page.locator("#Input_Country"), countyName());
-        enterTextByLocator(page.locator("#Input_Email2"),email());
-        enterTextByLocator(page.locator("#Input_Telephone2"),mobilePhone());
+        enterTextByLocator(page.locator("#Input_Email2"), email());
+        enterTextByLocator(page.locator("#Input_Telephone2"), mobilePhone());
         getButtonByName("Continue").click();
         waitUntilSpinnersAreGone("Loading, please wait");
 
@@ -109,7 +111,7 @@ public class VcaCaseContactPage extends BasePage {
 
     }
 
-    public void verifyCaseContact(){
+    public void verifyCaseContact() {
         Locator familyLiaisonOfficer = page.locator("tr.govuk-table__row")
                 .filter(new Locator.FilterOptions().setHasText("Family Liaison Officer"));
 
@@ -134,10 +136,9 @@ public class VcaCaseContactPage extends BasePage {
         assertThat(independentDomesticVA.locator("td[data-header='Telephone']")).not().hasText("");
     }
 
-    public void updateFamilyLiaisonOfficer(){
+    public void updateFamilyLiaisonOfficer() {
         waitUntilSpinnersAreGone("Loading, please wait");
         Map<String, List<String>> familyLiaisonOfficerMapDetails = new HashMap<>();
-
         Locator familyLiaisonOfficer = page.locator("tr.govuk-table__row")
                 .filter(new Locator.FilterOptions().setHasText("Family Liaison Officer"));
 
@@ -148,15 +149,16 @@ public class VcaCaseContactPage extends BasePage {
         familyLiaisonOfficerMapDetails.put("FamilyLiaisonOfficer", Arrays.asList(existingFullName, existingEmail, existingTelephone));
         scenarioContext.set("familyLiaisonOfficerMapDetails", familyLiaisonOfficerMapDetails);
 
-        clickTextLink(page,"tr.govuk-table__row","td[data-header='Role']","Family Liaison Officer","Change");
+        clickTextLink(page, "tr.govuk-table__row", "td[data-header='Role']", "Family Liaison Officer", "Change");
 
         String firstName = firstName();
         String surName = lastName().toUpperCase();
 
         selectTextByLocator(page.locator("#Input_Full_Name"));
-        enterTextByLocator(page.locator("#Input_Full_Name"), surName+", "+firstName);
-        enterTextByLocator(page.locator("#Input_Email2"),email());
-        enterTextByLocator(page.locator("#Input_Telephone2"),mobilePhone());
+        enterTextByLocator(page.locator("#Input_Full_Name"), surName + ", " + firstName);
+        enterTextByLocator(page.locator("#Input_Email2"), email());
+        enterTextByLocator(page.locator("#Input_Telephone2"), mobilePhone());
+        page.pause();
         getButtonByName("Continue").click();
         waitUntilSpinnersAreGone("Loading, please wait");
 
@@ -169,7 +171,7 @@ public class VcaCaseContactPage extends BasePage {
         assertThat(row.locator("td[data-header='Telephone']")).not().hasText("");
     }
 
-    public void updateIndependentSexualVA(){
+    public void updateIndependentSexualVA() {
         waitUntilSpinnersAreGone("Loading, please wait");
         Map<String, List<String>> IndependentSexualMapDetails = new HashMap<>();
 
@@ -183,12 +185,12 @@ public class VcaCaseContactPage extends BasePage {
         IndependentSexualMapDetails.put("IndependentSexual", Arrays.asList(existingFullName, existingEmail, existingTelephone));
         scenarioContext.set("IndependentSexualMapDetails", IndependentSexualMapDetails);
 
-        clickTextLink(page,"tr.govuk-table__row","td[data-header='Role']","Independent Sexual Violence Adviser (ISVA)","Change");
+        clickTextLink(page, "tr.govuk-table__row", "td[data-header='Role']", "Independent Sexual Violence Adviser (ISVA)", "Change");
 
         String firstName = firstName();
         String surName = lastName().toUpperCase();
         selectTextByLocator(page.locator("#Input_Full_Name"));
-        enterTextByLocator(page.locator("#Input_Full_Name"), surName+", "+firstName);
+        enterTextByLocator(page.locator("#Input_Full_Name"), surName + ", " + firstName);
         enterTextByLocator(page.locator("#Input_AddressLine1"), buildingNumber());
         enterTextByLocator(page.locator("#Input_AddressLine2"), streetName());
         enterTextByLocator(page.locator("#Input_AddressLine3"), streetName());
@@ -197,8 +199,8 @@ public class VcaCaseContactPage extends BasePage {
         enterTextByLocator(page.locator("#Input_Postcode"), ukPostCode());
         enterTextByLocator(page.locator("#Input_City"), cityName());
         enterTextByLocator(page.locator("#Input_Country"), countyName());
-        enterTextByLocator(page.locator("#Input_Email2"),email());
-        enterTextByLocator(page.locator("#Input_Telephone2"),mobilePhone());
+        enterTextByLocator(page.locator("#Input_Email2"), email());
+        enterTextByLocator(page.locator("#Input_Telephone2"), mobilePhone());
         getButtonByName("Continue").click();
         waitUntilSpinnersAreGone("Loading, please wait");
 
@@ -212,7 +214,7 @@ public class VcaCaseContactPage extends BasePage {
         assertThat(row.locator("td[data-header='Telephone']")).not().hasText("");
     }
 
-    public void updateIndependentDomesticVA(){
+    public void updateIndependentDomesticVA() {
         waitUntilSpinnersAreGone("Loading, please wait");
 
         Map<String, List<String>> IndependentDomesticMapDetails = new HashMap<>();
@@ -227,12 +229,12 @@ public class VcaCaseContactPage extends BasePage {
         IndependentDomesticMapDetails.put("IndependentDomestic", Arrays.asList(existingFullName, existingEmail, existingTelephone));
         scenarioContext.set("IndependentDomesticMapDetails", IndependentDomesticMapDetails);
 
-        clickTextLink(page,"tr.govuk-table__row","td[data-header='Role']","Independent Domestic Violence Adviser (IDVA)","Change");
+        clickTextLink(page, "tr.govuk-table__row", "td[data-header='Role']", "Independent Domestic Violence Adviser (IDVA)", "Change");
 
         String firstName = firstName();
         String surName = lastName().toUpperCase();
         selectTextByLocator(page.locator("#Input_Full_Name"));
-        enterTextByLocator(page.locator("#Input_Full_Name"), surName+", "+firstName);
+        enterTextByLocator(page.locator("#Input_Full_Name"), surName + ", " + firstName);
         enterTextByLocator(page.locator("#Input_AddressLine1"), buildingNumber());
         enterTextByLocator(page.locator("#Input_AddressLine2"), streetName());
         enterTextByLocator(page.locator("#Input_AddressLine3"), streetName());
@@ -241,8 +243,8 @@ public class VcaCaseContactPage extends BasePage {
         enterTextByLocator(page.locator("#Input_Postcode"), ukPostCode());
         enterTextByLocator(page.locator("#Input_City"), cityName());
         enterTextByLocator(page.locator("#Input_Country"), countyName());
-        enterTextByLocator(page.locator("#Input_Email2"),email());
-        enterTextByLocator(page.locator("#Input_Telephone2"),mobilePhone());
+        enterTextByLocator(page.locator("#Input_Email2"), email());
+        enterTextByLocator(page.locator("#Input_Telephone2"), mobilePhone());
         getButtonByName("Continue").click();
         waitUntilSpinnersAreGone("Loading, please wait");
 
@@ -257,63 +259,57 @@ public class VcaCaseContactPage extends BasePage {
 
     }
 
-    public void verifyUpdatedCaseContact(){
+    public void verifyUpdatedCaseContact(String caseContactType) {
         waitUntilSpinnersAreGone("Loading, please wait");
-//        Family Liaison Officer
-        Map<String, List<String>> familyLiaisonOfficerMapDetails = scenarioContext.get("familyLiaisonOfficerMapDetails");
-        List<String> familyLiaisonOfficerDetails = familyLiaisonOfficerMapDetails.get("FamilyLiaisonOfficer");
-
-        String oldFullName = familyLiaisonOfficerDetails.getFirst();
-        String oldEmail = familyLiaisonOfficerDetails.get(1);
-        String oldTelephone = familyLiaisonOfficerDetails.get(2);
-
-        Locator familyLiaisonOfficer = page.locator("tr.govuk-table__row")
-                .filter(new Locator.FilterOptions().setHasText("Family Liaison Officer"));
-
-        String newFullName = familyLiaisonOfficer.locator("td[data-header='Name']").innerText();
-        assertNotEquals(oldFullName, newFullName);
-        String newEmail = familyLiaisonOfficer.locator("td[data-header='Email']").innerText();
-        assertNotEquals(oldEmail, newEmail);
-        String newTelephone = familyLiaisonOfficer.locator("td[data-header='Telephone']").innerText();
-        assertNotEquals(oldTelephone, newTelephone);
-
-        //        Independent Sexual Violence Adviser
-        Map<String, List<String>> IndependentSexualMapDetails = scenarioContext.get("IndependentSexualMapDetails");
-        List<String> IndependentSexualDetails = IndependentSexualMapDetails.get("IndependentSexual");
-
-        String oldISVAFullName = IndependentSexualDetails.getFirst();
-        String oldISVAEmail = IndependentSexualDetails.get(1);
-        String oldISVATelephone = IndependentSexualDetails.get(2);
-
-        Locator IndependentSexualViolenceAdviser = page.locator("tr.govuk-table__row")
-                .filter(new Locator.FilterOptions().setHasText("Independent Sexual Violence Adviser (ISVA)"));
-
-        String newISVAFullName = IndependentSexualViolenceAdviser.locator("td[data-header='Name']").innerText();
-        assertNotEquals(oldISVAFullName, newISVAFullName);
-        String newISVAEmail = IndependentSexualViolenceAdviser.locator("td[data-header='Email']").innerText();
-        assertNotEquals(oldISVAEmail, newISVAEmail);
-        String newISVATelephone = IndependentSexualViolenceAdviser.locator("td[data-header='Telephone']").innerText();
-        assertNotEquals(oldISVATelephone, newISVATelephone);
-
-        //        Independent Domestic  Violence Adviser
-        Map<String, List<String>> IndependentDomesticMapDetails = scenarioContext.get("IndependentDomesticMapDetails");
-        List<String> IndependentDomesticDetails = IndependentDomesticMapDetails.get("IndependentDomestic");
-
-        String oldIDVAFullName = IndependentDomesticDetails.getFirst();
-        String oldIDVAEmail = IndependentDomesticDetails.get(1);
-        String oldIDVATelephone = IndependentDomesticDetails.get(2);
-
-        Locator IndependentDomesticViolenceAdviser = page.locator("tr.govuk-table__row")
-                .filter(new Locator.FilterOptions().setHasText("Independent Domestic Violence Adviser (IDVA)"));
-
-        String newIDVAFullName = IndependentDomesticViolenceAdviser.locator("td[data-header='Name']").innerText();
-        assertNotEquals(oldIDVAFullName, newIDVAFullName);
-        String newIDVAEmail = IndependentDomesticViolenceAdviser.locator("td[data-header='Email']").innerText();
-        assertNotEquals(oldIDVAEmail, newIDVAEmail);
-        String newIDVATelephone = IndependentDomesticViolenceAdviser.locator("td[data-header='Telephone']").innerText();
-        assertNotEquals(oldIDVATelephone, newIDVATelephone);
+        switch (caseContactType) {
+            case "Family Liaison Officer":
+                Map<String, List<String>> familyLiaisonOfficerMapDetails = scenarioContext.get("familyLiaisonOfficerMapDetails");
+                List<String> familyLiaisonOfficerDetails = familyLiaisonOfficerMapDetails.get("FamilyLiaisonOfficer");
+                String oldFullName = familyLiaisonOfficerDetails.getFirst();
+                String oldEmail = familyLiaisonOfficerDetails.get(1);
+                String oldTelephone = familyLiaisonOfficerDetails.get(2);
+                Locator familyLiaisonOfficer = page.locator("tr.govuk-table__row")
+                        .filter(new Locator.FilterOptions().setHasText("Family Liaison Officer"));
+                String newFullName = familyLiaisonOfficer.locator("td[data-header='Name']").innerText();
+                assertNotEquals(oldFullName, newFullName);
+                String newEmail = familyLiaisonOfficer.locator("td[data-header='Email']").innerText();
+                assertNotEquals(oldEmail, newEmail);
+                String newTelephone = familyLiaisonOfficer.locator("td[data-header='Telephone']").innerText();
+                assertNotEquals(oldTelephone, newTelephone);
+                break;
+            case "Independent Sexual Violence Adviser":
+                Map<String, List<String>> IndependentSexualMapDetails = scenarioContext.get("IndependentSexualMapDetails");
+                List<String> IndependentSexualDetails = IndependentSexualMapDetails.get("IndependentSexual");
+                String oldISVAFullName = IndependentSexualDetails.getFirst();
+                String oldISVAEmail = IndependentSexualDetails.get(1);
+                String oldISVATelephone = IndependentSexualDetails.get(2);
+                Locator IndependentSexualViolenceAdviser = page.locator("tr.govuk-table__row")
+                        .filter(new Locator.FilterOptions().setHasText("Independent Sexual Violence Adviser (ISVA)"));
+                String newISVAFullName = IndependentSexualViolenceAdviser.locator("td[data-header='Name']").innerText();
+                assertNotEquals(oldISVAFullName, newISVAFullName);
+                String newISVAEmail = IndependentSexualViolenceAdviser.locator("td[data-header='Email']").innerText();
+                assertNotEquals(oldISVAEmail, newISVAEmail);
+                String newISVATelephone = IndependentSexualViolenceAdviser.locator("td[data-header='Telephone']").innerText();
+                assertNotEquals(oldISVATelephone, newISVATelephone);
+                break;
+            case "Independent Domestic Violence Adviser":
+                Map<String, List<String>> IndependentDomesticMapDetails = scenarioContext.get("IndependentDomesticMapDetails");
+                List<String> IndependentDomesticDetails = IndependentDomesticMapDetails.get("IndependentDomestic");
+                String oldIDVAFullName = IndependentDomesticDetails.getFirst();
+                String oldIDVAEmail = IndependentDomesticDetails.get(1);
+                String oldIDVATelephone = IndependentDomesticDetails.get(2);
+                Locator IndependentDomesticViolenceAdviser = page.locator("tr.govuk-table__row")
+                        .filter(new Locator.FilterOptions().setHasText("Independent Domestic Violence Adviser (IDVA)"));
+                String newIDVAFullName = IndependentDomesticViolenceAdviser.locator("td[data-header='Name']").innerText();
+                assertNotEquals(oldIDVAFullName, newIDVAFullName);
+                String newIDVAEmail = IndependentDomesticViolenceAdviser.locator("td[data-header='Email']").innerText();
+                assertNotEquals(oldIDVAEmail, newIDVAEmail);
+                String newIDVATelephone = IndependentDomesticViolenceAdviser.locator("td[data-header='Telephone']").innerText();
+                assertNotEquals(oldIDVATelephone, newIDVATelephone);
+                break;
+            default:
+                System.out.println("Specified case contact type does not exist");
+        }
     }
-
-
 
 }

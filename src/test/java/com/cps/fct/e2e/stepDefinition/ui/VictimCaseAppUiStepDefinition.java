@@ -46,32 +46,18 @@ public class VictimCaseAppUiStepDefinition {
 
     @When("the {string} is onboarded to {string} service lead")
     public void onboardVictim(String personType, String serviceType) {
-//        Map<String, List<String>> victimWitnessIds = context.get("victimWitnessMapIds");
 
         Map<String, List<String>> personTypePersonNameMap = context.get("personTypePersonNameMap");
         String personFullName = String.valueOf(personTypePersonNameMap.get(personType));
         personFullName = personFullName.replace("[", "").replace("]", "");
 
-//        String personFullName = "KOSS, Latoria";
-
         pages.vcaHomePage.onboardVictim(personFullName, serviceType);
-
-//        for (String id : victimWitnessIds.get(personType)) {
-//            pages.vcaHomePage.onboardVictim(personFullName, serviceType);
-//        }
 
     }
 
     @When("select {string} for next task for the {string}")
     public void selectNextTask(String taskType, String personType) {
-//        Map<String, List<String>> victimWitnessIds = context.get("victimWitnessMapIds");
-
         pages.vcaHomePage.selectNextTaskForVictim(taskType);
-
-//        for (String id : victimWitnessIds.get(personType)) {
-//            pages.vcaHomePage.selectNextTaskForVictim(taskType);
-//        }
-
     }
 
     @When("verify that {string} is onboarded")
@@ -99,9 +85,6 @@ public class VictimCaseAppUiStepDefinition {
         String personFullName = String.valueOf(personTypePersonNameMap.get(personType));
         personFullName = personFullName.replace("[", "").replace("]", "");
 
-//        String caseUrn = "05AQ7242526";
-//        String victimFullName = "KING, Craig";
-
         pages.vcaHomePage.searchVictimCase(caseUrn);
         pages.vcaHomePage.assignVloToVictim(vloName, personFullName);
     }
@@ -113,7 +96,6 @@ public class VictimCaseAppUiStepDefinition {
         String personFullName = String.valueOf(personTypePersonNameMap.get(personType));
         personFullName = personFullName.replace("[", "").replace("]", "");
 
-//        String caseUrn = "05AQ7242526";
         pages.vcaHomePage.searchVictimCase(caseUrn);
         pages.vcaHomePage.verifyAssignedVlo(vloName, personFullName);
     }
@@ -307,7 +289,6 @@ public class VictimCaseAppUiStepDefinition {
         pages.vcaHomePage.navigateVictimHomePage();
     }
 
-
     @When("the following case contacts are added to {string} in VCA application")
     public void addCaseContact(String personType, DataTable dataTable) {
         String caseUrn = context.get("caseUrn");
@@ -360,7 +341,6 @@ public class VictimCaseAppUiStepDefinition {
         String personFullName = String.valueOf(personTypePersonNameMap.get(personType));
         personFullName = personFullName.replace("[", "").replace("]", "");
 
-
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
 
         pages.vcaHomePage.searchVictimCase(caseUrn);
@@ -386,17 +366,20 @@ public class VictimCaseAppUiStepDefinition {
 
 
     @Then("{string} case contacts are verified in VCA application")
-    public void verifyUpdatedCaseContacts(String personType) {
+    public void verifyUpdatedCaseContacts(String personType, DataTable dataTable) {
         String caseUrn = context.get("caseUrn");
         Map<String, List<String>> personTypePersonNameMap = context.get("personTypePersonNameMap");
         String personFullName = String.valueOf(personTypePersonNameMap.get(personType));
         personFullName = personFullName.replace("[", "").replace("]", "");
 
-        pages.vcaHomePage.searchVictimCase(caseUrn);
-        pages.vcaHomePage.navigateCaseContactsTab(caseUrn, personFullName);
-        pages.vcaCaseContactPage.verifyUpdatedCaseContact();
-        pages.vcaHomePage.navigateVictimHomePage();
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
 
+        for (Map<String, String> row : rows) {
+            pages.vcaHomePage.searchVictimCase(caseUrn);
+            pages.vcaHomePage.navigateCaseContactsTab(caseUrn, personFullName);
+            pages.vcaCaseContactPage.verifyUpdatedCaseContact(row.get("caseContactType"));
+            pages.vcaHomePage.navigateVictimHomePage();
+        }
     }
 
     @When("the following category type is added to {string} in VCA application")
@@ -498,10 +481,6 @@ public class VictimCaseAppUiStepDefinition {
         String personFirstLastName = String.valueOf(personTypeFirstSureNameMap.get(personType));
         personFirstLastName = personFirstLastName.replace("[", "").replace("]", "");
 
-//        String caseUrn = "05AQ3163526";
-//        String personFullName = "BARTON, Shaun";
-//        String personFirstLastName = "Shaun Barton";
-
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
         pages.vcaHomePage.searchVictimCase(caseUrn);
         pages.vcaHomePage.navigateCommunicationsTab(caseUrn, personFullName);
@@ -521,10 +500,6 @@ public class VictimCaseAppUiStepDefinition {
         Map<String, List<String>> personTypePersonNameMap = context.get("personTypePersonNameMap");
         String personFullName = String.valueOf(personTypePersonNameMap.get(personType));
         personFullName = personFullName.replace("[", "").replace("]", "");
-
-//        String caseUrn = "05AQ3891626";
-//        String personFullName = "BALISTRERI, Daryl";
-//        String personFirstLastName = "Daryl Balistreri";
 
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
         pages.vcaHomePage.searchVictimCase(caseUrn);
@@ -548,10 +523,6 @@ public class VictimCaseAppUiStepDefinition {
         Map<String, List<String>> personTypeFirstSureNameMap = context.get("personTypeFirstSureNameMap");
         String personFirstLastName = String.valueOf(personTypeFirstSureNameMap.get(personType));
         personFirstLastName = personFirstLastName.replace("[", "").replace("]", "");
-
-//        String caseUrn = "05AQ4938826";
-//        String personFullName = "TOWNE, Margit";
-//        String personFirstLastName = "Margit Towne";
 
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
         pages.vcaHomePage.searchVictimCase(caseUrn);
@@ -593,10 +564,6 @@ public class VictimCaseAppUiStepDefinition {
         String personFirstLastName = String.valueOf(personTypeFirstSureNameMap.get(personType));
         personFirstLastName = personFirstLastName.replace("[", "").replace("]", "");
 
-//        String caseUrn = "05AQ3163526";
-//        String personFullName = "BARTON, Shaun";
-//        String personFirstLastName = "Shaun Barton";
-
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
         pages.vcaHomePage.searchVictimCase(caseUrn);
         pages.vcaHomePage.navigateCommunicationsTab(caseUrn, personFullName);
@@ -633,10 +600,6 @@ public class VictimCaseAppUiStepDefinition {
         String personFirstLastName = String.valueOf(personTypeFirstSureNameMap.get(personType));
         personFirstLastName = personFirstLastName.replace("[", "").replace("]", "");
 
-//        String caseUrn = "05AQ6377926";
-//        String personFullName = "HERMANN, Evan";
-//        String personFirstLastName = "Evan Hermann";
-
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
         pages.vcaHomePage.searchVictimCase(caseUrn);
         pages.vcaHomePage.navigateCommunicationsTab(caseUrn, personFullName);
@@ -661,10 +624,6 @@ public class VictimCaseAppUiStepDefinition {
         String personFirstLastName = String.valueOf(personTypeFirstSureNameMap.get(personType));
         personFirstLastName = personFirstLastName.replace("[", "").replace("]", "");
 
-//        String caseUrn = "05AQ6377926";
-//        String personFullName = "HERMANN, Evan";
-//        String personFirstLastName = "Evan Hermann";
-
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
         pages.vcaHomePage.searchVictimCase(caseUrn);
         pages.vcaHomePage.navigateCommunicationsTab(caseUrn, personFullName);
@@ -687,9 +646,6 @@ public class VictimCaseAppUiStepDefinition {
         String personFirstLastName = String.valueOf(personTypeFirstSureNameMap.get(personType));
         personFirstLastName = personFirstLastName.replace("[", "").replace("]", "");
 
-        //        String caseUrn = "05AQ6377926";
-//        String personFullName = "HERMANN, Evan";
-//        String personFirstLastName = "Evan Hermann";
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
         pages.vcaHomePage.searchVictimCase(caseUrn);
         pages.vcaHomePage.navigateCommunicationsTab(caseUrn, personFullName);
@@ -711,10 +667,6 @@ public class VictimCaseAppUiStepDefinition {
         Map<String, List<String>> personTypeFirstSureNameMap = context.get("personTypeFirstSureNameMap");
         String personFirstLastName = String.valueOf(personTypeFirstSureNameMap.get(personType));
         personFirstLastName = personFirstLastName.replace("[", "").replace("]", "");
-
-//        String caseUrn = "05AQ5807126";
-//        String personFullName = "BECHTELAR, Nickolas";
-//        String personFirstLastName = "Nickolas Bechtelar";
 
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
         pages.vcaHomePage.searchVictimCase(caseUrn);
@@ -739,10 +691,6 @@ public class VictimCaseAppUiStepDefinition {
         Map<String, List<String>> personTypePersonNameMap = context.get("personTypePersonNameMap");
         String personFullName = String.valueOf(personTypePersonNameMap.get(personType));
         personFullName = personFullName.replace("[", "").replace("]", "");
-
-//        String caseUrn = "05AQ5807126";
-//        String personFullName = "BECHTELAR, Nickolas";
-//        String personFirstLastName = "Nickolas Bechtelar";
 
         List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
         pages.vcaHomePage.searchVictimCase(caseUrn);

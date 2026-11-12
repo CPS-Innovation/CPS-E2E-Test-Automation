@@ -45,7 +45,6 @@ public class VcaVictimDetailsPage extends BasePage {
         enterText("Day", todayDateDay());
         enterText("Month", todayDateMonth());
         enterText("Year", yearTill2005());
-//        getTextboxByName("Why are you changing this information?").click();
         enterText("Why are you changing this information?", justification);
         getButtonByName("Save and continue").click();
         waitUntilSpinnersAreGone("Loading, please wait");
@@ -414,10 +413,12 @@ public class VcaVictimDetailsPage extends BasePage {
     }
 
     public void addCategory(String victimWitnessFirstSureName, String categoryType) {
+        waitUntilSpinnersAreGone("Loading, please wait");
         clickTextLink(page, "div.govuk-summary-list__row", "#b31-b6-Key", "Category", "Change");
         waitUntilSpinnersAreGone("Loading, please wait");
         waitForText("What is " + victimWitnessFirstSureName);
         selectCheckbox(categoryType);
+        waitForButtonToAppear("Save and Continue");
         getButtonByName("Save and Continue").click();
         waitUntilSpinnersAreGone("Loading, please wait");
         assertThat(page.getByText(
@@ -440,6 +441,4 @@ public class VcaVictimDetailsPage extends BasePage {
             );
         }
     }
-
-
 }

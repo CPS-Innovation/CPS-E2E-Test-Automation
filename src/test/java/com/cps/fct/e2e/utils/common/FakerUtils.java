@@ -215,6 +215,15 @@ public class FakerUtils {
         return LocalDate.parse(date).format(outputFormatter);
     }
 
+    public static String convertDateAs0DMonthYear(String date) {
+        DateTimeFormatter outputFormatter =
+                DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.UK);
+
+        return LocalDate.parse(date).format(outputFormatter);
+    }
+
+
+
     public static String todayMinusFourDays() {
         return LocalDate.now()
                 .minusDays(4)

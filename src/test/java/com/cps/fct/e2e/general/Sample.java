@@ -19,7 +19,7 @@ public class Sample {
 //todayMinusThreeDays();
 //        String date = todayMinusNoOfDays(1);
 
-        System.out.println(convertDateMonthYear(todayMinusNoOfDays(1)));
+        System.out.println(convertDateMonthYear(todayMinusNoOfDays(4)));
     }
 
 

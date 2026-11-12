@@ -265,7 +265,7 @@ public abstract class BasePage {
         page.locator("role=" + ROLE_RADIO + "[name='" + name + "']").check();
     }
 
-    public void checkRadioContainName(String name) {
+    public void selectRadioContainName(String name) {
         Locator radio = page.locator("input[type='radio'][value*='" + name + "']" );
         radio.waitFor();
         if (!radio.isChecked()) {

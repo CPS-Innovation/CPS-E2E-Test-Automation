@@ -80,51 +80,8 @@ public class VcaCommunicationsPage extends BasePage {
 
     public void verifyMeetingNotOffered(String meetingType, String notOfferedReason) {
         waitUntilSpinnersAreGone("Loading, please wait");
-        switch (meetingType) {
-            case "Other":
-                String otherMeetingOffered = readTableRowCell(page,
-                        "div.govuk-summary-card", "h2.govuk-summary-card__title", "Other CPS meeting",
-                        "div.govuk-summary-list__row", "Has a meeting been offered", "dd.govuk-summary-list__value")
-                        .innerText();
-                String otherMeetingReason = readTableRowCell(page,
-                        "div.govuk-summary-card", "h2.govuk-summary-card__title", "Other CPS meeting",
-                        "div.govuk-summary-list__row", "Why was a meeting not offered", "dd.govuk-summary-list__value")
-                        .innerText();
-
-                assertEquals("No", otherMeetingOffered);
-                assertEquals(notOfferedReason, otherMeetingReason);
-                break;
-            case "Inform victim about charging decision":
-                String informVictimRowOffered = readTableRowCell(page,
-                        "div.govuk-summary-card", "h2.govuk-summary-card__title", "Charging decision meeting",
-                        "div.govuk-summary-list__row", "Has a meeting been offered", "dd.govuk-summary-list__value")
-                        .innerText();
-
-                String informVictimReason = readTableRowCell(page,
-                        "div.govuk-summary-card", "h2.govuk-summary-card__title", "Charging decision meeting",
-                        "div.govuk-summary-list__row", "Why was a meeting not offered", "dd.govuk-summary-list__value")
-                        .innerText();
-
-                assertEquals("No", informVictimRowOffered);
-                assertEquals(notOfferedReason, informVictimReason);
-                break;
-            case "CPS pre-trial meeting":
-                String preTrialOffered = readTableRowCell(page,
-                        "div.govuk-summary-card", "h2.govuk-summary-card__title", "CPS pre-trial meeting",
-                        "div.govuk-summary-list__row", "Has a meeting been offered", "dd.govuk-summary-list__value")
-                        .innerText();
-
-                String preTrialReason = readTableRowCell(page,
-                        "div.govuk-summary-card", "h2.govuk-summary-card__title", "CPS pre-trial meeting",
-                        "div.govuk-summary-list__row", "Why was a meeting not offered", "dd.govuk-summary-list__value")
-                        .innerText();
-
-                assertEquals("No", preTrialOffered);
-                assertEquals(notOfferedReason, preTrialReason);
-                break;
-            default:
-                System.out.println("Specified meeting type does not exist");
-        }
+        meetingType = vcaMeetingsPage.getMeetingType(meetingType);
+        vcaMeetingsPage.assertMeetingNotOffered(meetingType, notOfferedReason);
     }
 
     public void logMeetingOffered(String personFirstLastName, String meetingType, String meetingMethod) {
@@ -168,34 +125,9 @@ public class VcaCommunicationsPage extends BasePage {
         waitForText("Communications");
         waitForElement(page, AriaRole.TAB, "Meetings");
         clickSelectOnAriaRole(page, AriaRole.TAB, "Meetings");
-
-        switch (meetingType) {
-            case "Other":
-                waitUntilSpinnersAreGone("Loading, please wait");
-                selectTableButton(page, "div.govuk-summary-card", "h2.govuk-summary-card__title",
-                        "Other CPS meeting offered",
-                        "button.govuk-button", meetingResponse)
-                        .click();
-                break;
-            case "Inform victim about charging decision":
-                waitUntilSpinnersAreGone("Loading, please wait");
-                selectTableButton(page, "div.govuk-summary-card", "h2.govuk-summary-card__title",
-                        "Charging decision meeting offered",
-                        "button.govuk-button", meetingResponse)
-                        .click();
-                break;
-            case "CPS pre-trial meeting":
-                waitUntilSpinnersAreGone("Loading, please wait");
-                selectTableButton(page, "div.govuk-summary-card", "h2.govuk-summary-card__title",
-                        "CPS pre-trial meeting offered",
-                        "button.govuk-button", meetingResponse)
-                        .click();
-                break;
-            default:
-                System.out.println("Specified meeting type does not exist");
-        }
+        meetingType = vcaMeetingsPage.getMeetingType(meetingType);
+        vcaMeetingsPage.selectMeetingOfferedResponse(meetingType,meetingResponse);
         waitUntilSpinnersAreGone("Loading, please wait");
-
         switch (meetingResponse) {
             case "Log meeting acceptance":
                 waitForText("Details of the meeting acceptance");
@@ -207,28 +139,7 @@ public class VcaCommunicationsPage extends BasePage {
                 waitUntilSpinnersAreGone("Loading, please wait");
                 waitForText("Communications");
                 waitForElement(page, AriaRole.TAB, "Meetings");
-                switch (meetingType) {
-                    case "CPS pre-trial meeting":
-                        assertThat(readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "CPS pre-trial meeting accepted",
-                                "div.govuk-summary-list__row", "How was meeting accepted", "dd.govuk-summary-list__value"))
-                                .isVisible();
-                        break;
-                    case "Inform victim about charging decision":
-                        assertThat(readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "Charging decision meeting accepted",
-                                "div.govuk-summary-list__row", "How was meeting accepted", "dd.govuk-summary-list__value"))
-                                .isVisible();
-                        break;
-                    case "Other":
-                        assertThat(readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "Other CPS meeting accepted",
-                                "div.govuk-summary-list__row", "How was meeting accepted", "dd.govuk-summary-list__value"))
-                                .isVisible();
-                        break;
-                    default:
-                        System.out.println("Specified meeting type does not exist");
-                }
+                vcaMeetingsPage.verifyOfferedAcceptanceResponse(meetingType);
                 break;
             case "Log meeting declined":
                 waitForText("Details of the meeting declined");
@@ -240,58 +151,16 @@ public class VcaCommunicationsPage extends BasePage {
                 waitUntilSpinnersAreGone("Loading, please wait");
                 waitForText("Communications");
                 waitForElement(page, AriaRole.TAB, "Meetings");
-                switch (meetingType) {
-                    case "CPS pre-trial meeting":
-                        assertThat(readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "CPS pre-trial meeting declined",
-                                "div.govuk-summary-list__row", "How was meeting declined", "dd.govuk-summary-list__value"))
-                                .isVisible();
-                        break;
-                    case "Inform victim about charging decision":
-                        assertThat(readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "Charging decision meeting declined",
-                                "div.govuk-summary-list__row", "How was meeting declined", "dd.govuk-summary-list__value"))
-                                .isVisible();
-                        break;
-                    case "Other":
-                        assertThat(readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "Other CPS meeting declined",
-                                "div.govuk-summary-list__row", "How was meeting declined", "dd.govuk-summary-list__value"))
-                                .isVisible();
-                        break;
-                    default:
-                        System.out.println("Specified meeting type does not exist");
-                }
+                vcaMeetingsPage.verifyOfferedDeclinedResponse(meetingType);
                 break;
             case "Log no response":
                 waitUntilSpinnersAreGone("Loading, please wait");
                 waitForText("Communications");
                 waitForElement(page, AriaRole.TAB, "Meetings");
-                switch (meetingType) {
-                    case "CPS pre-trial meeting":
-                        assertThat(readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "No response to CPS pre-trial meeting offer",
-                                "div.govuk-summary-list__row", "Response", "dd.govuk-summary-list__value"))
-                                .isVisible();
-                        break;
-                    case "Inform victim about charging decision":
-                        assertThat(readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "No response to Charging decision meeting offer",
-                                "div.govuk-summary-list__row", "Response", "dd.govuk-summary-list__value"))
-                                .isVisible();
-                        break;
-                    case "Other":
-                        assertThat(readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "No response to Other CPS meeting offer",
-                                "div.govuk-summary-list__row", "Response", "dd.govuk-summary-list__value"))
-                                .isVisible();
-                        break;
-                    default:
-                        System.out.println("Specified response type does not exist");
-                }
+                vcaMeetingsPage.verifyOfferedNoResponse(meetingType);
                 break;
             default:
-                System.out.println("Specified meeting type does not exist");
+                System.out.println("Specified meeting response does not exist");
         }
 
     }
@@ -309,359 +178,26 @@ public class VcaCommunicationsPage extends BasePage {
             meetingResponseMethod = "Telephone";
         }
 
+        meetingType = vcaMeetingsPage.getMeetingType(meetingType);
+
         switch (meetingResponse) {
             case "Log meeting acceptance":
                 waitUntilSpinnersAreGone("Loading, please wait");
                 waitForText("Communications");
                 waitForElement(page, AriaRole.TAB, "Meetings");
-                switch (meetingType) {
-                    case "CPS pre-trial meeting":
-                        assertThat(readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "CPS pre-trial meeting accepted",
-                                "div.govuk-summary-list__row", "How was meeting accepted", "dd.govuk-summary-list__value"))
-                                .isVisible();
-                        String preTrialMeetingAcceptedMethod = readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "CPS pre-trial meeting accepted",
-                                "div.govuk-summary-list__row", "How was meeting accepted", "dd.govuk-summary-list__value")
-                                .innerText();
-                        assertEquals(meetingResponseMethod, preTrialMeetingAcceptedMethod);
-                        String preTrialMeetingAcceptedDate = readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "CPS pre-trial meeting accepted",
-                                "div.govuk-summary-list__row", "Date meeting was accepted", "dd.govuk-summary-list__value")
-                                .innerText();
-                        assertEquals(preTrialMeetingAcceptedDate, convertDateMonthYear(todayMinusFourDays()));
-
-                        Locator preTrialMeetingOffered = selectTableLink(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "CPS pre-trial meeting accepted",
-                                "summary.govuk-details__summary",
-                                "Offered meetings"
-                        );
-                        preTrialMeetingOffered.click();
-
-                        assertThat(readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "CPS pre-trial meeting offered",
-                                "div.govuk-summary-list__row", "How was meeting offered", "dd.govuk-summary-list__value"))
-                                .isVisible();
-                        String preTrialMeetingOfferedMethod = readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "CPS pre-trial meeting offered",
-                                "div.govuk-summary-list__row", "How was meeting offered", "dd.govuk-summary-list__value")
-                                .innerText();
-                        assertEquals(preTrialMeetingOfferedMethod, offerMethod);
-                        String preTrialMeetingOfferedDate = readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "CPS pre-trial meeting offered",
-                                "div.govuk-summary-list__row", "Date meeting was offered", "dd.govuk-summary-list__value")
-                                .innerText();
-                        assertEquals(preTrialMeetingOfferedDate, convertDateMonthYear(todayMinusFiveDays()));
-                        break;
-                    case "Inform victim about charging decision":
-                        assertThat(readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "Charging decision meeting accepted",
-                                "div.govuk-summary-list__row", "How was meeting accepted", "dd.govuk-summary-list__value"))
-                                .isVisible();
-                        String chargingDecisionMeetingAcceptedMethod = readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "Charging decision meeting accepted",
-                                "div.govuk-summary-list__row", "How was meeting accepted", "dd.govuk-summary-list__value")
-                                .innerText();
-                        assertEquals(meetingResponseMethod, chargingDecisionMeetingAcceptedMethod);
-                        String chargingDecisionMeetingAcceptedDate = readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "Charging decision meeting accepted",
-                                "div.govuk-summary-list__row", "Date meeting was accepted", "dd.govuk-summary-list__value")
-                                .innerText();
-                        assertEquals(chargingDecisionMeetingAcceptedDate, convertDateMonthYear(todayMinusFourDays()));
-
-                        Locator chargingDecisionMeetingOffered = selectTableLink(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "Charging decision meeting accepted",
-                                "summary.govuk-details__summary",
-                                "Offered meetings"
-                        );
-                        chargingDecisionMeetingOffered.click();
-
-                        assertThat(readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "Charging decision meeting offered",
-                                "div.govuk-summary-list__row", "How was meeting offered", "dd.govuk-summary-list__value"))
-                                .isVisible();
-                        String chargingDecisionMeetingOfferedMethod = readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "Charging decision meeting offered",
-                                "div.govuk-summary-list__row", "How was meeting offered", "dd.govuk-summary-list__value")
-                                .innerText();
-                        assertEquals(chargingDecisionMeetingOfferedMethod, offerMethod);
-                        String chargingDecisionMeetingOfferedDate = readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "Charging decision meeting offered",
-                                "div.govuk-summary-list__row", "Date meeting was offered", "dd.govuk-summary-list__value")
-                                .innerText();
-                        assertEquals(chargingDecisionMeetingOfferedDate, convertDateMonthYear(todayMinusFiveDays()));
-                        break;
-                    case "Other":
-                        assertThat(readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "Other CPS meeting accepted",
-                                "div.govuk-summary-list__row", "How was meeting accepted", "dd.govuk-summary-list__value"))
-                                .isVisible();
-                        String otherMeetingAcceptedMethod = readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "Other CPS meeting accepted",
-                                "div.govuk-summary-list__row", "How was meeting accepted", "dd.govuk-summary-list__value")
-                                .innerText();
-                        assertEquals(meetingResponseMethod, otherMeetingAcceptedMethod);
-                        String otherMeetingAcceptedDate = readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "Other CPS meeting accepted",
-                                "div.govuk-summary-list__row", "Date meeting was accepted", "dd.govuk-summary-list__value")
-                                .innerText();
-                        assertEquals(otherMeetingAcceptedDate, convertDateMonthYear(todayMinusFourDays()));
-
-                        Locator otherMeetingOffered = selectTableLink(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "Other CPS meeting accepted",
-                                "summary.govuk-details__summary",
-                                "Offered meetings"
-                        );
-                        otherMeetingOffered.click();
-
-                        assertThat(readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "Other CPS meeting offered",
-                                "div.govuk-summary-list__row", "How was meeting offered", "dd.govuk-summary-list__value"))
-                                .isVisible();
-                        String otherMeetingOfferedMethod = readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "Other CPS meeting offered",
-                                "div.govuk-summary-list__row", "How was meeting offered", "dd.govuk-summary-list__value")
-                                .innerText();
-                        assertEquals(otherMeetingOfferedMethod, offerMethod);
-                        String otherMeetingOfferedDate = readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "Other CPS meeting offered",
-                                "div.govuk-summary-list__row", "Date meeting was offered", "dd.govuk-summary-list__value")
-                                .innerText();
-                        assertEquals(otherMeetingOfferedDate, convertDateMonthYear(todayMinusFiveDays()));
-                        break;
-                    default:
-                        System.out.println("Specified meeting type does not exist");
-                }
+                vcaMeetingsPage.assertOfferAcceptResponse(meetingType, meetingResponseMethod, offerMethod);
                 break;
             case "Log meeting declined":
                 waitUntilSpinnersAreGone("Loading, please wait");
                 waitForText("Communications");
                 waitForElement(page, AriaRole.TAB, "Meetings");
-                switch (meetingType) {
-                    case "CPS pre-trial meeting":
-                        assertThat(readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "CPS pre-trial meeting declined",
-                                "div.govuk-summary-list__row", "How was meeting declined", "dd.govuk-summary-list__value"))
-                                .isVisible();
-                        String preTrialMeetingDeclineMethod = readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "CPS pre-trial meeting declined",
-                                "div.govuk-summary-list__row", "How was meeting declined", "dd.govuk-summary-list__value")
-                                .innerText();
-                        assertEquals(meetingResponseMethod, preTrialMeetingDeclineMethod);
-                        String preTrialMeetingDeclineDate = readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "CPS pre-trial meeting declined",
-                                "div.govuk-summary-list__row", "Date meeting was declined", "dd.govuk-summary-list__value")
-                                .innerText();
-                        assertEquals(preTrialMeetingDeclineDate, convertDateMonthYear(todayMinusFourDays()));
-
-                        Locator preTrialMeetingOffered = selectTableLink(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "CPS pre-trial meeting declined",
-                                "summary.govuk-details__summary",
-                                "Offered meetings"
-                        );
-                        preTrialMeetingOffered.click();
-
-                        assertThat(readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "CPS pre-trial meeting offered",
-                                "div.govuk-summary-list__row", "How was meeting offered", "dd.govuk-summary-list__value"))
-                                .isVisible();
-                        String preTrialMeetingOfferedMethod = readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "CPS pre-trial meeting offered",
-                                "div.govuk-summary-list__row", "How was meeting offered", "dd.govuk-summary-list__value")
-                                .innerText();
-                        assertEquals(preTrialMeetingOfferedMethod, offerMethod);
-                        String preTrialMeetingOfferedDate = readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "CPS pre-trial meeting offered",
-                                "div.govuk-summary-list__row", "Date meeting was offered", "dd.govuk-summary-list__value")
-                                .innerText();
-                        assertEquals(preTrialMeetingOfferedDate, convertDateMonthYear(todayMinusFiveDays()));
-                        break;
-                    case "Inform victim about charging decision":
-                        assertThat(readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "Charging decision meeting declined",
-                                "div.govuk-summary-list__row", "How was meeting declined", "dd.govuk-summary-list__value"))
-                                .isVisible();
-                        String chargingDecisionMeetingDeclinedMethod = readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "Charging decision meeting declined",
-                                "div.govuk-summary-list__row", "How was meeting declined", "dd.govuk-summary-list__value")
-                                .innerText();
-                        assertEquals(meetingResponseMethod, chargingDecisionMeetingDeclinedMethod);
-                        String chargingDecisionMeetingDeclinedDate = readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "Charging decision meeting declined",
-                                "div.govuk-summary-list__row", "Date meeting was declined", "dd.govuk-summary-list__value")
-                                .innerText();
-                        assertEquals(chargingDecisionMeetingDeclinedDate, convertDateMonthYear(todayMinusFourDays()));
-
-                        Locator chargingDecisionMeetingOffered = selectTableLink(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "Charging decision meeting declined",
-                                "summary.govuk-details__summary",
-                                "Offered meetings"
-                        );
-                        chargingDecisionMeetingOffered.click();
-
-                        assertThat(readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "Charging decision meeting offered",
-                                "div.govuk-summary-list__row", "How was meeting offered", "dd.govuk-summary-list__value"))
-                                .isVisible();
-                        String chargingDecisionMeetingOfferedMethod = readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "Charging decision meeting offered",
-                                "div.govuk-summary-list__row", "How was meeting offered", "dd.govuk-summary-list__value")
-                                .innerText();
-                        assertEquals(chargingDecisionMeetingOfferedMethod, offerMethod);
-                        String chargingDecisionMeetingOfferedDate = readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "Charging decision meeting offered",
-                                "div.govuk-summary-list__row", "Date meeting was offered", "dd.govuk-summary-list__value")
-                                .innerText();
-                        assertEquals(chargingDecisionMeetingOfferedDate, convertDateMonthYear(todayMinusFiveDays()));
-                        break;
-                    case "Other":
-                        assertThat(readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "Other CPS meeting declined",
-                                "div.govuk-summary-list__row", "How was meeting declined", "dd.govuk-summary-list__value"))
-                                .isVisible();
-                        String otherMeetingDeclinedMethod = readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "Other CPS meeting declined",
-                                "div.govuk-summary-list__row", "How was meeting declined", "dd.govuk-summary-list__value")
-                                .innerText();
-                        assertEquals(meetingResponseMethod, otherMeetingDeclinedMethod);
-                        String otherMeetingDeclinedDate = readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "Other CPS meeting declined",
-                                "div.govuk-summary-list__row", "Date meeting was declined", "dd.govuk-summary-list__value")
-                                .innerText();
-                        assertEquals(otherMeetingDeclinedDate, convertDateMonthYear(todayMinusFourDays()));
-
-                        Locator otherMeetingOffered = selectTableLink(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "Other CPS meeting declined",
-                                "summary.govuk-details__summary",
-                                "Offered meetings"
-                        );
-                        otherMeetingOffered.click();
-
-                        assertThat(readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "Other CPS meeting offered",
-                                "div.govuk-summary-list__row", "How was meeting offered", "dd.govuk-summary-list__value"))
-                                .isVisible();
-                        String otherMeetingOfferedMethod = readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "Other CPS meeting offered",
-                                "div.govuk-summary-list__row", "How was meeting offered", "dd.govuk-summary-list__value")
-                                .innerText();
-                        assertEquals(otherMeetingOfferedMethod, offerMethod);
-                        String otherMeetingOfferedDate = readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "Other CPS meeting offered",
-                                "div.govuk-summary-list__row", "Date meeting was offered", "dd.govuk-summary-list__value")
-                                .innerText();
-                        assertEquals(otherMeetingOfferedDate, convertDateMonthYear(todayMinusFiveDays()));
-                        break;
-                    default:
-                        System.out.println("Specified meeting type does not exist");
-                }
+                vcaMeetingsPage.assertOfferDeclineResponse(meetingType, meetingResponseMethod, offerMethod);
                 break;
             case "Log no response":
                 waitUntilSpinnersAreGone("Loading, please wait");
                 waitForText("Communications");
                 waitForElement(page, AriaRole.TAB, "Meetings");
-                switch (meetingType) {
-                    case "CPS pre-trial meeting":
-                        assertThat(readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "No response to CPS pre-trial meeting offer",
-                                "div.govuk-summary-list__row", "Response", "dd.govuk-summary-list__value"))
-                                .isVisible();
-                        String preTrialMeetingNoResponse = readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "No response to CPS pre-trial meeting offer",
-                                "div.govuk-summary-list__row", "Response", "dd.govuk-summary-list__value")
-                                .innerText();
-                        assertEquals("No", preTrialMeetingNoResponse);
-
-                        Locator preTrialMeetingOffered = selectTableLink(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "No response to CPS pre-trial meeting offer",
-                                "summary.govuk-details__summary",
-                                "Offered meetings"
-                        );
-                        preTrialMeetingOffered.click();
-
-                        assertThat(readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "CPS pre-trial meeting offered",
-                                "div.govuk-summary-list__row", "How was meeting offered", "dd.govuk-summary-list__value"))
-                                .isVisible();
-                        String preTrialMeetingOfferedMethod = readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "CPS pre-trial meeting offered",
-                                "div.govuk-summary-list__row", "How was meeting offered", "dd.govuk-summary-list__value")
-                                .innerText();
-                        assertEquals(preTrialMeetingOfferedMethod, offerMethod);
-                        String preTrialMeetingOfferedDate = readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "CPS pre-trial meeting offered",
-                                "div.govuk-summary-list__row", "Date meeting was offered", "dd.govuk-summary-list__value")
-                                .innerText();
-                        assertEquals(preTrialMeetingOfferedDate, convertDateMonthYear(todayMinusFiveDays()));
-                        break;
-                    case "Inform victim about charging decision":
-                        assertThat(readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "No response to Charging decision meeting offer",
-                                "div.govuk-summary-list__row", "Response", "dd.govuk-summary-list__value"))
-                                .isVisible();
-                        String chargingDecisionMeetingNoResponse = readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "No response to Charging decision meeting offer",
-                                "div.govuk-summary-list__row", "Response", "dd.govuk-summary-list__value")
-                                .innerText();
-                        assertEquals("No", chargingDecisionMeetingNoResponse);
-                        Locator chargingDecisionMeetingOffered = selectTableLink(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "No response to Charging decision meeting offer",
-                                "summary.govuk-details__summary",
-                                "Offered meetings"
-                        );
-                        chargingDecisionMeetingOffered.click();
-
-                        assertThat(readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "Charging decision meeting offered",
-                                "div.govuk-summary-list__row", "How was meeting offered", "dd.govuk-summary-list__value"))
-                                .isVisible();
-                        String chargingDecisionMeetingOfferedMethod = readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "Charging decision meeting offered",
-                                "div.govuk-summary-list__row", "How was meeting offered", "dd.govuk-summary-list__value")
-                                .innerText();
-                        assertEquals(chargingDecisionMeetingOfferedMethod, offerMethod);
-                        String chargingDecisionMeetingOfferedDate = readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "Charging decision meeting offered",
-                                "div.govuk-summary-list__row", "Date meeting was offered", "dd.govuk-summary-list__value")
-                                .innerText();
-                        assertEquals(chargingDecisionMeetingOfferedDate, convertDateMonthYear(todayMinusFiveDays()));
-                        break;
-                    case "Other":
-                        assertThat(readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "No response to Other CPS meeting offer",
-                                "div.govuk-summary-list__row", "Response", "dd.govuk-summary-list__value"))
-                                .isVisible();
-                        String otherMeetingResponse = readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "No response to Other CPS meeting offer",
-                                "div.govuk-summary-list__row", "Response", "dd.govuk-summary-list__value")
-                                .innerText();
-                        assertEquals("No", otherMeetingResponse);
-
-                        Locator otherMeetingOffered = selectTableLink(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "No response to Other CPS meeting offer",
-                                "summary.govuk-details__summary",
-                                "Offered meetings"
-                        );
-                        otherMeetingOffered.click();
-
-                        assertThat(readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "Other CPS meeting offered",
-                                "div.govuk-summary-list__row", "How was meeting offered", "dd.govuk-summary-list__value"))
-                                .isVisible();
-                        String otherMeetingOfferedMethod = readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "Other CPS meeting offered",
-                                "div.govuk-summary-list__row", "How was meeting offered", "dd.govuk-summary-list__value")
-                                .innerText();
-                        assertEquals(otherMeetingOfferedMethod, offerMethod);
-                        String otherMeetingOfferedDate = readTableRowCell(page,
-                                "div.govuk-summary-card", "h2.govuk-summary-card__title", "Other CPS meeting offered",
-                                "div.govuk-summary-list__row", "Date meeting was offered", "dd.govuk-summary-list__value")
-                                .innerText();
-                        assertEquals(otherMeetingOfferedDate, convertDateMonthYear(todayMinusFiveDays()));
-                        break;
-                    default:
-                        System.out.println("Specified response type does not exist");
-                }
+                vcaMeetingsPage.assertOfferNoResponse(meetingType, meetingResponseMethod, offerMethod);
                 break;
             default:
                 System.out.println("Specified response type does not exist");
@@ -674,6 +210,7 @@ public class VcaCommunicationsPage extends BasePage {
         waitForText("Communications");
         waitForElement(page, AriaRole.TAB, "Meetings");
         clickSelectOnAriaRole(page, AriaRole.TAB, "Meetings");
+        meetingType = vcaMeetingsPage.getMeetingType(meetingType);
         vcaMeetingsPage.selectAcceptedMeetingType(meetingType);
         waitUntilSpinnersAreGone("Loading, please wait");
         waitForText("How was the meeting arranged?");
@@ -694,7 +231,7 @@ public class VcaCommunicationsPage extends BasePage {
         waitForText("Who should attend the meeting?");
         vcaMeetingsPage.selectMeetingAttendees(meetingAttendeesRoles);
         waitForText("Who will lead the meeting?");
-        checkRadioContainName(chairPerson);
+        vcaMeetingsPage.selectMeetingChairPerson(chairPerson);
         getButtonByName("Continue").click();
         waitForText("Support needs");
     }
@@ -737,11 +274,13 @@ public class VcaCommunicationsPage extends BasePage {
         waitForText("Communications");
         waitForElement(page, AriaRole.TAB, "Meetings");
         clickSelectOnAriaRole(page, AriaRole.TAB, "Meetings");
+        meetingType = vcaMeetingsPage.getMeetingType(meetingType);
         vcaMeetingsPage.verifyArrangedMeeting(meetingType);
     }
 
     public void cancelArrangedMeeting(String personFirstLastName, String meetingType, String cancellationReason){
         waitUntilSpinnersAreGone("Loading, please wait");
+        meetingType = vcaMeetingsPage.getMeetingType(meetingType);
         vcaMeetingsPage.cancelMeeting(meetingType);
         enterTextInLocator("#b6-Input_Date",todayMinusNoOfDays(1));
         enterTextInLocator("#Input_Hour",utcHourNow());
@@ -760,6 +299,7 @@ public class VcaCommunicationsPage extends BasePage {
         waitForElement(page, AriaRole.TAB, "Meetings");
         clickSelectOnAriaRole(page, AriaRole.TAB, "Meetings");
         navigateMeetings();
+        meetingType = vcaMeetingsPage.getMeetingType(meetingType);
         vcaMeetingsPage.verifyCancelledMeeting(meetingType);
     }
 
@@ -767,6 +307,7 @@ public class VcaCommunicationsPage extends BasePage {
         waitUntilSpinnersAreGone("Loading, please wait");
         waitForElement(page, AriaRole.TAB, "Meetings");
         clickSelectOnAriaRole(page, AriaRole.TAB, "Meetings");
+        meetingType = vcaMeetingsPage.getMeetingType(meetingType);
         vcaMeetingsPage.verifyCancelledMeetingDetails(personFirstLastName, meetingType,cancellationReason);
 
     }
@@ -775,6 +316,7 @@ public class VcaCommunicationsPage extends BasePage {
         waitUntilSpinnersAreGone("Loading, please wait");
         waitForElement(page, AriaRole.TAB, "Meetings");
         clickSelectOnAriaRole(page, AriaRole.TAB, "Meetings");
+        meetingType = vcaMeetingsPage.getMeetingType(meetingType);
         vcaMeetingsPage.verifyArrangedMeetingDetails(personFirstLastName, meetingType, meetingRequest, meetingMethod, locationName, chairPerson);
     }
 
@@ -786,6 +328,7 @@ public class VcaCommunicationsPage extends BasePage {
         waitForText("Communications");
         waitForElement(page, AriaRole.TAB, "Meetings");
         clickSelectOnAriaRole(page, AriaRole.TAB, "Meetings");
+        meetingType = vcaMeetingsPage.getMeetingType(meetingType);
         vcaMeetingsPage.selectArrangedMeetingType(meetingType);
         vcaMeetingsPage.logArrangedMeetingTime(meetingTookPlace);
         vcaMeetingsPage.logArrangedMeetingAttendeesLedBy(personFullName,personFirstLastName,meetingAttendeesRoles, meetingLedBy);
@@ -797,7 +340,8 @@ public class VcaCommunicationsPage extends BasePage {
 
     public void verifyLoggedMeeting(String meetingType, String agreeToResearch, String meetingNotes,
                                     String meetingNotesSent, String actionsAgreed){
-        vcaMeetingsPage.verifyLoggedMeetingDetails( meetingType, agreeToResearch, meetingNotes, meetingNotesSent, actionsAgreed);
+        meetingType = vcaMeetingsPage.getMeetingType(meetingType);
+        vcaMeetingsPage.verifyLoggedMeetingDetails(meetingType, agreeToResearch, meetingNotes, meetingNotesSent, actionsAgreed);
     }
 
 }

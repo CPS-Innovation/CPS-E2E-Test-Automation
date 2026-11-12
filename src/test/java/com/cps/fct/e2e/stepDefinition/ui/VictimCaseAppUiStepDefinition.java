@@ -537,6 +537,48 @@ public class VictimCaseAppUiStepDefinition {
         pages.vcaHomePage.navigateVictimHomePage();
     }
 
+    @When("the meeting is arranged with meeting method and meeting chair person for {string} in VCA application")
+    public void arrangeAcceptedMeeting(String personType, DataTable dataTable) {
+        String caseUrn = context.get("caseUrn");
+
+        Map<String, List<String>> personTypePersonNameMap = context.get("personTypePersonNameMap");
+        String personFullName = String.valueOf(personTypePersonNameMap.get(personType));
+        personFullName = personFullName.replace("[", "").replace("]", "");
+
+        Map<String, List<String>> personTypeFirstSureNameMap = context.get("personTypeFirstSureNameMap");
+        String personFirstLastName = String.valueOf(personTypeFirstSureNameMap.get(personType));
+        personFirstLastName = personFirstLastName.replace("[", "").replace("]", "");
+
+//        String caseUrn = "05AQ4938826";
+//        String personFullName = "TOWNE, Margit";
+//        String personFirstLastName = "Margit Towne";
+
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+        pages.vcaHomePage.searchVictimCase(caseUrn);
+        pages.vcaHomePage.navigateCommunicationsTab(caseUrn, personFullName);
+
+        List<String> meetingAttendeesRoles = rows.stream()
+                .map(row -> row.get("meetingAttendeesRoles"))
+                .collect(Collectors.toList());
+
+        List<String> meetingSupportNeeds = rows.stream()
+                .map(row -> row.get("supportNeeds"))
+                .filter(Objects::nonNull)
+                .map(String::trim)
+                .filter(value -> !value.isEmpty())
+                .toList();
+        pages.vcaCommunicationsPage.navigateMeetings();
+
+        for (Map<String, String> row : rows) {
+            pages.vcaCommunicationsPage.arrangeMeetings(personFirstLastName, row.get("meetingType"), row.get("meetingSource"), row.get("meetingMethod"), row.get("locationType"), row.get("locationName"));
+            pages.vcaCommunicationsPage.selectAttendeesAndChairperson(meetingAttendeesRoles, row.get("meetingChairPerson"));
+            pages.vcaCommunicationsPage.selectSupportNeeds(meetingSupportNeeds, personFirstLastName);
+            pages.vcaCommunicationsPage.confirmArrangedMeeting(row.get("meetingType"));
+        }
+        pages.vcaHomePage.navigateVictimHomePage();
+    }
+
+
 
     @When("the {string} meeting type is arranged because {string} it and meeting method is {string} at {string} in {string} and {string} as chair person with attendees for {string} in VCA application")
     public void arrangeMeetingMethod(String meetingType, String meetingSource, String meetingMethod, String locationType, String locationName,

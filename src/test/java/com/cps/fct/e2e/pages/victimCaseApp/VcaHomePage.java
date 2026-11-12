@@ -27,7 +27,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class VcaHomePage extends BasePage {
 
-//    private ScenarioContext context;
 
     public VcaHomePage(PlaywrightContext context) {
         super(context);

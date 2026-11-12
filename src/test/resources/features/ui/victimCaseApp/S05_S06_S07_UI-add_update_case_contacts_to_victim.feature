@@ -44,8 +44,12 @@ Feature: VCA-UI-S5_S6_S7:- Add and update case contacts to victims or victimWitn
       | Independent Domestic Violence Adviser |
     When update following case contacts of "victimWitness" in VCA application
       | caseContactType                       |
-      | Family Liaison Officer                |
+#      | Family Liaison Officer                |
       | Independent Sexual Violence Adviser   |
       | Independent Domestic Violence Adviser |
     Then "victimWitness" case contacts are verified in VCA application
+      | caseContactType                       |
+#      | Family Liaison Officer                |
+      | Independent Sexual Violence Adviser   |
+      | Independent Domestic Violence Adviser |
 

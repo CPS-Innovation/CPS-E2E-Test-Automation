@@ -452,29 +452,6 @@ public class VcaMeetingsPage extends BasePage {
                 meetingType+" arranged",
                 "button.govuk-button", "Log meeting outcome")
                 .click();
-
-//        switch (meetingType.trim().toLowerCase()) {
-//            case "cps pre-trial meeting":
-//                selectTableButton(page, "div.govuk-summary-card", "h2.govuk-summary-card__title",
-//                        "CPS pre-trial meeting arranged",
-//                        "button.govuk-button", "Log meeting outcome")
-//                        .click();
-//                break;
-//            case "inform victim about charging decision":
-//                selectTableButton(page, "div.govuk-summary-card", "h2.govuk-summary-card__title",
-//                        "Charging decision meeting arranged",
-//                        "button.govuk-button", "Log meeting outcome")
-//                        .click();
-//                break;
-//            case "other":
-//                selectTableButton(page, "div.govuk-summary-card", "h2.govuk-summary-card__title",
-//                        "Other CPS meeting arranged",
-//                        "button.govuk-button", "Log meeting outcome")
-//                        .click();
-//                break;
-//            default:
-//                System.out.println("Specified meeting type does not exist");
-//        }
     }
 
     public void logArrangedMeetingTime(String meetingTookPlace) {
@@ -592,29 +569,6 @@ public class VcaMeetingsPage extends BasePage {
                 "div.govuk-summary-card", "h2.govuk-summary-card__title", meetingType+" outcome logged",
                 "div.govuk-summary-list__row", "Duration of the meeting", "dd.govuk-summary-list__value"))
                 .isVisible();
-
-//        switch (meetingType.trim().toLowerCase()) {
-//            case "cps pre-trial meeting":
-//                assertThat(readTableRowCell(page,
-//                        "div.govuk-summary-card", "h2.govuk-summary-card__title", "CPS pre-trial meeting outcome logged",
-//                        "div.govuk-summary-list__row", "Duration of the meeting", "dd.govuk-summary-list__value"))
-//                        .isVisible();
-//                break;
-//            case "inform victim about charging decision":
-//                assertThat(readTableRowCell(page,
-//                        "div.govuk-summary-card", "h2.govuk-summary-card__title", "Charging decision meeting outcome logged",
-//                        "div.govuk-summary-list__row", "Duration of the meeting", "dd.govuk-summary-list__value"))
-//                        .isVisible();
-//                break;
-//            case "other":
-//                assertThat(readTableRowCell(page,
-//                        "div.govuk-summary-card", "h2.govuk-summary-card__title", "Other CPS meeting outcome logged",
-//                        "div.govuk-summary-list__row", "Duration of the meeting", "dd.govuk-summary-list__value"))
-//                        .isVisible();
-//                break;
-//            default:
-//                System.out.println("Specified meeting type is not arranged");
-//        }
     }
 
     public void verifyLoggedMeetingDetails(String meetingType, String agreeToResearch, String meetingNotes,
@@ -656,24 +610,6 @@ public class VcaMeetingsPage extends BasePage {
                 .innerText();
         assertEquals(actionsAgreed, actualActionsAgreed);
 
-//        assertLoggedMeetingValues(meetingType, agreeToResearch, meetingNotes, meetingNotesSent, actionsAgreed);
-
-//        switch (meetingType.trim().toLowerCase()) {
-//            case "cps pre-trial meeting":
-//                meetingType = "CPS pre-trial meeting";
-//                assertLoggedMeetingValues(meetingType, agreeToResearch, meetingNotes, meetingNotesSent, actionsAgreed);
-//                break;
-//            case "inform victim about charging decision":
-//                meetingType = "Charging decision meeting";
-//                assertLoggedMeetingValues(meetingType, agreeToResearch, meetingNotes, meetingNotesSent, actionsAgreed);
-//                break;
-//            case "other":
-//                meetingType = "Other CPS meeting";
-//                assertLoggedMeetingValues(meetingType, agreeToResearch, meetingNotes, meetingNotesSent, actionsAgreed);
-//                break;
-//            default:
-//                System.out.println("Specified meeting type does not exist");
-//        }
     }
 
     public void assertLoggedMeetingValues(String meetingType, String agreeToResearch, String meetingNotes,

@@ -1,21 +1,14 @@
 package com.cps.fct.e2e.pages.victimCaseApp;
 
-import com.cps.fct.e2e.model.victimCaseApp.MeetingAttendees;
 import com.cps.fct.e2e.pages.BasePage;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
 import com.cps.fct.e2e.utils.playwright.PlaywrightContext;
 import com.microsoft.playwright.Locator;
-import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
-import org.picocontainer.annotations.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.cps.fct.e2e.pages.*;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.regex.Pattern;
 
 import static com.cps.fct.e2e.utils.common.DateTimeUtils.utcHourNow;
 import static com.cps.fct.e2e.utils.common.DateTimeUtils.utcMinuteNow;
@@ -135,7 +128,7 @@ public class VcaMeetingsPage extends BasePage {
         assertOfferDetails(meetingType, offerMethod);
     }
 
-    public void assertOfferNoResponse(String meetingType, String meetingResponseMethod, String offerMethod) {
+    public void assertOfferNoResponse(String meetingType, String offerMethod) {
         String actualMeetingNoResponse = readTableRowCell(page,
                 "div.govuk-summary-card", "h2.govuk-summary-card__title", "No response to "+ meetingType + " offer",
                 "div.govuk-summary-list__row", "Response", "dd.govuk-summary-list__value")
@@ -257,14 +250,19 @@ public class VcaMeetingsPage extends BasePage {
             switch (role.trim().toLowerCase()) {
                 case "defence firm":
                     selectCheckboxContainText("Defence firm");
+                    break;
                 case "defence solicitor":
                     selectCheckboxContainText("Defence Solicitor");
+                    break;
                 case "officer in charge":
                     selectCheckboxContainText("Officer in Charge");
+                    break;
                 case "victim liaison officer":
                     selectCheckboxContainText("Victim Liaison Officer");
+                    break;
                 case "counsel":
                     selectCheckboxContainText("Counsel");
+                    break;
             }
         }
         getButtonByName("Continue").click();
@@ -437,6 +435,8 @@ public class VcaMeetingsPage extends BasePage {
             assertEquals(locationName, meetingsLocation);
         }
 
+//        TODO :- Need to assert for ChairPerson
+        System.out.println(chairPerson);
 //        String meetingsAttendees = readTableRowCell(page,
 //                "div.govuk-summary-card", "h2.govuk-summary-card__title", meetingType + " arranged",
 //                "div.govuk-summary-list__row", "Attendees", "dd.govuk-summary-list__value")

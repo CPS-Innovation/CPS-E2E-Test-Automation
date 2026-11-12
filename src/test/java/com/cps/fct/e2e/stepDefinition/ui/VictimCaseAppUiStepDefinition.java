@@ -62,7 +62,6 @@ public class VictimCaseAppUiStepDefinition {
 
     @When("verify that {string} is onboarded")
     public void verifyOnboard(String personType) {
-//        Map<String, List<String>> victimWitnessIds = context.get("victimWitnessMapIds");
 
         Map<String, List<String>> personTypePersonNameMap = context.get("personTypePersonNameMap");
         String personFullName = String.valueOf(personTypePersonNameMap.get(personType));
@@ -70,12 +69,7 @@ public class VictimCaseAppUiStepDefinition {
 
         pages.vcaHomePage.verifyVictimOnboard(personFullName);
 
-//        for (String id : victimWitnessIds.get(personType)) {
-//            pages.vcaHomePage.verifyVictimOnboard(personFullName);
-//        }
-
     }
-
 
     @When("the {string} is assigned as VLO to {string}")
     public void assignVLO(String vloName, String personType) {
@@ -236,7 +230,7 @@ public class VictimCaseAppUiStepDefinition {
                     pages.vcaVictimDetailsPage.updateDateOfBirth(row.get("justification"));
                     break;
                 case "Gender":
-                    pages.vcaVictimDetailsPage.updateGender(personFirstLastName, row.get("justification"));
+                    pages.vcaVictimDetailsPage.updateGender(personFirstLastName);
                     break;
                 case "Address":
                     pages.vcaVictimDetailsPage.updateAddress(personFirstLastName, row.get("justification"));

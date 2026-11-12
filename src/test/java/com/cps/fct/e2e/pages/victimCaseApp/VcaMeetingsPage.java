@@ -263,6 +263,9 @@ public class VcaMeetingsPage extends BasePage {
                 case "counsel":
                     selectCheckboxContainText("Counsel");
                     break;
+                default:
+                    System.out.println("Specified meeting attendees role does not exist");
+
             }
         }
         getButtonByName("Continue").click();
@@ -471,7 +474,7 @@ public class VcaMeetingsPage extends BasePage {
         waitForText("Who attended the meeting?");
     }
 
-    public void logArrangedMeetingAttendeesLedBy(String personFullName, String personFirstLastName, List<String> meetingAttendeesRoles, String meetingLedBy) {
+    public void logArrangedMeetingAttendeesLedBy(String personFirstLastName, List<String> meetingAttendeesRoles, String meetingLedBy) {
         waitForText("Who attended the meeting?");
         System.out.println(meetingAttendeesRoles);
         for (String role : meetingAttendeesRoles) {
@@ -610,45 +613,6 @@ public class VcaMeetingsPage extends BasePage {
                 .innerText();
         assertEquals(actionsAgreed, actualActionsAgreed);
 
-    }
-
-    public void assertLoggedMeetingValues(String meetingType, String agreeToResearch, String meetingNotes,
-                                          String meetingNotesSent, String actionsAgreed) {
-        if ("Question Not Asked".equalsIgnoreCase(agreeToResearch)) {
-            agreeToResearch = "Did not ask";
-        }
-        if ("Yes".equalsIgnoreCase(actionsAgreed)) {
-            actionsAgreed = "Action Agreed Data Entered";
-        }
-
-        assertThat(readTableRowCell(page,
-                "div.govuk-summary-card", "h2.govuk-summary-card__title", meetingType + " outcome logged",
-                "div.govuk-summary-list__row", "Duration of the meeting", "dd.govuk-summary-list__value"))
-                .isVisible();
-
-        String actualAgreeToResearch = readTableRowCell(page,
-                "div.govuk-summary-card", "h2.govuk-summary-card__title", meetingType + " outcome logged",
-                "div.govuk-summary-list__row", "Agreed to research", "dd.govuk-summary-list__value")
-                .innerText();
-        assertEquals(agreeToResearch, actualAgreeToResearch);
-
-        String actualMeetingNotes = readTableRowCell(page,
-                "div.govuk-summary-card", "h2.govuk-summary-card__title", meetingType + " outcome logged",
-                "div.govuk-summary-list__row", "Meeting notes to OIC", "dd.govuk-summary-list__value")
-                .innerText();
-        assertEquals(meetingNotes, actualMeetingNotes);
-
-        String actualMeetingNotesSent = readTableRowCell(page,
-                "div.govuk-summary-card", "h2.govuk-summary-card__title", meetingType + " outcome logged",
-                "div.govuk-summary-list__row", "Meeting notes to victim", "dd.govuk-summary-list__value")
-                .innerText();
-        assertEquals(meetingNotesSent, actualMeetingNotesSent);
-
-        String actualActionsAgreed = readTableRowCell(page,
-                "div.govuk-summary-card", "h2.govuk-summary-card__title", meetingType + " outcome logged",
-                "div.govuk-summary-list__row", "Actions agreed", "dd.govuk-summary-list__value")
-                .innerText();
-        assertEquals(actionsAgreed, actualActionsAgreed);
     }
 
 

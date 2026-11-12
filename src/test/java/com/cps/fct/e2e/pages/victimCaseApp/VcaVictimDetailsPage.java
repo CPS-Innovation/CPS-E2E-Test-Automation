@@ -284,7 +284,7 @@ public class VcaVictimDetailsPage extends BasePage {
         clickTextLink(page, "div.govuk-summary-list__row", "#b31-b25-Key", "Email address", "Change");
         waitForText("What is " + victimWitnessFirstSureName + "’s email address? (optional)");
         enterTextById("b8-Input_Email", email());
-        page.locator("textarea").fill("justification");
+        page.locator("textarea").fill(justification);
         getButtonByName("Save and continue").click();
         waitUntilSpinnersAreGone("Loading, please wait");
         assertThat(page.getByText(

@@ -327,7 +327,7 @@ public class VcaCommunicationsPage extends BasePage {
         meetingType = vcaMeetingsPage.getMeetingType(meetingType);
         vcaMeetingsPage.selectArrangedMeetingType(meetingType);
         vcaMeetingsPage.logArrangedMeetingTime(meetingTookPlace);
-        vcaMeetingsPage.logArrangedMeetingAttendeesLedBy(personFullName,personFirstLastName,meetingAttendeesRoles, meetingLedBy);
+        vcaMeetingsPage.logArrangedMeetingAttendeesLedBy(personFirstLastName,meetingAttendeesRoles, meetingLedBy);
         vcaMeetingsPage.logArrangedMeetingAction(personFirstLastName, agreeToResearch, meetingNotes, meetingNotesSent, actionsAgreed);
         vcaMeetingsPage.confirmLogArrangedMeetingDetails();
         vcaMeetingsPage.verifyMeetingOutcome(meetingType);

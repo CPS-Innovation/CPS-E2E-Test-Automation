@@ -46,48 +46,18 @@ Feature: VCA-UI-S13-S14-S54:- Cancel the offered then accepted then arranged vic
       | CPS pre-trial meeting                 | By telephone     | Log meeting acceptance | Letter by police      |
       | Inform victim about charging decision | Letter by police | Log meeting acceptance | By telephone          |
       | Other                                 | Letter by ISVA   | Log meeting acceptance | Letter by ISVA        |
-    When the "CPS pre-trial meeting" meeting type is arranged because "CPS Offered" it and meeting method is "In person" at "CPS location" in "Petty France" and "Victim Liaison Officer" as chair person with attendees for "victimWitness" in VCA application
-      | meetingAttendeesRoles  | supportNeeds      |
-      | Defence firm           | Interpreter       |
-      | Victim liaison officer | Someone to attend |
-      | Defence Solicitor      |                   |
-      | Counsel                |                   |
-      | Officer in Charge      |                   |
-    When the "Inform victim about charging decision" meeting type is arranged because "Victim Requested" it and meeting method is "Virtual call" at "Virtual call" in "Virtual call" and "Counsel" as chair person with attendees for "victimWitness" in VCA application
-      | meetingAttendeesRoles  | supportNeeds |
-      | Defence firm           | Interpreter  |
-      | Victim liaison officer |              |
-      | Defence Solicitor      |              |
-      | Counsel                |              |
-      | Officer in Charge      |              |
-    When the "Other" meeting type is arranged because "Third party requested" it and meeting method is "Hybrid" at "Magistrates court" in "Newcastle upon Tyne Magistrates' Court" and "Officer in Charge" as chair person with attendees for "victimWitness" in VCA application
-      | meetingAttendeesRoles  | supportNeeds      |
-      | Defence firm           | Someone to attend |
-      | Victim liaison officer |                   |
-      | Defence Solicitor      |                   |
-      | Counsel                |                   |
-      | Officer in Charge      |                   |
-    When the "CPS pre-trial meeting" meeting type is arranged because "Victim Requested" it and meeting method is "In person" at "Crown court" in "Newcastle upon Tyne Crown Court" and "Defence firm" as chair person with attendees for "victimWitnessChild" in VCA application
-      | meetingAttendeesRoles  | supportNeeds      |
-      | Defence firm           | Interpreter       |
-      | Victim liaison officer | Someone to attend |
-      | Defence Solicitor      |                   |
-      | Counsel                |                   |
-      | Officer in Charge      |                   |
-    When the "Inform victim about charging decision" meeting type is arranged because "Third party requested" it and meeting method is "Hybrid" at "Police station" in "Northumbria" and "Defence Solicitor" as chair person with attendees for "victimWitnessChild" in VCA application
-      | meetingAttendeesRoles  | supportNeeds |
-      | Defence firm           | Interpreter  |
-      | Victim liaison officer |              |
-      | Defence Solicitor      |              |
-      | Counsel                |              |
-      | Officer in Charge      |              |
-    When the "Other" meeting type is arranged because "Victim Requested" it and meeting method is "In person" at "Other" in "Other Location text" and "Victim Liaison Officer" as chair person with attendees for "victimWitnessChild" in VCA application
-      | meetingAttendeesRoles  | supportNeeds      |
-      | Defence firm           | Someone to attend |
-      | Victim liaison officer |                   |
-      | Defence Solicitor      |                   |
-      | Counsel                |                   |
-      | Officer in Charge      |                   |
+    When the meeting is arranged with meeting method and meeting chair person for "victimWitness" in VCA application
+      | meetingType                           | meetingSource         | meetingMethod | locationType | locationName                    | meetingAttendeesRoles  | meetingChairPerson     | supportNeeds      |
+      | CPS pre-trial meeting                 | CPS Offered           | In Person     | CPS location | Petty France                    | Counsel                | Victim liaison officer | Interpreter       |
+      | Inform victim about charging decision | Victim Requested      | Virtual call  | Virtual call | Virtual call                    | Victim liaison officer | Counsel                | Someone to attend |
+      | Other                                 | Third party requested | Hybrid        | Crown court  | Newcastle upon Tyne Crown Court | Officer in Charge      | Officer in Charge      |                   |
+    When the meeting is arranged with meeting method and meeting chair person for "victimWitnessChild" in VCA application
+      | meetingType                           | meetingSource         | meetingMethod | locationType      | locationName                           | meetingAttendeesRoles  | meetingChairPerson     | supportNeeds |
+      | CPS pre-trial meeting                 | Victim Requested      | Hybrid        | Magistrates court | Newcastle upon Tyne Magistrates' Court | Defence firm           | Defence Solicitor      | Interpreter  |
+      | Inform victim about charging decision | Third party requested | In Person     | Other             | Other Location text                    | Defence Solicitor      | Victim liaison officer |              |
+      | Other                                 | CPS Offered           | Hybrid        | Police station    | Northumbria                            | Victim liaison officer | Defence firm           |              |
+#      # CPS location :- #Petty France        # Magistrates court :-  #Newcastle upon Tyne Magistrates' Court
+#      # Crown court  :- #Newcastle upon Tyne Crown Court       # Police station:- #Northumbria     # Other :- #Other Location text
     When cancel the arranged meeting with the cancellation reason for "victimWitness" in VCA application
       | meetingType                           | cancellationReason       |
       | CPS pre-trial meeting                 | Victim withdrew          |

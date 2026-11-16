@@ -33,7 +33,7 @@ Feature: VCA-UI-S5_S6_S7:- Add and update case contacts to victims or victimWitn
     Given VLO login to victim case application
     And "victimWitness" is searched using case reference
     And the "victimWitness" is onboarded to "Universal" service lead
-    And select "No task at this time" for next task for the "victimWitness"
+    And select "No task at this time" for next task
     And verify that "victimWitness" is onboarded
     And the "Murali" is assigned as VLO to "victimWitness"
     And verify that Vlo "Murali" is assigned to "victimWitness"

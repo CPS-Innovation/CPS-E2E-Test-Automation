@@ -23,7 +23,7 @@ Feature: VCA-UI-S1_S2:- UI Flow - Add personal and contact details for victims o
     And "victimWitness" is searched using case reference
     And the "victimWitness" is onboarded to "Universal" service lead
 #      service lead options = Universal, Enhanced, Rasso, Not aligned
-    And select "No task at this time" for next task for the "victimWitness"
+    And select "No task at this time" for next task
 #     task options = #Inform of a decision to charge
 #                     Inform of a no further action decision
 #                     Log offered meeting

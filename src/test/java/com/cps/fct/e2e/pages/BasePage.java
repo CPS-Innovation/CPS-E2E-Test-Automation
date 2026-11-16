@@ -618,9 +618,9 @@ public abstract class BasePage {
 
 
     public void clickSelectOnAriaRole(Page page, AriaRole role, String expectedTexts) {
-        Locator link = page.getByRole(role,
+        Locator type = page.getByRole(role,
                 new Page.GetByRoleOptions().setName(expectedTexts));
-        link.click();
+        type.click();
     }
 
 

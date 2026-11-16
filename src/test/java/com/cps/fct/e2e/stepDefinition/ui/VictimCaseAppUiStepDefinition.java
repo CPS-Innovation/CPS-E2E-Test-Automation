@@ -7,6 +7,7 @@ import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.jetbrains.annotations.NotNull;
 import org.picocontainer.annotations.Inject;
 
 import java.util.*;
@@ -21,7 +22,6 @@ public class VictimCaseAppUiStepDefinition {
     @Inject
     private PlaywrightManager playwrightManager;
 
-
     @Given("VLO login to victim case application")
     public void newVloLogIntoVca() {
         playwrightManager.setUpBrowser(null);
@@ -30,7 +30,6 @@ public class VictimCaseAppUiStepDefinition {
                 pages.appsLoginPage.vcaUsername(),
                 pages.appsLoginPage.vcaPassword()
         );
-
     }
 
     @When("{string} is searched using case reference")
@@ -55,8 +54,8 @@ public class VictimCaseAppUiStepDefinition {
 
     }
 
-    @When("select {string} for next task for the {string}")
-    public void selectNextTask(String taskType, String personType) {
+    @When("select {string} for next task")
+    public void selectNextTask(String taskType) {
         pages.vcaHomePage.selectNextTaskForVictim(taskType);
     }
 
@@ -95,7 +94,7 @@ public class VictimCaseAppUiStepDefinition {
     }
 
     @When("the following {string} personal details are added to CMS")
-    public void addVictimCMSPersonDetails(String personType, DataTable dataTable) {
+    public void addVictimCMSPersonDetails(String personType, @NotNull DataTable dataTable) {
         String caseUrn = context.get("caseUrn");
 
         Map<String, List<String>> personTypePersonNameMap = context.get("personTypePersonNameMap");
@@ -128,7 +127,7 @@ public class VictimCaseAppUiStepDefinition {
     }
 
     @When("the following {string} personal details are added in VCA")
-    public void addVictimVCAPersonDetails(String personType, DataTable dataTable) {
+    public void addVictimVCAPersonDetails(String personType, @NotNull DataTable dataTable) {
         String caseUrn = context.get("caseUrn");
         Map<String, List<String>> personTypePersonNameMap = context.get("personTypePersonNameMap");
         String personFullName = String.valueOf(personTypePersonNameMap.get(personType));
@@ -184,7 +183,6 @@ public class VictimCaseAppUiStepDefinition {
     @When("the {string} forename and surname are updated with {string} to CMS")
     public void updateForenameSurname(String personType, String justification) {
         String caseUrn = context.get("caseUrn");
-        Map<String, List<String>> victimWitnessIds = context.get("victimWitnessMapIds");
 
         Map<String, List<String>> personTypePersonNameMap = context.get("personTypePersonNameMap");
         String personFullName = String.valueOf(personTypePersonNameMap.get(personType));
@@ -208,7 +206,7 @@ public class VictimCaseAppUiStepDefinition {
     }
 
     @When("the following {string} personal details are updated to CMS")
-    public void updateVictimCMSPersonDetails(String personType, DataTable dataTable) {
+    public void updateVictimCMSPersonDetails(String personType, @NotNull DataTable dataTable) {
         String caseUrn = context.get("caseUrn");
 
         Map<String, List<String>> personTypePersonNameMap = context.get("personTypePersonNameMap");
@@ -248,7 +246,7 @@ public class VictimCaseAppUiStepDefinition {
     }
 
     @When("the following {string} personal details are updated in VCA")
-    public void updateVictimVCAPersonDetails(String personType, DataTable dataTable) {
+    public void updateVictimVCAPersonDetails(String personType, @NotNull DataTable dataTable) {
 
         Map<String, List<String>> personTypeFirstSureNameMap = context.get("personTypeFirstSureNameMap");
         String personFirstLastName = String.valueOf(personTypeFirstSureNameMap.get(personType));
@@ -284,7 +282,7 @@ public class VictimCaseAppUiStepDefinition {
     }
 
     @When("the following case contacts are added to {string} in VCA application")
-    public void addCaseContact(String personType, DataTable dataTable) {
+    public void addCaseContact(String personType, @NotNull DataTable dataTable) {
         String caseUrn = context.get("caseUrn");
         Map<String, List<String>> personTypePersonNameMap = context.get("personTypePersonNameMap");
         String personFullName = String.valueOf(personTypePersonNameMap.get(personType));
@@ -328,7 +326,7 @@ public class VictimCaseAppUiStepDefinition {
     }
 
     @When("update following case contacts of {string} in VCA application")
-    public void updateCaseContact(String personType, DataTable dataTable) {
+    public void updateCaseContact(String personType, @NotNull DataTable dataTable) {
         String caseUrn = context.get("caseUrn");
 
         Map<String, List<String>> personTypePersonNameMap = context.get("personTypePersonNameMap");
@@ -358,9 +356,8 @@ public class VictimCaseAppUiStepDefinition {
         pages.vcaHomePage.navigateVictimHomePage();
     }
 
-
     @Then("{string} case contacts are verified in VCA application")
-    public void verifyUpdatedCaseContacts(String personType, DataTable dataTable) {
+    public void verifyUpdatedCaseContacts(String personType, @NotNull DataTable dataTable) {
         String caseUrn = context.get("caseUrn");
         Map<String, List<String>> personTypePersonNameMap = context.get("personTypePersonNameMap");
         String personFullName = String.valueOf(personTypePersonNameMap.get(personType));
@@ -377,7 +374,7 @@ public class VictimCaseAppUiStepDefinition {
     }
 
     @When("the following category type is added to {string} in VCA application")
-    public void addNewCategory(String personType, DataTable dataTable) {
+    public void addNewCategory(String personType, @NotNull DataTable dataTable) {
         String caseUrn = context.get("caseUrn");
         Map<String, List<String>> personTypePersonNameMap = context.get("personTypePersonNameMap");
         String personFullName = String.valueOf(personTypePersonNameMap.get(personType));
@@ -399,7 +396,7 @@ public class VictimCaseAppUiStepDefinition {
     }
 
     @Then("{string} category types are verified in summary details in VCA application")
-    public void verifyCategoryTypes(String personType, DataTable dataTable) {
+    public void verifyCategoryTypes(String personType, @NotNull DataTable dataTable) {
         String caseUrn = context.get("caseUrn");
         Map<String, List<String>> personTypePersonNameMap = context.get("personTypePersonNameMap");
         String personFullName = String.valueOf(personTypePersonNameMap.get(personType));
@@ -422,7 +419,7 @@ public class VictimCaseAppUiStepDefinition {
     }
 
     @When("the following meeting types are not offered to {string} in VCA application")
-    public void meetingNotOffered(String personType, DataTable dataTable) {
+    public void meetingNotOffered(String personType, @NotNull DataTable dataTable) {
         String caseUrn = context.get("caseUrn");
         Map<String, List<String>> personTypePersonNameMap = context.get("personTypePersonNameMap");
         String personFullName = String.valueOf(personTypePersonNameMap.get(personType));
@@ -445,7 +442,7 @@ public class VictimCaseAppUiStepDefinition {
     }
 
     @Then("the following not offered meetings to {string} are verified in VCA application")
-    public void verifyNotOfferedMeeting(String personType, DataTable dataTable) {
+    public void verifyNotOfferedMeeting(String personType, @NotNull DataTable dataTable) {
         String caseUrn = context.get("caseUrn");
         Map<String, List<String>> personTypePersonNameMap = context.get("personTypePersonNameMap");
         String personFullName = String.valueOf(personTypePersonNameMap.get(personType));
@@ -464,7 +461,7 @@ public class VictimCaseAppUiStepDefinition {
     }
 
     @When("the meeting is offered and meeting response is logged for {string} in VCA application")
-    public void offerMeetingTypeMethod(String personType, DataTable dataTable) {
+    public void offerMeetingTypeMethod(String personType, @NotNull DataTable dataTable) {
         String caseUrn = context.get("caseUrn");
 
         Map<String, List<String>> personTypePersonNameMap = context.get("personTypePersonNameMap");
@@ -488,7 +485,7 @@ public class VictimCaseAppUiStepDefinition {
     }
 
     @When("the offered meeting and response is verified for {string} in VCA application")
-    public void verifyMeetingOfferResponse(String personType, DataTable dataTable) {
+    public void verifyMeetingOfferResponse(String personType, @NotNull DataTable dataTable) {
         String caseUrn = context.get("caseUrn");
 
         Map<String, List<String>> personTypePersonNameMap = context.get("personTypePersonNameMap");
@@ -507,7 +504,7 @@ public class VictimCaseAppUiStepDefinition {
     }
 
     @When("the meeting is arranged with meeting method and meeting chair person for {string} in VCA application")
-    public void arrangeAcceptedMeeting(String personType, DataTable dataTable) {
+    public void arrangeAcceptedMeeting(String personType, @NotNull DataTable dataTable) {
         String caseUrn = context.get("caseUrn");
 
         Map<String, List<String>> personTypePersonNameMap = context.get("personTypePersonNameMap");
@@ -543,11 +540,9 @@ public class VictimCaseAppUiStepDefinition {
         pages.vcaHomePage.navigateVictimHomePage();
     }
 
-
-
     @When("the {string} meeting type is arranged because {string} it and meeting method is {string} at {string} in {string} and {string} as chair person with attendees for {string} in VCA application")
     public void arrangeMeetingMethod(String meetingType, String meetingSource, String meetingMethod, String locationType, String locationName,
-                                     String chairPerson, String personType, DataTable dataTable) {
+                                     String chairPerson, String personType, @NotNull DataTable dataTable) {
         String caseUrn = context.get("caseUrn");
 
         Map<String, List<String>> personTypePersonNameMap = context.get("personTypePersonNameMap");
@@ -582,7 +577,7 @@ public class VictimCaseAppUiStepDefinition {
     }
 
     @When("cancel the arranged meeting with the cancellation reason for {string} in VCA application")
-    public void cancelArrangedMeeting(String personType, DataTable dataTable) {
+    public void cancelArrangedMeeting(String personType, @NotNull DataTable dataTable) {
 
         String caseUrn = context.get("caseUrn");
 
@@ -608,7 +603,7 @@ public class VictimCaseAppUiStepDefinition {
     }
 
     @Then("verify the cancelled meeting details for {string} in VCA application")
-    public void verifyCancelledMeetingDetails(String personType, DataTable dataTable) {
+    public void verifyCancelledMeetingDetails(String personType, @NotNull DataTable dataTable) {
         String caseUrn = context.get("caseUrn");
         Map<String, List<String>> personTypePersonNameMap = context.get("personTypePersonNameMap");
         String personFullName = String.valueOf(personTypePersonNameMap.get(personType));
@@ -629,7 +624,7 @@ public class VictimCaseAppUiStepDefinition {
     }
 
     @Then("verify the arranged meeting details for {string} in VCA application")
-    public void verifyArrangedMeetingDetails(String personType, DataTable dataTable) {
+    public void verifyArrangedMeetingDetails(String personType, @NotNull DataTable dataTable) {
         String caseUrn = context.get("caseUrn");
 
         Map<String, List<String>> personTypePersonNameMap = context.get("personTypePersonNameMap");
@@ -646,13 +641,13 @@ public class VictimCaseAppUiStepDefinition {
         pages.vcaCommunicationsPage.navigateMeetings();
 
         for (Map<String, String> row : rows) {
-            pages.vcaCommunicationsPage.verifyArrangedMeetingDetails(personFirstLastName, row.get("meetingType"), row.get("meetingRequest"), row.get("meetingMethod"), row.get("locationName"), row.get("chairPerson"));
+            pages.vcaCommunicationsPage.verifyArrangedMeetingDetails(personFirstLastName, row.get("meetingType"), row.get("meetingSource"), row.get("meetingMethod"), row.get("locationName"), row.get("chairPerson"));
         }
         pages.vcaHomePage.navigateVictimHomePage();
     }
 
     @When("the arranged meeting is conducted with following details for {string} in VCA application")
-    public void conductArrangedMeeting(String personType, DataTable dataTable){
+    public void conductArrangedMeeting(String personType, @NotNull DataTable dataTable) {
         String caseUrn = context.get("caseUrn");
         Map<String, List<String>> personTypePersonNameMap = context.get("personTypePersonNameMap");
         String personFullName = String.valueOf(personTypePersonNameMap.get(personType));
@@ -673,14 +668,14 @@ public class VictimCaseAppUiStepDefinition {
 
         for (Map<String, String> row : rows) {
             pages.vcaCommunicationsPage.conductArrangedMeeting(personFullName, personFirstLastName, row.get("meetingType"), row.get("meetingTookPlace"),
-                             meetingAttendeesRoles,row.get("meetingLedBy"), row.get("agreeToResearch"), row.get("meetingNotes"), row.get("meetingNotesSent"),
-                            row.get("actionsAgreed"));
+                    meetingAttendeesRoles, row.get("meetingLedBy"), row.get("agreeToResearch"), row.get("meetingNotes"), row.get("meetingNotesSent"),
+                    row.get("actionsAgreed"));
         }
         pages.vcaHomePage.navigateVictimHomePage();
     }
 
     @Then("verify the logged meeting outcome details for {string} in VCA application")
-    public void verifyLoggedMeeting(String personType, DataTable dataTable) {
+    public void verifyLoggedMeeting(String personType, @NotNull DataTable dataTable) {
         String caseUrn = context.get("caseUrn");
         Map<String, List<String>> personTypePersonNameMap = context.get("personTypePersonNameMap");
         String personFullName = String.valueOf(personTypePersonNameMap.get(personType));
@@ -698,4 +693,60 @@ public class VictimCaseAppUiStepDefinition {
         pages.vcaHomePage.navigateVictimHomePage();
     }
 
+    @When("the other communication are logged to {string} in VCA application")
+    public void logOtherCommunication(String personType, @NotNull DataTable dataTable) {
+        String caseUrn = context.get("caseUrn");
+        Map<String, List<String>> personTypePersonNameMap = context.get("personTypePersonNameMap");
+        String personFullName = String.valueOf(personTypePersonNameMap.get(personType));
+        personFullName = personFullName.replace("[", "").replace("]", "");
+
+        Map<String, List<String>> personTypeFirstSureNameMap = context.get("personTypeFirstSureNameMap");
+        String personFirstLastName = String.valueOf(personTypeFirstSureNameMap.get(personType));
+        personFirstLastName = personFirstLastName.replace("[", "").replace("]", "");
+
+//        String caseUrn = "05AQ5416426";
+//        String personFullName = "GREENHOLT, Reinaldo";
+//        String personFirstLastName = "Reinaldo Greenholt";
+
+
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+        pages.vcaHomePage.searchVictimCase(caseUrn);
+        pages.vcaHomePage.navigateCommunicationsTab(caseUrn, personFullName);
+        pages.vcaCommunicationsPage.navigateOtherCommunication();
+
+        for (Map<String, String> row : rows) {
+            pages.vcaCommunicationsPage.logOtherCommunication(personFirstLastName, row.get("communicationType"), row.get("direction"), row.get("personContacted"), row.get("purpose"));
+        }
+        pages.vcaHomePage.navigateVictimHomePage();
+    }
+
+    @Then("verify the logged other communication types for {string} in VCA application")
+    public void verifyLoggedOtherComms(String personType, @NotNull DataTable dataTable){
+
+        String caseUrn = context.get("caseUrn");
+        Map<String, List<String>> personTypePersonNameMap = context.get("personTypePersonNameMap");
+        String personFullName = String.valueOf(personTypePersonNameMap.get(personType));
+        personFullName = personFullName.replace("[", "").replace("]", "");
+
+        Map<String, List<String>> personTypeFirstSureNameMap = context.get("personTypeFirstSureNameMap");
+        String personFirstLastName = String.valueOf(personTypeFirstSureNameMap.get(personType));
+        personFirstLastName = personFirstLastName.replace("[", "").replace("]", "");
+
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+        pages.vcaHomePage.searchVictimCase(caseUrn);
+        pages.vcaHomePage.navigateCommunicationsTab(caseUrn, personFullName);
+        pages.vcaCommunicationsPage.navigateOtherCommunication();
+
+        for (Map<String, String> row : rows) {
+            pages.vcaCommunicationsPage.verifyOtherCommunication(personFullName, row.get("communicationType"), row.get("direction"), row.get("personContacted"), row.get("purpose"));
+        }
+        pages.vcaHomePage.navigateVictimHomePage();
+    }
+
+
+
+
 }
+
+
+

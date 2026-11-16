@@ -4,6 +4,7 @@ import com.cps.fct.e2e.pages.BasePage;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
 import com.cps.fct.e2e.utils.playwright.PlaywrightContext;
 import com.microsoft.playwright.options.AriaRole;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.cps.fct.e2e.pages.*;
@@ -23,10 +24,15 @@ public class VcaCommunicationsPage extends BasePage {
 
     private final VcaMeetingsPage vcaMeetingsPage;
 
-    public VcaCommunicationsPage(PlaywrightContext context, ScenarioContext scenarioContext, VcaMeetingsPage vcaMeetingsPage) {
+    private final VcaOtherCommsPage vcaOtherCommsPage;
+
+    public VcaCommunicationsPage(PlaywrightContext context, ScenarioContext scenarioContext,
+                                 VcaMeetingsPage vcaMeetingsPage,
+                                 VcaOtherCommsPage vcaOtherCommsPage) {
         super(context);
         this.scenarioContext = scenarioContext;
         this.vcaMeetingsPage = vcaMeetingsPage;
+        this.vcaOtherCommsPage = vcaOtherCommsPage;
     }
 
     private static final int WAIT_FOR_MILLIS = 10_000;
@@ -38,6 +44,13 @@ public class VcaCommunicationsPage extends BasePage {
         waitForText("Communications");
         waitForElement(page, AriaRole.TAB, "Meetings");
         clickSelectOnAriaRole(page, AriaRole.TAB, "Meetings");
+    }
+
+    public void navigateOtherCommunication() {
+        waitUntilSpinnersAreGone("Loading, please wait");
+        waitForText("Communications");
+        waitForElement(page, AriaRole.TAB, "Other communication");
+        clickSelectOnAriaRole(page, AriaRole.TAB, "Other communication");
     }
 
     public void logMeetingNotOffered(String victimWitnessFirstSureName, String meetingType, String notOfferedReason) {
@@ -122,7 +135,7 @@ public class VcaCommunicationsPage extends BasePage {
         waitForElement(page, AriaRole.TAB, "Meetings");
         clickSelectOnAriaRole(page, AriaRole.TAB, "Meetings");
         meetingType = vcaMeetingsPage.getMeetingType(meetingType);
-        vcaMeetingsPage.selectMeetingOfferedResponse(meetingType,meetingResponse);
+        vcaMeetingsPage.selectMeetingOfferedResponse(meetingType, meetingResponse);
         waitUntilSpinnersAreGone("Loading, please wait");
         switch (meetingResponse) {
             case "Log meeting acceptance":
@@ -257,11 +270,10 @@ public class VcaCommunicationsPage extends BasePage {
 
         enterText(
                 "Disability support or adjustment needs (optional)",
-                "Disability support Text" );
+                "Disability support Text");
         getButtonByName("Continue").click();
         waitForText("Check your answers before confirming details");
     }
-
 
     public void confirmArrangedMeeting(String meetingType) {
         waitForText("Check your answers before confirming details");
@@ -274,23 +286,23 @@ public class VcaCommunicationsPage extends BasePage {
         vcaMeetingsPage.verifyArrangedMeeting(meetingType);
     }
 
-    public void cancelArrangedMeeting(String personFirstLastName, String meetingType, String cancellationReason){
+    public void cancelArrangedMeeting(String personFirstLastName, String meetingType, String cancellationReason) {
         waitUntilSpinnersAreGone("Loading, please wait");
         meetingType = vcaMeetingsPage.getMeetingType(meetingType);
         vcaMeetingsPage.cancelMeeting(meetingType);
-        enterTextInLocator("#b6-Input_Date",todayMinusNoOfDays(1));
-        enterTextInLocator("#Input_Hour",utcHourNow());
-        enterTextInLocator("#Input_Minutes",utcMinuteNow());
+        enterTextInLocator("#b6-Input_Date", todayMinusNoOfDays(1));
+        enterTextInLocator("#Input_Hour", utcHourNow());
+        enterTextInLocator("#Input_Minutes", utcMinuteNow());
         getButtonByName("Continue").click();
         waitForText("What is the reason for cancelling the meeting?");
-        vcaMeetingsPage.selectCancellationReason(personFirstLastName,cancellationReason);
+        vcaMeetingsPage.selectCancellationReason(personFirstLastName, cancellationReason);
         getButtonByName("Continue").click();
         waitUntilSpinnersAreGone("Loading, please wait");
         waitUntilTabAppear("Communications");
         waitUntilSpinnersAreGone("Loading, please wait");
     }
 
-    public void confirmCancelledMeeting(String meetingType){
+    public void confirmCancelledMeeting(String meetingType) {
         waitUntilSpinnersAreGone("Loading, please wait");
         waitForElement(page, AriaRole.TAB, "Meetings");
         clickSelectOnAriaRole(page, AriaRole.TAB, "Meetings");
@@ -299,26 +311,26 @@ public class VcaCommunicationsPage extends BasePage {
         vcaMeetingsPage.verifyCancelledMeeting(meetingType);
     }
 
-    public void verifyCancelledMeetingDetails(String personFirstLastName, String meetingType, String cancellationReason){
+    public void verifyCancelledMeetingDetails(String personFirstLastName, String meetingType, String cancellationReason) {
         waitUntilSpinnersAreGone("Loading, please wait");
         waitForElement(page, AriaRole.TAB, "Meetings");
         clickSelectOnAriaRole(page, AriaRole.TAB, "Meetings");
         meetingType = vcaMeetingsPage.getMeetingType(meetingType);
-        vcaMeetingsPage.verifyCancelledMeetingDetails(personFirstLastName, meetingType,cancellationReason);
+        vcaMeetingsPage.verifyCancelledMeetingDetails(personFirstLastName, meetingType, cancellationReason);
 
     }
 
-    public void verifyArrangedMeetingDetails(String personFirstLastName, String meetingType, String meetingRequest, String meetingMethod, String locationName, String chairPerson){
+    public void verifyArrangedMeetingDetails(String personFirstLastName, String meetingType, String meetingSource, String meetingMethod, String locationName, String chairPerson) {
         waitUntilSpinnersAreGone("Loading, please wait");
         waitForElement(page, AriaRole.TAB, "Meetings");
         clickSelectOnAriaRole(page, AriaRole.TAB, "Meetings");
         meetingType = vcaMeetingsPage.getMeetingType(meetingType);
-        vcaMeetingsPage.verifyArrangedMeetingDetails(personFirstLastName, meetingType, meetingRequest, meetingMethod, locationName, chairPerson);
+        vcaMeetingsPage.verifyArrangedMeetingDetails(personFirstLastName, meetingType, meetingSource, meetingMethod, locationName, chairPerson);
     }
 
     public void conductArrangedMeeting(String personFullName, String personFirstLastName, String meetingType, String meetingTookPlace,
                                        List<String> meetingAttendeesRoles, String meetingLedBy, String agreeToResearch, String meetingNotes,
-                                       String meetingNotesSent, String actionsAgreed){
+                                       String meetingNotesSent, String actionsAgreed) {
 
         waitUntilSpinnersAreGone("Loading, please wait");
         waitForText("Communications");
@@ -327,7 +339,7 @@ public class VcaCommunicationsPage extends BasePage {
         meetingType = vcaMeetingsPage.getMeetingType(meetingType);
         vcaMeetingsPage.selectArrangedMeetingType(meetingType);
         vcaMeetingsPage.logArrangedMeetingTime(meetingTookPlace);
-        vcaMeetingsPage.logArrangedMeetingAttendeesLedBy(personFirstLastName,meetingAttendeesRoles, meetingLedBy);
+        vcaMeetingsPage.logArrangedMeetingAttendeesLedBy(personFirstLastName, meetingAttendeesRoles, meetingLedBy);
         vcaMeetingsPage.logArrangedMeetingAction(personFirstLastName, agreeToResearch, meetingNotes, meetingNotesSent, actionsAgreed);
         vcaMeetingsPage.confirmLogArrangedMeetingDetails();
         vcaMeetingsPage.verifyMeetingOutcome(meetingType);
@@ -335,10 +347,44 @@ public class VcaCommunicationsPage extends BasePage {
 
 
     public void verifyLoggedMeeting(String meetingType, String agreeToResearch, String meetingNotes,
-                                    String meetingNotesSent, String actionsAgreed){
+                                    String meetingNotesSent, String actionsAgreed) {
         meetingType = vcaMeetingsPage.getMeetingType(meetingType);
         vcaMeetingsPage.verifyLoggedMeetingDetails(meetingType, agreeToResearch, meetingNotes, meetingNotesSent, actionsAgreed);
     }
+
+    public void logOtherCommunication(String personFirstLastName, String communicationType, String direction,
+                                      String personContacted, String purpose) {
+
+        waitUntilSpinnersAreGone("Loading, please wait");
+        waitForText("Communications");
+        waitForElement(page, AriaRole.TAB, "Other communication");
+        clickSelectOnAriaRole(page, AriaRole.TAB, "Other communication");
+        waitForButtonToAppear("Log a communication");
+        clickButton("Log a communication");
+        waitForText("How did you communicate with " + personFirstLastName + "?");
+
+        vcaOtherCommsPage.logOtherCommunicationDetails(communicationType, personFirstLastName, direction, personContacted, purpose);
+
+        vcaOtherCommsPage.confirmOtherCommunicationDetails(communicationType);
+
+    }
+
+    public void verifyOtherCommunication(String personFullName, String communicationType, String direction,
+                                         String personContacted, String purpose){
+
+        waitUntilSpinnersAreGone("Loading, please wait");
+        waitForText("Communications");
+        waitForElement(page, AriaRole.TAB, "Other communication");
+        clickSelectOnAriaRole(page, AriaRole.TAB, "Other communication");
+        waitForButtonToAppear("Log a communication");
+
+        vcaOtherCommsPage.verifyOtherCommunicationDetails(personFullName, communicationType, direction, personContacted, purpose);
+
+    }
+
+
+
+
 
 }
 

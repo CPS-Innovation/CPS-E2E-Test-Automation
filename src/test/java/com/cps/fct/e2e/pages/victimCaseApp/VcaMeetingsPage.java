@@ -54,7 +54,6 @@ public class VcaMeetingsPage extends BasePage {
                 "div.govuk-summary-card", "h2.govuk-summary-card__title", meetingType,
                 "div.govuk-summary-list__row", "Why was a meeting not offered", "dd.govuk-summary-list__value")
                 .innerText();
-
         assertEquals("No", actualMeetingOffered);
         assertEquals(notOfferedReason, actualMeetingOfferedReason);
     }
@@ -387,25 +386,25 @@ public class VcaMeetingsPage extends BasePage {
 
     }
 
-    public void verifyArrangedMeetingDetails(String personFirstLastName, String meetingType, String meetingRequest, String meetingMethod, String locationName, String chairPerson) {
+    public void verifyArrangedMeetingDetails(String personFirstLastName, String meetingType, String meetingSource, String meetingMethod, String locationName, String chairPerson) {
 
-        String meetingRequestType = null;
-        if ("CPS Offered".equals(meetingRequest)) {
-            meetingRequestType = "CPS offered and " + personFirstLastName + " accepted";
-        } else if ("Victim Requested".equals(meetingRequest)) {
-            meetingRequestType = personFirstLastName + " requested it";
-        } else if ("Third party requested".equals(meetingRequest)) {
-            meetingRequestType = "Requested by a third party";
+        String meetingSourceType = null;
+        if ("CPS Offered".equals(meetingSource)) {
+            meetingSourceType = "CPS offered and " + personFirstLastName + " accepted";
+        } else if ("Victim Requested".equals(meetingSource)) {
+            meetingSourceType = personFirstLastName + " requested it";
+        } else if ("Third party requested".equals(meetingSource)) {
+            meetingSourceType = "Requested by a third party";
         }
 
         chairPerson = "(Meeting lead) " + chairPerson;
         waitUntilSpinnersAreGone("Loading, please wait");
 
-        assertArrangedMeetingValues(meetingType, meetingRequestType, meetingMethod, locationName, chairPerson);
+        assertArrangedMeetingValues(meetingType, meetingSourceType, meetingMethod, locationName, chairPerson);
 
     }
 
-    public void assertArrangedMeetingValues(String meetingType, String meetingRequestType, String meetingMethod, String locationName, String chairPerson) {
+    public void assertArrangedMeetingValues(String meetingType, String meetingSourceType, String meetingMethod, String locationName, String chairPerson) {
         assertThat(readTableRowCell(page,
                 "div.govuk-summary-card", "h2.govuk-summary-card__title", meetingType + " arranged",
                 "div.govuk-summary-list__row", "Date and time", "dd.govuk-summary-list__value"))
@@ -422,7 +421,7 @@ public class VcaMeetingsPage extends BasePage {
                 "div.govuk-summary-card", "h2.govuk-summary-card__title", meetingType + " arranged",
                 "div.govuk-summary-list__row", "How was meeting arranged", "dd.govuk-summary-list__value")
                 .innerText();
-        assertEquals(meetingRequestType, meetingsRequestBy);
+        assertEquals(meetingSourceType, meetingsRequestBy);
 
         String meetingsMethod = readTableRowCell(page,
                 "div.govuk-summary-card", "h2.govuk-summary-card__title", meetingType + " arranged",

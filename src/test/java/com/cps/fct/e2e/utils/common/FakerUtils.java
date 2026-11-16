@@ -214,6 +214,14 @@ public class FakerUtils {
 
         return LocalDate.parse(date).format(outputFormatter);
     }
+    public static String convertDayDateMonthYear(String date) {
+        DateTimeFormatter outputFormatter =
+                DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy", Locale.UK);
+
+        return LocalDate.parse(date).format(outputFormatter);
+    }
+
+
 
     public static String convertDateAs0DMonthYear(String date) {
         DateTimeFormatter outputFormatter =

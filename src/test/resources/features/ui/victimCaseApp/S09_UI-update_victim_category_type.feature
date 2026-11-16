@@ -16,7 +16,7 @@ Feature: VCA-UI-S9:- Add category type to victim or victimWitness and verify wm0
     Given VLO login to victim case application
     And "victimWitnessChild" is searched using case reference
     And the "victimWitnessChild" is onboarded to "Universal" service lead
-    And select "No task at this time" for next task for the "victimWitnessChild"
+    And select "No task at this time" for next task
     And verify that "victimWitnessChild" is onboarded
     And the "Murali" is assigned as VLO to "victimWitnessChild"
     And verify that Vlo "Murali" is assigned to "victimWitnessChild"

@@ -52,6 +52,9 @@ public class PageObjects {
     @Inject
     public VcaOtherCommsPage vcaOtherCommsPage;
 
+    @Inject
+    public VcaChargingDecisionPage vcaChargingDecisionPage;
+
     public void useCurrentPage() {
         loginPage.useCurrentPage();
         caseIdSearchPage.useCurrentPage();
@@ -60,7 +63,6 @@ public class PageObjects {
         decisionAnalysisPage.useCurrentPage();
         actionPlanPage.useCurrentPage();
         completeSubmissionPage.useCurrentPage();
-//        appsLoginPage.useCurrentPage();
         vcaLoginPage.useCurrentPage();
         vcaHomePage.useCurrentPage();
         vcaVictimDetailsPage.useCurrentPage();
@@ -68,7 +70,7 @@ public class PageObjects {
         vcaCommunicationsPage.useCurrentPage();
         vcaMeetingsPage.useCurrentPage();
         vcaOtherCommsPage.useCurrentPage();
-
+        vcaChargingDecisionPage.useCurrentPage();
     }
 
 }

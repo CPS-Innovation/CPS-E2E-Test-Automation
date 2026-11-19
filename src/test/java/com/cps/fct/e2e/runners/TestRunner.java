@@ -4,9 +4,8 @@ import net.masterthought.cucumber.Configuration;
 import net.masterthought.cucumber.ReportBuilder;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.suite.api.*;
-import org.w3c.dom.*;
+
 import java.io.File;
-import java.nio.file.*;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,14 +29,11 @@ import static io.cucumber.junit.platform.engine.Constants.OBJECT_FACTORY_PROPERT
 
 @ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@api_vca_regression" )
 
-
-
-
 @ConfigurationParameter(
         key = OBJECT_FACTORY_PROPERTY_NAME,
         value = "com.cps.fct.e2e.utils.support.CucumberObjectFactory"
 )
-public class TestRunnerApi {
+public class TestRunner {
     @Test
     void generateCucumberReport() {
         String jsonPath = "target/cucumber-report/cucumber.json";

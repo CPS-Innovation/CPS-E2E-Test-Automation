@@ -26,13 +26,18 @@ public class VcaCommunicationsPage extends BasePage {
 
     private final VcaOtherCommsPage vcaOtherCommsPage;
 
+    private final VcaChargingDecisionPage vcaChargingDecisionPage;
+
+
     public VcaCommunicationsPage(PlaywrightContext context, ScenarioContext scenarioContext,
                                  VcaMeetingsPage vcaMeetingsPage,
-                                 VcaOtherCommsPage vcaOtherCommsPage) {
+                                 VcaOtherCommsPage vcaOtherCommsPage,
+                                 VcaChargingDecisionPage vcaChargingDecisionPage) {
         super(context);
         this.scenarioContext = scenarioContext;
         this.vcaMeetingsPage = vcaMeetingsPage;
         this.vcaOtherCommsPage = vcaOtherCommsPage;
+        this.vcaChargingDecisionPage = vcaChargingDecisionPage;
     }
 
     private static final int WAIT_FOR_MILLIS = 10_000;
@@ -51,6 +56,14 @@ public class VcaCommunicationsPage extends BasePage {
         waitForText("Communications");
         waitForElement(page, AriaRole.TAB, "Other communication");
         clickSelectOnAriaRole(page, AriaRole.TAB, "Other communication");
+    }
+
+    public void navigateChargingDecision() {
+        waitUntilSpinnersAreGone("Loading, please wait");
+        waitForText("Communications");
+        waitForElement(page, AriaRole.TAB, "Charging decision");
+        clickSelectOnAriaRole(page, AriaRole.TAB, "Charging decision");
+        waitUntilSpinnersAreGone("Loading, please wait");
     }
 
     public void logMeetingNotOffered(String victimWitnessFirstSureName, String meetingType, String notOfferedReason) {
@@ -377,13 +390,9 @@ public class VcaCommunicationsPage extends BasePage {
         waitForElement(page, AriaRole.TAB, "Other communication");
         clickSelectOnAriaRole(page, AriaRole.TAB, "Other communication");
         waitForButtonToAppear("Log a communication");
-
         vcaOtherCommsPage.verifyOtherCommunicationDetails(personFullName, communicationType, direction, personContacted, purpose);
 
     }
-
-
-
 
 
 }

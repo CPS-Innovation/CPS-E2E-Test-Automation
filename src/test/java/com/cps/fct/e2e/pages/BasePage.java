@@ -278,6 +278,10 @@ public abstract class BasePage {
         page.locator("role=" + ROLE_LINK + "[name='" + name + "']").click();
     }
 
+    public void clickBackLink() {
+        page.locator(".govuk-back-link").click();
+    }
+
     public void clickTextLink(Page page, String rowSelector, String keySelector, String textToFind, String linkName) {
         Locator row = page.locator(rowSelector)
                 .filter(new Locator.FilterOptions()

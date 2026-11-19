@@ -277,7 +277,7 @@
                         <include>**/*Test.java</include>
                         <include>**/*Tests.java</include>
                         <include>**/*TestCase.java</include>
-                        <include>**/*TestRunnerApi.java</include>
+                        <include>**/*TestRunner.java</include>
                     </includes>
                     <useModulePath>false</useModulePath>
                     <rerunFailingTestsCount>${surefire.rerunFailingTestsCount}</rerunFailingTestsCount>

@@ -346,7 +346,17 @@ public class CaseCreateService extends BaseService {
         return firstname + " " + surname;
     }
 
+    public String personFullName(String personType){
+        Map<String, List<String>> personTypePersonNameMap = context.get("personTypePersonNameMap");
+        String personFullName = String.valueOf(personTypePersonNameMap.get(personType));
+       return personFullName.replace("[", "").replace("]", "");
+    }
 
+    public String personFirstLastName(String personType){
+        Map<String, List<String>> personTypeFirstSureNameMap = context.get("personTypeFirstSureNameMap");
+        String personFirstLastName = String.valueOf(personTypeFirstSureNameMap.get(personType));
+        return personFirstLastName.replace("[", "").replace("]", "");
+    }
 
 
 

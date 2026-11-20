@@ -26,6 +26,7 @@ Feature: CR-UI-S22 - CCU Initial PCD Review
       | decision type             | decision code                                              | reason | out come of case | offence category | charge code decision |
       | No further action         | K - No prosecution - Evidential                            | D81    | D80              | Robbery          |                      |
       | Further evidence required | H - Request further evidence to complete evidential report |        |                  | Robbery          |                      |
+      | No further action         | K - No prosecution - Evidential                            | D81    | D80              | Robbery          |                      |
       | Non-conviction disposal   | C - Simple caution                                         |        | D77              | Robbery          |                      |
       | Charge                    | A - Charge and request evidential file                     | D81    | D80              | Robbery          | Accept               |
 

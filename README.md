@@ -119,7 +119,7 @@ Edit run configuration --> Edit Configuration Template --> Cucumber Template
 
 ![img.png](img.png)
 
-NOTE:- CPS_USER should not be added with .CIN3 or .CIN5
+NOTE:- CPS_USER should not be added with .CIN3 or .CIN2
 
 #### UI tests limitations
 ```

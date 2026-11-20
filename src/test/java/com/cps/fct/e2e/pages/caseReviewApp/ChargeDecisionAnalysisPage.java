@@ -45,13 +45,12 @@ public class ChargeDecisionAnalysisPage extends BasePage {
     private static final String NGAP_QUESTION_TEXT = "Has the file been submitted as NGAP?";
     private static final String FIELDSET_LEGEND_SELECTOR = "legend.cps-fieldset__legend";
     private static final String HUMAN_RIGHTS_QUESTION_TEXT = "Are there human rights factors that may affect the case?";
-    private static final String DG_COMPLAINT_HEADER = "DG file quality assessment";
-    private static final String DG_COMPLAINT_SUBHEADER = "Is the submitted file compliant in accordance with the Directors Guidance (DG6)?";
+    private static final String DG_COMPLAINT_HEADER = "Complete a Director’s Guidance Assessment";
+    private static final String DG_COMPLAINT_SUBHEADER = "Is the material submitted compliant with the DG?";
     private static final String SAVE_AND_CONTINUE_BUTTON_TEXT = "Save and continue";
     private static final String ACTION_SAVE_ANALYSIS_ENDPOINT = "ActionSaveAnalysis";
     private static final String ACTION_SAVE_THRESHOLD_CONDITION_ENDPOINT = "ActionSaveCondition_StreamlinedThreshold";
     private static final String ACTION_REPLACE_THRESHOLD_WORKFLOW_ENDPOINT = "ActionReplaceWorkflow";
-    private static final String ACTION_SAVE_DG_ASSESSMENT_ENDPOINT = "ActionCheckSubTypeAndSaveDG";
     // Charging-decision save endpoints. Match on the suspect-count-agnostic prefix
     // (ActionSaveChargeDecision covers both ...MultiSuspect and ...SingleSuspect) so the waits
     // hold across single- and multi-defendant cases rather than being tied to one test's data.
@@ -1157,15 +1156,8 @@ public class ChargeDecisionAnalysisPage extends BasePage {
 
     private void clickSaveDgAssessment() {
         waitUntilBusyIndicatorsAreGone();
-        waitForResponseTriggeredBy(
-                page,
-                "Save DG file quality assessment",
-                ACTION_SAVE_DG_ASSESSMENT_ENDPOINT,
-                SAVE_ANALYSIS_METHOD,
-                SUCCESS_STATUS,
-                this::clickSaveAndContinueButton
-        );
-        page.waitForTimeout(DEFAULT_WAIT_TIMEOUT_MS);
+        clickSaveAndContinueButton();
+        waitForChargingDecisionStartOrQuestion();
         waitUntilBusyIndicatorsAreGone();
     }
 
@@ -1309,7 +1301,9 @@ public class ChargeDecisionAnalysisPage extends BasePage {
         checkRadioByName(decisionType);
         page.waitForTimeout(DEFAULT_WAIT_TIMEOUT_MS);
 
-        waitForTextInLocator("h2", DECISION_CODE_QUESTION);
+        assertThat(page.getByRole(AriaRole.HEADING,
+                new Page.GetByRoleOptions().setName(DECISION_CODE_QUESTION).setExact(true).setLevel(2)))
+                .isVisible();
         checkRadioByName(requiredChargingDecisionValue(decisionChargingData, DECISION_CODE_FIELD));
         clickAndWaitForChargingResponse(
                 "Save charge decision type and code",

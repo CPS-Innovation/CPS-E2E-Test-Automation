@@ -104,6 +104,7 @@ log/
 target/
 test-artifacts/
 videos/
+.allure/
 
 # Eclipse
 .classpath

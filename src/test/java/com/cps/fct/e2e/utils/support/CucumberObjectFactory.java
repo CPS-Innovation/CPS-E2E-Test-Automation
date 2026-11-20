@@ -8,6 +8,7 @@ import com.cps.fct.e2e.pages.victimCaseApp.*;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
 import com.cps.fct.e2e.utils.httpClient.DefaultHttpService;
 import com.cps.fct.e2e.utils.httpClient.HttpStatusValidator;
+import com.cps.fct.e2e.utils.services.caseCreation.payloadBuilders.PayloadBuilderForCaseMessage;
 import com.cps.fct.e2e.utils.services.caseCreation.payloadBuilders.PayloadBuilderForCM01;
 import com.cps.fct.e2e.utils.services.caseCreation.payloadBuilders.PayloadBuilderForLM04;
 import com.cps.fct.e2e.utils.playwright.PlaywrightContext;
@@ -33,6 +34,7 @@ public class CucumberObjectFactory implements ObjectFactory {
         delegate.addClass(ScenarioContext.class);
         delegate.addClass(DefaultHttpService.class);
         delegate.addClass(HttpStatusValidator.class);
+        delegate.addClass(PayloadBuilderForCaseMessage.class);
         delegate.addClass(PayloadBuilderForCM01.class);
         delegate.addClass(PayloadBuilderForLM04.class);
         delegate.addClass(VictimService.class);

@@ -13,6 +13,7 @@ public class CaseResponse {
     private String urn;
     private Response response;
     private String result;
+    private String status;
 
     private String requestId;
     private boolean success;

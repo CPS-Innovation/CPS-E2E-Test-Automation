@@ -6,9 +6,6 @@ import com.cps.fct.e2e.utils.httpClient.RestAssuredConfig;
 import com.cps.fct.e2e.utils.playwright.PlaywrightContext;
 import com.cps.fct.e2e.utils.playwright.PlaywrightManager;
 import com.cps.fct.e2e.utils.services.ddei.CommonService;
-import com.microsoft.playwright.Browser;
-import com.microsoft.playwright.BrowserContext;
-import com.microsoft.playwright.Playwright;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
@@ -24,15 +21,11 @@ import static com.cps.fct.e2e.utils.common.EnvConfig.getEnv;
 public class Hooks {
     private static final Logger logger = LoggerFactory.getLogger(Hooks.class);
 
-    private Playwright playwright;
-    private Browser browser;
-    private BrowserContext browserContext;
-
     private boolean isUIScenario = false;
 
 
     private static final String CIN3_SUFFIX = ".CIN3";
-    private static final String CIN5_SUFFIX = ".CIN5";
+    private static final String CIN2_SUFFIX = ".CIN2";
     private static final String CASE_TYPE_KEY = "CASE_TYPE";
 
 
@@ -83,27 +76,6 @@ public class Hooks {
         }
     }
 
-    public void setSuffixBasedOnTag(Scenario scenario) {
-        String suffix = "";
-        String caseType = "";
-
-        for (String tag : scenario.getSourceTagNames()) {
-            String tagName = tag.toUpperCase();
-            if (tagName.contains("@DCF")) {
-                suffix = CIN5_SUFFIX;
-                caseType = tagName;
-                break;
-            } else if (tagName.contains("@TWIF")) {
-                suffix = CIN3_SUFFIX;
-                caseType = tagName;
-                break;
-            }
-        }
-
-        context.set("caseType", caseType.replace("@", ""));
-        context.set("envSuffix", suffix);
-    }
-
 //    This was used if CASE_TYPE is missing, get("CASE_TYPE") may return null, then .toUpperCase()
 //    causes a less helpful NullPointerException. Very solid solution and helps with debugging
     public void setSuffixBasedOnCaseTypeInEnv(Scenario scenario) {
@@ -116,7 +88,7 @@ public class Hooks {
 
     private String suffixForCaseType(String caseType) {
         if (caseType.contains("DCF")) {
-            return CIN5_SUFFIX;
+            return CIN2_SUFFIX;
         }
         if (caseType.contains("TWIF")) {
             return CIN3_SUFFIX;

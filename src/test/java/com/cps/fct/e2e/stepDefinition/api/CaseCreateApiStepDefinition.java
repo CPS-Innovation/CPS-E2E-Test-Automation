@@ -1,5 +1,7 @@
 package com.cps.fct.e2e.stepDefinition.api;
 
+import com.cps.fct.e2e.model.caseCreation.CaseResponse;
+import com.cps.fct.e2e.utils.common.JsonUtils;
 import com.cps.fct.e2e.utils.fileMapping.FileUtils;
 import com.cps.fct.e2e.utils.common.ScenarioContext;
 import com.cps.fct.e2e.utils.httpClient.HttpResponseWrapper;
@@ -129,6 +131,30 @@ public class CaseCreateApiStepDefinition {
 
         Map<String, List<String>> personTypeFirstSureNameMap = new HashMap<>();
         context.set("personTypeFirstSureNameMap", personTypeFirstSureNameMap);
+    }
+
+    @And("add {string} using {string} for the case without waiting")
+    public void addCaseMessageWithoutWaiting(String caseDataType, String messageType) throws IOException {
+        File caseDataFile = FileUtils.getValidatedFile(context.get("caseType"), messageType, caseDataType);
+        boolean isLM04 = "LM04".equalsIgnoreCase(messageType);
+        HttpResponseWrapper responseWrapper = isLM04
+                ? caseCreateService.lm04AddVictimWitness(caseDataFile, messageType, context)
+                : caseCreateService.caseMessage(caseDataFile, messageType, context);
+        CaseResponse caseResponse = JsonUtils.fromJson(responseWrapper.getBody(), CaseResponse.class);
+        if (!caseResponse.isSuccess()) {
+            throw new IllegalStateException(messageType + " request failed. Response: " + responseWrapper.getBody());
+        }
+
+        String requestId = caseResponse.getRequestId();
+        if (requestId == null || requestId.isBlank()) {
+            throw new IllegalStateException(messageType + " did not return a requestId.");
+        }
+
+        if (isLM04) {
+            caseCreateService.getLM04RequestId(responseWrapper, context);
+        } else {
+            context.set(messageType.toLowerCase(Locale.ROOT) + "RequestId", requestId);
+        }
     }
 
     @When("the {string} details are available in CMS")

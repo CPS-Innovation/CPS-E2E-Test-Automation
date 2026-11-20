@@ -4,13 +4,13 @@ import net.masterthought.cucumber.Configuration;
 import net.masterthought.cucumber.ReportBuilder;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.suite.api.*;
-import org.w3c.dom.*;
+
 import java.io.File;
-import java.nio.file.*;
 import java.util.Collections;
 import java.util.List;
 
 import static io.cucumber.junit.platform.engine.Constants.GLUE_PROPERTY_NAME;
+import static io.cucumber.junit.platform.engine.Constants.FILTER_TAGS_PROPERTY_NAME;
 import static io.cucumber.junit.platform.engine.Constants.PLUGIN_PROPERTY_NAME;
 import static io.cucumber.junit.platform.engine.Constants.OBJECT_FACTORY_PROPERTY_NAME;
 
@@ -20,14 +20,16 @@ import static io.cucumber.junit.platform.engine.Constants.OBJECT_FACTORY_PROPERT
 @ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "com.cps.fct.e2e")
 @ConfigurationParameter(
         key = PLUGIN_PROPERTY_NAME,
-//        value = "pretty, json:target/cucumber-report/cucumber.json, io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm" )
         value = "pretty, json:target/cucumber-report/cucumber.json" )
-// Select tags from the terminal with -Dcucumber.filter.tags="@regression".
+//@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@caseReview" )
+//@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@TWIF_pms_api_regression")
+//@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@ui_vca_regression or @api_vca_regression" )
+
 @ConfigurationParameter(
         key = OBJECT_FACTORY_PROPERTY_NAME,
         value = "com.cps.fct.e2e.utils.support.CucumberObjectFactory"
 )
-public class TestRunnerApi {
+public class TestRunner {
     @Test
     void generateCucumberReport() {
         String jsonPath = "target/cucumber-report/cucumber.json";

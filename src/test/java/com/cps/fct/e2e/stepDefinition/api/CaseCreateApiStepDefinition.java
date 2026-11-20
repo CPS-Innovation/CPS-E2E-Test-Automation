@@ -23,13 +23,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 public class CaseCreateApiStepDefinition {
 
     private static final String DEFENDANT_COUNT_CONTEXT_KEY = "defendantCount";
     private static final String CASE_DATA_FILE_NAME_CONTEXT_KEY = "caseDataFileName";
-    private static final long CASE_MESSAGE_TIMEOUT_MS = 120000;
-    private static final long CJ05_TIMEOUT_MS = 300000;
 
     @Inject
     private CaseReviewService caseReviewService;
@@ -54,7 +53,39 @@ public class CaseCreateApiStepDefinition {
         HttpResponseWrapper responseWrapper = caseCreateService.cm01WithCaseDetails(caseDataFile, messageType, context);
         caseCreateService.getCM01RequestId(responseWrapper, context);
         if (Boolean.TRUE.equals(context.get("cm01Success"))) {
-            waitForCaseIdAndUrn(messageType, context.get("cm01RequestId"));
+            String caseId = null;
+            String caseUrn = null;
+            String status = "PENDING";
+            String errorMessage = null;
+            long timeoutMs = 90000;
+            long startTime = System.currentTimeMillis();
+            HttpResponseWrapper lastResponseWrapper = null;
+
+            while ((caseId == null || caseUrn == null) && System.currentTimeMillis() - startTime < timeoutMs) {
+                HttpResponseWrapper respWrapper = caseCreateService.caseDetails(context.get("cm01RequestId"), context);
+                lastResponseWrapper = respWrapper;
+                caseCreateService.persistCaseDetails(respWrapper, context);
+                caseId = context.get("caseId");
+                caseUrn = context.get("caseUrn");
+                status = context.get("status");
+                errorMessage = context.get("errorMessage");
+
+                if (caseId == null || caseUrn == null) {
+                    Thread.sleep(2000); // wait before retrying
+                } else if (Objects.equals(status, "FAILURE")) {
+                    System.out.println("Case Creation Request ID failed for:" + errorMessage);
+                }
+            }
+
+            if (caseId != null && caseUrn != null) {
+                System.out.println("CaseId : " + caseId);
+                System.out.println("CaseUrn : " + caseUrn);
+            } else {
+                throw new IllegalStateException("Case creation did not return both caseId and caseUrn within "
+                        + timeoutMs + "ms. Last response: "
+                        + (lastResponseWrapper == null ? "<none>" : lastResponseWrapper.getBody()));
+            }
+
         } else {
             throw new IllegalStateException("Case creation request failed. Response: " + responseWrapper.getBody());
         }
@@ -64,20 +95,46 @@ public class CaseCreateApiStepDefinition {
     @And("add {string} using {string} for the case")
     public void addNewVictimOrWitness(String caseDataType, String messageType) throws IOException, InterruptedException {
         File caseDataFile = FileUtils.getValidatedFile(context.get("caseType"), messageType, caseDataType);
-        if (!"LM04".equalsIgnoreCase(messageType)) {
-            addCaseMessage(caseDataFile, messageType);
-            return;
-        }
-
         HttpResponseWrapper responseWrapper = caseCreateService.lm04AddVictimWitness(caseDataFile, messageType, context);
         caseCreateService.getLM04RequestId(responseWrapper, context);
         if (Boolean.TRUE.equals(context.get("lm04Success"))) {
-            waitForCaseIdAndUrn(messageType, context.get("lm04RequestId"));
+            String caseId = null;
+            String caseUrn = null;
+            long timeoutMs = 90000;
+            long startTime = System.currentTimeMillis();
+            HttpResponseWrapper lastResponseWrapper = null;
+
+            while ((caseId == null || caseUrn == null) && System.currentTimeMillis() - startTime < timeoutMs) {
+                HttpResponseWrapper respWrapper = caseCreateService.caseDetails(context.get("lm04RequestId"), context);
+                lastResponseWrapper = respWrapper;
+                caseCreateService.persistCaseDetails(respWrapper, context);
+                caseId = context.get("caseId");
+                caseUrn = context.get("caseUrn");
+
+                if (caseId == null || caseUrn == null) {
+                    Thread.sleep(2000); // wait before retrying
+                }
+            }
+
+            if (caseId != null && caseUrn != null) {
+                System.out.println("CaseId : " + caseId);
+                System.out.println("CaseUrn : " + caseUrn);
+            } else {
+                throw new IllegalStateException("Victim or Witness creation did not return both caseId and caseUrn within "
+                        + timeoutMs + "ms. Last response: "
+                        + (lastResponseWrapper == null ? "<none>" : lastResponseWrapper.getBody()));
+            }
+
         } else {
             throw new IllegalStateException("Victim or Witness creation request failed. Response: "
                     + responseWrapper.getBody());
         }
 
+        Map<String, List<String>> personTypePersonNameMap = new HashMap<>();
+        context.set("personTypePersonNameMap", personTypePersonNameMap);
+
+        Map<String, List<String>> personTypeFirstSureNameMap = new HashMap<>();
+        context.set("personTypeFirstSureNameMap", personTypeFirstSureNameMap);
     }
 
     @And("add {string} using {string} for the case without waiting")
@@ -102,52 +159,6 @@ public class CaseCreateApiStepDefinition {
         } else {
             context.set(messageType.toLowerCase(Locale.ROOT) + "RequestId", requestId);
         }
-    }
-
-    private void addCaseMessage(File caseDataFile, String messageType) throws IOException, InterruptedException {
-        HttpResponseWrapper responseWrapper = caseCreateService.caseMessage(caseDataFile, messageType, context);
-        CaseResponse caseResponse = JsonUtils.fromJson(responseWrapper.getBody(), CaseResponse.class);
-        if (!caseResponse.isSuccess()) {
-            throw new IllegalStateException(messageType + " request failed. Response: " + responseWrapper.getBody());
-        }
-
-        String requestId = caseResponse.getRequestId();
-        context.set(messageType.toLowerCase(Locale.ROOT) + "RequestId", requestId);
-        waitForCaseIdAndUrn(messageType, requestId);
-    }
-
-    private void waitForCaseIdAndUrn(String messageType, String requestId) throws InterruptedException {
-        if (requestId == null || requestId.isBlank()) {
-            throw new IllegalStateException(messageType + " did not return a requestId.");
-        }
-
-        long timeoutMs = "CJ05".equalsIgnoreCase(messageType) ? CJ05_TIMEOUT_MS : CASE_MESSAGE_TIMEOUT_MS;
-        long startTime = System.currentTimeMillis();
-        HttpResponseWrapper lastResponseWrapper = null;
-
-        while (System.currentTimeMillis() - startTime < timeoutMs) {
-            lastResponseWrapper = caseCreateService.caseDetails(requestId, context);
-            caseCreateService.persistCaseDetails(lastResponseWrapper, context);
-            CaseResponse caseData = context.get("caseData");
-            if ("FAILURE".equalsIgnoreCase(caseData.getStatus())) {
-                throw new IllegalStateException(messageType + " request " + requestId
-                        + " failed. Response: " + lastResponseWrapper.getBody());
-            }
-
-            String caseId = context.get("caseId");
-            String caseUrn = context.get("caseUrn");
-            if (caseId != null && caseUrn != null) {
-                System.out.println("CaseId : " + caseId);
-                System.out.println("CaseUrn : " + caseUrn);
-                return;
-            }
-
-            Thread.sleep(3000);
-        }
-
-        throw new IllegalStateException(messageType + " did not return both caseId and caseUrn within "
-                + timeoutMs + "ms. Last response: "
-                + (lastResponseWrapper == null ? "<none>" : lastResponseWrapper.getBody()));
     }
 
     @When("the {string} details are available in CMS")

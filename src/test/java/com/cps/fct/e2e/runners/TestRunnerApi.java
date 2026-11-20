@@ -11,7 +11,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static io.cucumber.junit.platform.engine.Constants.GLUE_PROPERTY_NAME;
-import static io.cucumber.junit.platform.engine.Constants.FILTER_TAGS_PROPERTY_NAME;
 import static io.cucumber.junit.platform.engine.Constants.PLUGIN_PROPERTY_NAME;
 import static io.cucumber.junit.platform.engine.Constants.OBJECT_FACTORY_PROPERTY_NAME;
 
@@ -23,13 +22,7 @@ import static io.cucumber.junit.platform.engine.Constants.OBJECT_FACTORY_PROPERT
         key = PLUGIN_PROPERTY_NAME,
 //        value = "pretty, json:target/cucumber-report/cucumber.json, io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm" )
         value = "pretty, json:target/cucumber-report/cucumber.json" )
-//@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@caseReview" )
-@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@TWIF_pms_api_regression")
-//@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@ui_vca_regression or @api_vca_regression" )
-
-
-
-
+// Select tags from the terminal with -Dcucumber.filter.tags="@regression".
 @ConfigurationParameter(
         key = OBJECT_FACTORY_PROPERTY_NAME,
         value = "com.cps.fct.e2e.utils.support.CucumberObjectFactory"

@@ -87,7 +87,6 @@ public class VictimService extends BaseService {
         List<String> victimIntimidatedId = extractFromJsonToList(body,
                 "$[?(@.isPureVictim==true && @.isWitnessAndVictim==false && @.isVulnerable==false && @.isIntimidated==true)].witnessId");
 
-
         Map<String, List<String>> witnessMapIds = new HashMap<>();
         Map<String, List<String>> victimWitnessMapIds = new HashMap<>();
 //        Map<String, List<String>> victimMapIds = new HashMap<>();
@@ -233,7 +232,6 @@ public class VictimService extends BaseService {
                 .method("GET")
                 .resourceName("getVictimPersonalDetailsFromCms")
                 .build();
-
     }
 
     public HttpResponseWrapper getVictimDetailsFromVca(String guid) {
@@ -626,7 +624,6 @@ public class VictimService extends BaseService {
                 .build();
     }
 
-
     public void addCallAttempt(String guid, String decisionToChargeContextGuid, String requestBody) {
         service.sendRequest(addCallAttemptRequestParams(guid,decisionToChargeContextGuid,requestBody));
     }
@@ -682,10 +679,6 @@ public class VictimService extends BaseService {
                 .resourceName("addNoFurtherActionGuid")
                 .build();
     }
-
-
-
-
 
     public Integer getActiveTask(String guid, int taskType) {
         HttpResponseWrapper responseWrapper = service.sendRequest(getActiveTaskRequestParams(guid, taskType));
@@ -851,11 +844,6 @@ public class VictimService extends BaseService {
                 .resourceName("getTaskType")
                 .build();
     }
-
-
-
-
-
 
 
 }

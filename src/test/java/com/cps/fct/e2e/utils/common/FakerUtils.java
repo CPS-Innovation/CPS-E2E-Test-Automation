@@ -196,16 +196,43 @@ public class FakerUtils {
                 .format(DateTimeFormatter.ofPattern("MM"));
     }
 
-
     public static String todayMinusFiveDays() {
         return LocalDate.now()
                 .minusDays(5)
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 
+    public static String todayMinusNoOfDays(int NoOfDays) {
+        return LocalDate.now()
+                .minusDays(NoOfDays)
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));   
+    }
+
+    public static String convertDateMonthYear(String date) {
+        DateTimeFormatter outputFormatter =
+                DateTimeFormatter.ofPattern("d MMMM yyyy", Locale.UK);
+
+        return LocalDate.parse(date).format(outputFormatter);
+    }
+
+    public static String convertDateAs0DMonthYear(String date) {
+        DateTimeFormatter outputFormatter =
+                DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.UK);
+
+        return LocalDate.parse(date).format(outputFormatter);
+    }
+
+
+
     public static String todayMinusFourDays() {
         return LocalDate.now()
                 .minusDays(4)
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
+
+    public static String todayMinusThreeDays() {
+        return LocalDate.now()
+                .minusDays(3)
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 
@@ -214,13 +241,11 @@ public class FakerUtils {
         return faker.bothify(pattern).toUpperCase();
     }
 
-
     public static String yearTill2005() {
         int year = random.nextInt(2005 - 1975 ) + 1975; // Random year between 2010 and 2025
 //        return String.format("%02d", year % 100);
         return String.valueOf(year);
     }
-
 
     public static void main(String[] args) {
         Faker faker1 = new Faker();

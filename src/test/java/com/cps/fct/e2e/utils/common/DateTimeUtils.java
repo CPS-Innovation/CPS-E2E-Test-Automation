@@ -32,8 +32,8 @@ public class DateTimeUtils {
     }
 
     public static String UTCDatePastThreeMonths() {
-        LocalDate pastDate = today.minusMonths(3);
-        return pastDate.format(formatter);
+        LocalDate futureDate = today.minusDays(90);
+        return futureDate.format(formatter);
     }
 
     public static String UTCDateInFuture(int noOfDays) {
@@ -44,6 +44,16 @@ public class DateTimeUtils {
     public static String UTCTimeNow() {
         ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
         return now.format(UTC_TIME_NOW);
+    }
+
+    public static String utcHourNow() {
+        return String.format("%02d",
+                ZonedDateTime.now(ZoneOffset.UTC).getHour());
+    }
+
+    public static String utcMinuteNow() {
+        return String.format("%02d",
+                ZonedDateTime.now(ZoneOffset.UTC).getMinute());
     }
 
     public static String UTCTimeHrsMinsNow() {

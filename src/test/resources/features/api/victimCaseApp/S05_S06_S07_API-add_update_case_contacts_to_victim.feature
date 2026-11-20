@@ -1,4 +1,4 @@
-@regression @vca_api_regression @VCA_API_S5 @VCA_API_S6 @VCA_API_S7
+@regression @api_vca_regression @VCA_API_S5 @VCA_API_S6 @VCA_API_S7
 
 Feature: VCA-API-S5_S6_S7:- Add and update cps-contacts to victims
   As a Victim Liaison Officer
